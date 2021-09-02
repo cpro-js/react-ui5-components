@@ -1,7 +1,7 @@
 import { ComboBox, ComboBoxItem } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { ComboBoxPropTypes } from "@ui5/webcomponents-react/webComponents/ComboBox";
-import React, { FC, KeyboardEvent, forwardRef, useCallback } from "react";
+import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
 
 import { triggerSubmitOnEnter } from "./util";
 

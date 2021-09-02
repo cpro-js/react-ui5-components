@@ -1,7 +1,7 @@
 import { MultiComboBox, MultiComboBoxItem } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { MultiComboBoxPropTypes } from "@ui5/webcomponents-react/webComponents/MultiComboBox";
-import React, { FC, KeyboardEvent, forwardRef, useCallback } from "react";
+import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
 
 import { triggerSubmitOnEnter, useAllowAction } from "./util";
 
