@@ -1798,6 +1798,7 @@ __metadata:
     ts-jest: ^27.0.5
     typescript: ^4.4.2
   peerDependencies:
+    "@ui5/webcomponents": "*"
     "@ui5/webcomponents-react": ^0.18.5
     react: ^17.0.0
   languageName: unknown
