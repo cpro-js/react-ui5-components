@@ -16,8 +16,7 @@
   },
   "files": [
     "*.md",
-    "dist",
-    "src"
+    "dist"
   ],
   "peerDependencies": {
     "@ui5/webcomponents-react": "^0.18.5",
