@@ -24,6 +24,9 @@ export type { TextInputProps } from "./component/TextInput";
 export { CheckboxField } from "./field/CheckboxField";
 export type { CheckboxFieldProps } from "./field/CheckboxField";
 
+export { CheckboxFieldGroup } from "./field/CheckboxFieldGroup";
+export type { CheckboxFieldGroupProps } from "./field/CheckboxFieldGroup";
+
 export { DatePickerField } from "./field/DatePickerField";
 export type { DatePickerFieldProps } from "./field/DatePickerField";
 
