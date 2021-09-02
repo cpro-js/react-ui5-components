@@ -1,0 +1,84 @@
+import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
+
+import { InputType, ValueState } from "@ui5/webcomponents-react";
+import { FC, useMemo } from "react";
+import { Controller } from "react-hook-form";
+
+import { TextInput, TextInputProps } from "../component/TextInput";
+import { FormFieldValidation } from "./types";
+
+export type NumberInputFieldProps = Omit<
+  TextInputProps,
+  "name" | "value" | "onChange" | "valueState" | "onBlur"
+> &
+  Pick<FormFieldValidation, "required" | "min" | "max"> & {
+    name: string;
+  };
+
+export const NumberInputField: FC<NumberInputFieldProps> = ({
+  name,
+  required,
+  min,
+  max,
+  ...props
+}) => {
+  const rules: Partial<FormFieldValidation> = useMemo(
+    () => ({
+      required,
+      min,
+      max,
+    }),
+    [required, min, max]
+  );
+
+  return (
+    <Controller<any>
+      name={name}
+      rules={rules}
+      render={({ field, fieldState }) => {
+        // use empty string to reset value, undefined will be ignored by web component
+        const value = field.value == null ? "" : field.value + "";
+        return (
+          <TextInput
+            {...props}
+            type={InputType.Number}
+            ref={field.ref}
+            name={field.name}
+            value={value}
+            onChange={(event) => {
+              const transformedValue =
+                event.target.value === ""
+                  ? undefined
+                  : Number(event.target.value);
+              field.onChange(transformedValue);
+            }}
+            onBlur={field.onBlur}
+            valueState={
+              fieldState.error != null ? ValueState.Error : ValueState.None
+            }
+            required={required}
+            valueStateMessage={
+              fieldState.error != null ? (
+                <div slot="valueStateMessage">{fieldState.error.type}</div>
+              ) : undefined
+            }
+            aria-valuemin={
+              min != null
+                ? typeof min === "number"
+                  ? min
+                  : min.value
+                : undefined
+            }
+            aria-valuemax={
+              max != null
+                ? typeof max === "number"
+                  ? max
+                  : max.value
+                : undefined
+            }
+          />
+        );
+      }}
+    />
+  );
+};
