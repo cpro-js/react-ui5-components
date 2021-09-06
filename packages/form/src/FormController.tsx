@@ -41,16 +41,19 @@ export function useFormController<FormValues extends {}>(
     shouldUnregister: false,
   });
 
-  const { handleSubmit, reset } = form;
+  const { handleSubmit, reset, trigger } = form;
 
   const enhancedOnSubmit: SubmitHandler<FormValues> = useCallback(
     async (data) => {
-      if (form.formState.isValid) {
+      // need to trigger validation to ensure everything is really ok
+      const valid = await trigger();
+
+      if (valid) {
         // call submit
         return onSubmit(data);
       }
     },
-    [form, onSubmit]
+    [trigger, onSubmit]
   );
 
   const handleReset = useCallback(() => {
