@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.18.2](https://github.com/cpro-js/react-ui5-components/compare/v0.18.1...v0.18.2) (2021-09-06)
+
+### Bug Fixes
+
+- **form:** ensure that onSubmit is called when the form is valid ([2719062](https://github.com/cpro-js/react-ui5-components/commit/271906238c75fb3222f5dc67e40eecbdab7c8ad9))
+
 ## [0.18.1](https://github.com/cpro-js/react-ui5-components/compare/v0.18.0...v0.18.1) (2021-09-02)
 
 ### Bug Fixes
