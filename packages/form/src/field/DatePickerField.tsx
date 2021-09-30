@@ -66,6 +66,7 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
         // use null to reset value, undefined will be ignored by web component
         const value = field.value === undefined ? null : field.value;
 
+        // get error message (Note: undefined fallbacks to default message of ui5 component)
         const errorMessage =
           hasError(fieldState.error) && !isErrorIgnored(fieldState.error)
             ? getValidationErrorMessage(fieldState.error, field.value)

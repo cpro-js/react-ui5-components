@@ -36,6 +36,7 @@ export const MultiSelectField: FC<MultiSelectFieldProps> = ({
       name={name}
       rules={rules}
       render={({ field, fieldState }) => {
+        // get error message (Note: undefined fallbacks to default message of ui5 component)
         const errorMessage = hasError(fieldState.error)
           ? getValidationErrorMessage(fieldState.error, field.value)
           : undefined;
