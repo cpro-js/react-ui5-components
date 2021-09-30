@@ -18,7 +18,6 @@ export interface FormI18nContextProps {
 
 export const FormI18nContext = createContext<FormI18nContextProps>({
   getValidationErrorMessage(field, error, rules) {
-    console.log("error", error);
     return error.message != null && error.message !== ""
       ? error.message
       : error.type;
