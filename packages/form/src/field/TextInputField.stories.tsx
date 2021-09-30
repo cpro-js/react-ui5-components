@@ -1,6 +1,7 @@
 import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../FormController";
+import { FormI18nProvider } from "../i18n/FormI18n";
 import { TextInputField, TextInputFieldProps } from "./TextInputField";
 
 interface FormData {
@@ -22,6 +23,24 @@ const Template: Story<FormControllerProps<FormData> & TextInputFieldProps> = (
     </FormController>
   );
 };
+
+const I18nTemplate: Story<FormControllerProps<FormData> & TextInputFieldProps> =
+  (args, context) => {
+    return (
+      <FormI18nProvider
+        getValidationErrorMessage={(
+          fieldName,
+          fieldValue,
+          validationRule,
+          rules
+        ) => {
+          return `Field '${fieldName}' has Error '${validationRule}'`;
+        }}
+      >
+        {Template(args, context)}
+      </FormI18nProvider>
+    );
+  };
 
 export const Empty = Template.bind({});
 Empty.args = {};
@@ -59,6 +78,25 @@ ValidationMinLength.args = {
 
 export const ValidationMinMaxLength = Template.bind({});
 ValidationMinMaxLength.args = {
+  ...Empty.args,
+  minLength: 4,
+  maxLength: 10,
+};
+
+export const ValidationTranslationRequired = I18nTemplate.bind({});
+ValidationTranslationRequired.args = {
+  ...Empty.args,
+  required: true,
+};
+
+export const ValidationTranslationMinLength = I18nTemplate.bind({});
+ValidationTranslationMinLength.args = {
+  ...Empty.args,
+  minLength: 4,
+};
+
+export const ValidationTranslationMinMaxLength = I18nTemplate.bind({});
+ValidationTranslationMinMaxLength.args = {
   ...Empty.args,
   minLength: 4,
   maxLength: 10,

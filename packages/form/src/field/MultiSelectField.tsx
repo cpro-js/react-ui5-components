@@ -5,6 +5,7 @@ import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { MultiSelect, MultiSelectProps } from "../component/MultiSelect";
+import { hasError, useFormI18n } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 
 export type MultiSelectFieldProps = Omit<
@@ -26,6 +27,9 @@ export const MultiSelectField: FC<MultiSelectFieldProps> = ({
     }),
     [required]
   );
+
+  const { getValidationErrorMessage } = useFormI18n();
+
   return (
     <Controller<any>
       name={name}
@@ -41,11 +45,20 @@ export const MultiSelectField: FC<MultiSelectFieldProps> = ({
               field.onChange(value);
             }}
             valueState={
-              fieldState.error != null ? ValueState.Error : ValueState.None
+              hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              fieldState.error != null ? (
-                <div slot="valueStateMessage">{fieldState.error.type}</div>
+              hasError(fieldState.error) ? (
+                <div slot="valueStateMessage">
+                  {getValidationErrorMessage(
+                    {
+                      name: field.name,
+                      value: field.value,
+                    },
+                    fieldState.error,
+                    rules
+                  )}
+                </div>
               ) : undefined
             }
             onBlur={(event) => {

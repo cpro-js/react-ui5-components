@@ -5,6 +5,7 @@ import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { TextInput, TextInputProps } from "../component/TextInput";
+import { hasError, useFormI18n } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 
 export type NumberInputFieldProps = Omit<
@@ -31,6 +32,8 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
     [required, min, max]
   );
 
+  const { getValidationErrorMessage } = useFormI18n();
+
   return (
     <Controller<any>
       name={name}
@@ -53,13 +56,22 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
               field.onChange(transformedValue);
             }}
             onBlur={field.onBlur}
-            valueState={
-              fieldState.error != null ? ValueState.Error : ValueState.None
-            }
             required={required}
+            valueState={
+              hasError(fieldState.error) ? ValueState.Error : ValueState.None
+            }
             valueStateMessage={
-              fieldState.error != null ? (
-                <div slot="valueStateMessage">{fieldState.error.type}</div>
+              hasError(fieldState.error) ? (
+                <div slot="valueStateMessage">
+                  {getValidationErrorMessage(
+                    {
+                      name: field.name,
+                      value: field.value,
+                    },
+                    fieldState.error,
+                    rules
+                  )}
+                </div>
               ) : undefined
             }
             aria-valuemin={

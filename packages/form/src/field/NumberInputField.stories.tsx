@@ -1,6 +1,7 @@
 import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../FormController";
+import { FormI18nProvider } from "../i18n/FormI18n";
 import { NumberInputField, NumberInputFieldProps } from "./NumberInputField";
 
 interface FormData {
@@ -20,6 +21,25 @@ const Template: Story<FormControllerProps<FormData> & NumberInputFieldProps> = (
         <button type="reset">Reset</button>
       </div>
     </FormController>
+  );
+};
+
+const I18nTemplate: Story<
+  FormControllerProps<FormData> & NumberInputFieldProps
+> = (args, context) => {
+  return (
+    <FormI18nProvider
+      getValidationErrorMessage={(
+        fieldName,
+        fieldValue,
+        validationRule,
+        rules
+      ) => {
+        return `Field '${fieldName}' has Error '${validationRule}'`;
+      }}
+    >
+      {Template(args, context)}
+    </FormI18nProvider>
   );
 };
 
@@ -59,6 +79,25 @@ ValidationMin.args = {
 
 export const ValidationMinMax = Template.bind({});
 ValidationMinMax.args = {
+  ...Empty.args,
+  min: 4,
+  max: 10,
+};
+
+export const ValidationTranslationRequired = I18nTemplate.bind({});
+ValidationTranslationRequired.args = {
+  ...Empty.args,
+  required: true,
+};
+
+export const ValidationTranslationMin = I18nTemplate.bind({});
+ValidationTranslationMin.args = {
+  ...Empty.args,
+  min: 4,
+};
+
+export const ValidationTranslationMinMax = I18nTemplate.bind({});
+ValidationTranslationMinMax.args = {
   ...Empty.args,
   min: 4,
   max: 10,

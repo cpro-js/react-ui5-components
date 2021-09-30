@@ -5,6 +5,7 @@ import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { Select, SelectProps } from "../component/Select";
+import { hasError, useFormI18n } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 
 export type SelectFieldProps = Omit<
@@ -27,6 +28,8 @@ export const SelectField: FC<SelectFieldProps> = ({
     [required]
   );
 
+  const { getValidationErrorMessage } = useFormI18n();
+
   return (
     <Controller<any>
       name={name}
@@ -40,11 +43,20 @@ export const SelectField: FC<SelectFieldProps> = ({
             value={field.value}
             onChange={(_, value) => field.onChange(value)}
             valueState={
-              fieldState.error != null ? ValueState.Error : ValueState.None
+              hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              fieldState.error != null ? (
-                <div slot="valueStateMessage">{fieldState.error.type}</div>
+              hasError(fieldState.error) ? (
+                <div slot="valueStateMessage">
+                  {getValidationErrorMessage(
+                    {
+                      name: field.name,
+                      value: field.value,
+                    },
+                    fieldState.error,
+                    rules
+                  )}
+                </div>
               ) : undefined
             }
             onBlur={field.onBlur}

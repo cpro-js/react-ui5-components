@@ -15,3 +15,8 @@ export interface FormFieldValidation {
   maxLength?: FormFieldValidationRule<number>;
   validate?: FormFieldValidate<any> | Record<string, FormFieldValidate<any>>;
 }
+
+export interface FormFieldValidationError {
+  type: keyof FormFieldValidation | string; // string to allow user types
+  message?: string;
+}
