@@ -1,65 +1,38 @@
-import React, {
-  FC,
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-} from "react";
+import React, { FC, createContext, useContext, useMemo } from "react";
 
 import { FormFieldValidation, FormFieldValidationError } from "../field/types";
 
+export type GetValidationErrorMessage = (
+  field: { name: string; value?: string | number | boolean | Date | null },
+  error: FormFieldValidationError,
+  rules: Partial<FormFieldValidation>
+) => string | undefined;
+
 export interface FormI18nContextProps {
-  getValidationErrorMessage: (
-    field: { name: string; value?: string | number | boolean | Date | null },
-    error: FormFieldValidationError,
-    rules: Partial<FormFieldValidation>
-  ) => string;
+  getValidationErrorMessage: GetValidationErrorMessage;
 }
 
 export const FormI18nContext = createContext<FormI18nContextProps>({
   getValidationErrorMessage(field, error, rules) {
     return error.message != null && error.message !== ""
       ? error.message
-      : error.type;
+      : undefined;
   },
 });
 
 export interface FormI18nProviderProps {
-  getValidationErrorMessage(
-    fieldName: string,
-    fieldValue: string | number | boolean | Date | null | undefined,
-    validationRule: string,
-    rules: Partial<FormFieldValidation>
-  ): string;
+  getValidationErrorMessage: GetValidationErrorMessage;
 }
 
 export const FormI18nProvider: FC<FormI18nProviderProps> = ({
   children,
   getValidationErrorMessage,
 }) => {
-  const getMessage = useCallback(
-    (field, error, rules) => {
-      // always prefer user provided message
-      if (error.message != null && error.message !== "") {
-        return error.message;
-      }
-
-      // otherwise get validation message from external service
-      return getValidationErrorMessage(
-        field.name,
-        field.value,
-        error.type,
-        rules
-      );
-    },
-    [getValidationErrorMessage]
-  );
-
   const context = useMemo<FormI18nContextProps>(
     () => ({
-      getValidationErrorMessage: getMessage,
+      getValidationErrorMessage: getValidationErrorMessage,
     }),
-    [getMessage]
+    [getValidationErrorMessage]
   );
 
   return (
@@ -76,7 +49,7 @@ export const useI18nValidationError = (
   const { getValidationErrorMessage } = useContext(FormI18nContext);
 
   return useMemo(() => {
-    return (error: FormFieldValidationError, value: any): string =>
+    return (error: FormFieldValidationError, value: any): string | undefined =>
       getValidationErrorMessage(
         {
           name,

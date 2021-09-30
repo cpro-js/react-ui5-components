@@ -37,13 +37,10 @@ const I18nTemplate: Story<
 > = (args, context) => {
   return (
     <FormI18nProvider
-      getValidationErrorMessage={(
-        fieldName,
-        fieldValue,
-        validationRule,
-        rules
-      ) => {
-        return `Field '${fieldName}' has Error '${validationRule}'`;
+      getValidationErrorMessage={({ name }, error) => {
+        return `Field '${name}' has Error '${
+          error.type
+        }'. Original error message: ${error.message || "---"}`;
       }}
     >
       {Template(args, context)}

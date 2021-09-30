@@ -39,13 +39,10 @@ const I18nTemplate: Story<FormControllerProps<FormData> & SelectFieldProps> = (
 ) => {
   return (
     <FormI18nProvider
-      getValidationErrorMessage={(
-        fieldName,
-        fieldValue,
-        validationRule,
-        rules
-      ) => {
-        return `Field '${fieldName}' has Error '${validationRule}'`;
+      getValidationErrorMessage={({ name }, error) => {
+        return `Field '${name}' has Error '${
+          error.type
+        }'. Original error message: ${error.message || "---"}`;
       }}
     >
       {Template(args, context)}
