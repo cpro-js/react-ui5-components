@@ -74,4 +74,21 @@ export const hasError = (
   error?: FormFieldValidationError
 ): error is FormFieldValidationError => error != null;
 
-export const useFormI18n = () => useContext(FormI18nContext);
+export const useI18nValidationError = (
+  name: string,
+  rules: Partial<FormFieldValidation>
+) => {
+  const { getValidationErrorMessage } = useContext(FormI18nContext);
+
+  return useMemo(() => {
+    return (error: FormFieldValidationError, value: any): string =>
+      getValidationErrorMessage(
+        {
+          name,
+          value,
+        },
+        error,
+        rules
+      );
+  }, [name, rules]);
+};

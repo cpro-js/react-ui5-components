@@ -1,11 +1,11 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { FC, useContext, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { Controller, FieldError } from "react-hook-form";
 
 import { DatePicker, DatePickerProps } from "../component/DatePicker";
-import { FormI18nContext, hasError, useFormI18n } from "../i18n/FormI18n";
+import { hasError, useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 
 const convertToDateOnly = (value: Date | number): Date => {
@@ -32,8 +32,6 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
   maxDate,
   ...props
 }) => {
-  const { getValidationErrorMessage } = useFormI18n();
-
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -56,6 +54,8 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
     }),
     [required, minDate, maxDate]
   );
+
+  const getValidationErrorMessage = useI18nValidationError(name, rules);
 
   return (
     <Controller<any>
@@ -82,14 +82,7 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
               hasError(fieldState.error) &&
               !isErrorIgnored(fieldState.error) ? (
                 <div slot="valueStateMessage">
-                  {getValidationErrorMessage(
-                    {
-                      name: field.name,
-                      value: field.value,
-                    },
-                    fieldState.error,
-                    rules
-                  )}
+                  {getValidationErrorMessage(fieldState.error, field.value)}
                 </div>
               ) : undefined
             }
