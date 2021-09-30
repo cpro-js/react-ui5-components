@@ -36,6 +36,10 @@ export const MultiSelectField: FC<MultiSelectFieldProps> = ({
       name={name}
       rules={rules}
       render={({ field, fieldState }) => {
+        const errorMessage = hasError(fieldState.error)
+          ? getValidationErrorMessage(fieldState.error, field.value)
+          : undefined;
+
         return (
           <MultiSelect
             {...props}
@@ -49,11 +53,9 @@ export const MultiSelectField: FC<MultiSelectFieldProps> = ({
               hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              hasError(fieldState.error) ? (
-                <div slot="valueStateMessage">
-                  {getValidationErrorMessage(fieldState.error, field.value)}
-                </div>
-              ) : undefined
+              errorMessage != null && (
+                <div slot="valueStateMessage">{errorMessage}</div>
+              )
             }
             onBlur={(event) => {
               // ignore blur event when combobox items are clicked

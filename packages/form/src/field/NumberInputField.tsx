@@ -42,6 +42,11 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
       render={({ field, fieldState }) => {
         // use empty string to reset value, undefined will be ignored by web component
         const value = field.value == null ? "" : field.value + "";
+
+        const errorMessage = hasError(fieldState.error)
+          ? getValidationErrorMessage(fieldState.error, field.value)
+          : undefined;
+
         return (
           <TextInput
             {...props}
@@ -62,11 +67,9 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
               hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              hasError(fieldState.error) ? (
-                <div slot="valueStateMessage">
-                  {getValidationErrorMessage(fieldState.error, field.value)}
-                </div>
-              ) : undefined
+              errorMessage != null && (
+                <div slot="valueStateMessage">{errorMessage}</div>
+              )
             }
             aria-valuemin={
               min != null

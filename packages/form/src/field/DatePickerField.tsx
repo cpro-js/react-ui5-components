@@ -65,6 +65,12 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
       render={({ field, fieldState }) => {
         // use null to reset value, undefined will be ignored by web component
         const value = field.value === undefined ? null : field.value;
+
+        const errorMessage =
+          hasError(fieldState.error) && !isErrorIgnored(fieldState.error)
+            ? getValidationErrorMessage(fieldState.error, field.value)
+            : undefined;
+
         return (
           <DatePicker
             {...props}
@@ -80,12 +86,9 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
               hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              hasError(fieldState.error) &&
-              !isErrorIgnored(fieldState.error) ? (
-                <div slot="valueStateMessage">
-                  {getValidationErrorMessage(fieldState.error, field.value)}
-                </div>
-              ) : undefined
+              errorMessage != null && (
+                <div slot="valueStateMessage">{errorMessage}</div>
+              )
             }
             onBlur={field.onBlur}
             required={required}

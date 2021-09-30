@@ -36,6 +36,10 @@ export const SelectField: FC<SelectFieldProps> = ({
       name={name}
       rules={rules}
       render={({ field, fieldState }) => {
+        const errorMessage = hasError(fieldState.error)
+          ? getValidationErrorMessage(fieldState.error, field.value)
+          : undefined;
+
         return (
           <Select
             {...props}
@@ -47,11 +51,9 @@ export const SelectField: FC<SelectFieldProps> = ({
               hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              hasError(fieldState.error) ? (
-                <div slot="valueStateMessage">
-                  {getValidationErrorMessage(fieldState.error, field.value)}
-                </div>
-              ) : undefined
+              errorMessage != null && (
+                <div slot="valueStateMessage">{errorMessage}</div>
+              )
             }
             onBlur={field.onBlur}
             required={required}
