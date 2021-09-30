@@ -5,7 +5,9 @@ import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { MultiSelect, MultiSelectProps } from "../component/MultiSelect";
+import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
+import { hasError } from "./util";
 
 export type MultiSelectFieldProps = Omit<
   MultiSelectProps,
@@ -26,11 +28,19 @@ export const MultiSelectField: FC<MultiSelectFieldProps> = ({
     }),
     [required]
   );
+
+  const getValidationErrorMessage = useI18nValidationError(name, rules);
+
   return (
     <Controller<any>
       name={name}
       rules={rules}
       render={({ field, fieldState }) => {
+        // get error message (Note: undefined fallbacks to default message of ui5 component)
+        const errorMessage = hasError(fieldState.error)
+          ? getValidationErrorMessage(fieldState.error, field.value)
+          : undefined;
+
         return (
           <MultiSelect
             {...props}
@@ -41,12 +51,12 @@ export const MultiSelectField: FC<MultiSelectFieldProps> = ({
               field.onChange(value);
             }}
             valueState={
-              fieldState.error != null ? ValueState.Error : ValueState.None
+              hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              fieldState.error != null ? (
-                <div slot="valueStateMessage">{fieldState.error.type}</div>
-              ) : undefined
+              errorMessage != null && (
+                <div slot="valueStateMessage">{errorMessage}</div>
+              )
             }
             onBlur={(event) => {
               // ignore blur event when combobox items are clicked

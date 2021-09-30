@@ -5,7 +5,9 @@ import { FC, useMemo } from "react";
 import { Controller, FieldError } from "react-hook-form";
 
 import { DatePicker, DatePickerProps } from "../component/DatePicker";
+import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
+import { hasError } from "./util";
 
 const convertToDateOnly = (value: Date | number): Date => {
   const temp = typeof value === "number" ? new Date(value) : value;
@@ -54,6 +56,8 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
     [required, minDate, maxDate]
   );
 
+  const getValidationErrorMessage = useI18nValidationError(name, rules);
+
   return (
     <Controller<any>
       name={name}
@@ -61,6 +65,13 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
       render={({ field, fieldState }) => {
         // use null to reset value, undefined will be ignored by web component
         const value = field.value === undefined ? null : field.value;
+
+        // get error message (Note: undefined fallbacks to default message of ui5 component)
+        const errorMessage =
+          hasError(fieldState.error) && !isErrorIgnored(fieldState.error)
+            ? getValidationErrorMessage(fieldState.error, field.value)
+            : undefined;
+
         return (
           <DatePicker
             {...props}
@@ -73,12 +84,12 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
               field.onChange(value != null ? value : undefined)
             }
             valueState={
-              fieldState.error != null ? ValueState.Error : ValueState.None
+              hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              fieldState.error != null && !isErrorIgnored(fieldState.error) ? (
-                <div slot="valueStateMessage">{fieldState.error.type}</div>
-              ) : undefined
+              errorMessage != null && (
+                <div slot="valueStateMessage">{errorMessage}</div>
+              )
             }
             onBlur={field.onBlur}
             required={required}

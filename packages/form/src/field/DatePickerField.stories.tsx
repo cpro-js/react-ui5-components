@@ -1,6 +1,7 @@
 import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../FormController";
+import { FormI18nProvider } from "../i18n/FormI18n";
 import { DatePickerField, DatePickerFieldProps } from "./DatePickerField";
 
 interface FormData {
@@ -20,6 +21,22 @@ const Template: Story<FormControllerProps<FormData> & DatePickerFieldProps> = (
         <button type="reset">Reset</button>
       </div>
     </FormController>
+  );
+};
+
+const I18nTemplate: Story<
+  FormControllerProps<FormData> & DatePickerFieldProps
+> = (args, context) => {
+  return (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) => {
+        return `Field '${name}' has Error '${
+          error.type
+        }'. Original error message: ${error.message || "---"}`;
+      }}
+    >
+      {Template(args, context)}
+    </FormI18nProvider>
   );
 };
 
@@ -61,6 +78,11 @@ ValidationRequiredAndOnlyToday.args = {
   required: true,
   minDate: new Date(),
   maxDate: new Date(),
+};
+
+export const ValidationTranslationRequired = I18nTemplate.bind({});
+ValidationTranslationRequired.args = {
+  ...ValidationRequired.args,
 };
 
 export default {

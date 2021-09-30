@@ -7,6 +7,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Checkbox, CheckboxProps } from "../component/Checkbox";
 import { CheckboxFieldGroupContext } from "./CheckboxFieldGroup";
 import { FormFieldValidation } from "./types";
+import { hasError } from "./util";
 
 export const MISSING_NAME = "CHECKBOX_NAME_IS_MISSING";
 
@@ -93,7 +94,7 @@ export const CheckboxField: FC<CheckboxFieldProps> = ({
               setValue(field.name, updatedValue);
             }}
             valueState={
-              fieldState.error != null ? ValueState.Error : ValueState.None
+              hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             onBlur={field.onBlur}
           />

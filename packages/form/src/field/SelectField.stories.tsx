@@ -2,6 +2,7 @@ import { Story } from "@storybook/react";
 
 import { SelectItem } from "../component/Select";
 import { FormController, FormControllerProps } from "../FormController";
+import { FormI18nProvider } from "../i18n/FormI18n";
 import { SelectField, SelectFieldProps } from "./SelectField";
 
 const items: Array<SelectItem> = [
@@ -29,6 +30,23 @@ const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
         <button type="reset">Reset</button>
       </div>
     </FormController>
+  );
+};
+
+const I18nTemplate: Story<FormControllerProps<FormData> & SelectFieldProps> = (
+  args,
+  context
+) => {
+  return (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) => {
+        return `Field '${name}' has Error '${
+          error.type
+        }'. Original error message: ${error.message || "---"}`;
+      }}
+    >
+      {Template(args, context)}
+    </FormI18nProvider>
   );
 };
 
@@ -67,6 +85,11 @@ export const ValidationRequired = Template.bind({});
 ValidationRequired.args = {
   ...WithEmptyOption.args,
   required: true,
+};
+
+export const ValidationTranslationRequired = I18nTemplate.bind({});
+ValidationTranslationRequired.args = {
+  ...ValidationRequired.args,
 };
 
 export default {

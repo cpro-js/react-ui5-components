@@ -59,3 +59,6 @@ export type { TextInputFieldProps } from "./field/TextInputField";
 
 export { useFormController, FormController } from "./FormController";
 export type { FormControllerProps } from "./FormController";
+
+export { FormI18nProvider } from "./i18n/FormI18n";
+export type { FormI18nProviderProps } from "./i18n/FormI18n";

@@ -5,7 +5,9 @@ import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { Select, SelectProps } from "../component/Select";
+import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
+import { hasError } from "./util";
 
 export type SelectFieldProps = Omit<
   SelectProps,
@@ -27,11 +29,18 @@ export const SelectField: FC<SelectFieldProps> = ({
     [required]
   );
 
+  const getValidationErrorMessage = useI18nValidationError(name, rules);
+
   return (
     <Controller<any>
       name={name}
       rules={rules}
       render={({ field, fieldState }) => {
+        // get error message (Note: undefined fallbacks to default message of ui5 component)
+        const errorMessage = hasError(fieldState.error)
+          ? getValidationErrorMessage(fieldState.error, field.value)
+          : undefined;
+
         return (
           <Select
             {...props}
@@ -40,12 +49,12 @@ export const SelectField: FC<SelectFieldProps> = ({
             value={field.value}
             onChange={(_, value) => field.onChange(value)}
             valueState={
-              fieldState.error != null ? ValueState.Error : ValueState.None
+              hasError(fieldState.error) ? ValueState.Error : ValueState.None
             }
             valueStateMessage={
-              fieldState.error != null ? (
-                <div slot="valueStateMessage">{fieldState.error.type}</div>
-              ) : undefined
+              errorMessage != null && (
+                <div slot="valueStateMessage">{errorMessage}</div>
+              )
             }
             onBlur={field.onBlur}
             required={required}

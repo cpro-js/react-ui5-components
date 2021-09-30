@@ -2,6 +2,7 @@ import { Story } from "@storybook/react";
 
 import { MultiSelectItem } from "../component/MultiSelect";
 import { FormController, FormControllerProps } from "../FormController";
+import { FormI18nProvider } from "../i18n/FormI18n";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
 
 const items: Array<MultiSelectItem> = [
@@ -28,6 +29,22 @@ const Template: Story<FormControllerProps<FormData> & MultiSelectFieldProps> = (
         <button type="reset">Reset</button>
       </div>
     </FormController>
+  );
+};
+
+const I18nTemplate: Story<
+  FormControllerProps<FormData> & MultiSelectFieldProps
+> = (args, context) => {
+  return (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) => {
+        return `Field '${name}' has Error '${
+          error.type
+        }'. Original error message: ${error.message || "---"}`;
+      }}
+    >
+      {Template(args, context)}
+    </FormI18nProvider>
   );
 };
 
@@ -63,6 +80,11 @@ export const ValidationRequired = Template.bind({});
 ValidationRequired.args = {
   ...Standard.args,
   required: true,
+};
+
+export const ValidationTranslationRequired = I18nTemplate.bind({});
+ValidationTranslationRequired.args = {
+  ...ValidationRequired.args,
 };
 
 export default {

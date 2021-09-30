@@ -5,7 +5,9 @@ import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { TextInput, TextInputProps } from "../component/TextInput";
+import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
+import { hasError } from "./util";
 
 export type NumberInputFieldProps = Omit<
   TextInputProps,
@@ -31,6 +33,8 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
     [required, min, max]
   );
 
+  const getValidationErrorMessage = useI18nValidationError(name, rules);
+
   return (
     <Controller<any>
       name={name}
@@ -38,6 +42,12 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
       render={({ field, fieldState }) => {
         // use empty string to reset value, undefined will be ignored by web component
         const value = field.value == null ? "" : field.value + "";
+
+        // get error message (Note: undefined fallbacks to default message of ui5 component)
+        const errorMessage = hasError(fieldState.error)
+          ? getValidationErrorMessage(fieldState.error, field.value)
+          : undefined;
+
         return (
           <TextInput
             {...props}
@@ -53,14 +63,14 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
               field.onChange(transformedValue);
             }}
             onBlur={field.onBlur}
-            valueState={
-              fieldState.error != null ? ValueState.Error : ValueState.None
-            }
             required={required}
+            valueState={
+              hasError(fieldState.error) ? ValueState.Error : ValueState.None
+            }
             valueStateMessage={
-              fieldState.error != null ? (
-                <div slot="valueStateMessage">{fieldState.error.type}</div>
-              ) : undefined
+              errorMessage != null && (
+                <div slot="valueStateMessage">{errorMessage}</div>
+              )
             }
             aria-valuemin={
               min != null
