@@ -82,21 +82,17 @@ ValidationMinMaxLength.args = {
 
 export const ValidationTranslationRequired = I18nTemplate.bind({});
 ValidationTranslationRequired.args = {
-  ...Empty.args,
-  required: true,
+  ...ValidationRequired.args,
 };
 
 export const ValidationTranslationMinLength = I18nTemplate.bind({});
 ValidationTranslationMinLength.args = {
-  ...Empty.args,
-  minLength: 4,
+  ...ValidationMinLength.args,
 };
 
 export const ValidationTranslationMinMaxLength = I18nTemplate.bind({});
 ValidationTranslationMinMaxLength.args = {
-  ...Empty.args,
-  minLength: 4,
-  maxLength: 10,
+  ...ValidationMinMaxLength.args,
 };
 
 export default {

@@ -89,8 +89,7 @@ ValidationRequired.args = {
 
 export const ValidationTranslationRequired = I18nTemplate.bind({});
 ValidationTranslationRequired.args = {
-  ...WithEmptyOption.args,
-  required: true,
+  ...ValidationRequired.args,
 };
 
 export default {
