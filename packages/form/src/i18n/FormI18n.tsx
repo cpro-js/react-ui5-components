@@ -69,10 +69,6 @@ export const FormI18nProvider: FC<FormI18nProviderProps> = ({
   );
 };
 
-export const hasError = (
-  error?: FormFieldValidationError
-): error is FormFieldValidationError => error != null;
-
 export const useI18nValidationError = (
   name: string,
   rules: Partial<FormFieldValidation>

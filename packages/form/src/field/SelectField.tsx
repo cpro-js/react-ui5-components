@@ -5,8 +5,9 @@ import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { Select, SelectProps } from "../component/Select";
-import { hasError, useI18nValidationError } from "../i18n/FormI18n";
+import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
+import { hasError } from "./util";
 
 export type SelectFieldProps = Omit<
   SelectProps,
