@@ -2,7 +2,7 @@ import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../FormController";
-import { FormValues, FormValuesProps } from "./FormValues";
+import { FormListener, FormListenerProps } from "./FormListener";
 import { TextInputField } from "./TextInputField";
 
 interface FormData {
@@ -10,7 +10,7 @@ interface FormData {
 }
 
 const Template: Story<
-  FormControllerProps<FormData> & FormValuesProps<FormData>
+  FormControllerProps<FormData> & FormListenerProps<FormData>
 > = (args) => {
   const { initialValues, onSubmit } = args;
 
@@ -21,7 +21,7 @@ const Template: Story<
         <button type="submit">Submit</button>
         <button type="reset">Reset</button>
       </div>
-      <FormValues {...args} />
+      <FormListener {...args} />
     </FormController>
   );
 };
@@ -37,10 +37,12 @@ Standard.args = {
       { name: "text", value: "Random value: " + new Date().getTime() },
     ]);
   },
-  render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
+  onChange: (...args) => {
+    action("change")(...args);
+  },
 };
 
 export default {
-  title: "Form/Field/FormValues",
-  component: FormValues,
+  title: "Form/Field/FormListener",
+  component: FormListener,
 };
