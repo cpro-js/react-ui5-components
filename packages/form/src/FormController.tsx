@@ -10,10 +10,15 @@ import {
 } from "react-hook-form";
 import { UnpackNestedValue } from "react-hook-form/dist/types/form";
 
+import { FormActions } from "./field/types";
+
 export interface FormControllerProps<FormValues extends {}> {
   id?: string;
   initialValues?: DefaultValues<FormValues>;
-  onSubmit: (values: UnpackNestedValue<FormValues>) => void | Promise<void>;
+  onSubmit: (
+    values: UnpackNestedValue<FormValues>,
+    actions: FormActions<FormValues>
+  ) => void | Promise<void>;
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
@@ -41,7 +46,43 @@ export function useFormController<FormValues extends {}>(
     shouldUnregister: false,
   });
 
-  const { handleSubmit, reset, trigger } = form;
+  const { handleSubmit, reset, trigger, setValue, setError, setFocus } = form;
+
+  const formActions: FormActions<FormValues> = useMemo(
+    () => ({
+      setErrors(errors, config): void {
+        if (errors.length > 0) {
+          errors.forEach(({ name, message }) => {
+            setError(
+              name,
+              {
+                type: "external-error",
+                message: message,
+              },
+              { shouldFocus: false }
+            );
+          });
+
+          if (config?.shouldFocus) {
+            // TODO is there any way to ensure that the error order matches the input order?
+            setFocus(errors[0].name);
+          }
+        }
+      },
+      setValues(values): void {
+        values.forEach(({ name, value }) => {
+          setValue(name, value, {
+            shouldValidate: false,
+            shouldDirty: false,
+          });
+        });
+      },
+      reset(): void {
+        reset();
+      },
+    }),
+    [reset, setValue, setError, setFocus]
+  );
 
   const enhancedOnSubmit: SubmitHandler<FormValues> = useCallback(
     async (data) => {
@@ -50,10 +91,10 @@ export function useFormController<FormValues extends {}>(
 
       if (valid) {
         // call submit
-        return onSubmit(data);
+        return onSubmit(data, formActions);
       }
     },
-    [trigger, onSubmit]
+    [trigger, onSubmit, formActions]
   );
 
   const handleReset = useCallback(() => {
