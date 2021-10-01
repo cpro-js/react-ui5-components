@@ -69,7 +69,7 @@ export function useFormController<FormValues extends {}>(
           }
         }
       },
-      setValues(...values): void {
+      setValues(values): void {
         values.forEach(({ name, value }) => {
           setValue(name, value, {
             shouldValidate: false,

@@ -150,10 +150,10 @@ SetValuesOnSubmit.args = {
   ...Prefilled.args,
   onSubmit: (values, actions) => {
     action("onsubmit")(values, actions);
-    actions.setValues(
+    actions.setValues([
       { name: "date", value: new Date(1990, 1, 10) },
-      { name: "input1", value: "New Value" }
-    );
+      { name: "input1", value: "New Value" },
+    ]);
   },
 };
 

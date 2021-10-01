@@ -1,5 +1,4 @@
 import { FieldPath } from "react-hook-form";
-import { UnpackNestedValue } from "react-hook-form/dist/types/form";
 
 export type FormFieldValidationRule<
   T extends boolean | number | string | RegExp
@@ -43,9 +42,7 @@ export interface FormActions<FormValues> {
    *
    * @param values
    */
-  setValues(
-    ...values: Array<{ name: FieldPath<FormValues>; value: any }>
-  ): void;
+  setValues(values: Array<{ name: FieldPath<FormValues>; value: any }>): void;
 
   /**
    * Reset form to it's initial state.
