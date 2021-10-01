@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
 import {
   FlexBox,
@@ -103,6 +104,40 @@ Prefilled.args = {
     input2: "Text 2",
     date: new Date(),
     dish: ["burger"],
+  },
+};
+
+export const SubmitErrors = Template.bind({});
+SubmitErrors.args = {
+  ...Prefilled.args,
+  onSubmit: (values, actions) => {
+    action("onsubmit")(values, actions);
+
+    actions.setErrors([
+      { name: "input1", message: "Custom error from submit: input1" },
+    ]);
+  },
+};
+
+export const SubmitErrorsFocus = Template.bind({});
+SubmitErrorsFocus.args = {
+  ...Prefilled.args,
+  onSubmit: (values, actions) => {
+    action("onsubmit")(values, actions);
+
+    actions.setErrors(
+      [{ name: "input1", message: "Custom error from submit: input1" }],
+      { shouldFocus: true }
+    );
+  },
+};
+
+export const ResetFormOnSubmit = Template.bind({});
+ResetFormOnSubmit.args = {
+  ...Prefilled.args,
+  onSubmit: (values, actions) => {
+    action("onsubmit")(values, actions);
+    actions.reset();
   },
 };
 
