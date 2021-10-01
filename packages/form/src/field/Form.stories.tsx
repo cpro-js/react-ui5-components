@@ -115,6 +115,7 @@ SubmitErrors.args = {
 
     actions.setErrors([
       { name: "input1", message: "Custom error from submit: input1" },
+      { name: "date", message: "Custom error from submit: date" },
     ]);
   },
 };
@@ -126,7 +127,10 @@ SubmitErrorsFocus.args = {
     action("onsubmit")(values, actions);
 
     actions.setErrors(
-      [{ name: "input1", message: "Custom error from submit: input1" }],
+      [
+        { name: "input1", message: "Custom error from submit: input1" },
+        { name: "date", message: "Custom error from submit: date" },
+      ],
       { shouldFocus: true }
     );
   },
