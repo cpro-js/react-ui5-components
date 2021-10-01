@@ -145,6 +145,18 @@ ResetFormOnSubmit.args = {
   },
 };
 
+export const SetValuesOnSubmit = Template.bind({});
+SetValuesOnSubmit.args = {
+  ...Prefilled.args,
+  onSubmit: (values, actions) => {
+    action("onsubmit")(values, actions);
+    actions.setValues(
+      { name: "date", value: new Date(1990, 1, 10) },
+      { name: "input1", value: "New Value" }
+    );
+  },
+};
+
 export default {
   title: "Form/Field/Form",
   argTypes: {

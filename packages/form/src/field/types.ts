@@ -38,6 +38,16 @@ export interface FormActions<FormValues> {
   ): void;
 
   /**
+   * Set new form values for fields.
+   * Note: This does not override the default values of your form for the reset() method. You need to create a new form to reset the original default values.
+   *
+   * @param values
+   */
+  setValues(
+    ...values: Array<{ name: FieldPath<FormValues>; value: any }>
+  ): void;
+
+  /**
    * Reset form to it's initial state.
    */
   reset(): void;
