@@ -14,13 +14,13 @@ const items: Array<SelectItem> = [
   { value: "4", label: "Test 4" },
 ];
 
-export const Empty = Template.bind({});
-Empty.args = {};
-
 export const Standard = Template.bind({});
 Standard.args = {
   items,
 };
+
+export const Empty = Template.bind({});
+Empty.args = {};
 
 export const WithEmptyOption = Template.bind({});
 WithEmptyOption.args = { ...Standard.args, addEmptyOption: true };

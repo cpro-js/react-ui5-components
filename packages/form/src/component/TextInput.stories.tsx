@@ -1,3 +1,5 @@
+import "@ui5/webcomponents-icons/dist/value-help";
+
 import { Story } from "@storybook/react";
 import { Icon, Text } from "@ui5/webcomponents-react";
 

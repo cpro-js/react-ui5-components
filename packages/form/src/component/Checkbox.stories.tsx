@@ -29,10 +29,24 @@ Checked.args = {
   checked: true,
 };
 
+export const Indeterminate = Template.bind({});
+Indeterminate.args = {
+  ...Standard.args,
+  indeterminate: true,
+  checked: true,
+};
+
 export const Disabled = Template.bind({});
 Disabled.args = {
   ...Standard.args,
   disabled: true,
+};
+
+export const DisabledAndChecked = Template.bind({});
+DisabledAndChecked.args = {
+  ...Standard.args,
+  disabled: true,
+  checked: true,
 };
 
 export const HtmlForm = Template.bind({});

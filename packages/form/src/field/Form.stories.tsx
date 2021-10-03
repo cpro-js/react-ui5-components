@@ -11,6 +11,10 @@ import {
   ToolbarSpacer,
 } from "@ui5/webcomponents-react";
 
+import {
+  COUNTRIES,
+  SEARCH_COUNTRIES,
+} from "../component/auto-complete/AutoComplete-storyData";
 import { Button } from "../component/Button";
 import { FormController, FormControllerProps } from "../FormController";
 import { CheckboxField } from "./CheckboxField";
@@ -18,6 +22,7 @@ import { CheckboxFieldGroup } from "./CheckboxFieldGroup";
 import { DatePickerField } from "./DatePickerField";
 import { HiddenField } from "./HiddenField";
 import { TextInputField } from "./TextInputField";
+import { AutoCompleteField, MultiAutoCompleteField } from "..";
 
 interface FormData {
   id?: string;
@@ -25,10 +30,23 @@ interface FormData {
   input2?: string;
   date?: Date;
   dish?: Array<string>;
+  country: string;
+  countries: Array<string>;
 }
 
-const Template: Story<FormControllerProps<FormData>> = (args) => {
-  const { initialValues, onSubmit, id } = args;
+interface ExtraData {
+  initialCurrentCountrySuggestions?: typeof COUNTRIES;
+  initialCountriesSuggestions?: typeof COUNTRIES;
+}
+
+const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
+  const {
+    initialValues,
+    onSubmit,
+    id,
+    initialCurrentCountrySuggestions,
+    initialCountriesSuggestions,
+  } = args;
 
   return (
     <>
@@ -71,6 +89,20 @@ const Template: Story<FormControllerProps<FormData>> = (args) => {
               </CheckboxFieldGroup>
             </FlexBox>
           </FormItem>
+          <FormItem label="Current Country">
+            <AutoCompleteField
+              name="country"
+              onSearch={SEARCH_COUNTRIES}
+              initialSuggestions={initialCurrentCountrySuggestions}
+            />
+          </FormItem>
+          <FormItem label="Visitied Countries">
+            <MultiAutoCompleteField
+              name="countries"
+              onSearch={SEARCH_COUNTRIES}
+              initialSuggestions={initialCountriesSuggestions}
+            />
+          </FormItem>
           <FormItem>
             <Toolbar>
               <ToolbarSpacer />
@@ -104,7 +136,11 @@ Prefilled.args = {
     input2: "Text 2",
     date: new Date(),
     dish: ["burger"],
+    country: "BG",
+    countries: ["FI", "GB"],
   },
+  initialCurrentCountrySuggestions: [COUNTRIES[1]],
+  initialCountriesSuggestions: [COUNTRIES[2], COUNTRIES[3]],
 };
 
 export const SubmitErrors = Template.bind({});

@@ -20,6 +20,19 @@ export type { SelectProps, SelectItem } from "./component/Select";
 export { TextInput } from "./component/TextInput";
 export type { TextInputProps } from "./component/TextInput";
 
+export { AutoComplete } from "./component/AutoComplete";
+export type { AutoCompleteProps } from "./component/AutoComplete";
+
+export { MultiAutoComplete } from "./component/MultiAutoComplete";
+export type { MultiAutoCompleteProps } from "./component/MultiAutoComplete";
+
+export type {
+  AutoCompleteOptions,
+  DefaultAutoCompleteOption,
+  CustomSuggestionProps,
+  CustomTokenProps,
+} from "./component/AutoCompleteModel";
+
 // smart form components/fields
 export { CheckboxField } from "./field/CheckboxField";
 export type { CheckboxFieldProps } from "./field/CheckboxField";
@@ -56,6 +69,12 @@ export type { SelectFieldProps } from "./field/SelectField";
 
 export { TextInputField } from "./field/TextInputField";
 export type { TextInputFieldProps } from "./field/TextInputField";
+
+export { AutoCompleteField } from "./field/AutoCompleteField";
+export type { AutoCompleteFieldProps } from "./field/AutoCompleteField";
+
+export { MultiAutoCompleteField } from "./field/MultiAutoCompleteField";
+export type { MultiAutoCompleteFieldProps } from "./field/MultiAutoCompleteField";
 
 export { useFormController, FormController } from "./FormController";
 export type { FormControllerProps } from "./FormController";
