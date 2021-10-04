@@ -16,6 +16,7 @@ import {
 } from "react";
 import { createUseStyles } from "react-jss";
 
+import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
 import { triggerSubmitOnEnter } from "./util";
 
 const useStyles = createUseStyles({
@@ -80,6 +81,8 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
     // forward our internal ref as external
     useImperativeHandle(forwardedRef, () => ref.current);
 
+    const ui5Loaded = useWaitForWebcomponent("ui5-date-picker");
+
     // Workaround: API of UI5 Datepicker supports only user formatted date strings as input and output
     // that's why we need to transform our used date objects to string and vice versa with their private API
     const [{ format, parse }, setDateFormat] = useState<
@@ -119,12 +122,15 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
 
     const handleChange = useCallback(
       (event: Ui5CustomEvent<HTMLInputElement>) => {
+        if (!ui5Loaded) {
+          return;
+        }
         if (onChange != null) {
           const value = parse == null ? null : parse(event.target.value);
           onChange(event, value);
         }
       },
-      [onChange, parse]
+      [onChange, parse, ui5Loaded]
     );
 
     const handleKeyPress = useCallback(
@@ -144,17 +150,21 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
         {...props}
         className={clsx(className, classes.fixWidth)}
         ref={setRef}
-        value={format != null && value != null ? format(new Date(value)) : ""}
+        value={
+          ui5Loaded && format != null && value != null
+            ? format(new Date(value))
+            : ""
+        }
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onKeyPress={handleKeyPress}
         minDate={
-          format != null && minDate != null
+          ui5Loaded && format != null && minDate != null
             ? format(new Date(minDate))
             : undefined
         }
         maxDate={
-          format != null && maxDate != null
+          ui5Loaded && format != null && maxDate != null
             ? format(new Date(maxDate))
             : undefined
         }
