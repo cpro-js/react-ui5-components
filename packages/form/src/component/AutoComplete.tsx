@@ -4,7 +4,7 @@ import { Input, SuggestionItem } from "@ui5/webcomponents-react";
 import { debounce } from "@ui5/webcomponents-react-base/dist/Utils";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
-import { Component, ReactNode } from "react";
+import { Component, FocusEvent, ReactNode } from "react";
 
 import {
   AutoCompleteOptions,
@@ -98,17 +98,17 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     suggestions: this.props.initialSuggestions || ([] as Array<T>),
   };
 
-  search = debounce((searchTerm: string) => {
+  search = debounce((searchTerm: string, hasMinChars: boolean) => {
     const { value } = this.state;
-    const { onSearch, minCharsForSearch } = this.props;
-    const hasMinChars = searchTerm.length >= (minCharsForSearch || 1);
+    const { onSearch } = this.props;
 
     // there is one case where we shouldn't search, after a selection has been made.
     // First a search is not neccessary, second it can be harmful: The label which is put
     // into the input field after selection, doesn't need to be a proper & matching search term
     // => only search if the search term doesn't match the label of the current value
-    const selectedLabel = value ? this.getLabelForValue(value) : "";
+    const selectedLabel = value ? this.getLabelForValue(value) : undefined;
     const hasBeenSelected = selectedLabel === searchTerm;
+
     if (!hasBeenSelected && hasMinChars) {
       this.searching = true;
       onSearch(searchTerm).then((suggestions) => {
@@ -119,29 +119,37 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
   }, DEBOUNCE_RATE);
 
   onInput = (event: Ui5CustomEvent<HTMLInputElement>) => {
-    const { onChange, onSelectionChange: onSelect } = this.props;
-    const value = (event.currentTarget as InputPropTypes).value;
-    this.searchTerm = value ? value.trim() : "";
+    const {
+      onChange,
+      onSelectionChange: onSelect,
+      minCharsForSearch,
+    } = this.props;
+    const { value } = this.state;
+    const currentValue = (event.currentTarget as InputPropTypes).value;
+    this.searchTerm = currentValue ? currentValue.trim() : "";
+    const hasMinChars = this.searchTerm.length >= (minCharsForSearch || 1);
 
-    // no value => clear everything
-    if (!this.searchTerm) {
-      console.log("no value ! clearing!");
-      if (onChange) {
-        onChange(event, "");
+    if (!this.searchTerm || !hasMinChars) {
+      // value existed, now its empty => trigger change
+      if (value) {
+        if (onChange) {
+          onChange(event, "");
+        }
+        if (onSelect) {
+          onSelect("");
+        }
       }
-      if (onSelect) {
-        onSelect("");
-      }
+
+      // no value => clear everything
       this.setState({ suggestions: [], value: "" });
     }
 
     // call debounced search function
-    // we always call this function to handle empty values
-    this.search(this.searchTerm);
+    // note: we always need to call this function, because of debouncing & empty values
+    this.search(this.searchTerm, hasMinChars);
   };
 
   onSelect = (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
-    console.log("onSelect");
     const { onChange, onSelectionChange: onSelect } = this.props;
     const id = (event.detail.item as unknown as HTMLElement).dataset.id;
     const selectedValue = id || "";
@@ -160,6 +168,16 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
       onSelect(selectedValue, selectedItem);
     }
     this.setState({ value: selectedValue });
+  };
+
+  onBlur = (event: FocusEvent<HTMLInputElement>) => {
+    const { value } = this.state;
+    const labelFromValue = this.getLabelForValue(value);
+    const currentValue = event.currentTarget.value;
+
+    if (labelFromValue !== currentValue) {
+      event.currentTarget.value = labelFromValue;
+    }
   };
 
   findItemFromSuggestions = (value?: string) => {
@@ -221,9 +239,6 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
   };
 
   getLabelForValue(value?: string) {
-    if (this.searchTerm) {
-      return this.searchTerm;
-    }
     if (value) {
       const item = this.findItemFromSuggestions(value);
       return item ? this.retrieveOptionLabel(item) : value;
@@ -245,7 +260,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     } = this.props;
     const { value: selected } = this.state;
 
-    const labelSelected = this.getLabelForValue(selected);
+    const labelSelected = this.searchTerm ?? this.getLabelForValue(selected);
 
     return (
       <Input
@@ -254,6 +269,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
         showSuggestions={true}
         onInput={this.onInput}
         onSuggestionItemSelect={this.onSelect}
+        onBlur={this.onBlur}
       >
         {this.renderSuggestions()}
       </Input>

@@ -39,6 +39,9 @@ PrefilledWithValueOnly.args = {
   value: COUNTRIES[1].value,
 };
 
+export const MinCharacters = Template.bind({});
+MinCharacters.args = { ...Standard.args, minCharsForSearch: 3 };
+
 export const CustomLabelProp = Template.bind({});
 CustomLabelProp.args = { ...Prefilled.args, optionLabel: "withUmlaut" };
 
