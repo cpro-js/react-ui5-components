@@ -1,3 +1,5 @@
+import { action } from "@storybook/addon-actions";
+
 import { DefaultAutoCompleteOption } from "../AutoCompleteModel";
 
 export const COUNTRIES = [
@@ -18,6 +20,8 @@ export const COUNTRIES = [
 export const SEARCH_COUNTRIES = (
   searchTerm: string
 ): Promise<Array<DefaultAutoCompleteOption>> => {
+  action("onSearch")(searchTerm);
+
   const regExp = new RegExp(searchTerm, "i");
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -25,6 +29,6 @@ export const SEARCH_COUNTRIES = (
         (country) => country.label.match(regExp) || country.value.match(regExp)
       );
       resolve(result);
-    }, 800);
+    }, 300);
   });
 };

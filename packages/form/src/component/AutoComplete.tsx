@@ -1,6 +1,7 @@
 import "@ui5/webcomponents/dist/features/InputSuggestions.js";
 
 import { Input, SuggestionItem } from "@ui5/webcomponents-react";
+import { debounce } from "@ui5/webcomponents-react-base/dist/Utils";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
 import { Component, ReactNode } from "react";
@@ -47,6 +48,13 @@ export type AutoCompleteProps<T = DefaultAutoCompleteOption> =
     optionValue?: string | ((value: T) => string);
 
     placeholder?: string;
+
+    /**
+     * Minimum number of characters before search is triggered.
+     * Default: 1.
+     */
+    minCharsForSearch?: number;
+
     /**
      * The search method to use in order to generate suggestions.
      * This method is fired on every key press.
@@ -77,21 +85,47 @@ export type AutoCompleteProps<T = DefaultAutoCompleteOption> =
     ) => void;
   };
 
+const DEBOUNCE_RATE = 400;
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
 
 export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
+  searchTerm: string = "";
+  searching: boolean = false;
+
   state = {
     value: this.props.value || "",
     suggestions: this.props.initialSuggestions || ([] as Array<T>),
   };
 
-  onInput = (event: Ui5CustomEvent<HTMLInputElement>) => {
-    const { onSearch, onChange, onSelectionChange: onSelect } = this.props;
-    const value = (event.currentTarget as InputPropTypes).value;
+  search = debounce((searchTerm: string) => {
+    const { value } = this.state;
+    const { onSearch, minCharsForSearch } = this.props;
+    const hasMinChars = searchTerm.length >= (minCharsForSearch || 1);
 
-    // no searching
-    if (!value || !value.trim()) {
+    // there is one case where we shouldn't search, after a selection has been made.
+    // First a search is not neccessary, second it can be harmful: The label which is put
+    // into the input field after selection, doesn't need to be a proper & matching search term
+    // => only search if the search term doesn't match the label of the current value
+    const selectedLabel = value ? this.getLabelForValue(value) : "";
+    const hasBeenSelected = selectedLabel === searchTerm;
+    if (!hasBeenSelected && hasMinChars) {
+      this.searching = true;
+      onSearch(searchTerm).then((suggestions) => {
+        this.searching = false;
+        this.setState({ suggestions });
+      });
+    }
+  }, DEBOUNCE_RATE);
+
+  onInput = (event: Ui5CustomEvent<HTMLInputElement>) => {
+    const { onChange, onSelectionChange: onSelect } = this.props;
+    const value = (event.currentTarget as InputPropTypes).value;
+    this.searchTerm = value ? value.trim() : "";
+
+    // no value => clear everything
+    if (!this.searchTerm) {
+      console.log("no value ! clearing!");
       if (onChange) {
         onChange(event, "");
       }
@@ -99,17 +133,15 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
         onSelect("");
       }
       this.setState({ suggestions: [], value: "" });
-      return;
     }
 
-    if (onSearch) {
-      onSearch(value).then((data) => {
-        this.setState({ suggestions: data });
-      });
-    }
+    // call debounced search function
+    // we always call this function to handle empty values
+    this.search(this.searchTerm);
   };
 
   onSelect = (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
+    console.log("onSelect");
     const { onChange, onSelectionChange: onSelect } = this.props;
     const id = (event.detail.item as unknown as HTMLElement).dataset.id;
     const selectedValue = id || "";
@@ -189,6 +221,9 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
   };
 
   getLabelForValue(value?: string) {
+    if (this.searchTerm) {
+      return this.searchTerm;
+    }
     if (value) {
       const item = this.findItemFromSuggestions(value);
       return item ? this.retrieveOptionLabel(item) : value;

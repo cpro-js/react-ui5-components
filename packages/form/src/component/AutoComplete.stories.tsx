@@ -15,10 +15,9 @@ import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
 import { DefaultAutoCompleteOption } from "./AutoCompleteModel";
 
 const Template: Story<AutoCompleteProps<DefaultAutoCompleteOption>> = ({
-  value,
   ...props
 }) => {
-  return <AutoComplete {...props} value={value} />;
+  return <AutoComplete {...props} onSearch={SEARCH_COUNTRIES} />;
 };
 
 export const Standard = Template.bind({});
