@@ -36,13 +36,6 @@ interface SapCoreDateFormat {
    * @param date
    */
   format: (date: Date) => string;
-  /**
-   * Parses date string into Date. Invalid values seems to return null.
-   * TODO identify scenarios when array of dates will be returned
-   *
-   * @param date
-   */
-  parse: (date: string) => Date | null;
 }
 
 export interface DatePickerProps
@@ -85,9 +78,9 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
 
     // Workaround: API of UI5 Datepicker supports only user formatted date strings as input and output
     // that's why we need to transform our used date objects to string and vice versa with their private API
-    const [{ format, parse }, setDateFormat] = useState<
-      Partial<SapCoreDateFormat>
-    >({});
+    const [{ format }, setDateFormat] = useState<Partial<SapCoreDateFormat>>(
+      {}
+    );
 
     const setRef = useCallback((ui5DatePicker: null | Ui5DatePickerDomRef) => {
       if (ui5DatePicker == null) {
@@ -97,12 +90,8 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
       ref.current = ui5DatePicker as any;
 
       setDateFormat({
-        parse(date: string) {
-          // private api...
-          return (ui5DatePicker as any).getFormat().parse(date);
-        },
         format(date: Date) {
-          // todo types are wrong
+          // todo return type of formatValue is incorrect (void instead of string)
           return ui5DatePicker.formatValue(date) as any as string;
         },
       });
@@ -126,11 +115,12 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
           return;
         }
         if (onChange != null) {
-          const value = parse == null ? null : parse(event.target.value);
-          onChange(event, value);
+          const value: Date | undefined | null = (event.target as any)
+            .dateValue;
+          onChange(event, value != null ? value : null);
         }
       },
-      [onChange, parse, ui5Loaded]
+      [onChange, ui5Loaded]
     );
 
     const handleKeyPress = useCallback(
