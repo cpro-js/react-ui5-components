@@ -7,62 +7,25 @@ import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
 import { Component, FocusEvent, ReactNode } from "react";
 
 import {
-  AutoCompleteOptions,
   CustomInputProps,
   CustomSuggestionProps,
   DefaultAutoCompleteOption,
 } from "./AutoCompleteModel";
+import {
+  DEBOUNCE_RATE,
+  DEFAULT_LABEL_PROP,
+  DEFAULT_VALUE_PROP,
+} from "./common/CommonSelection";
 
 export type AutoCompleteProps<T = DefaultAutoCompleteOption> =
-  CustomInputProps & {
-    /**
-     * Name of the input.
-     */
-    name?: string;
-
+  CustomInputProps<T> & {
     /**
      * The selected value.
+     *
+     * This is NOT the display value in the input field. It is either the value of a selected
+     * item or the empty string.
      */
     value?: string;
-
-    renderValue?: (value: T) => string;
-
-    /**
-     * Controls which text is used to display options.
-     * Used by suggestions, if not overridden
-     * by <code>renderSuggestion</code>
-     *
-     * By default the prop <code>label</code> is used.
-     * You can pass either a string, which represents a different prop or a render function.
-     */
-    optionLabel?: string | ((value: T) => string);
-
-    /**
-     * Controls which value / key is used to identify an option.
-     * This is used by suggestions, if not overridden
-     * by <code>renderSuggestion</code>.
-     *
-     * By default the prop <code>value</code> is used.
-     * You can pass either a string, which represents a different prop or a render function.
-     */
-    optionValue?: string | ((value: T) => string);
-
-    placeholder?: string;
-
-    /**
-     * Minimum number of characters before search is triggered.
-     * Default: 1.
-     */
-    minCharsForSearch?: number;
-
-    /**
-     * The search method to use in order to generate suggestions.
-     * This method is fired on every key press.
-     *
-     * @param searchTerm the entered value
-     * @returns Promise of the items to use for showing suggestions
-     */
-    onSearch: (searchTerm: string) => Promise<AutoCompleteOptions<T>>;
 
     /**
      * Main method to get notified about any change to the selection.
@@ -72,22 +35,11 @@ export type AutoCompleteProps<T = DefaultAutoCompleteOption> =
      */
     onSelectionChange?: (value: string, suggestionValue?: any) => void;
 
-    /**
-     * Render <code>SuggestionItem</code>s from UI5.
-     */
-    suggestionProps?: (value: T) => Partial<CustomSuggestionProps>;
-
-    initialSuggestions?: Array<T>;
-
     onChange?: (
       event: Ui5CustomEvent<HTMLInputElement>,
       value?: string
     ) => void;
   };
-
-const DEBOUNCE_RATE = 400;
-const DEFAULT_LABEL_PROP = "label";
-const DEFAULT_VALUE_PROP = "value";
 
 export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
   searchTerm: string = "";
@@ -119,11 +71,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
   }, DEBOUNCE_RATE);
 
   onInput = (event: Ui5CustomEvent<HTMLInputElement>) => {
-    const {
-      onChange,
-      onSelectionChange: onSelect,
-      minCharsForSearch,
-    } = this.props;
+    const { onChange, onSelectionChange, minCharsForSearch } = this.props;
     const { value } = this.state;
     const currentValue = (event.currentTarget as InputPropTypes).value;
     this.searchTerm = currentValue ? currentValue.trim() : "";
@@ -135,8 +83,8 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
         if (onChange) {
           onChange(event, "");
         }
-        if (onSelect) {
-          onSelect("");
+        if (onSelectionChange) {
+          onSelectionChange("");
         }
       }
 
@@ -150,7 +98,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
   };
 
   onSelect = (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
-    const { onChange, onSelectionChange: onSelect } = this.props;
+    const { onChange, onSelectionChange } = this.props;
     const id = (event.detail.item as unknown as HTMLElement).dataset.id;
     const selectedValue = id || "";
     const selectedItem = this.findItemFromSuggestions(selectedValue);
@@ -164,10 +112,10 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     if (onChange) {
       onChange(event as Ui5CustomEvent<HTMLInputElement>, selectedValue);
     }
-    if (onSelect) {
-      onSelect(selectedValue, selectedItem);
+    if (onSelectionChange) {
+      onSelectionChange(selectedValue, selectedItem);
     }
-    this.setState({ value: selectedValue });
+    this.setState({ value: selectedValue, suggestions: [] });
   };
 
   onBlur = (event: FocusEvent<HTMLInputElement>) => {
