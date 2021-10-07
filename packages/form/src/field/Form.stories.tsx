@@ -21,6 +21,7 @@ import { CheckboxField } from "./CheckboxField";
 import { CheckboxFieldGroup } from "./CheckboxFieldGroup";
 import { DatePickerField } from "./DatePickerField";
 import { HiddenField } from "./HiddenField";
+import { NumberInputField } from "./NumberInputField";
 import { TextInputField } from "./TextInputField";
 import { AutoCompleteField, MultiAutoCompleteField } from "..";
 
@@ -28,6 +29,7 @@ interface FormData {
   id?: string;
   input1?: string;
   input2?: string;
+  numberinput?: number;
   date?: Date;
   dish?: Array<string>;
   country: string;
@@ -96,6 +98,10 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
               initialSuggestions={initialCurrentCountrySuggestions}
             />
           </FormItem>
+
+          <FormItem label="Number Input">
+            <NumberInputField name="numberinput" />
+          </FormItem>
           <FormItem label="Visitied Countries">
             <MultiAutoCompleteField
               name="countries"
@@ -134,6 +140,7 @@ Prefilled.args = {
     id: "my-id",
     input1: "Text 1",
     input2: "Text 2",
+    numberinput: 10,
     date: new Date(),
     dish: ["burger"],
     country: "BG",
@@ -152,6 +159,7 @@ SubmitErrors.args = {
     actions.setErrors([
       { name: "input1", message: "Custom error from submit: input1" },
       { name: "date", message: "Custom error from submit: date" },
+      { name: "numberinput", message: "Custom error from submit: textarea" },
     ]);
   },
 };
@@ -166,6 +174,7 @@ SubmitErrorsFocus.args = {
       [
         { name: "input1", message: "Custom error from submit: input1" },
         { name: "date", message: "Custom error from submit: date" },
+        { name: "numberinput", message: "Custom error from submit: textarea" },
       ],
       { shouldFocus: true }
     );
@@ -189,6 +198,7 @@ SetValuesOnSubmit.args = {
     actions.setValues([
       { name: "date", value: new Date(1990, 1, 10) },
       { name: "input1", value: "New Value" },
+      { name: "numberinput", value: 25 },
     ]);
   },
 };
