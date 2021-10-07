@@ -32,7 +32,6 @@ export const WithValueNumber = Template.bind({});
 WithValueNumber.args = { ...Standard.args, value: 1 };
 
 export const WithValueString = Template.bind({});
-
 WithValueString.args = { ...Standard.args, value: "1" };
 
 export default {
