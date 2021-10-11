@@ -1,4 +1,4 @@
-import { ISODateTimeAdapter } from "../../src/form/adapter/date/ISODateTimeAdapter";
+import { ISODateTimeAdapter } from "../../../src/form/adapter/date/ISODateTimeAdapter";
 
 const values: Array<{ formattedValue: string; parsedValue: Date | null }> = [
   {

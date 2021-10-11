@@ -1,4 +1,4 @@
-import { IdentityDateAdapter } from "../../src/form/adapter/date/IdentityDateAdapter";
+import { IdentityDateAdapter } from "../../../src/form/adapter/date/IdentityDateAdapter";
 
 const values: Array<{ formattedValue: any; parsedValue: any }> = [
   {
