@@ -10,12 +10,14 @@ import {
   KeyboardEvent,
   forwardRef,
   useCallback,
+  useContext,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
 import { createUseStyles } from "react-jss";
 
+import { FormAdapter, FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
 import { triggerSubmitOnEnter } from "./util";
 
@@ -38,21 +40,21 @@ interface SapCoreDateFormat {
   format: (date: Date) => string;
 }
 
-export interface DatePickerProps
+export interface DatePickerProps<TDate extends Date | string | number = string>
   extends Omit<
     DatePickerPropTypes,
     "value" | "minDate" | "maxDate" | "onChange"
   > {
-  value?: Date | number;
-  minDate?: Date | number;
-  maxDate?: Date | number;
+  value?: Date | TDate;
+  minDate?: Date | TDate;
+  maxDate?: Date | TDate;
   onChange?: (
     event: Ui5CustomEvent<HTMLInputElement, { valid: boolean; value: string }>,
-    value: Date | null
+    value: TDate | null
   ) => void;
 }
 
-export const DatePicker: FC<DatePickerProps> = forwardRef<
+export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
   HTMLInputElement | undefined,
   DatePickerProps
 >(
@@ -73,6 +75,8 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
     const ref = useRef<HTMLInputElement>();
     // forward our internal ref as external
     useImperativeHandle(forwardedRef, () => ref.current);
+
+    const { date } = useContext(FormAdapterContext);
 
     const ui5Loaded = useWaitForWebcomponent("ui5-date-picker");
 
@@ -117,10 +121,13 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
         if (onChange != null) {
           const value: Date | undefined | null = (event.target as any)
             .dateValue;
-          onChange(event, value != null ? value : null);
+
+          const normalizedValue =
+            value == null ? null : (date.format(value) as string);
+          onChange(event, normalizedValue);
         }
       },
-      [onChange, ui5Loaded]
+      [onChange, ui5Loaded, date]
     );
 
     const handleKeyPress = useCallback(
@@ -135,27 +142,43 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
       [onKeyPress]
     );
 
+    console.log(value);
+    const normalizedValue =
+      value == null ? null : value instanceof Date ? value : date.parse(value);
+    const normalizedMinDate =
+      minDate == null
+        ? null
+        : minDate instanceof Date
+        ? minDate
+        : date.parse(minDate);
+    const normalizedMaxDate =
+      maxDate == null
+        ? null
+        : maxDate instanceof Date
+        ? maxDate
+        : date.parse(maxDate);
+
     return (
       <UI5DatePicker
         {...props}
         className={clsx(className, classes.fixWidth)}
         ref={setRef}
         value={
-          ui5Loaded && format != null && value != null
-            ? format(new Date(value))
+          ui5Loaded && format != null && normalizedValue != null
+            ? format(normalizedValue)
             : ""
         }
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onKeyPress={handleKeyPress}
         minDate={
-          ui5Loaded && format != null && minDate != null
-            ? format(new Date(minDate))
+          ui5Loaded && format != null && normalizedMinDate != null
+            ? format(normalizedMinDate)
             : undefined
         }
         maxDate={
-          ui5Loaded && format != null && maxDate != null
-            ? format(new Date(maxDate))
+          ui5Loaded && format != null && normalizedMaxDate != null
+            ? format(normalizedMaxDate)
             : undefined
         }
       />
