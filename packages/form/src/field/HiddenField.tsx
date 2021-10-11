@@ -17,7 +17,7 @@ export const HiddenField: FC<HiddenFieldProps> = ({ name }) => {
           <input
             {...field}
             type="hidden"
-            value={field.value == null ? null : field.value}
+            value={field.value == null ? "" : field.value}
           />
         );
       }}
