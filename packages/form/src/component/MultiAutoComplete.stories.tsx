@@ -50,21 +50,21 @@ Prefilled.args = {
 };
 
 export const CustomLabelProp = Template.bind({});
-CustomLabelProp.args = { ...Prefilled.args, optionLabel: "withUmlaut" };
+CustomLabelProp.args = { ...Prefilled.args, itemLabel: "withUmlaut" };
 
 export const CustomLabelFunction = Template.bind({});
 CustomLabelFunction.args = {
   ...Prefilled.args,
-  optionLabel: (country) => `ISO code: ${country.value}`,
+  itemLabel: (country) => `ISO code: ${country.value}`,
 };
 
 export const CustomValueProp = Template.bind({});
-CustomValueProp.args = { ...Prefilled.args, optionValue: "label" };
+CustomValueProp.args = { ...Prefilled.args, itemValue: "label" };
 
 export const CustomValueFunction = Template.bind({});
 CustomValueFunction.args = {
   ...Prefilled.args,
-  optionValue: (country) => `VALUE_${country.label.toUpperCase()}`,
+  itemValue: (country) => `VALUE_${country.label.toUpperCase()}`,
 };
 
 export const RenderSuggestion = Template.bind({});

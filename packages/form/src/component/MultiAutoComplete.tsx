@@ -110,7 +110,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     // into the input field after selection, doesn't need to be a proper & matching search term
     // => only search if the search term doesn't match the label of the current value
     const hasBeenSelected = Object.values(selectedItems)
-      .map((item) => this.retrieveOptionLabel(item))
+      .map((item) => this.retrieveItemLabel(item))
       .includes(searchTerm);
 
     if (!hasBeenSelected && hasMinChars) {
@@ -121,7 +121,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         const { values } = this.state;
 
         const withoutSelected = suggestions.filter((s) => {
-          const dataId = this.retrieveOptionValue(s);
+          const dataId = this.retrieveItemValue(s);
           return !values.includes(dataId);
         });
 
@@ -188,7 +188,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   findItemFromSuggestions = (value?: string) => {
     if (value) {
       return this.state.suggestions.find(
-        (suggestion) => this.retrieveOptionValue(suggestion) === value
+        (suggestion) => this.retrieveItemValue(suggestion) === value
       );
     }
   };
@@ -273,14 +273,14 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   };
 
-  retrieveOptionLabel = (value: T) => {
-    const { optionLabel } = this.props;
-    if (optionLabel) {
-      if (typeof optionLabel === "string") {
+  retrieveItemLabel = (value: T) => {
+    const { itemLabel } = this.props;
+    if (itemLabel) {
+      if (typeof itemLabel === "string") {
         //@ts-ignore
-        return value[optionLabel];
-      } else if (typeof optionLabel === "function") {
-        return optionLabel(value);
+        return value[itemLabel];
+      } else if (typeof itemLabel === "function") {
+        return itemLabel(value);
       }
     }
 
@@ -288,15 +288,15 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     return value[DEFAULT_LABEL_PROP] || "---";
   };
 
-  retrieveOptionValue = (value: T) => {
-    const { optionValue } = this.props;
+  retrieveItemValue = (value: T) => {
+    const { itemValue } = this.props;
 
-    if (optionValue) {
-      if (typeof optionValue === "string") {
+    if (itemValue) {
+      if (typeof itemValue === "string") {
         //@ts-ignore
-        return value[optionValue];
-      } else if (typeof optionValue === "function") {
-        return optionValue(value);
+        return value[itemValue];
+      } else if (typeof itemValue === "function") {
+        return itemValue(value);
       }
     }
 
@@ -318,8 +318,8 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
           ? renderValue(item)
           : {};
 
-        finalValue = value || this.retrieveOptionValue(item);
-        finalLabel = props.text || this.retrieveOptionLabel(item);
+        finalValue = value || this.retrieveItemValue(item);
+        finalLabel = props.text || this.retrieveItemLabel(item);
       }
 
       return (
@@ -344,8 +344,8 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         ? suggestionProps(suggestion)
         : {};
 
-      const value = props.value || this.retrieveOptionValue(suggestion);
-      const label = props.text || this.retrieveOptionLabel(suggestion);
+      const value = props.value || this.retrieveItemValue(suggestion);
+      const label = props.text || this.retrieveItemLabel(suggestion);
       const text = label;
 
       return (
@@ -357,8 +357,8 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   render() {
     const {
       values,
-      optionLabel,
-      optionValue,
+      itemLabel,
+      itemValue,
       onChange,
       onSearch,
       onSelectionChange,

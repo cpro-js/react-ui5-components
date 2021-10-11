@@ -44,7 +44,7 @@ export type CustomInputProps<T> = Pick<
    * By default the prop <code>label</code> is used.
    * You can pass either a string, which represents a different prop or a render function.
    */
-  optionLabel?: string | ((value: T) => string);
+  itemLabel?: string | ((value: T) => string);
 
   /**
    * Controls which value / key is used to identify an option.
@@ -54,7 +54,7 @@ export type CustomInputProps<T> = Pick<
    * By default the prop <code>value</code> is used.
    * You can pass either a string, which represents a different prop or a render function.
    */
-  optionValue?: string | ((value: T) => string);
+  itemValue?: string | ((value: T) => string);
 
   /**
    * Minimum number of characters before search is triggered.

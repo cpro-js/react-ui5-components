@@ -105,7 +105,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     const selectedValue = id || "";
     const selectedItem = this.findItemFromSuggestions(selectedValue);
     const labelSelected = selectedItem
-      ? this.retrieveOptionLabel(selectedItem)
+      ? this.retrieveItemLabel(selectedItem)
       : selectedValue;
     this.selectedState = true;
 
@@ -134,19 +134,19 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
   findItemFromSuggestions = (value?: string) => {
     if (value) {
       return this.state.suggestions.find(
-        (suggestion) => this.retrieveOptionValue(suggestion) === value
+        (suggestion) => this.retrieveItemValue(suggestion) === value
       );
     }
   };
 
-  retrieveOptionLabel = (value: T) => {
-    const { optionLabel } = this.props;
-    if (optionLabel) {
-      if (typeof optionLabel === "string") {
+  retrieveItemLabel = (value: T) => {
+    const { itemLabel } = this.props;
+    if (itemLabel) {
+      if (typeof itemLabel === "string") {
         //@ts-ignore
-        return value[optionLabel];
-      } else if (typeof optionLabel === "function") {
-        return optionLabel(value);
+        return value[itemLabel];
+      } else if (typeof itemLabel === "function") {
+        return itemLabel(value);
       }
     }
 
@@ -154,15 +154,15 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     return value[DEFAULT_LABEL_PROP];
   };
 
-  retrieveOptionValue = (value: T) => {
-    const { optionValue } = this.props;
+  retrieveItemValue = (value: T) => {
+    const { itemValue } = this.props;
 
-    if (optionValue) {
-      if (typeof optionValue === "string") {
+    if (itemValue) {
+      if (typeof itemValue === "string") {
         //@ts-ignore
-        return value[optionValue];
-      } else if (typeof optionValue === "function") {
-        return optionValue(value);
+        return value[itemValue];
+      } else if (typeof itemValue === "function") {
+        return itemValue(value);
       }
     }
 
@@ -179,8 +179,8 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
         ? suggestionProps(suggestion)
         : {};
 
-      const value = props.value || this.retrieveOptionValue(suggestion);
-      const label = props.text || this.retrieveOptionLabel(suggestion);
+      const value = props.value || this.retrieveItemValue(suggestion);
+      const label = props.text || this.retrieveItemLabel(suggestion);
       const text = label;
 
       return (
@@ -192,15 +192,15 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
   getLabelForValue(value?: string) {
     if (value) {
       const item = this.findItemFromSuggestions(value);
-      return item ? this.retrieveOptionLabel(item) : value;
+      return item ? this.retrieveItemLabel(item) : value;
     }
     return "";
   }
 
   render() {
     const {
-      optionLabel,
-      optionValue,
+      itemLabel,
+      itemValue,
       onChange,
       onSearch,
       onSelectionChange: onSelect,
