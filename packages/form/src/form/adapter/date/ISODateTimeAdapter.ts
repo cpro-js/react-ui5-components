@@ -7,6 +7,7 @@ import { DateAdapter } from "../type/DateAdapter";
  */
 export const ISODateTimeAdapter: DateAdapter<string> = {
   parse(value: string): Date | null {
+    // Note: we need to check for string cause we may receive any data type here
     if (value == null || typeof value !== "string") {
       return null;
     }

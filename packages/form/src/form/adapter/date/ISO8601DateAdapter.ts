@@ -10,14 +10,10 @@ const ISO_DATE_REGEX = /^(\d{4})-([0][1-9]|1[0-2])-([0-2][1-9]|[1-3]0|3[01])$/;
  */
 export const ISO8601DateAdapter: DateAdapter<string> = {
   parse(value: string): Date | null {
+    // Note: we need to check for string cause we may receive any data type here
     if (value == null || typeof value !== "string") {
       return null;
     }
-
-    // // check for iso date string
-    // if (!isNaN(Number(value)) && parsedValue.toISOString() == value) {
-    //   return parsedValue;
-    // }
 
     const resultIso = value.match(ISO_DATE_REGEX);
     if (resultIso) {
