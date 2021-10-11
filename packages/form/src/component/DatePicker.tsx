@@ -17,7 +17,7 @@ import {
 } from "react";
 import { createUseStyles } from "react-jss";
 
-import { FormAdapter, FormAdapterContext } from "../form/FormAdapter";
+import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
 import { triggerSubmitOnEnter } from "./util";
 
@@ -27,6 +27,13 @@ const useStyles = createUseStyles({
     width: "var(--_ui5_input_width)",
   },
 });
+
+const convertToDate = (
+  value: Date | any,
+  parse: (value: any) => Date | null
+): Date | null => {
+  return value == null ? null : value instanceof Date ? value : parse(value);
+};
 
 /**
  * Simplified interface for DateFormat
@@ -76,15 +83,17 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
     // forward our internal ref as external
     useImperativeHandle(forwardedRef, () => ref.current);
 
-    const { date } = useContext(FormAdapterContext);
+    const {
+      date: { format, parse },
+    } = useContext(FormAdapterContext);
 
     const ui5Loaded = useWaitForWebcomponent("ui5-date-picker");
 
     // Workaround: API of UI5 Datepicker supports only user formatted date strings as input and output
     // that's why we need to transform our used date objects to string and vice versa with their private API
-    const [{ format }, setDateFormat] = useState<Partial<SapCoreDateFormat>>(
-      {}
-    );
+    const [{ format: formatToUiString }, setDateFormat] = useState<
+      Partial<SapCoreDateFormat>
+    >({});
 
     const setRef = useCallback((ui5DatePicker: null | Ui5DatePickerDomRef) => {
       if (ui5DatePicker == null) {
@@ -123,11 +132,11 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
             .dateValue;
 
           const normalizedValue =
-            value == null ? null : (date.format(value) as string);
+            value == null ? null : (format(value) as string);
           onChange(event, normalizedValue);
         }
       },
-      [onChange, ui5Loaded, date]
+      [onChange, ui5Loaded, format]
     );
 
     const handleKeyPress = useCallback(
@@ -142,21 +151,9 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
       [onKeyPress]
     );
 
-    console.log(value);
-    const normalizedValue =
-      value == null ? null : value instanceof Date ? value : date.parse(value);
-    const normalizedMinDate =
-      minDate == null
-        ? null
-        : minDate instanceof Date
-        ? minDate
-        : date.parse(minDate);
-    const normalizedMaxDate =
-      maxDate == null
-        ? null
-        : maxDate instanceof Date
-        ? maxDate
-        : date.parse(maxDate);
+    const normalizedValue = convertToDate(value, parse);
+    const normalizedMinDate = convertToDate(minDate, parse);
+    const normalizedMaxDate = convertToDate(maxDate, parse);
 
     return (
       <UI5DatePicker
@@ -164,21 +161,21 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
         className={clsx(className, classes.fixWidth)}
         ref={setRef}
         value={
-          ui5Loaded && format != null && normalizedValue != null
-            ? format(normalizedValue)
+          ui5Loaded && formatToUiString != null && normalizedValue != null
+            ? formatToUiString(normalizedValue)
             : ""
         }
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onKeyPress={handleKeyPress}
         minDate={
-          ui5Loaded && format != null && normalizedMinDate != null
-            ? format(normalizedMinDate)
+          ui5Loaded && formatToUiString != null && normalizedMinDate != null
+            ? formatToUiString(normalizedMinDate)
             : undefined
         }
         maxDate={
-          ui5Loaded && format != null && normalizedMaxDate != null
-            ? format(normalizedMaxDate)
+          ui5Loaded && formatToUiString != null && normalizedMaxDate != null
+            ? formatToUiString(normalizedMaxDate)
             : undefined
         }
       />
