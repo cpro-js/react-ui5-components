@@ -42,8 +42,9 @@ export type AutoCompleteProps<T = DefaultAutoCompleteOption> =
   };
 
 export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
-  searchTerm: string = this.props.value || "";
+  searchTerm: string = "";
   searching: boolean = false;
+  selectedState: boolean = !!this.props.value;
 
   state = {
     value: this.props.value || "",
@@ -76,6 +77,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     const currentValue = (event.currentTarget as InputPropTypes).value;
     this.searchTerm = currentValue ? currentValue.trim() : "";
     const hasMinChars = this.searchTerm.length >= (minCharsForSearch || 1);
+    this.selectedState = false;
 
     if (!this.searchTerm || !hasMinChars) {
       // value existed, now its empty => trigger change
@@ -105,6 +107,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     const labelSelected = selectedItem
       ? this.retrieveOptionLabel(selectedItem)
       : selectedValue;
+    this.selectedState = true;
 
     // set input value to selected label (fallback: value)
     event.target.value = labelSelected;
@@ -115,7 +118,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     if (onSelectionChange) {
       onSelectionChange(selectedValue, selectedItem);
     }
-    this.setState({ value: selectedValue, suggestions: [] });
+    this.setState({ value: selectedValue, suggestions: [selectedItem] });
   };
 
   onBlur = (event: FocusEvent<HTMLInputElement>) => {
@@ -208,9 +211,9 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     } = this.props;
     const { value: selected } = this.state;
 
-    const labelSelected = this.searchTerm
+    const labelSelected = this.selectedState
       ? this.getLabelForValue(selected)
-      : undefined;
+      : this.searchTerm;
 
     return (
       <Input
