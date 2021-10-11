@@ -90,4 +90,4 @@ export { IdentityDateAdapter } from "./form/adapter/date/IdentityDateAdapter";
 export { ISO8601DateAdapter } from "./form/adapter/date/ISO8601DateAdapter";
 export { ISODateTimeAdapter } from "./form/adapter/date/ISODateTimeAdapter";
 
-export { toISO8601DateString, toISODateTimeString } from "./util/util";
+export { toISO8601DateString, toISODateTimeString } from "./util/date";

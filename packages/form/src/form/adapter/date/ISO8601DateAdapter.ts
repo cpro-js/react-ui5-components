@@ -1,4 +1,4 @@
-import { isValidDate, toISO8601DateString } from "../../../util/util";
+import { isValidDate, toISO8601DateString } from "../../../util/date";
 import { DateAdapter } from "../type/DateAdapter";
 
 const ISO_DATE_REGEX = /^(\d{4})-([0][1-9]|1[0-2])-([0-2][1-9]|[1-3]0|3[01])$/;

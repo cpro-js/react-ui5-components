@@ -3,7 +3,7 @@ import { Story } from "@storybook/react";
 import { ISO8601DateAdapter } from "../form/adapter/date/ISO8601DateAdapter";
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
 import { FormAdapter } from "../form/FormAdapter";
-import { toISO8601DateString, toISODateTimeString } from "../util/util";
+import { toISO8601DateString } from "../util/date";
 import { DatePicker, DatePickerProps } from "./DatePicker";
 
 const Template: Story<DatePickerProps> = (args) => {
