@@ -22,6 +22,7 @@ import { CheckboxFieldGroup } from "./CheckboxFieldGroup";
 import { DatePickerField } from "./DatePickerField";
 import { HiddenField } from "./HiddenField";
 import { NumberInputField } from "./NumberInputField";
+import { TextAreaField } from "./TextAreaField";
 import { TextInputField } from "./TextInputField";
 import { AutoCompleteField, MultiAutoCompleteField } from "..";
 
@@ -29,6 +30,7 @@ interface FormData {
   id?: string;
   input1?: string;
   input2?: string;
+  textarea?: string;
   numberinput?: number;
   date?: Date;
   dish?: Array<string>;
@@ -98,7 +100,9 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
               initialSuggestions={initialCurrentCountrySuggestions}
             />
           </FormItem>
-
+          <FormItem label="Text Area">
+            <TextAreaField name="textarea" />
+          </FormItem>
           <FormItem label="Number Input">
             <NumberInputField name="numberinput" />
           </FormItem>
@@ -140,6 +144,7 @@ Prefilled.args = {
     id: "my-id",
     input1: "Text 1",
     input2: "Text 2",
+    textarea: "Text",
     numberinput: 10,
     date: new Date(),
     dish: ["burger"],
@@ -159,6 +164,7 @@ SubmitErrors.args = {
     actions.setErrors([
       { name: "input1", message: "Custom error from submit: input1" },
       { name: "date", message: "Custom error from submit: date" },
+      { name: "textarea", message: "Custome error from submit: textarea" },
       { name: "numberinput", message: "Custom error from submit: textarea" },
     ]);
   },
@@ -174,6 +180,7 @@ SubmitErrorsFocus.args = {
       [
         { name: "input1", message: "Custom error from submit: input1" },
         { name: "date", message: "Custom error from submit: date" },
+        { name: "textarea", message: "Custome error from submit: textarea" },
         { name: "numberinput", message: "Custom error from submit: textarea" },
       ],
       { shouldFocus: true }
@@ -198,6 +205,7 @@ SetValuesOnSubmit.args = {
     actions.setValues([
       { name: "date", value: new Date(1990, 1, 10) },
       { name: "input1", value: "New Value" },
+      { name: "textarea", value: "New Value" },
       { name: "numberinput", value: 25 },
     ]);
   },
