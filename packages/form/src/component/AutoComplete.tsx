@@ -42,7 +42,7 @@ export type AutoCompleteProps<T = DefaultAutoCompleteOption> =
   };
 
 export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
-  searchTerm: string = "";
+  searchTerm: string = this.props.value || "";
   searching: boolean = false;
 
   state = {
@@ -208,7 +208,9 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
     } = this.props;
     const { value: selected } = this.state;
 
-    const labelSelected = this.searchTerm ?? this.getLabelForValue(selected);
+    const labelSelected = this.searchTerm
+      ? this.getLabelForValue(selected)
+      : undefined;
 
     return (
       <Input
