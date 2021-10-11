@@ -17,6 +17,9 @@ export type {
 export { Select } from "./component/Select";
 export type { SelectProps, SelectItem } from "./component/Select";
 
+export { TextArea } from "./component/TextArea";
+export type { TextAreaProps } from "./component/TextArea";
+
 export { TextInput } from "./component/TextInput";
 export type { TextInputProps } from "./component/TextInput";
 
@@ -66,6 +69,9 @@ export type { NumberInputFieldProps } from "./field/NumberInputField";
 
 export { SelectField } from "./field/SelectField";
 export type { SelectFieldProps } from "./field/SelectField";
+
+export { TextAreaField } from "./field/TextAreaField";
+export type { TextAreaFieldProps } from "./field/TextAreaField";
 
 export { TextInputField } from "./field/TextInputField";
 export type { TextInputFieldProps } from "./field/TextInputField";
