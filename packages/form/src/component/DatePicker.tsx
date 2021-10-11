@@ -10,12 +10,14 @@ import {
   KeyboardEvent,
   forwardRef,
   useCallback,
+  useContext,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
 import { createUseStyles } from "react-jss";
 
+import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
 import { triggerSubmitOnEnter } from "./util";
 
@@ -25,6 +27,13 @@ const useStyles = createUseStyles({
     width: "var(--_ui5_input_width)",
   },
 });
+
+const convertToDate = (
+  value: Date | any,
+  parse: (value: any) => Date | null
+): Date | null => {
+  return value == null ? null : value instanceof Date ? value : parse(value);
+};
 
 /**
  * Simplified interface for DateFormat
@@ -36,30 +45,23 @@ interface SapCoreDateFormat {
    * @param date
    */
   format: (date: Date) => string;
-  /**
-   * Parses date string into Date. Invalid values seems to return null.
-   * TODO identify scenarios when array of dates will be returned
-   *
-   * @param date
-   */
-  parse: (date: string) => Date | null;
 }
 
-export interface DatePickerProps
+export interface DatePickerProps<TDate extends Date | string | number = string>
   extends Omit<
     DatePickerPropTypes,
     "value" | "minDate" | "maxDate" | "onChange"
   > {
-  value?: Date | number;
-  minDate?: Date | number;
-  maxDate?: Date | number;
+  value?: Date | TDate;
+  minDate?: Date | TDate;
+  maxDate?: Date | TDate;
   onChange?: (
     event: Ui5CustomEvent<HTMLInputElement, { valid: boolean; value: string }>,
-    value: Date | null
+    value: TDate | null
   ) => void;
 }
 
-export const DatePicker: FC<DatePickerProps> = forwardRef<
+export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
   HTMLInputElement | undefined,
   DatePickerProps
 >(
@@ -81,11 +83,15 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
     // forward our internal ref as external
     useImperativeHandle(forwardedRef, () => ref.current);
 
+    const {
+      date: { format, parse },
+    } = useContext(FormAdapterContext);
+
     const ui5Loaded = useWaitForWebcomponent("ui5-date-picker");
 
     // Workaround: API of UI5 Datepicker supports only user formatted date strings as input and output
     // that's why we need to transform our used date objects to string and vice versa with their private API
-    const [{ format, parse }, setDateFormat] = useState<
+    const [{ format: formatToUiString }, setDateFormat] = useState<
       Partial<SapCoreDateFormat>
     >({});
 
@@ -97,12 +103,8 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
       ref.current = ui5DatePicker as any;
 
       setDateFormat({
-        parse(date: string) {
-          // private api...
-          return (ui5DatePicker as any).getFormat().parse(date);
-        },
         format(date: Date) {
-          // todo types are wrong
+          // todo return type of formatValue is incorrect (void instead of string)
           return ui5DatePicker.formatValue(date) as any as string;
         },
       });
@@ -126,11 +128,15 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
           return;
         }
         if (onChange != null) {
-          const value = parse == null ? null : parse(event.target.value);
-          onChange(event, value);
+          const value: Date | undefined | null = (event.target as any)
+            .dateValue;
+
+          const normalizedValue =
+            value == null ? null : (format(value) as string);
+          onChange(event, normalizedValue);
         }
       },
-      [onChange, parse, ui5Loaded]
+      [onChange, ui5Loaded, format]
     );
 
     const handleKeyPress = useCallback(
@@ -145,27 +151,31 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
       [onKeyPress]
     );
 
+    const normalizedValue = convertToDate(value, parse);
+    const normalizedMinDate = convertToDate(minDate, parse);
+    const normalizedMaxDate = convertToDate(maxDate, parse);
+
     return (
       <UI5DatePicker
         {...props}
         className={clsx(className, classes.fixWidth)}
         ref={setRef}
         value={
-          ui5Loaded && format != null && value != null
-            ? format(new Date(value))
+          ui5Loaded && formatToUiString != null && normalizedValue != null
+            ? formatToUiString(normalizedValue)
             : ""
         }
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onKeyPress={handleKeyPress}
         minDate={
-          ui5Loaded && format != null && minDate != null
-            ? format(new Date(minDate))
+          ui5Loaded && formatToUiString != null && normalizedMinDate != null
+            ? formatToUiString(normalizedMinDate)
             : undefined
         }
         maxDate={
-          ui5Loaded && format != null && maxDate != null
-            ? format(new Date(maxDate))
+          ui5Loaded && formatToUiString != null && normalizedMaxDate != null
+            ? formatToUiString(normalizedMaxDate)
             : undefined
         }
       />

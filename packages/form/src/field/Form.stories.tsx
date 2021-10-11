@@ -24,7 +24,11 @@ import { HiddenField } from "./HiddenField";
 import { NumberInputField } from "./NumberInputField";
 import { TextAreaField } from "./TextAreaField";
 import { TextInputField } from "./TextInputField";
-import { AutoCompleteField, MultiAutoCompleteField } from "..";
+import {
+  AutoCompleteField,
+  MultiAutoCompleteField,
+  toISO8601DateString,
+} from "..";
 
 interface FormData {
   id?: string;
@@ -146,7 +150,7 @@ Prefilled.args = {
     input2: "Text 2",
     textarea: "Text",
     numberinput: 10,
-    date: new Date(),
+    date: toISO8601DateString(new Date()),
     dish: ["burger"],
     country: "BG",
     countries: ["FI", "GB"],
@@ -203,7 +207,7 @@ SetValuesOnSubmit.args = {
   onSubmit: (values, actions) => {
     action("onsubmit")(values, actions);
     actions.setValues([
-      { name: "date", value: new Date(1990, 1, 10) },
+      { name: "date", value: "1990-01-10" },
       { name: "input1", value: "New Value" },
       { name: "textarea", value: "New Value" },
       { name: "numberinput", value: 25 },

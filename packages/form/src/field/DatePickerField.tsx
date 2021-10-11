@@ -1,17 +1,25 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { FC, useMemo } from "react";
+import { FC, useContext, useMemo } from "react";
 import { Controller, FieldError } from "react-hook-form";
 
 import { DatePicker, DatePickerProps } from "../component/DatePicker";
+import { FormAdapterContext } from "../form/FormAdapter";
 import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
-const convertToDateOnly = (value: Date | number): Date => {
-  const temp = typeof value === "number" ? new Date(value) : value;
-  return new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
+const convertToDateOnly = (
+  value: Date | any,
+  parse: (value: any) => Date | null
+): Date | null => {
+  const temp = value instanceof Date ? value : parse(value);
+  if (temp != null) {
+    return new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
+  }
+
+  return null;
 };
 
 const isErrorIgnored = (error: FieldError | undefined) =>
@@ -33,6 +41,10 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
   maxDate,
   ...props
 }) => {
+  const {
+    date: { parse },
+  } = useContext(FormAdapterContext);
+
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -40,20 +52,40 @@ export const DatePickerField: FC<DatePickerFieldProps> = ({
         ...(minDate == null
           ? {}
           : {
-              minDate: (value?: Date | null) =>
-                value == null ||
-                convertToDateOnly(value) >= convertToDateOnly(minDate),
+              minDate: (value?: Date | null) => {
+                if (value == null) {
+                  return true;
+                }
+                const normalizedValue = convertToDateOnly(value, parse);
+                const normalizedMinDate = convertToDateOnly(minDate, parse);
+
+                return (
+                  normalizedValue == null ||
+                  normalizedMinDate == null ||
+                  normalizedValue >= normalizedMinDate
+                );
+              },
             }),
         ...(maxDate == null
           ? {}
           : {
-              maxDate: (value?: Date | null) =>
-                value == null ||
-                convertToDateOnly(value) <= convertToDateOnly(maxDate),
+              maxDate: (value?: Date | null) => {
+                if (value == null) {
+                  return true;
+                }
+                const normalizedValue = convertToDateOnly(value, parse);
+                const normalizedMaxDate = convertToDateOnly(maxDate, parse);
+
+                return (
+                  normalizedValue == null ||
+                  normalizedMaxDate == null ||
+                  normalizedValue <= normalizedMaxDate
+                );
+              },
             }),
       },
     }),
-    [required, minDate, maxDate]
+    [parse, required, minDate, maxDate]
   );
 
   const getValidationErrorMessage = useI18nValidationError(name, rules);

@@ -2,10 +2,11 @@ import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { toISO8601DateString } from "../util/date";
 import { DatePickerField, DatePickerFieldProps } from "./DatePickerField";
 
 interface FormData {
-  date?: Date;
+  date?: string;
 }
 
 const Template: Story<FormControllerProps<FormData> & DatePickerFieldProps> = (
@@ -46,7 +47,7 @@ Empty.args = {};
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   initialValues: {
-    date: new Date(),
+    date: toISO8601DateString(new Date()),
   },
 };
 
@@ -68,16 +69,16 @@ ValidationRequired.args = {
 };
 
 export const ValidationMinDateToday = Template.bind({});
-ValidationMinDateToday.args = { minDate: new Date() };
+ValidationMinDateToday.args = { minDate: toISO8601DateString(new Date()) };
 
 export const ValidationMaxDateToday = Template.bind({});
-ValidationMaxDateToday.args = { maxDate: new Date() };
+ValidationMaxDateToday.args = { maxDate: toISO8601DateString(new Date()) };
 
 export const ValidationRequiredAndOnlyToday = Template.bind({});
 ValidationRequiredAndOnlyToday.args = {
   required: true,
-  minDate: new Date(),
-  maxDate: new Date(),
+  minDate: toISO8601DateString(new Date()),
+  maxDate: toISO8601DateString(new Date()),
 };
 
 export const ValidationTranslationRequired = I18nTemplate.bind({});
@@ -92,5 +93,7 @@ export default {
     onSubmit: {
       action: "submit",
     },
+    minDate: { type: "string", control: "text" },
+    maxDate: { type: "string", control: "text" },
   },
 };
