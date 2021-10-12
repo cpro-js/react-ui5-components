@@ -14,8 +14,7 @@ const items: Array<SelectItemAlt> = [
   { value: "4", label: "Test 4", alt: "Test 4 Alt" },
 ];
 
-const Template: Story<SelectProps<SelectItemAlt>> = (args) => {
-  //@ts-ignore //-> forward Ref Generic implementation
+const Template: Story<SelectProps> = (args) => {
   return <Select {...args} />;
 };
 
@@ -39,10 +38,14 @@ WithValueNumber.args = { ...Standard.args, value: 1 };
 export const WithValueString = Template.bind({});
 WithValueString.args = { ...Standard.args, value: "1" };
 
-export const WithItemLabel = Template.bind({});
+const TemplateAlt: Story<SelectProps<SelectItemAlt>> = (args) => {
+  return <Select<SelectItemAlt> {...args} />;
+};
+
+export const WithItemLabel = TemplateAlt.bind({});
 WithItemLabel.args = { ...Standard.args, itemLabel: "alt" };
 
-export const WithItemValue = Template.bind({});
+export const WithItemValue = TemplateAlt.bind({});
 WithItemValue.args = { ...Standard.args, itemValue: "alt" };
 
 export default {

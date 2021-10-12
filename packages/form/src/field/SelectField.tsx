@@ -1,27 +1,27 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { FC, useMemo } from "react";
+import { useMemo } from "react";
 import { Controller } from "react-hook-form";
 
-import { Select, SelectProps } from "../component/Select";
+import { Select, SelectItem, SelectProps } from "../component/Select";
 import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
-export type SelectFieldProps = Omit<
-  SelectProps,
+export type SelectFieldProps<T = SelectItem> = Omit<
+  SelectProps<T>,
   "name" | "value" | "onChange" | "onSelectionChange" | "onBlur"
 > &
   Pick<FormFieldValidation, "required"> & {
     name: string;
   };
 
-export const SelectField: FC<SelectFieldProps> = ({
+export function SelectField<T = SelectItem>({
   name,
   required,
   ...props
-}) => {
+}: SelectFieldProps<T>) {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -63,4 +63,4 @@ export const SelectField: FC<SelectFieldProps> = ({
       }}
     />
   );
-};
+}
