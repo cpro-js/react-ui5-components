@@ -2,17 +2,22 @@ import { Story } from "@storybook/react";
 
 import { Select, SelectItem, SelectProps } from "./Select";
 
-const Template: Story<SelectProps> = (args) => {
+export interface SelectItemAlt extends SelectItem {
+  alt: string;
+}
+
+const items: Array<SelectItemAlt> = [
+  { value: 1, label: "Test 1 Number", alt: "Test 1 Number Alt" },
+  { value: "1", label: "Test 1 String", alt: "Test 1 String Alt" },
+  { value: "2", label: "Test 2", alt: "Test 2 Alt" },
+  { value: "3", label: "Test 3", alt: "Test 3 Alt" },
+  { value: "4", label: "Test 4", alt: "Test 4 Alt" },
+];
+
+const Template: Story<SelectProps<SelectItemAlt>> = (args) => {
+  //@ts-ignore //-> forward Ref Generic implementation
   return <Select {...args} />;
 };
-
-const items: Array<SelectItem> = [
-  { value: 1, label: "Test 1 Number" },
-  { value: "1", label: "Test 1 String" },
-  { value: "2", label: "Test 2" },
-  { value: "3", label: "Test 3" },
-  { value: "4", label: "Test 4" },
-];
 
 export const Standard = Template.bind({});
 Standard.args = {
@@ -33,6 +38,12 @@ WithValueNumber.args = { ...Standard.args, value: 1 };
 
 export const WithValueString = Template.bind({});
 WithValueString.args = { ...Standard.args, value: "1" };
+
+export const WithItemLabel = Template.bind({});
+WithItemLabel.args = { ...Standard.args, itemLabel: "alt" };
+
+export const WithItemValue = Template.bind({});
+WithItemValue.args = { ...Standard.args, itemValue: "alt" };
 
 export default {
   title: "Form/Component/Select",

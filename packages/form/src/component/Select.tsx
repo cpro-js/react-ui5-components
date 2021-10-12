@@ -1,4 +1,4 @@
-import { ComboBox, ComboBoxItem } from "@ui5/webcomponents-react";
+import { ComboBox, ComboBoxItem, Label } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { ComboBoxPropTypes } from "@ui5/webcomponents-react/webComponents/ComboBox";
 import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
@@ -23,7 +23,7 @@ export interface SelectItem {
   label: string;
 }
 
-export interface SelectProps
+export interface SelectProps<T = SelectItem>
   extends Omit<
     ComboBoxPropTypes,
     | "name"
@@ -37,6 +37,8 @@ export interface SelectProps
   value?: string | number;
   items?: Array<SelectItem>;
   addEmptyOption?: boolean;
+  itemValue?: keyof T | ((value: T) => string);
+  itemLabel?: keyof T | ((value: T) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
       HTMLInputElement,
@@ -52,6 +54,9 @@ export interface SelectProps
   ) => void;
 }
 
+const DEFAULT_LABEL_PROP = "label";
+const DEFAULT_VALUE_PROP = "value";
+
 export const Select: FC<SelectProps> = forwardRef<
   HTMLInputElement | undefined,
   SelectProps
@@ -65,18 +70,50 @@ export const Select: FC<SelectProps> = forwardRef<
     onKeyDown,
     onKeyPress,
     value,
+    itemValue,
+    itemLabel,
     ...otherProps
   } = props;
+
+  const retrieveItemLabel = useCallback(
+    (item: SelectItem) => {
+      if (itemLabel) {
+        if (typeof itemLabel === "string") {
+          return item[itemLabel];
+        } else if (typeof itemLabel === "function") {
+          return itemLabel(item);
+        }
+      }
+      return item[DEFAULT_LABEL_PROP];
+    },
+    [itemLabel]
+  );
+
+  const retrieveItemValue = useCallback(
+    (item: SelectItem) => {
+      if (itemValue) {
+        if (typeof itemValue === "string") {
+          return item[itemValue];
+        } else if (typeof itemValue === "function") {
+          return itemValue(item);
+        }
+      }
+      return item[DEFAULT_VALUE_PROP];
+    },
+    [itemValue]
+  );
 
   const handleSelectionChange = useCallback(
     (event: Ui5CustomEvent<HTMLInputElement, { item: any }>) => {
       if (onSelectionChange != null) {
         const index = event.detail.item.dataset.index;
-        const value = index == null ? undefined : items[Number(index)]?.value;
+        const selectedItem = index == null ? undefined : items[Number(index)];
+        const value =
+          selectedItem == null ? undefined : retrieveItemValue(selectedItem);
         onSelectionChange(event, value);
       }
     },
-    [items, onSelectionChange]
+    [items, onSelectionChange, retrieveItemValue]
   );
 
   const handleChange = useCallback(
@@ -87,12 +124,14 @@ export const Select: FC<SelectProps> = forwardRef<
         ).find((item) => (item as HTMLOptionElement).selected);
 
         const index = item?.dataset.index;
-        const value = index == null ? undefined : items[Number(index)]?.value;
+        const selectedItem = index == null ? undefined : items[Number(index)];
+        const value =
+          selectedItem == null ? undefined : retrieveItemValue(selectedItem);
 
         onChange(event, value);
       }
     },
-    [items, onChange]
+    [items, onChange, retrieveItemValue]
   );
 
   const handleKeyDown = useCallback(
@@ -135,7 +174,11 @@ export const Select: FC<SelectProps> = forwardRef<
         {addEmptyOption && <ComboBoxItem text="---" />}
         {items.map((item, index) => (
           // index is the most unique value, value could be non-unique when providing numbers and strings (react keys are strings)
-          <ComboBoxItem key={index} text={item.label} data-index={index} />
+          <ComboBoxItem
+            key={index}
+            text={retrieveItemLabel(item) as string}
+            data-index={index}
+          />
         ))}
       </ComboBox>
     </>
