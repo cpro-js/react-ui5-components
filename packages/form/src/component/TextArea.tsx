@@ -1,6 +1,7 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
-import { TextArea } from "@ui5/webcomponents-react";
+
+import { TextArea as UI5TextArea } from "@ui5/webcomponents-react";
 import { TextAreaPropTypes } from "@ui5/webcomponents-react/webComponents/TextArea";
 import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
 
@@ -8,7 +9,8 @@ import { triggerSubmitOnEnter } from "./util";
 
 export interface TextAreaProps extends TextAreaPropTypes {}
 
-export const TextAreaField: FC<TextAreaProps> = forwardRef<
+
+export const TextArea: FC<TextAreaProps> = forwardRef<
   HTMLInputElement | undefined,
   TextAreaProps
 >(({ onKeyPress, ...props }, forwardedRef) => {
@@ -24,7 +26,8 @@ export const TextAreaField: FC<TextAreaProps> = forwardRef<
     [onKeyPress]
   );
 
-  return <TextArea {...props} ref={forwardedRef} onKeyPress={handleKeyPress} />;
-});
 
-export default TextArea;
+  return (
+    <UI5TextArea {...props} ref={forwardedRef} onKeyPress={handleKeyPress} />
+  );
+});

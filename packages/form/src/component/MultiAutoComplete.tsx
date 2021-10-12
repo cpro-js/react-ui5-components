@@ -4,6 +4,7 @@
  */
 import "@ui5/webcomponents/dist/features/InputSuggestions";
 
+import { debounce } from "@ui5/webcomponents-react-base/dist/Utils";
 import {
   MultiInput,
   MultiInputPropTypes,
@@ -20,6 +21,11 @@ import {
   CustomTokenProps,
   DefaultAutoCompleteOption,
 } from "./AutoCompleteModel";
+import {
+  DEBOUNCE_RATE,
+  DEFAULT_LABEL_PROP,
+  DEFAULT_VALUE_PROP,
+} from "./common/CommonSelection";
 
 // UI5 Event Types
 type TokenDeleteEvent = Ui5CustomEvent<HTMLInputElement, { token: ReactNode }>;
@@ -32,42 +38,13 @@ interface FocusOutEvent<T = Element> extends SyntheticEvent<T, FocusEvent> {
  * The complete set of properties as union (last won wins => our new defined props always win)
  */
 export type MultiAutoCompleteProps<T = DefaultAutoCompleteOption> =
-  CustomMultiInputProps & {
+  CustomMultiInputProps<T> & {
     /**
      * The list of selected options.
      *
      * Also provide fitting intialSuggestionItems when using controlled state to show labels instead of plain values.
      */
     values: Array<string>;
-
-    /**
-     * Controls which text is used to display options.
-     * Used by suggestions as well as values (tokens), if not overridden
-     * by <code>renderValue</code> and <code>renderSuggestion</code>
-     *
-     * By default the prop <code>label</code> is used.
-     * You can pass either a string, which represents a different prop or a render function.
-     */
-    optionLabel?: string | ((value: T) => string);
-
-    /**
-     * Controls which value / key is used to identify an option.
-     * This is used by suggestions as well as values (tokens), if not overridden
-     * by <code>renderValue</code> and <code>renderSuggestion</code>.
-     *
-     * By default the prop <code>label</code> is used.
-     * You can pass either a string, which represents a different prop or a render function.
-     */
-    optionValue?: string | ((value: T) => string);
-
-    /**
-     * The search method to use in order to generate suggestions.
-     * This method is fired on every key press.
-     *
-     * @param searchTerm the entered value
-     * @returns Promise of the items to use for showing suggestions
-     */
-    onSearch: (searchTerm: string) => Promise<AutoCompleteOptions<T>>;
 
     /**
      * Main method to get notified about changes to values, i.e. deletion or addition of values.
@@ -82,27 +59,14 @@ export type MultiAutoCompleteProps<T = DefaultAutoCompleteOption> =
     ) => void;
 
     onAdd?: (value: T) => void;
+
     onRemove?: (value: T) => void;
-
-    /**
-     * Render <code>Token</code>s from UI5.
-     */
-    renderValue?: (value: T) => Partial<CustomTokenProps>;
-    /**
-     * Render <code>SuggestionItem</code>s from UI5.
-     */
-    suggestionProps?: (value: T) => Partial<CustomSuggestionProps>;
-
-    initialSuggestions?: Array<T>;
 
     onChange?: (
       event: Ui5CustomEvent<HTMLInputElement>,
       values: Array<string>
     ) => void;
   };
-
-const DEFAULT_LABEL_PROP = "label";
-const DEFAULT_VALUE_PROP = "value";
 
 const KEY_BACKSPACE = "Backspace";
 const KEY_LEFT = "ArrowLeft";
@@ -111,6 +75,9 @@ const KEY_RIGHT = "ArrowRight";
 const TAG_NAME_TOKEN = "UI5-TOKEN";
 
 export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
+  searchTerm: string = "";
+  searching: boolean = false;
+
   state = {
     values: this.props.values || [],
     suggestions: [] as Array<T>,
@@ -134,28 +101,51 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   }
 
-  onInput = (event: Ui5CustomEvent<HTMLInputElement>) => {
+  search = debounce((searchTerm: string, hasMinChars: boolean) => {
+    const { selectedItems } = this.state;
     const { onSearch } = this.props;
-    const value = (event.currentTarget as MultiInputPropTypes).value;
 
-    // no searching
-    if (!value || !value.trim()) {
-      this.setState({ suggestions: [] });
-      return;
-    }
+    // there is one case where we shouldn't search, after a selection has been made.
+    // First a search is not neccessary, second it can be harmful: The label which is put
+    // into the input field after selection, doesn't need to be a proper & matching search term
+    // => only search if the search term doesn't match the label of the current value
+    const hasBeenSelected = Object.values(selectedItems)
+      .map((item) => this.retrieveItemLabel(item))
+      .includes(searchTerm);
 
-    if (onSearch) {
-      onSearch(value).then((data) => {
+    if (!hasBeenSelected && hasMinChars) {
+      this.searching = true;
+
+      onSearch(searchTerm).then((suggestions) => {
+        this.searching = false;
         const { values } = this.state;
 
-        const withoutSelected = data.filter((d) => {
-          const dataId = this.retrieveOptionValue(d);
+        const withoutSelected = suggestions.filter((s) => {
+          const dataId = this.retrieveItemValue(s);
           return !values.includes(dataId);
         });
 
         this.setState({ suggestions: withoutSelected });
       });
     }
+
+    if (onSearch) {
+      onSearch(this.searchTerm).then((data) => {});
+    }
+  }, DEBOUNCE_RATE);
+
+  onInput = (event: Ui5CustomEvent<HTMLInputElement>) => {
+    const { minCharsForSearch } = this.props;
+    const currentValue = (event.currentTarget as MultiInputPropTypes).value;
+    this.searchTerm = currentValue ? currentValue.trim() : "";
+    const hasMinChars = this.searchTerm.length >= (minCharsForSearch || 1);
+
+    // no value => clear suggestions
+    if (!this.searchTerm || !hasMinChars) {
+      this.setState({ suggestions: [] });
+    }
+
+    this.search(this.searchTerm, hasMinChars);
   };
 
   onSelect = (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
@@ -163,6 +153,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     const { values } = this.state;
     const id = (event.detail.item as unknown as HTMLElement).dataset.id;
     const toAdd = this.findItemFromSuggestions(id);
+
     // nothing to do
     if (!id || !toAdd) {
       return;
@@ -190,10 +181,14 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     });
   };
 
+  onBlur = (event: FocusOutEvent<HTMLInputElement>) => {
+    event.target.value = "";
+  };
+
   findItemFromSuggestions = (value?: string) => {
     if (value) {
       return this.state.suggestions.find(
-        (suggestion) => this.retrieveOptionValue(suggestion) === value
+        (suggestion) => this.retrieveItemValue(suggestion) === value
       );
     }
   };
@@ -225,10 +220,6 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     this.setState({ values: newValues, selectedItems: newItems });
   };
 
-  onBlur = (event: FocusOutEvent<HTMLInputElement>) => {
-    event.target.value = "";
-  };
-
   onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     const multiInput = event.currentTarget;
 
@@ -258,9 +249,10 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
 
         const newIndex = isKeyLeft ? selected - 1 : selected + 1;
         if (newIndex < 0 || newIndex >= tokens.length) {
-          // console.log("input should be focussed!");
+          // TODO: UI5 MultiInput doesn't handle the focusevent as it should be => no searching possibles
+          // @see https://github.com/SAP/ui5-webcomponents/issues/3865
           // multiInput.focus()
-          elementToFocus = multiInput;
+          // elementToFocus = multiInput;
         } else {
           // console.log("focussing token ", newIndex);
           elementToFocus = tokens[newIndex];
@@ -281,14 +273,14 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   };
 
-  retrieveOptionLabel = (value: T) => {
-    const { optionLabel } = this.props;
-    if (optionLabel) {
-      if (typeof optionLabel === "string") {
+  retrieveItemLabel = (value: T) => {
+    const { itemLabel } = this.props;
+    if (itemLabel) {
+      if (typeof itemLabel === "string") {
         //@ts-ignore
-        return value[optionLabel];
-      } else if (typeof optionLabel === "function") {
-        return optionLabel(value);
+        return value[itemLabel];
+      } else if (typeof itemLabel === "function") {
+        return itemLabel(value);
       }
     }
 
@@ -296,15 +288,15 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     return value[DEFAULT_LABEL_PROP] || "---";
   };
 
-  retrieveOptionValue = (value: T) => {
-    const { optionValue } = this.props;
+  retrieveItemValue = (value: T) => {
+    const { itemValue } = this.props;
 
-    if (optionValue) {
-      if (typeof optionValue === "string") {
+    if (itemValue) {
+      if (typeof itemValue === "string") {
         //@ts-ignore
-        return value[optionValue];
-      } else if (typeof optionValue === "function") {
-        return optionValue(value);
+        return value[itemValue];
+      } else if (typeof itemValue === "function") {
+        return itemValue(value);
       }
     }
 
@@ -326,8 +318,8 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
           ? renderValue(item)
           : {};
 
-        finalValue = value || this.retrieveOptionValue(item);
-        finalLabel = props.text || this.retrieveOptionLabel(item);
+        finalValue = value || this.retrieveItemValue(item);
+        finalLabel = props.text || this.retrieveItemLabel(item);
       }
 
       return (
@@ -352,8 +344,8 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         ? suggestionProps(suggestion)
         : {};
 
-      const value = props.value || this.retrieveOptionValue(suggestion);
-      const label = props.text || this.retrieveOptionLabel(suggestion);
+      const value = props.value || this.retrieveItemValue(suggestion);
+      const label = props.text || this.retrieveItemLabel(suggestion);
       const text = label;
 
       return (
@@ -365,8 +357,8 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   render() {
     const {
       values,
-      optionLabel,
-      optionValue,
+      itemLabel,
+      itemValue,
       onChange,
       onSearch,
       onSelectionChange,

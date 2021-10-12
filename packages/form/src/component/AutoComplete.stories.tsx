@@ -15,10 +15,9 @@ import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
 import { DefaultAutoCompleteOption } from "./AutoCompleteModel";
 
 const Template: Story<AutoCompleteProps<DefaultAutoCompleteOption>> = ({
-  value,
   ...props
 }) => {
-  return <AutoComplete {...props} value={value} />;
+  return <AutoComplete {...props} onSearch={SEARCH_COUNTRIES} />;
 };
 
 export const Standard = Template.bind({});
@@ -40,23 +39,26 @@ PrefilledWithValueOnly.args = {
   value: COUNTRIES[1].value,
 };
 
+export const MinCharacters = Template.bind({});
+MinCharacters.args = { ...Standard.args, minCharsForSearch: 3 };
+
 export const CustomLabelProp = Template.bind({});
-CustomLabelProp.args = { ...Prefilled.args, optionLabel: "withUmlaut" };
+CustomLabelProp.args = { ...Prefilled.args, itemLabel: "withUmlaut" };
 
 export const CustomLabelFunction = Template.bind({});
 CustomLabelFunction.args = {
   ...Prefilled.args,
-  optionLabel: (country) => `ISO code: ${country.value} => ${country.label}`,
+  itemLabel: (country) => `ISO code: ${country.value} => ${country.label}`,
 };
 
 export const CustomValueProp = Template.bind({});
-CustomValueProp.args = { ...Prefilled.args, optionValue: "label" };
+CustomValueProp.args = { ...Prefilled.args, itemValue: "label" };
 
 export const CustomValueFunction = Template.bind({});
 CustomValueFunction.args = {
   ...Prefilled.args,
   value: COUNTRIES[1].value,
-  optionValue: (country) => `${country.label} (${country.value})`,
+  itemValue: (country) => `${country.label} (${country.value})`,
 };
 
 export const RenderSuggestion = Template.bind({});

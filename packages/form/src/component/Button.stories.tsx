@@ -12,8 +12,8 @@ const Template: Story<{ buttons: Array<ButtonProps> }> = ({ buttons }) => {
       }}
     >
       <input type={"text"} defaultValue="change value and reset" />
-      {buttons.map((props) => (
-        <Button {...props} />
+      {buttons.map((props, index) => (
+        <Button key={index} {...props} />
       ))}
     </form>
   );
@@ -49,8 +49,8 @@ const TemplateExternalForm: Story<{ buttons: Array<ButtonProps> }> = ({
         }}
       />
       <input type={"text"} defaultValue="change value and reset" />
-      {buttons.map((props) => (
-        <Button {...props} />
+      {buttons.map((props, index) => (
+        <Button key={index} {...props} />
       ))}
     </>
   );

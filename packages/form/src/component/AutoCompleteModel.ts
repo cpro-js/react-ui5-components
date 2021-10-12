@@ -19,7 +19,7 @@ export type ExcludedTypes<T, U> = {
 /**
  * Props of Input we really care about. Reduced prop set of the UI5 Component <code>Input</code>
  */
-export type CustomInputProps = Pick<
+export type CustomInputProps<T> = Pick<
   InputPropTypes,
   | "style"
   | "className"
@@ -31,7 +31,58 @@ export type CustomInputProps = Pick<
   | "required"
   | "disabled"
   | "readonly"
->;
+> & {
+  /**
+   * Name of the input.
+   */
+  name?: string;
+  /**
+   * Controls which text is used to display options.
+   * Used by suggestions, if not overridden
+   * by <code>renderSuggestion</code>
+   *
+   * By default the prop <code>label</code> is used.
+   * You can pass either a string, which represents a different prop or a render function.
+   */
+  itemLabel?: string | ((value: T) => string);
+
+  /**
+   * Controls which value / key is used to identify an option.
+   * This is used by suggestions, if not overridden
+   * by <code>renderSuggestion</code>.
+   *
+   * By default the prop <code>value</code> is used.
+   * You can pass either a string, which represents a different prop or a render function.
+   */
+  itemValue?: string | ((value: T) => string);
+
+  /**
+   * Minimum number of characters before search is triggered.
+   * Default: 1.
+   */
+  minCharsForSearch?: number;
+
+  /**
+   * The search method to use in order to generate suggestions.
+   * This method is fired on every key press.
+   *
+   * @param searchTerm the entered value
+   * @returns Promise of the items to use for showing suggestions
+   */
+  onSearch: (searchTerm: string) => Promise<AutoCompleteOptions<T>>;
+
+  /**
+   * Render <code>SuggestionItem</code>s from UI5.
+   */
+  suggestionProps?: (value: T) => Partial<CustomSuggestionProps>;
+
+  initialSuggestions?: Array<T>;
+
+  /**
+   * Render <code>Token</code>s from UI5.
+   */
+  renderValue?: (value: T) => Partial<CustomTokenProps>;
+};
 
 /**
  * Props of MultiInput we really care about. Reduced prop set of the UI5 Component <code>MultiInput</code>.
@@ -41,19 +92,7 @@ export type CustomInputProps = Pick<
  * 3. Omit from reduced MultiInputProps those UI5 props we don't want (tokens, value, ...)
  * 4. WORKAROUND: the omit statement is wrapped as partial so that react-docgen-typescript won't document those attributes as required
  */
-export type CustomMultiInputProps = Pick<
-  MultiInputPropTypes,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "valueState"
-  | "valueStateMessage"
-  | "onBlur"
-  | "required"
-  | "disabled"
-  | "readonly"
-> &
+export type CustomMultiInputProps<T> = CustomInputProps<T> &
   Partial<
     Omit<
       ExcludedTypes<MultiInputPropTypes, HTMLAttributes<HTMLElement>>,
