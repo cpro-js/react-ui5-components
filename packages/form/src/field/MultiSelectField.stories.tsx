@@ -5,12 +5,16 @@ import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
 
-const items: Array<MultiSelectItem> = [
-  { value: 1, label: "Test 1 Number" },
-  { value: "1", label: "Test 1 String" },
-  { value: "2", label: "Test 2" },
-  { value: "3", label: "Test 3" },
-  { value: "4", label: "Test 4" },
+export interface MultiSelectItemAlt extends MultiSelectItem {
+  alt: string;
+}
+
+const items: Array<MultiSelectItemAlt> = [
+  { value: 1, label: "Test 1 Number", alt: "Test 1 Number Alt" },
+  { value: "1", label: "Test 1 String", alt: "Test 1 String Alt" },
+  { value: "2", label: "Test 2", alt: "Test 2 Alt" },
+  { value: "3", label: "Test 3", alt: "Test 3 Alt" },
+  { value: "4", label: "Test 4", alt: "Test 4 Alt" },
 ];
 
 interface FormData {
@@ -87,11 +91,26 @@ ValidationTranslationRequired.args = {
   ...ValidationRequired.args,
 };
 
-export const WithItemLabel = Template.bind({});
-WithItemLabel.args = { ...Standard.args, itemLabel: "value" };
+const TemplateAlt: Story<
+  FormControllerProps<FormData> & MultiSelectFieldProps<MultiSelectItemAlt>
+> = (args, context) => {
+  const { initialValues, onSubmit, ...props } = args;
+  return (
+    <FormController<FormData> {...{ initialValues, onSubmit }}>
+      <MultiSelectField<MultiSelectItemAlt> {...props} name="item" />
+      <div>
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+      </div>
+    </FormController>
+  );
+};
 
-export const WithItemValue = Template.bind({});
-WithItemValue.args = { ...Standard.args, itemValue: "label" };
+export const WithItemLabel = TemplateAlt.bind({});
+WithItemLabel.args = { ...Standard.args, itemLabel: "alt" };
+
+export const WithItemValue = TemplateAlt.bind({});
+WithItemValue.args = { ...Standard.args, itemValue: "alt" };
 
 export default {
   title: "Form/Field/MultiSelectField",

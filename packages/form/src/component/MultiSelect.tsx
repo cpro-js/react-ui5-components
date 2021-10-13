@@ -1,7 +1,13 @@
 import { MultiComboBox, MultiComboBoxItem } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { MultiComboBoxPropTypes } from "@ui5/webcomponents-react/webComponents/MultiComboBox";
-import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
+import {
+  KeyboardEvent,
+  ReactElement,
+  Ref,
+  forwardRef,
+  useCallback,
+} from "react";
 
 import { triggerSubmitOnEnter, useAllowAction } from "./util";
 
@@ -39,7 +45,7 @@ export interface MultiSelectProps<T = MultiSelectItem>
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
 
-export const MultiSelect: FC<MultiSelectProps> = forwardRef<
+export const MultiSelect = forwardRef<
   HTMLInputElement | undefined,
   MultiSelectProps
 >((props, forwardedRef) => {
@@ -168,4 +174,6 @@ export const MultiSelect: FC<MultiSelectProps> = forwardRef<
       </MultiComboBox>
     </>
   );
-});
+}) as <T = MultiSelectItem>(
+  p: MultiSelectProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
+) => ReactElement;
