@@ -34,6 +34,12 @@ WithValueString.args = { ...Standard.args, value: ["1"] };
 export const WithMultiValue = Template.bind({});
 WithMultiValue.args = { ...Standard.args, value: [1, "1", "2"] };
 
+export const WithItemLabel = Template.bind({});
+WithItemLabel.args = { ...Standard.args, itemLabel: "value" };
+
+export const WithItemValue = Template.bind({});
+WithItemValue.args = { ...Standard.args, itemValue: "label" };
+
 export default {
   title: "Form/Component/MultiSelect",
   component: MultiSelect,

@@ -87,6 +87,12 @@ ValidationTranslationRequired.args = {
   ...ValidationRequired.args,
 };
 
+export const WithItemLabel = Template.bind({});
+WithItemLabel.args = { ...Standard.args, itemLabel: "value" };
+
+export const WithItemValue = Template.bind({});
+WithItemValue.args = { ...Standard.args, itemValue: "label" };
+
 export default {
   title: "Form/Field/MultiSelectField",
   component: MultiSelectField,
