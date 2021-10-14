@@ -3,7 +3,6 @@ import { FilterBarPropTypes } from "@ui5/webcomponents-react/components/FilterBa
 import { FC, useCallback, useContext, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { triggerSubmit } from "../component/util";
 import { FormActionContext } from "./context/FormActionContext";
 
 export interface FormFilterBarProps extends FilterBarPropTypes {}
@@ -27,7 +26,7 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
   } = props;
 
   const { getValues, setValue, watch } = useFormContext();
-  const { clear, reset } = useContext(FormActionContext);
+  const { clear, reset, submit } = useContext(FormActionContext);
 
   const valuesBeforeRef = useRef<any>();
   const valuesChangedRef = useRef<any>();
@@ -136,7 +135,7 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
         saveValues();
       }
 
-      triggerSubmit(event);
+      submit();
 
       if (onGo != null) {
         onGo(event);

@@ -53,4 +53,9 @@ export interface FormActions<FormValues> {
    * Clear all form fields.
    */
   clear(): void;
+
+  /**
+   * Submit form
+   */
+  submit(): void;
 }

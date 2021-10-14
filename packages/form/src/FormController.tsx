@@ -89,6 +89,8 @@ export function useFormController<FormValues extends {}>(
       clear(): void {
         reset({} as DefaultValues<FormValues>);
       },
+      // todo refactor
+      submit(): void {},
     }),
     [reset, setValue, setError, setFocus]
   );
@@ -119,7 +121,10 @@ export function useFormController<FormValues extends {}>(
     context: form,
     handleSubmit: handleSubmit(enhancedOnSubmit),
     handleReset: handleReset,
-    actions: formActions,
+    actions: {
+      ...formActions,
+      submit: handleSubmit(enhancedOnSubmit),
+    },
   };
 }
 
