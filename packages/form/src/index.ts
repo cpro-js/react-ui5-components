@@ -49,9 +49,6 @@ export type { DatePickerFieldProps } from "./field/DatePickerField";
 export { FormBusyIndicator } from "./field/FormBusyIndicator";
 export type { FormBusyIndicatorProps } from "./field/FormBusyIndicator";
 
-export { FormListener } from "./field/FormListener";
-export type { FormListenerProps } from "./field/FormListener";
-
 export { FormStatus } from "./field/FormStatus";
 export type { FormStatusProps, FormStatusValues } from "./field/FormStatus";
 
@@ -93,6 +90,11 @@ export type { FormControllerProps } from "./form/FormController";
 
 export { FormProvider } from "./form/FormProvider";
 export type { FormProviderProps } from "./form/FormProvider";
+
+export { FormListener } from "./form/FormListener";
+export type { FormListenerProps } from "./form/FormListener";
+export { useFormListener } from "./form/useFormListener";
+export type { UseFormListenerCallback } from "./form/useFormListener";
 
 export { FormFilterBar } from "./form/FormFilterBar";
 export type { FormFilterBarProps } from "./form/FormFilterBar";
