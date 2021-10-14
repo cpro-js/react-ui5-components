@@ -1,6 +1,6 @@
 import { klona } from "klona/json";
 import * as React from "react";
-import { CSSProperties, ReactNode, useCallback, useMemo } from "react";
+import { CSSProperties, ReactNode, useCallback, useMemo, useRef } from "react";
 import {
   DefaultValues,
   FormProvider,
@@ -11,6 +11,7 @@ import {
 import { UnpackNestedValue } from "react-hook-form/dist/types/form";
 
 import { FormActions } from "./field/types";
+import { FormActionContext } from "./form/context/FormActionContext";
 
 export interface FormControllerProps<FormValues extends {}> {
   id?: string;
@@ -30,16 +31,17 @@ export function useFormController<FormValues extends {}>(
   context: UseFormReturn<FormValues>;
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   handleReset: () => void;
+  actions: FormActions<FormValues>;
 } {
   const { initialValues, onSubmit } = props;
 
-  // deep clone initial values to bypass mutations
-  const clonedInitialValues = useMemo(() => {
-    return initialValues != null ? klona(initialValues) : undefined;
-  }, [initialValues]);
+  // store initial values & deep clone initial values to bypass mutations
+  const initialValuesRef = useRef<typeof initialValues>(
+    initialValues != null ? klona(initialValues) : undefined
+  );
 
   const form = useForm<FormValues>({
-    defaultValues: clonedInitialValues,
+    defaultValues: initialValuesRef.current,
     mode: "onTouched", // Validation will trigger on the first blur event. After that, it will trigger on every change event.
     reValidateMode: "onChange", // Validation will trigger on the change event with each input, and lead to multiple re-renders.
     criteriaMode: "firstError",
@@ -78,8 +80,17 @@ export function useFormController<FormValues extends {}>(
         });
       },
       reset(): void {
-        reset();
+        reset(
+          initialValuesRef.current != null
+            ? initialValuesRef.current
+            : ({} as DefaultValues<FormValues>)
+        );
       },
+      clear(): void {
+        reset({} as DefaultValues<FormValues>);
+      },
+      // todo refactor
+      submit(): void {},
     }),
     [reset, setValue, setError, setFocus]
   );
@@ -99,13 +110,21 @@ export function useFormController<FormValues extends {}>(
 
   const handleReset = useCallback(() => {
     // call submit
-    reset();
+    reset(
+      initialValuesRef.current != null
+        ? initialValuesRef.current
+        : ({} as DefaultValues<FormValues>)
+    );
   }, [reset]);
 
   return {
     context: form,
     handleSubmit: handleSubmit(enhancedOnSubmit),
     handleReset: handleReset,
+    actions: {
+      ...formActions,
+      submit: handleSubmit(enhancedOnSubmit),
+    },
   };
 }
 
@@ -114,10 +133,11 @@ export function FormController<FormValues extends {}>(
 ) {
   const { id, children, initialValues, onSubmit, className, style } = props;
 
-  const { context, handleSubmit, handleReset } = useFormController<FormValues>({
-    initialValues,
-    onSubmit,
-  });
+  const { context, handleSubmit, handleReset, actions } =
+    useFormController<FormValues>({
+      initialValues,
+      onSubmit,
+    });
 
   return (
     <form
@@ -127,7 +147,11 @@ export function FormController<FormValues extends {}>(
       className={className}
       style={style}
     >
-      <FormProvider {...context}>{children}</FormProvider>
+      <FormProvider {...context}>
+        <FormActionContext.Provider value={actions}>
+          {children}
+        </FormActionContext.Provider>
+      </FormProvider>
     </form>
   );
 }

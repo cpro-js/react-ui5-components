@@ -48,4 +48,14 @@ export interface FormActions<FormValues> {
    * Reset form to it's initial state.
    */
   reset(): void;
+
+  /**
+   * Clear all form fields.
+   */
+  clear(): void;
+
+  /**
+   * Submit form
+   */
+  submit(): void;
 }

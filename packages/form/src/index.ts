@@ -85,6 +85,9 @@ export type { MultiAutoCompleteFieldProps } from "./field/MultiAutoCompleteField
 export { useFormController, FormController } from "./FormController";
 export type { FormControllerProps } from "./FormController";
 
+export { FormFilterBar } from "./form/FormFilterBar";
+export type { FormFilterBarProps } from "./form/FormFilterBar";
+
 export { FormI18nProvider } from "./i18n/FormI18n";
 export type { FormI18nProviderProps } from "./i18n/FormI18n";
 

@@ -1791,7 +1791,7 @@ __metadata:
     microbundle: ^0.13.3
     react: ^17.0.2
     react-dom: ^17.0.2
-    react-hook-form: 7.13.0
+    react-hook-form: 7.17.3
     react-jss: ^10.7.1
     react-test-renderer: ^17.0.2
     rimraf: ^3.0.2
@@ -16432,12 +16432,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.13.0":
-  version: 7.13.0
-  resolution: "react-hook-form@npm:7.13.0"
+"react-hook-form@npm:7.17.3":
+  version: 7.17.3
+  resolution: "react-hook-form@npm:7.17.3"
   peerDependencies:
     react: ^16.8.0 || ^17
-  checksum: 763aefa3ceb26846dbd6f8fefe85d176a033c73aa5e2cffa460afb972bf6032b80a174b13a46543d4412741617d9ff4ef5b161956fcc64200cd7b7b9299174ad
+  checksum: af7aeba3ddc47fe97ed39bd2be6d60989b9c534b7b34a2d7d96ce7a357cd5aa9595672d7a0d125267553908b261d221d1826c2f9533430e75dc4eecc39529db8
   languageName: node
   linkType: hard
 

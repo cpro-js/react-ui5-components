@@ -1,14 +1,18 @@
+import "@ui5/webcomponents-icons/dist/search.js";
+
 import { Story } from "@storybook/react";
-import { FilterBar, FilterGroupItem } from "@ui5/webcomponents-react";
+import { FilterGroupItem, Icon } from "@ui5/webcomponents-react";
 
 import { SelectItem } from "../component/Select";
+import { CheckboxField } from "../field/CheckboxField";
+import { CheckboxFieldGroup } from "../field/CheckboxFieldGroup";
+import { DatePickerField } from "../field/DatePickerField";
+import { FormValues } from "../field/FormValues";
+import { MultiSelectField } from "../field/MultiSelectField";
+import { SelectField } from "../field/SelectField";
+import { TextInputField } from "../field/TextInputField";
 import { FormController, FormControllerProps } from "../FormController";
-import { CheckboxField } from "./CheckboxField";
-import { CheckboxFieldGroup } from "./CheckboxFieldGroup";
-import { DatePickerField } from "./DatePickerField";
-import { MultiSelectField } from "./MultiSelectField";
-import { SelectField } from "./SelectField";
-import { TextInputField } from "./TextInputField";
+import { FormFilterBar } from "./FormFilterBar";
 
 const items: Array<SelectItem> = [
   { value: 1, label: "Test 1 Number" },
@@ -19,6 +23,7 @@ const items: Array<SelectItem> = [
 ];
 
 interface FormData {
+  query?: string;
   input1?: string;
   input2?: string;
   date?: Date;
@@ -32,7 +37,22 @@ const Template: Story<FormControllerProps<FormData>> = (args) => {
 
   return (
     <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <FilterBar showFilterConfiguration>
+      <FormFilterBar
+        showFilterConfiguration
+        showGo
+        showGoOnFB
+        showClearButton
+        showClearOnFB
+        showRestoreButton
+        showRestoreOnFB
+        search={
+          <TextInputField
+            name="query"
+            placeholder={"Search"}
+            icon={<Icon name="search" />}
+          />
+        }
+      >
         <FilterGroupItem label="Input">
           <TextInputField name="input1" required />
         </FilterGroupItem>
@@ -57,7 +77,10 @@ const Template: Story<FormControllerProps<FormData>> = (args) => {
             <CheckboxField value="burger" text={"Burger"} />
           </CheckboxFieldGroup>
         </FilterGroupItem>
-      </FilterBar>
+      </FormFilterBar>
+      <FormValues
+        render={(values) => <div>{JSON.stringify(values, null, 2)}</div>}
+      />
     </FormController>
   );
 };
@@ -65,8 +88,11 @@ const Template: Story<FormControllerProps<FormData>> = (args) => {
 export const Standard = Template.bind({});
 Standard.args = {};
 
+export const Prefilled = Template.bind({});
+Prefilled.args = { initialValues: { input1: "test1", input2: "test2" } };
+
 export default {
-  title: "Form/Field/FilterBar",
+  title: "Form/Field/FormFilterBar",
   argTypes: {
     onSubmit: {
       action: "submit",
