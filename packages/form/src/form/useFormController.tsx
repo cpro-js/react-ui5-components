@@ -1,6 +1,6 @@
 import { klona } from "klona/json";
 import * as React from "react";
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
   DefaultValues,
   SubmitHandler,
@@ -9,7 +9,16 @@ import {
 } from "react-hook-form";
 import { UnpackNestedValue } from "react-hook-form/dist/types/form";
 
-import { FormActions } from "../field/types";
+import {
+  FormActionClearForm,
+  FormActionResetForm,
+  FormActionSetErrors,
+  FormActionSetValues,
+  FormActionSubmitForm,
+  FormActions,
+} from "../field/types";
+
+const noop = () => undefined;
 
 export interface UseFormControllerProps<FormValues extends {}> {
   initialValues?: DefaultValues<FormValues>;
@@ -20,10 +29,17 @@ export interface UseFormControllerProps<FormValues extends {}> {
 }
 
 export interface UseFormControllerReturn<FormValues extends {}> {
+  /**
+   * React hook form context
+   */
   context: UseFormReturn<FormValues>;
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   handleReset: () => void;
-  actions: FormActions<FormValues>;
+  setErrors: FormActionSetErrors<FormValues>;
+  setValues: FormActionSetValues<FormValues>;
+  reset: FormActionResetForm<FormValues>;
+  clear: FormActionClearForm<FormValues>;
+  submit: FormActionSubmitForm<FormValues>;
 }
 
 export function useFormController<FormValues extends {}>(
@@ -46,80 +62,98 @@ export function useFormController<FormValues extends {}>(
 
   const { handleSubmit, reset, trigger, setValue, setError, setFocus } = form;
 
-  const formActions: FormActions<FormValues> = useMemo(
-    () => ({
-      setErrors(errors, config): void {
-        if (errors.length > 0) {
-          errors.forEach(({ name, message }) => {
-            setError(
-              name,
-              {
-                type: "external-error",
-                message: message,
-              },
-              { shouldFocus: false }
-            );
-          });
+  const actions = useRef<FormActions<FormValues>>({
+    setErrors: noop,
+    setValues: noop,
+    reset: noop,
+    clear: noop,
+    submit: noop,
+  });
 
-          if (config?.shouldFocus) {
-            // TODO is there any way to ensure that the error order matches the input order?
-            setFocus(errors[0].name);
-          }
-        }
-      },
-      setValues(values): void {
-        values.forEach(({ name, value }) => {
-          setValue(name, value, {
-            shouldValidate: false,
-            shouldDirty: false,
-          });
+  const setErrors: FormActionSetErrors<FormValues> = useCallback(
+    (errors, config) => {
+      if (errors.length > 0) {
+        errors.forEach(({ name, message }) => {
+          setError(
+            name,
+            {
+              type: "external-error",
+              message: message,
+            },
+            { shouldFocus: false }
+          );
         });
-      },
-      reset(): void {
-        reset(
-          initialValuesRef.current != null
-            ? initialValuesRef.current
-            : ({} as DefaultValues<FormValues>)
-        );
-      },
-      clear(): void {
-        reset({} as DefaultValues<FormValues>);
-      },
-      // todo refactor
-      submit(): void {},
-    }),
-    [reset, setValue, setError, setFocus]
+
+        if (config?.shouldFocus) {
+          // TODO is there any way to ensure that the error order matches the input order?
+          setFocus(errors[0].name);
+        }
+      }
+    },
+    [setError, setFocus]
   );
 
-  const enhancedOnSubmit: SubmitHandler<FormValues> = useCallback(
+  const setValues: FormActionSetValues<FormValues> = useCallback(
+    (values) => {
+      values.forEach(({ name, value }) => {
+        setValue(name, value, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      });
+    },
+    [setValue]
+  );
+
+  const resetForm: FormActionResetForm<FormValues> = useCallback(() => {
+    if (initialValuesRef.current != null) {
+      reset(initialValuesRef.current);
+    } else {
+      reset();
+    }
+  }, [reset]);
+
+  const clearForm: FormActionClearForm<FormValues> = useCallback(() => {
+    reset({} as DefaultValues<FormValues>);
+  }, [reset]);
+
+  const submitHandler: SubmitHandler<FormValues> = useCallback(
     async (data) => {
       // need to trigger validation to ensure everything is really ok
       const valid = await trigger();
 
       if (valid) {
         // call submit
-        return onSubmit(data, formActions);
+        return onSubmit(data, actions.current);
       }
     },
-    [trigger, onSubmit, formActions]
+    [trigger, onSubmit]
   );
 
-  const handleReset = useCallback(() => {
-    // call submit
-    reset(
-      initialValuesRef.current != null
-        ? initialValuesRef.current
-        : ({} as DefaultValues<FormValues>)
-    );
-  }, [reset]);
+  const submitForm = useMemo(
+    () => handleSubmit(submitHandler),
+    [handleSubmit, submitHandler]
+  );
+
+  useEffect(() => {
+    // refresh action ref if any of our methods changes
+    actions.current = {
+      setErrors: setErrors,
+      setValues: setValues,
+      reset: resetForm,
+      clear: clearForm,
+      submit: submitForm,
+    };
+  }, [setErrors, setValues, resetForm, clearForm, submitForm]);
 
   return {
     context: form,
-    handleSubmit: handleSubmit(enhancedOnSubmit),
-    handleReset: handleReset,
-    actions: {
-      ...formActions,
-      submit: handleSubmit(enhancedOnSubmit),
-    },
+    handleReset: resetForm,
+    handleSubmit: submitForm,
+    setErrors: setErrors,
+    setValues: setValues,
+    reset: resetForm,
+    clear: clearForm,
+    submit: submitForm,
   };
 }
