@@ -1,3 +1,4 @@
+import { Form } from "@ui5/webcomponents-react";
 import { klona } from "klona/json";
 import * as React from "react";
 import { useCallback, useMemo, useRef } from "react";
@@ -19,14 +20,16 @@ export interface UseFormControllerProps<FormValues extends {}> {
   ) => void | Promise<void>;
 }
 
-export function useFormController<FormValues extends {}>(
-  props: UseFormControllerProps<FormValues>
-): {
+export interface UseFormControllerReturn<FormValues extends {}> {
   context: UseFormReturn<FormValues>;
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   handleReset: () => void;
   actions: FormActions<FormValues>;
-} {
+}
+
+export function useFormController<FormValues extends {}>(
+  props: UseFormControllerProps<FormValues>
+): UseFormControllerReturn<FormValues> {
   const { initialValues, onSubmit } = props;
 
   // store initial values & deep clone initial values to bypass mutations

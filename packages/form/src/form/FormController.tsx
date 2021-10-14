@@ -1,8 +1,7 @@
 import * as React from "react";
 import { CSSProperties, ReactNode } from "react";
-import { FormProvider } from "react-hook-form";
 
-import { FormActionContext } from "./context/FormActionContext";
+import { FormProvider } from "./FormProvider";
 import { UseFormControllerProps, useFormController } from "./useFormController";
 
 export interface FormControllerProps<FormValues extends {}>
@@ -18,11 +17,12 @@ export function FormController<FormValues extends {}>(
 ) {
   const { id, children, initialValues, onSubmit, className, style } = props;
 
-  const { context, handleSubmit, handleReset, actions } =
-    useFormController<FormValues>({
-      initialValues,
-      onSubmit,
-    });
+  const form = useFormController<FormValues>({
+    initialValues,
+    onSubmit,
+  });
+
+  const { handleSubmit, handleReset } = form;
 
   return (
     <form
@@ -32,11 +32,7 @@ export function FormController<FormValues extends {}>(
       className={className}
       style={style}
     >
-      <FormProvider {...context}>
-        <FormActionContext.Provider value={actions}>
-          {children}
-        </FormActionContext.Provider>
-      </FormProvider>
+      <FormProvider {...form}>{children}</FormProvider>
     </form>
   );
 }
