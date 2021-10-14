@@ -11,7 +11,7 @@ import { FormValues } from "../field/FormValues";
 import { MultiSelectField } from "../field/MultiSelectField";
 import { SelectField } from "../field/SelectField";
 import { TextInputField } from "../field/TextInputField";
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "./FormController";
 import { FormFilterBar } from "./FormFilterBar";
 
 const items: Array<SelectItem> = [

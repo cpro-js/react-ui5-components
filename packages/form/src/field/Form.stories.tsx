@@ -16,7 +16,7 @@ import {
   SEARCH_COUNTRIES,
 } from "../component/auto-complete/AutoComplete-storyData";
 import { Button } from "../component/Button";
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { CheckboxField } from "./CheckboxField";
 import { CheckboxFieldGroup } from "./CheckboxFieldGroup";
 import { DatePickerField } from "./DatePickerField";

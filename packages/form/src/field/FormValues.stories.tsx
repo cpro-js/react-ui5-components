@@ -1,7 +1,7 @@
 import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
 
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { FormValues, FormValuesProps } from "./FormValues";
 import { TextInputField } from "./TextInputField";
 

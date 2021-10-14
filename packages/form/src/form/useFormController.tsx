@@ -1,32 +1,26 @@
 import { klona } from "klona/json";
 import * as React from "react";
-import { CSSProperties, ReactNode, useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   DefaultValues,
-  FormProvider,
   SubmitHandler,
   UseFormReturn,
   useForm,
 } from "react-hook-form";
 import { UnpackNestedValue } from "react-hook-form/dist/types/form";
 
-import { FormActions } from "./field/types";
-import { FormActionContext } from "./form/context/FormActionContext";
+import { FormActions } from "../field/types";
 
-export interface FormControllerProps<FormValues extends {}> {
-  id?: string;
+export interface UseFormControllerProps<FormValues extends {}> {
   initialValues?: DefaultValues<FormValues>;
   onSubmit: (
     values: UnpackNestedValue<FormValues>,
     actions: FormActions<FormValues>
   ) => void | Promise<void>;
-  children?: ReactNode;
-  className?: string;
-  style?: CSSProperties;
 }
 
 export function useFormController<FormValues extends {}>(
-  props: FormControllerProps<FormValues>
+  props: UseFormControllerProps<FormValues>
 ): {
   context: UseFormReturn<FormValues>;
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
@@ -126,32 +120,4 @@ export function useFormController<FormValues extends {}>(
       submit: handleSubmit(enhancedOnSubmit),
     },
   };
-}
-
-export function FormController<FormValues extends {}>(
-  props: FormControllerProps<FormValues>
-) {
-  const { id, children, initialValues, onSubmit, className, style } = props;
-
-  const { context, handleSubmit, handleReset, actions } =
-    useFormController<FormValues>({
-      initialValues,
-      onSubmit,
-    });
-
-  return (
-    <form
-      id={id}
-      onSubmit={handleSubmit}
-      onReset={handleReset}
-      className={className}
-      style={style}
-    >
-      <FormProvider {...context}>
-        <FormActionContext.Provider value={actions}>
-          {children}
-        </FormActionContext.Provider>
-      </FormProvider>
-    </form>
-  );
 }
