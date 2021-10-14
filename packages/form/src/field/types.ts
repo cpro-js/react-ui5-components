@@ -1,4 +1,10 @@
 import { FieldPath } from "react-hook-form";
+import { UnpackNestedValue } from "react-hook-form/dist/types/form";
+import { DeepPartial } from "react-hook-form/dist/types/utils";
+
+export type PartialFormValues<FormValues extends {}> = UnpackNestedValue<
+  DeepPartial<FormValues>
+>;
 
 export type FormFieldValidationRule<
   T extends boolean | number | string | RegExp

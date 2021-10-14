@@ -6,10 +6,8 @@ import {
   useEffect,
   useRef,
 } from "react";
-import { DeepPartial } from "react-hook-form";
-import { UnpackNestedValue } from "react-hook-form/dist/types/form";
 
-import { FormActions } from "../field/types";
+import { FormActions, PartialFormValues } from "../field/types";
 import { FormListener } from "./FormListener";
 import { FormProvider } from "./FormProvider";
 import {
@@ -26,7 +24,7 @@ export interface FormControllerProps<FormValues extends {}>
   className?: string;
   style?: CSSProperties;
   onChange?: (
-    values: UnpackNestedValue<DeepPartial<FormValues>>,
+    values: PartialFormValues<FormValues>,
     actions: FormActions<FormValues>
   ) => void;
 }

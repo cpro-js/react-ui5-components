@@ -1,12 +1,10 @@
 import { useEffect, useRef } from "react";
-import {
-  DeepPartial,
-  UnpackNestedValue,
-  useFormContext,
-} from "react-hook-form";
+import { useFormContext } from "react-hook-form";
+
+import { PartialFormValues } from "../field/types";
 
 export type UseFormListenerCallback<FormValues extends {}> = (
-  values: UnpackNestedValue<DeepPartial<FormValues>>
+  values: PartialFormValues<FormValues>
 ) => void;
 
 /**
@@ -29,9 +27,7 @@ export function useFormListener<FormValues extends {}>(
   // Set up the watcher
   useEffect(() => {
     const subscription = watch((values) => {
-      changeCallbackRef.current(
-        values as UnpackNestedValue<DeepPartial<FormValues>>
-      );
+      changeCallbackRef.current(values as PartialFormValues<FormValues>);
     });
 
     return () => {

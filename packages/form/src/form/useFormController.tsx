@@ -1,13 +1,7 @@
 import { klona } from "klona/json";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import {
-  DefaultValues,
-  SubmitHandler,
-  UseFormReturn,
-  useForm,
-} from "react-hook-form";
-import { UnpackNestedValue } from "react-hook-form/dist/types/form";
+import { SubmitHandler, UseFormReturn, useForm } from "react-hook-form";
 
 import {
   FormActionClearForm,
@@ -16,14 +10,15 @@ import {
   FormActionSetValues,
   FormActionSubmitForm,
   FormActions,
+  PartialFormValues,
 } from "../field/types";
 
 const noop = () => undefined;
 
 export interface UseFormControllerProps<FormValues extends {}> {
-  initialValues?: DefaultValues<FormValues>;
+  initialValues?: PartialFormValues<FormValues>;
   onSubmit: (
-    values: UnpackNestedValue<FormValues>,
+    values: FormValues,
     actions: FormActions<FormValues>
   ) => void | Promise<void>;
 }
@@ -114,7 +109,7 @@ export function useFormController<FormValues extends {}>(
   }, [reset]);
 
   const clearForm: FormActionClearForm<FormValues> = useCallback(() => {
-    reset({} as DefaultValues<FormValues>);
+    reset({} as PartialFormValues<FormValues>);
   }, [reset]);
 
   const submitHandler: SubmitHandler<FormValues> = useCallback(
@@ -124,7 +119,7 @@ export function useFormController<FormValues extends {}>(
 
       if (valid) {
         // call submit
-        return onSubmit(data, actions.current);
+        return onSubmit(data as FormValues, actions.current);
       }
     },
     [trigger, onSubmit]
