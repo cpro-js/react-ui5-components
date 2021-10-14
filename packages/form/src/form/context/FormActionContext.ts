@@ -9,4 +9,5 @@ export const FormActionContext = createContext<FormActions<any>>({
   setValues: noop,
   reset: noop,
   clear: noop,
+  submit: noop,
 });
