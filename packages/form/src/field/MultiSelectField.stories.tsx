@@ -1,7 +1,7 @@
 import { Story } from "@storybook/react";
 
 import { MultiSelectItem } from "../component/MultiSelect";
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
 

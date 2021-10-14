@@ -6,7 +6,7 @@ import {
   SEARCH_COUNTRIES,
 } from "../component/auto-complete/AutoComplete-storyData";
 import { AutoCompleteProps } from "../component/AutoComplete";
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { AutoCompleteField } from "./AutoCompleteField";
 import { FormActions } from "./types";

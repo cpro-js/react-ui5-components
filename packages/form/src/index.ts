@@ -82,8 +82,17 @@ export type { AutoCompleteFieldProps } from "./field/AutoCompleteField";
 export { MultiAutoCompleteField } from "./field/MultiAutoCompleteField";
 export type { MultiAutoCompleteFieldProps } from "./field/MultiAutoCompleteField";
 
-export { useFormController, FormController } from "./FormController";
-export type { FormControllerProps } from "./FormController";
+export { useFormActions } from "./form/useFormActions";
+export type { FormActions } from "./field/types";
+
+export { useFormController } from "./form/useFormController";
+export type { UseFormControllerProps } from "./form/useFormController";
+
+export { FormController } from "./form/FormController";
+export type { FormControllerProps } from "./form/FormController";
+
+export { FormProvider } from "./form/FormProvider";
+export type { FormProviderProps } from "./form/FormProvider";
 
 export { FormFilterBar } from "./form/FormFilterBar";
 export type { FormFilterBarProps } from "./form/FormFilterBar";

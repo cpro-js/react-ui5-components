@@ -1,9 +1,9 @@
 import { FilterBar } from "@ui5/webcomponents-react";
 import { FilterBarPropTypes } from "@ui5/webcomponents-react/components/FilterBar";
-import { FC, useCallback, useContext, useEffect, useRef } from "react";
+import { FC, useCallback, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { FormActionContext } from "./context/FormActionContext";
+import { useFormActions } from "./useFormActions";
 
 export interface FormFilterBarProps extends FilterBarPropTypes {}
 
@@ -26,7 +26,7 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
   } = props;
 
   const { getValues, setValue, watch } = useFormContext();
-  const { clear, reset, submit } = useContext(FormActionContext);
+  const { clear, reset, submit } = useFormActions();
 
   const valuesBeforeRef = useRef<any>();
   const valuesChangedRef = useRef<any>();

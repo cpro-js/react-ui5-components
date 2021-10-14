@@ -1,6 +1,6 @@
 import { Story } from "@storybook/react";
 
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { HiddenField, HiddenFieldProps } from "./HiddenField";
 
 interface FormData {
