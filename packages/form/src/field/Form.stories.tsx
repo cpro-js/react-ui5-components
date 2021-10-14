@@ -36,7 +36,7 @@ interface FormData {
   input2?: string;
   textarea?: string;
   numberinput?: number;
-  date?: Date;
+  date?: string;
   dish?: Array<string>;
   country: string;
   countries: Array<string>;
