@@ -1,5 +1,7 @@
+import "@ui5/webcomponents-icons/dist/search.js";
+
 import { Story } from "@storybook/react";
-import { FilterBar, FilterGroupItem } from "@ui5/webcomponents-react";
+import { FilterGroupItem, Icon } from "@ui5/webcomponents-react";
 
 import { SelectItem } from "../component/Select";
 import { CheckboxField } from "../field/CheckboxField";
@@ -21,6 +23,7 @@ const items: Array<SelectItem> = [
 ];
 
 interface FormData {
+  query?: string;
   input1?: string;
   input2?: string;
   date?: Date;
@@ -42,6 +45,13 @@ const Template: Story<FormControllerProps<FormData>> = (args) => {
         showClearOnFB
         showRestoreButton
         showRestoreOnFB
+        search={
+          <TextInputField
+            name="query"
+            placeholder={"Search"}
+            icon={<Icon name="search" />}
+          />
+        }
       >
         <FilterGroupItem label="Input">
           <TextInputField name="input1" required />
