@@ -1,13 +1,6 @@
 import { FilterBar } from "@ui5/webcomponents-react";
 import { FilterBarPropTypes } from "@ui5/webcomponents-react/components/FilterBar";
-import {
-  FC,
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
+import { FC, useCallback, useContext, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { triggerSubmit } from "../component/util";
@@ -43,7 +36,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
   useEffect(() => {
     const sub = watch((values) => {
       if (openRef.current) {
-        console.log("value change", values);
         valuesChangedRef.current = values;
       }
     });
@@ -56,7 +48,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
   const resetChanges = useCallback(() => {
     if (valuesBeforeRef.current != null) {
       Object.entries(valuesBeforeRef.current).forEach(([key, value]) => {
-        console.log("set value", key, value);
         setValue(key, value);
       });
     }
@@ -74,9 +65,7 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const saveValues = useCallback(() => {
     if (valuesChangedRef.current != null) {
-      console.log(valuesChangedRef.current);
       Object.entries(valuesChangedRef.current).forEach(([key, value]) => {
-        console.log("set value", key, value);
         setValue(key, value);
       });
     }
@@ -84,7 +73,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const handleFiltersDialogOpen: typeof onFiltersDialogOpen = useCallback(
     (event) => {
-      console.log("handleFiltersDialogOpen");
       valuesChangedRef.current = null;
       valuesBeforeRef.current = getValues();
       openRef.current = true;
@@ -98,7 +86,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const handleFiltersDialogClose: typeof onFiltersDialogClose = useCallback(
     (event) => {
-      console.log("onFiltersDialogClose");
       openRef.current = false;
       valuesBeforeRef.current = null;
 
@@ -111,7 +98,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const handleFiltersDialogClear: typeof onFiltersDialogClear = useCallback(
     (event) => {
-      console.log("handleFiltersDialogClear");
       clearValues();
 
       if (onFiltersDialogClear != null) {
@@ -123,7 +109,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const handleFiltersDialogCancel: typeof onFiltersDialogCancel = useCallback(
     (event) => {
-      console.log("handleFiltersDialogCancel");
       resetChanges();
 
       if (onFiltersDialogCancel != null) {
@@ -135,7 +120,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const handleFiltersDialogSave: typeof onFiltersDialogSave = useCallback(
     (event) => {
-      console.log("handleFiltersDialogSave");
       saveValues();
 
       if (onFiltersDialogSave != null) {
@@ -147,7 +131,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const handleGo: typeof onGo = useCallback(
     (event) => {
-      console.log("handleGo");
       if (openRef.current) {
         // filter bar is opened and submitted via Go Button -> we need to save new values before
         saveValues();
@@ -164,7 +147,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const handleRestore: typeof onRestore = useCallback(
     (event) => {
-      console.log("handleRestore");
       restoreValues();
 
       if (onRestore != null) {
@@ -176,7 +158,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   const handleClear: typeof onClear = useCallback(
     (event) => {
-      console.log("handleClear");
       clearValues();
 
       if (onClear != null) {
