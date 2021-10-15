@@ -4,7 +4,13 @@ import { Input, SuggestionItem } from "@ui5/webcomponents-react";
 import { debounce } from "@ui5/webcomponents-react-base/dist/Utils";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
-import { Component, FocusEvent, ReactNode } from "react";
+import {
+  Component,
+  FocusEvent,
+  KeyboardEvent,
+  ReactNode,
+  useCallback,
+} from "react";
 
 import {
   CustomInputProps,
@@ -16,6 +22,7 @@ import {
   DEFAULT_LABEL_PROP,
   DEFAULT_VALUE_PROP,
 } from "./common/CommonSelection";
+import { triggerSubmitOnEnter } from "./util";
 
 export type AutoCompleteProps<T = DefaultAutoCompleteOption> =
   CustomInputProps<T> & {
@@ -70,6 +77,10 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
       });
     }
   }, DEBOUNCE_RATE);
+
+  handleKeyPress = (event: KeyboardEvent<HTMLElement>) => {
+    triggerSubmitOnEnter(event);
+  };
 
   onInput = (event: Ui5CustomEvent<HTMLInputElement>) => {
     const { onChange, onSelectionChange, minCharsForSearch } = this.props;
@@ -223,6 +234,7 @@ export class AutoComplete<T> extends Component<AutoCompleteProps<T>> {
         onInput={this.onInput}
         onSuggestionItemSelect={this.onSelect}
         onBlur={this.onBlur}
+        onKeyPress={this.handleKeyPress}
       >
         {this.renderSuggestions()}
       </Input>
