@@ -16,6 +16,16 @@ export type FormChangeHandler<FormValues extends {}> = (
   actions: FormActions<FormValues>
 ) => void;
 
+/**
+ * Base element that will be returned by ref
+ */
+export interface FormFieldElement {
+  /**
+   * Focus field
+   */
+  focus(): void;
+}
+
 export type FormFieldValidationRule<
   T extends boolean | number | string | RegExp
 > = T | { value: T; message: string };

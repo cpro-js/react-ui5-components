@@ -6,7 +6,7 @@ import { useController } from "react-hook-form";
 
 import { TextInput, TextInputProps } from "../component/TextInput";
 import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldValidation } from "./types";
+import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
 export type TextInputFieldProps = Omit<
@@ -18,9 +18,9 @@ export type TextInputFieldProps = Omit<
   };
 
 export const TextInputField: FC<TextInputFieldProps> = forwardRef<
-  HTMLInputElement | undefined,
+  FormFieldElement,
   TextInputFieldProps
->(({ name, required, minLength, maxLength, ...props }, ref) => {
+>(({ name, required, minLength, maxLength, ...props }, forwardedRef) => {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -39,8 +39,14 @@ export const TextInputField: FC<TextInputFieldProps> = forwardRef<
 
   // store input ref for intenral usage
   const inputRef = useRef<HTMLInputElement>();
-  // forward outer ref to stored internal input ref
-  useImperativeHandle(ref, () => inputRef.current);
+  // forward outer ref to custom element
+  useImperativeHandle(forwardedRef, () => ({
+    focus() {
+      if (inputRef.current != null) {
+        inputRef.current.focus();
+      }
+    },
+  }));
   // forward field ref to stored internal input ref
   useImperativeHandle(field.ref, () => inputRef.current);
 
