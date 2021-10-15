@@ -1,7 +1,7 @@
 import { Story } from "@storybook/react";
 
 import { SelectItem } from "../component/Select";
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { SelectField, SelectFieldProps } from "./SelectField";
 
