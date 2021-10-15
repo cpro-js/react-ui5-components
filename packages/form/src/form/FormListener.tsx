@@ -1,12 +1,13 @@
-import { DeepPartial, UnpackNestedValue } from "react-hook-form";
-
+import { PartialFormValues } from "../field/types";
 import { useFormListener } from "./useFormListener";
 
-export type FormListenerProps<T extends {}> = {
-  onChange: (values: UnpackNestedValue<DeepPartial<T>>) => void;
+export type FormListenerProps<FormValues extends {}> = {
+  onChange: (values: PartialFormValues<FormValues>) => void;
 };
 
-export function FormListener<T extends {}>(props: FormListenerProps<T>) {
+export function FormListener<FormValues extends {}>(
+  props: FormListenerProps<FormValues>
+) {
   const { onChange } = props;
 
   useFormListener(onChange);
