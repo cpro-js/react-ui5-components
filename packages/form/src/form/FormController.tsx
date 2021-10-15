@@ -7,7 +7,7 @@ import {
   useRef,
 } from "react";
 
-import { FormActions, PartialFormValues } from "../field/types";
+import { FormChangeHandler } from "../field/types";
 import { FormListener } from "./FormListener";
 import { FormProvider } from "./FormProvider";
 import {
@@ -23,10 +23,7 @@ export interface FormControllerProps<FormValues extends {}>
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
-  onChange?: (
-    values: PartialFormValues<FormValues>,
-    actions: FormActions<FormValues>
-  ) => void;
+  onChange?: FormChangeHandler<FormValues>;
 }
 
 export function FormController<FormValues extends {}>(

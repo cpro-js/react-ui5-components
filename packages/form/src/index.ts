@@ -80,7 +80,12 @@ export { MultiAutoCompleteField } from "./field/MultiAutoCompleteField";
 export type { MultiAutoCompleteFieldProps } from "./field/MultiAutoCompleteField";
 
 export { useFormActions } from "./form/useFormActions";
-export type { PartialFormValues, FormActions } from "./field/types";
+export type {
+  PartialFormValues,
+  FormActions,
+  FormSubmitHandler,
+  FormChangeHandler,
+} from "./field/types";
 
 export { useFormController } from "./form/useFormController";
 export type { UseFormControllerProps } from "./form/useFormController";

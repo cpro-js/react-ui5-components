@@ -6,6 +6,16 @@ export type PartialFormValues<FormValues extends {}> = UnpackNestedValue<
   DeepPartial<FormValues>
 >;
 
+export type FormSubmitHandler<FormValues extends {}> = (
+  values: FormValues,
+  actions: FormActions<FormValues>
+) => void | Promise<void>;
+
+export type FormChangeHandler<FormValues extends {}> = (
+  values: PartialFormValues<FormValues>,
+  actions: FormActions<FormValues>
+) => void;
+
 export type FormFieldValidationRule<
   T extends boolean | number | string | RegExp
 > = T | { value: T; message: string };

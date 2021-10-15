@@ -1,7 +1,11 @@
 import { klona } from "klona/json";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { SubmitHandler, UseFormReturn, useForm } from "react-hook-form";
+import {
+  SubmitHandler as HookFormSubmitHandler,
+  UseFormReturn,
+  useForm,
+} from "react-hook-form";
 
 import {
   FormActionClearForm,
@@ -10,6 +14,7 @@ import {
   FormActionSetValues,
   FormActionSubmitForm,
   FormActions,
+  FormSubmitHandler,
   PartialFormValues,
 } from "../field/types";
 
@@ -17,10 +22,7 @@ const noop = () => undefined;
 
 export interface UseFormControllerProps<FormValues extends {}> {
   initialValues?: PartialFormValues<FormValues>;
-  onSubmit: (
-    values: FormValues,
-    actions: FormActions<FormValues>
-  ) => void | Promise<void>;
+  onSubmit: FormSubmitHandler<FormValues>;
 }
 
 export interface UseFormControllerReturn<FormValues extends {}> {
@@ -28,7 +30,7 @@ export interface UseFormControllerReturn<FormValues extends {}> {
    * React hook form context
    */
   context: UseFormReturn<FormValues>;
-  handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  handleSubmit: (e?: React.BaseSyntheticEvent) => void | Promise<void>;
   handleReset: () => void;
   setErrors: FormActionSetErrors<FormValues>;
   setValues: FormActionSetValues<FormValues>;
@@ -112,7 +114,7 @@ export function useFormController<FormValues extends {}>(
     reset({} as PartialFormValues<FormValues>);
   }, [reset]);
 
-  const submitHandler: SubmitHandler<FormValues> = useCallback(
+  const submitHandler: HookFormSubmitHandler<FormValues> = useCallback(
     async (data) => {
       // need to trigger validation to ensure everything is really ok
       const valid = await trigger();
