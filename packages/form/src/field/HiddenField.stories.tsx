@@ -1,6 +1,7 @@
 import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../FormController";
+import { FormViewer } from "./FormViewer";
 import { HiddenField, HiddenFieldProps } from "./HiddenField";
 
 interface FormData {
@@ -8,18 +9,19 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData> & HiddenFieldProps> = (
-  args
+  args,
+  context
 ) => {
   const { initialValues, onSubmit, ...props } = args;
 
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <HiddenField {...props} name={"text"} />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-    </FormController>
+    <FormViewer
+      component={<HiddenField {...props} name={"text"} />}
+      initialValues={initialValues}
+      storyName={context.name}
+      //@ts-ignore
+      onSubmitAction={onSubmit}
+    />
   );
 };
 
