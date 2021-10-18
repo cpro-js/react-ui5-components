@@ -4,6 +4,7 @@ import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { toISO8601DateString } from "../util/date";
 import { DatePickerField, DatePickerFieldProps } from "./DatePickerField";
+import { FormViewer } from "./FormViewer";
 
 interface FormData {
   date?: string;
@@ -15,13 +16,12 @@ const Template: Story<FormControllerProps<FormData> & DatePickerFieldProps> = (
 ) => {
   const { initialValues, onSubmit, ...props } = args;
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <DatePickerField {...props} name={"date"} />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-    </FormController>
+    <FormViewer
+      component={<DatePickerField {...props} name={"date"} />}
+      initialValues={initialValues}
+      storyName={context.name}
+      onSubmitAction={onSubmit}
+    />
   );
 };
 
