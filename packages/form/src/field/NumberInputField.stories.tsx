@@ -2,6 +2,7 @@ import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { FormViewer } from "./FormViewer";
 import { NumberInputField, NumberInputFieldProps } from "./NumberInputField";
 
 interface FormData {
@@ -9,18 +10,18 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData> & NumberInputFieldProps> = (
-  args
+  args,
+  context
 ) => {
   const { initialValues, onSubmit, ...props } = args;
 
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <NumberInputField {...props} name={"number"} />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-    </FormController>
+    <FormViewer
+      component={<NumberInputField {...props} name={"number"} />}
+      initialValues={initialValues}
+      storyName={context.name}
+      onSubmitAction={onSubmit}
+    />
   );
 };
 
