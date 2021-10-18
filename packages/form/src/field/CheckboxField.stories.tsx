@@ -2,6 +2,7 @@ import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../FormController";
 import { CheckboxField, CheckboxFieldProps } from "./CheckboxField";
+import { FormViewer } from "./FormViewer";
 
 interface FormData {
   value?: string;
@@ -14,17 +15,16 @@ interface FormDataBoolean {
 const createTemplate = function <T>(): Story<
   FormControllerProps<T> & CheckboxFieldProps
 > {
-  return (args) => {
+  return (args, context) => {
     const { initialValues, onSubmit, ...props } = args;
 
     return (
-      <FormController<T> {...{ initialValues, onSubmit }}>
-        <CheckboxField {...props} name={"value"} value={"on"} />
-        <div>
-          <button type="submit">Submit</button>
-          <button type="reset">Reset</button>
-        </div>
-      </FormController>
+      <FormViewer
+        component={<CheckboxField {...props} name={"value"} />}
+        initialValues={initialValues}
+        storyName={context.name}
+        onSubmitAction={onSubmit}
+      />
     );
   };
 };
