@@ -9,6 +9,7 @@ import { AutoCompleteProps } from "../component/AutoComplete";
 import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { AutoCompleteField } from "./AutoCompleteField";
+import { FormViewer } from "./FormViewer";
 import { FormActions } from "./types";
 
 interface FormData {
@@ -19,31 +20,16 @@ const Template: Story<FormControllerProps<FormData> & AutoCompleteProps> = (
   args,
   context
 ) => {
-  const { initialValues, ...props } = args;
-
-  const [submittedValues, setSubmittedValues] = useState(
-    `${context.name}_submittedValues`,
-    {}
-  );
-  const NoData = <p>No submitted data yet!</p>;
-
-  const onSubmit = (values: FormData, actions: FormActions<FormData>) => {
-    setSubmittedValues(values);
-  };
+  const { initialValues, onSubmit, ...props } = args;
 
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <AutoCompleteField {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-
-      <h2>Submitted Values</h2>
-      {!Object.keys(submittedValues).length
-        ? NoData
-        : JSON.stringify(submittedValues)}
-    </FormController>
+    <FormViewer
+      component={<AutoCompleteField {...props} name={"item"} />}
+      initialValues={initialValues}
+      storyName={context.name}
+      //@ts-ignore
+      onSubmitAction={onSubmit}
+    />
   );
 };
 
