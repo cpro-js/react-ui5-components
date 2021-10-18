@@ -1,0 +1,13 @@
+h2 {
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: bold;
+  font-family: var(--sapFontFamily);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+p {
+  font-size: 18px;
+  line-height: 24px;
+  font-family: var(--sapFontFamily);
+}
