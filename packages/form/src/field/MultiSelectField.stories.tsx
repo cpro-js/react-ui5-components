@@ -3,6 +3,7 @@ import { Story } from "@storybook/react";
 import { MultiSelectItem } from "../component/MultiSelect";
 import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { FormViewer } from "./FormViewer";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
 
 const items: Array<MultiSelectItem> = [
@@ -18,17 +19,17 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData> & MultiSelectFieldProps> = (
-  args
+  args,
+  context
 ) => {
   const { initialValues, onSubmit, ...props } = args;
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <MultiSelectField {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-    </FormController>
+    <FormViewer
+      component={<MultiSelectField {...props} name={"item"} />}
+      initialValues={initialValues}
+      storyName={context.name}
+      onSubmitAction={onSubmit}
+    />
   );
 };
 
