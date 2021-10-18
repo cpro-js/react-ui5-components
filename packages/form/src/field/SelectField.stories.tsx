@@ -3,6 +3,7 @@ import { Story } from "@storybook/react";
 import { SelectItem } from "../component/Select";
 import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { FormViewer } from "./FormViewer";
 import { SelectField, SelectFieldProps } from "./SelectField";
 
 export interface SelectItemAlt extends SelectItem {
@@ -27,13 +28,12 @@ const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
 ) => {
   const { initialValues, onSubmit, ...props } = args;
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <SelectField {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-    </FormController>
+    <FormViewer
+      component={<SelectField {...props} name={"item"} />}
+      initialValues={initialValues}
+      storyName={context.name}
+      onSubmitAction={onSubmit}
+    />
   );
 };
 
