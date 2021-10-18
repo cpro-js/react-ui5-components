@@ -6,27 +6,29 @@ import {
   CheckboxFieldGroup,
   CheckboxFieldGroupProps,
 } from "./CheckboxFieldGroup";
+import { FormViewer } from "./FormViewer";
 
 interface FormData {
   value?: Array<string>;
 }
 
 const Template: Story<FormControllerProps<FormData> & CheckboxFieldGroupProps> =
-  (args) => {
+  (args, context) => {
     const { initialValues, onSubmit, ...props } = args;
 
     return (
-      <FormController<FormData> {...{ initialValues, onSubmit }}>
-        <CheckboxFieldGroup {...props} name="value">
-          <CheckboxField value="cake" text={"Cake"} />
-          <CheckboxField value="waffles" text={"Waffles"} />
-          <CheckboxField value="burger" text={"Burger"} />
-        </CheckboxFieldGroup>
-        <div>
-          <button type="submit">Submit</button>
-          <button type="reset">Reset</button>
-        </div>
-      </FormController>
+      <FormViewer
+        component={
+          <CheckboxFieldGroup {...props} name="value">
+            <CheckboxField value="cake" text={"Cake"} />
+            <CheckboxField value="waffles" text={"Waffles"} />
+            <CheckboxField value="burger" text={"Burger"} />
+          </CheckboxFieldGroup>
+        }
+        initialValues={initialValues}
+        storyName={context.name}
+        onSubmitAction={onSubmit}
+      />
     );
   };
 
