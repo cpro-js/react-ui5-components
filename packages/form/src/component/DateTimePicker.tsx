@@ -1,9 +1,9 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
-import { DatePicker as UI5DatePicker } from "@ui5/webcomponents-react";
+import { DateTimePicker as UI5DateTimePicker } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { Ui5DatePickerDomRef } from "@ui5/webcomponents-react/interfaces/Ui5DatePickerDomRef";
-import { DatePickerPropTypes } from "@ui5/webcomponents-react/webComponents/DatePicker";
+import { Ui5DateTimePickerDomRef } from "@ui5/webcomponents-react/interfaces/Ui5DateTimePickerDomRef";
+import { DateTimePickerPropTypes } from "@ui5/webcomponents-react/webComponents/DateTimePicker";
 import clsx from "clsx";
 import {
   FC,
@@ -28,13 +28,6 @@ const useStyles = createUseStyles({
   },
 });
 
-const convertToDate = (
-  value: Date | any,
-  parse: (value: any) => Date | null
-): Date | null => {
-  return value == null ? null : value instanceof Date ? value : parse(value);
-};
-
 /**
  * Simplified interface for DateFormat
  * see https://sapui5.hana.ondemand.com/sdk/#/api/sap.ui.core.format.DateFormat%23methods/sap.ui.core.format.DateFormat.getTimeInstance
@@ -44,12 +37,20 @@ interface SapCoreDateFormat {
    * Formats date in the desired format (already set). Invalid returns empty string.
    * @param date
    */
-  formatToUiString: (date: Date) => string;
+  formatToUiString: (dateTime: Date) => string;
 }
 
-export interface DatePickerProps<TDate extends Date | string | number = string>
-  extends Omit<
-    DatePickerPropTypes,
+const convertToDate = (
+  value: Date | any,
+  parse: (value: any) => Date | null
+): Date | null => {
+  return value == null ? null : value instanceof Date ? value : parse(value);
+};
+
+export interface DateTimePickerProps<
+  TDate extends Date | string | number = string
+> extends Omit<
+    DateTimePickerPropTypes,
     "value" | "minDate" | "maxDate" | "onChange"
   > {
   value?: Date | TDate;
@@ -61,9 +62,9 @@ export interface DatePickerProps<TDate extends Date | string | number = string>
   ) => void;
 }
 
-export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
+export const DateTimePicker: FC<DateTimePickerProps<string>> = forwardRef<
   HTMLInputElement | undefined,
-  DatePickerProps
+  DateTimePickerProps
 >(
   (
     {
@@ -84,7 +85,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
     useImperativeHandle(forwardedRef, () => ref.current);
 
     const {
-      date: { format, parse },
+      dateTime: { format, parse },
     } = useContext(FormAdapterContext);
 
     const ui5Loaded = useWaitForWebcomponent("ui5-date-picker");
@@ -95,20 +96,23 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
       Partial<SapCoreDateFormat>
     >({});
 
-    const setRef = useCallback((ui5DatePicker: null | Ui5DatePickerDomRef) => {
-      if (ui5DatePicker == null) {
-        ref.current = undefined;
-        return;
-      }
-      ref.current = ui5DatePicker as any;
+    const setRef = useCallback(
+      (ui5DatePicker: null | Ui5DateTimePickerDomRef) => {
+        if (ui5DatePicker == null) {
+          ref.current = undefined;
+          return;
+        }
+        ref.current = ui5DatePicker as any;
 
-      setDateFormat({
-        formatToUiString(date: Date) {
-          // todo return type of formatValue is incorrect (void instead of string)
-          return ui5DatePicker.formatValue(date) as any as string;
-        },
-      });
-    }, []);
+        setDateFormat({
+          formatToUiString(dateTime: Date) {
+            // todo return type of formatValue is incorrect (void instead of string)
+            return ui5DatePicker.formatValue(dateTime) as any as string;
+          },
+        });
+      },
+      []
+    );
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent<HTMLElement>) => {
@@ -132,6 +136,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
             .dateValue;
 
           const normalizedValue = value == null ? null : (format(value) as any);
+
           onChange(event, normalizedValue);
         }
       },
@@ -155,7 +160,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
     const normalizedMaxDate = convertToDate(maxDate, parse);
 
     return (
-      <UI5DatePicker
+      <UI5DateTimePicker
         {...props}
         className={clsx(className, classes.fixWidth)}
         ref={setRef}
