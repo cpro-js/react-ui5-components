@@ -78,6 +78,7 @@ export type CustomInputProps<T> = Pick<
 
   initialSuggestions?: Array<T>;
 
+  // TODO REMOVE
   /**
    * Render <code>Token</code>s from UI5.
    */
