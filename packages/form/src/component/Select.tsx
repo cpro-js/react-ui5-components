@@ -9,7 +9,7 @@ import {
   useCallback,
 } from "react";
 
-import { triggerSubmitOnEnter } from "./util";
+import { triggerSubmitOnEnter, useAllowAction } from "./util";
 
 const findLabel = (
   items: Array<SelectItem>,
@@ -120,8 +120,12 @@ export const Select = forwardRef<HTMLInputElement | undefined, SelectProps>(
       [items, onSelectionChange, retrieveItemValue]
     );
 
+    const [allowSubmitOnEnter, setAllowSubmitOnEnter] = useAllowAction(true);
+
     const handleChange = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement>) => {
+      (event: Ui5CustomEvent<HTMLInputElement & { open: boolean }>) => {
+        setAllowSubmitOnEnter(!event.target.open);
+
         if (onChange != null) {
           const item = (
             Array.from(event.target.childNodes) as Array<HTMLElement>
@@ -135,7 +139,7 @@ export const Select = forwardRef<HTMLInputElement | undefined, SelectProps>(
           onChange(event, value);
         }
       },
-      [items, onChange, retrieveItemValue]
+      [items, onChange, retrieveItemValue, setAllowSubmitOnEnter]
     );
 
     const handleKeyDown = useCallback(
@@ -154,12 +158,14 @@ export const Select = forwardRef<HTMLInputElement | undefined, SelectProps>(
       (event: KeyboardEvent<HTMLElement>) => {
         // Workaround: Webcomponents catches enter -> need to submit manually
         // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
-        triggerSubmitOnEnter(event);
+        allowSubmitOnEnter.current
+          ? triggerSubmitOnEnter(event)
+          : setAllowSubmitOnEnter(true);
         if (onKeyPress != null) {
           onKeyPress(event);
         }
       },
-      [onKeyPress]
+      [onKeyPress, setAllowSubmitOnEnter]
     );
 
     const text = findLabel(items, value);
@@ -171,7 +177,9 @@ export const Select = forwardRef<HTMLInputElement | undefined, SelectProps>(
           ref={forwardedRef}
           value={text}
           onSelectionChange={handleSelectionChange}
-          onChange={handleChange}
+          onChange={
+            handleChange as (event: Ui5CustomEvent<HTMLInputElement>) => void
+          }
           onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}
         >
