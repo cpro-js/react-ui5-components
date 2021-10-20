@@ -1,3 +1,6 @@
+import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
 type UsedAutocompleteProps<TItemModel> = Pick<
@@ -32,16 +35,68 @@ export interface UseAsyncProps<TItemModel> {
   defaultItems?: Array<TItemModel>;
 }
 
-export const useCreatable = <
+export const useAsync = <
   TItemModel,
   TAdditionalProps extends UseAsyncProps<TItemModel> &
     UsedAutocompleteProps<TItemModel>
 >(
   props: TAdditionalProps
 ): Omit<TAdditionalProps, keyof UseAsyncProps<TItemModel>> => {
-  const {} = props;
+  const { onSearch, defaultItems, ...restProps } = props;
+  const {
+    inputValue: propsInputValue,
+    onInputChange: propsOnInputChange,
+    minCharsForSearch,
+  } = restProps;
+
+  const lastRequest = useRef<unknown>(undefined);
+  const mounted = useRef(false);
+
+  const [loadedOptions, setLoadedOptions] = useState<Array<TItemModel>>(
+    defaultItems ?? []
+  );
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  const onInputChange = useCallback(
+    (inputValue: string, event: Ui5CustomEvent<HTMLInputElement>) => {
+      if (propsOnInputChange != null) {
+        propsOnInputChange(inputValue, event);
+      }
+
+      if (
+        !inputValue ||
+        (minCharsForSearch != null && inputValue.length < minCharsForSearch)
+      ) {
+        lastRequest.current = undefined;
+        setLoadedOptions([]);
+        return;
+      }
+
+      const request = (lastRequest.current = {});
+
+      onSearch(inputValue).then((options) => {
+        if (!mounted) {
+          return;
+        }
+        if (request !== lastRequest.current) {
+          return;
+        }
+        lastRequest.current = undefined;
+        setLoadedOptions(options || []);
+      });
+    },
+    [onSearch, propsOnInputChange]
+  );
 
   return {
-    ...props,
+    ...restProps,
+    onInputChange: onInputChange,
+    items: loadedOptions,
   };
 };

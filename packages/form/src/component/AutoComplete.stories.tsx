@@ -8,16 +8,20 @@ import { Meta, Story, StoryContext } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
 
 import {
+  AsyncAutocomplete,
+  AsyncAutocompleteProps,
+} from "./auto-complete/AsyncAutocomplete";
+import {
   COUNTRIES,
   SEARCH_COUNTRIES,
 } from "./auto-complete/AutoComplete-storyData";
 import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
 import { DefaultAutoCompleteOption } from "./AutoCompleteModel";
 
-const Template: Story<AutoCompleteProps<DefaultAutoCompleteOption>> = ({
+const Template: Story<AutoCompleteProps<AsyncAutocompleteProps>> = ({
   ...props
 }) => {
-  return <AutoComplete {...props} onSearch={SEARCH_COUNTRIES} />;
+  return <AsyncAutocomplete {...props} onSearch={SEARCH_COUNTRIES} />;
 };
 
 export const Standard = Template.bind({});
@@ -30,7 +34,7 @@ export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
   value: COUNTRIES[1].value,
-  initialSuggestions: [COUNTRIES[1]],
+  defaultItems: [COUNTRIES[1]],
 };
 
 export const PrefilledWithValueOnly = Template.bind({});
