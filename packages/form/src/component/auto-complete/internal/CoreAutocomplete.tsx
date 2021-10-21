@@ -186,13 +186,7 @@ export const CoreAutocomplete = forwardRef<
         const label = props.text || getItemLabel(item);
 
         return (
-          <SuggestionItem
-            {...props}
-            key={value}
-            data-id={value}
-            text={label}
-            additionalText={(item as any).__isNew__ ? "create" : undefined}
-          />
+          <SuggestionItem {...props} key={value} data-id={value} text={label} />
         );
       })}
     </Input>
