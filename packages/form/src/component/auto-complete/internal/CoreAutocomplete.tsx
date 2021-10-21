@@ -8,7 +8,7 @@ import { SuggestionItemPropTypes } from "@ui5/webcomponents-react/webComponents/
 import { KeyboardEvent, ReactNode, forwardRef, useCallback } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
-import { getItemAttribute, triggerSubmitOnEnter } from "../../util";
+import { triggerSubmitOnEnter } from "../../util";
 
 export type DefaultAutoCompleteOption = { label: string; value: string };
 
@@ -53,7 +53,7 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
     /**
      * Render <code>SuggestionItem</code>s from UI5.
      */
-    getItemProps?: (value: T) => Partial<SuggestionItemPropTypes>;
+    getItemProps?: (item: T) => Partial<SuggestionItemPropTypes>;
 
     /**
      * Controls which text is used to display options.
@@ -63,7 +63,7 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
      * By default the prop <code>label</code> is used.
      * You can pass either a string, which represents a different prop or a render function.
      */
-    getItemLabel: (value: T) => string;
+    getItemLabel: (item: T) => string;
 
     /**
      * Controls which value / key is used to identify an option.
@@ -73,7 +73,7 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
      * By default the prop <code>value</code> is used.
      * You can pass either a string, which represents a different prop or a render function.
      */
-    getItemValue: (value: T) => string;
+    getItemValue: (item: T) => string;
 
     /**
      * Change handler that allows to access the new inputValue
@@ -126,7 +126,7 @@ export const CoreAutocomplete = forwardRef<
       if (element?.dataset?.id != null) {
         const itemValue = element?.dataset?.id;
         const item = suggestionRef.current.find(
-          (item) => getItemAttribute(item, getItemValue) === itemValue
+          (item) => getItemValue(item) === itemValue
         );
         if (item) {
           onValueChange(item);
@@ -146,7 +146,7 @@ export const CoreAutocomplete = forwardRef<
 
       if (onValueChange != null) {
         const item = suggestionRef.current.find(
-          (item) => getItemAttribute(item, getItemLabel) === currentValue
+          (item) => getItemLabel(item) === currentValue
         );
         if (!item && valueRef.current != null) {
           onValueChange(undefined);
@@ -182,8 +182,8 @@ export const CoreAutocomplete = forwardRef<
           ? getItemProps(item)
           : {};
 
-        const value = getItemAttribute(item, getItemValue);
-        const label = props.text || getItemAttribute(item, getItemLabel);
+        const value = getItemValue(item);
+        const label = props.text || getItemLabel(item);
 
         return (
           <SuggestionItem
