@@ -7,17 +7,14 @@ import "@ui5/webcomponents-icons/dist/refresh";
 import { Meta, Story, StoryContext } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
 
-import {
-  COUNTRIES,
-  SEARCH_COUNTRIES,
-} from "./auto-complete/AutoComplete-storyData";
-import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
-import { DefaultAutoCompleteOption } from "./AutoCompleteModel";
+import { AsyncAutocomplete, AsyncAutocompleteProps } from "./AsyncAutocomplete";
+import { COUNTRIES, SEARCH_COUNTRIES } from "./AutoComplete-storyData";
+import { DefaultAutoCompleteOption } from "./internal/CoreAutocomplete";
 
-const Template: Story<AutoCompleteProps<DefaultAutoCompleteOption>> = ({
+const Template: Story<AsyncAutocompleteProps<DefaultAutoCompleteOption>> = ({
   ...props
 }) => {
-  return <AutoComplete {...props} onSearch={SEARCH_COUNTRIES} />;
+  return <AsyncAutocomplete {...props} onSearch={SEARCH_COUNTRIES} />;
 };
 
 export const Standard = Template.bind({});
@@ -30,7 +27,7 @@ export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
   value: COUNTRIES[1].value,
-  initialSuggestions: [COUNTRIES[1]],
+  defaultItems: [COUNTRIES[1]],
 };
 
 export const PrefilledWithValueOnly = Template.bind({});
@@ -64,7 +61,7 @@ CustomValueFunction.args = {
 export const RenderSuggestion = Template.bind({});
 RenderSuggestion.args = {
   ...Standard.args,
-  suggestionProps: (country) => ({
+  getItemProps: (country) => ({
     text: country.label,
     // @ts-ignore
     description: country.withUmlaut as string,
@@ -76,6 +73,6 @@ RenderSuggestion.args = {
 };
 
 export default {
-  title: "form/component/AutoComplete",
-  component: AutoComplete,
+  title: "form/component/AsyncAutocomplete",
+  component: AsyncAutocomplete,
 } as Meta;
