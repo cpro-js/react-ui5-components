@@ -4,21 +4,13 @@ import "@ui5/webcomponents/dist/features/InputSuggestions.js";
 import { Input, SuggestionItem } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
-import {
-  KeyboardEvent,
-  ReactNode,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
+import { SuggestionItemPropTypes } from "@ui5/webcomponents-react/webComponents/SuggestionItem";
+import { KeyboardEvent, ReactNode, forwardRef, useCallback } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
-import {
-  CustomSuggestionProps,
-  DefaultAutoCompleteOption,
-} from "../../AutoCompleteModel";
 import { getItemAttribute, triggerSubmitOnEnter } from "../../util";
+
+export type DefaultAutoCompleteOption = { label: string; value: string };
 
 /**
  * Base Props of Input we really care about. Reduced prop set of the UI5 Component <code>Input</code>
@@ -61,7 +53,7 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
     /**
      * Render <code>SuggestionItem</code>s from UI5.
      */
-    getItemProps?: (value: T) => Partial<CustomSuggestionProps>;
+    getItemProps?: (value: T) => Partial<SuggestionItemPropTypes>;
 
     /**
      * Controls which text is used to display options.
@@ -186,12 +178,11 @@ export const CoreAutocomplete = forwardRef<
       onKeyPress={handleKeyPress}
     >
       {items.map((item) => {
-        const props: Partial<CustomSuggestionProps> = getItemProps
+        const props: Partial<SuggestionItemPropTypes> = getItemProps
           ? getItemProps(item)
           : {};
 
-        // todo fix type definition of itemValue & itemLabel
-        const value = props.value || getItemAttribute(item, getItemValue);
+        const value = getItemAttribute(item, getItemValue);
         const label = props.text || getItemAttribute(item, getItemLabel);
 
         return (
