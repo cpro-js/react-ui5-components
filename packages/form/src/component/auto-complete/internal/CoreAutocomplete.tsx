@@ -23,83 +23,84 @@ import { getItemAttribute, triggerSubmitOnEnter } from "../../util";
  * Base Props of Input we really care about. Reduced prop set of the UI5 Component <code>Input</code>
  * => Controlled Component
  */
-export type CoreAutocompleteProps<T = DefaultAutoCompleteOption> = Pick<
-  InputPropTypes,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "valueState"
-  | "valueStateMessage"
-  | "onBlur"
-  | "required"
-  | "disabled"
-  | "readonly"
-> & {
-  /**
-   * Name of the input.
-   */
-  name?: string;
+export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
+  Pick<
+    InputPropTypes,
+    | "style"
+    | "className"
+    | "id"
+    | "placeholder"
+    | "valueState"
+    | "valueStateMessage"
+    | "onBlur"
+    | "required"
+    | "disabled"
+    | "readonly"
+  > & {
+    /**
+     * Name of the input.
+     */
+    name?: string;
 
-  /**
-   * Value shown on the input
-   */
-  inputValue?: string;
+    /**
+     * Value shown on the input
+     */
+    inputValue?: string;
 
-  /**
-   * Selected suggested item
-   */
-  value?: T;
+    /**
+     * Selected suggested item
+     */
+    value?: string;
 
-  /**
-   * Suggestions to show
-   */
-  items: Array<T>;
+    /**
+     * Suggestions to show
+     */
+    items: Array<T>;
 
-  /**
-   * Render <code>SuggestionItem</code>s from UI5.
-   */
-  getItemProps?: (value: T) => Partial<CustomSuggestionProps>;
+    /**
+     * Render <code>SuggestionItem</code>s from UI5.
+     */
+    getItemProps?: (value: T) => Partial<CustomSuggestionProps>;
 
-  /**
-   * Controls which text is used to display options.
-   * Used by suggestions, if not overridden
-   * by <code>renderSuggestion</code>
-   *
-   * By default the prop <code>label</code> is used.
-   * You can pass either a string, which represents a different prop or a render function.
-   */
-  getItemLabel: (value: T) => string;
+    /**
+     * Controls which text is used to display options.
+     * Used by suggestions, if not overridden
+     * by <code>renderSuggestion</code>
+     *
+     * By default the prop <code>label</code> is used.
+     * You can pass either a string, which represents a different prop or a render function.
+     */
+    getItemLabel: (value: T) => string;
 
-  /**
-   * Controls which value / key is used to identify an option.
-   * This is used by suggestions, if not overridden
-   * by <code>renderSuggestion</code>.
-   *
-   * By default the prop <code>value</code> is used.
-   * You can pass either a string, which represents a different prop or a render function.
-   */
-  getItemValue: (value: T) => string;
+    /**
+     * Controls which value / key is used to identify an option.
+     * This is used by suggestions, if not overridden
+     * by <code>renderSuggestion</code>.
+     *
+     * By default the prop <code>value</code> is used.
+     * You can pass either a string, which represents a different prop or a render function.
+     */
+    getItemValue: (value: T) => string;
 
-  /**
-   * Change handler that allows to access the new inputValue
-   *
-   * @param inputValue updated input value
-   * @param event event that lead to that change
-   */
-  onInputChange?: (
-    inputValue: string,
-    event: Ui5CustomEvent<HTMLInputElement>
-  ) => void;
+    /**
+     * Change handler that allows to access the new inputValue
+     *
+     * @param inputValue updated input value
+     * @param event event that lead to that change
+     */
+    onInputChange?: (
+      inputValue: string,
+      event: Ui5CustomEvent<HTMLInputElement>
+    ) => void;
 
-  /**
-   * Change handler that allows to access the new suggested item
-   * Note: will be called in the future without item to reset the value
-   *
-   * @param suggestionValue
-   */
-  onValueChange?: (suggestionValue?: T) => void;
-};
+    /**
+     * Change handler that allows to access the new suggested item
+     * Note: will be called in the future without item to reset the value
+     *
+     * @param suggestionValue
+     */
+    onValueChange?: (suggestionValue?: T) => void;
+  };
 
 export const CoreAutocomplete = forwardRef<
   HTMLInputElement,
@@ -159,10 +160,17 @@ export const CoreAutocomplete = forwardRef<
     triggerSubmitOnEnter(event);
   }, []);
 
+  let shownValue: string = inputValue ?? "";
+
+  if (value != null) {
+    const item = items.find((item) => getItemValue(item) === value);
+    shownValue = item == null ? value : getItemLabel(item);
+  }
+
   return (
     <Input
       {...otherProps}
-      value={inputValue}
+      value={shownValue}
       ref={forwardedRef}
       showSuggestions={true}
       onInput={handleInput}

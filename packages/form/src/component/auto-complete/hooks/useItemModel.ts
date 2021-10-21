@@ -7,7 +7,12 @@ import {
 } from "../../common/CommonSelection";
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
-export interface UseItemModelProps<TItemModel> {
+export type UseItemModelManagedPropKeys = keyof Pick<
+  CoreAutocompleteProps,
+  "getItemLabel" | "getItemValue"
+>;
+
+export type UseItemAdditionalProps<TItemModel> = {
   /**
    * Controls which text is used to display options.
    * Used by suggestions, if not overridden
@@ -27,21 +32,26 @@ export interface UseItemModelProps<TItemModel> {
    * You can pass either a string, which represents a different prop or a render function.
    */
   itemValue?: string | ((value: TItemModel) => string);
-}
+};
 
-export type UseItemModelReturn<
-  TItemModel,
-  TAdditionalProps extends UseItemModelProps<TItemModel>
-> = Omit<TAdditionalProps, keyof UseItemModelProps<TItemModel>> &
+type UseItemAdditionalPropKeys = keyof UseItemAdditionalProps<{}>;
+
+export type UseItemModelProps<TItemModel, TAdditionalProps> = Omit<
+  TAdditionalProps,
+  UseItemModelManagedPropKeys
+> &
+  UseItemAdditionalProps<TItemModel>;
+
+export type UseItemModelReturn<TItemModel, TAdditionalProps> = Omit<
+  TAdditionalProps,
+  UseItemAdditionalPropKeys
+> &
   Required<
-    Pick<CoreAutocompleteProps<TItemModel>, "getItemValue" | "getItemLabel">
+    Pick<CoreAutocompleteProps<TItemModel>, UseItemModelManagedPropKeys>
   >;
 
-export const useItemModel = <
-  TItemModel,
-  TAdditionalProps extends UseItemModelProps<TItemModel>
->(
-  props: TAdditionalProps
+export const useItemModel = <TItemModel, TAdditionalProps extends {}>(
+  props: UseItemModelProps<TItemModel, TAdditionalProps>
 ): UseItemModelReturn<TItemModel, TAdditionalProps> => {
   const { itemValue, itemLabel, ...otherProps } = props;
 
@@ -77,9 +87,12 @@ export const useItemModel = <
     [itemLabel]
   );
 
-  return {
+  // todo typescript!
+  const returnProps = {
     ...otherProps,
     getItemLabel,
     getItemValue,
-  };
+  } as UseItemModelReturn<TItemModel, TAdditionalProps>;
+
+  return returnProps;
 };

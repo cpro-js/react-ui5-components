@@ -18,7 +18,7 @@ import {
 import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
 import { DefaultAutoCompleteOption } from "./AutoCompleteModel";
 
-const Template: Story<AutoCompleteProps<AsyncAutocompleteProps>> = ({
+const Template: Story<AsyncAutocompleteProps<DefaultAutoCompleteOption>> = ({
   ...props
 }) => {
   return <AsyncAutocomplete {...props} onSearch={SEARCH_COUNTRIES} />;
@@ -68,7 +68,7 @@ CustomValueFunction.args = {
 export const RenderSuggestion = Template.bind({});
 RenderSuggestion.args = {
   ...Standard.args,
-  suggestionProps: (country) => ({
+  getItemProps: (country) => ({
     text: country.label,
     // @ts-ignore
     description: country.withUmlaut as string,

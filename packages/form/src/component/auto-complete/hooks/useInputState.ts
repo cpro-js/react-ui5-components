@@ -11,6 +11,7 @@ export const useInputState = <
 ): TAdditionalProps => {
   const {
     inputValue: propsInputValue,
+    getItemValue,
     value: propsValue,
     onInputChange: propsOnInputChange,
     onValueChange: propsOnValueChange,
@@ -40,7 +41,7 @@ export const useInputState = <
         propsOnValueChange(value);
       }
 
-      setStateValue(value);
+      setStateValue(value != null ? getItemValue(value) : undefined);
     },
     [setStateValue, propsOnValueChange]
   );
