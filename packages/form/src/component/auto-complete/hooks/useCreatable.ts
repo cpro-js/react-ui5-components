@@ -48,7 +48,7 @@ type UsedAutocompleteProps<TItemModel> = Pick<
   | "onInputChange"
 >;
 
-export interface UseCreatableProps<TItemModel> {
+export interface UseCreatableAdditionalProps<TItemModel> {
   /**
    * Gets the label for the "create new ..." option in the menu. Is given the current input value.
    * @param inputValue current input value
@@ -70,13 +70,24 @@ export interface UseCreatableProps<TItemModel> {
   onValueCreate?: (item: TItemModel) => void;
 }
 
+type UseCreatableAdditionalPropKeys = keyof UseCreatableAdditionalProps<{}>;
+
+export type UseCreatableProps<
+  TItemModel,
+  TAdditionalProps extends UsedAutocompleteProps<TItemModel>
+> = TAdditionalProps & UseCreatableAdditionalProps<TItemModel>;
+
+export type UseCreatablePropsReturn<
+  TItemModel extends {},
+  TAdditionalProps extends UsedAutocompleteProps<TItemModel>
+> = Omit<TAdditionalProps, UseCreatableAdditionalPropKeys>;
+
 export const useCreatable = <
   TItemModel,
-  TAdditionalProps extends UseCreatableProps<TItemModel> &
-    UsedAutocompleteProps<TItemModel>
+  TAdditionalProps extends UsedAutocompleteProps<TItemModel>
 >(
-  props: TAdditionalProps
-): Omit<TAdditionalProps, keyof UseCreatableProps<TItemModel>> => {
+  props: UseCreatableProps<TItemModel, TAdditionalProps>
+): UseCreatablePropsReturn<TItemModel, TAdditionalProps> => {
   const {
     formatCreateLabel = defaultFormatCreateLabel,
     getNewItem = defaultGetNewItem,

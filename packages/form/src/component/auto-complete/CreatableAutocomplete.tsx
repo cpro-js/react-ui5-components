@@ -1,24 +1,40 @@
+import { Simplify } from "type-fest";
+
 import { DefaultAutoCompleteOption } from "../AutoCompleteModel";
-import { UseCreatableProps, useCreatable } from "./hooks/useCreatable";
+import {
+  UseCreatableAdditionalProps,
+  useCreatable,
+} from "./hooks/useCreatable";
 import { useInputState } from "./hooks/useInputState";
-import { UseItemModelProps, useItemModel } from "./hooks/useItemModel";
+import {
+  UseItemAdditionalProps,
+  UseItemModelManagedPropKeys,
+  useItemModel,
+} from "./hooks/useItemModel";
 import {
   CoreAutocomplete,
   CoreAutocompleteProps,
 } from "./internal/CoreAutocomplete";
 
 export type CreatableAutocompleteProps<TModel = DefaultAutoCompleteOption> =
-  UseCreatableProps<TModel> &
-    UseItemModelProps<TModel> &
-    CoreAutocompleteProps<TModel>;
+  Simplify<
+    Omit<CoreAutocompleteProps<TModel>, UseItemModelManagedPropKeys> &
+      UseItemAdditionalProps<TModel> &
+      UseCreatableAdditionalProps<TModel>
+  >;
 
 export const CreatableAutocomplete = (props: CreatableAutocompleteProps) => {
-  // @ts-ignore TODO Check
-  const itemModelProps = useItemModel(props);
-  // @ts-ignore TODO Check
-  const stateProps = useInputState(itemModelProps);
-  const creatableProps = useCreatable(stateProps);
+  const itemModelProps = useItemModel<DefaultAutoCompleteOption, typeof props>(
+    props
+  );
+  const stateProps = useInputState<
+    DefaultAutoCompleteOption,
+    typeof itemModelProps
+  >(itemModelProps);
+  const creatableProps = useCreatable<
+    DefaultAutoCompleteOption,
+    typeof stateProps
+  >(stateProps);
 
-  // @ts-ignore TODO Check
   return <CoreAutocomplete {...creatableProps} />;
 };
