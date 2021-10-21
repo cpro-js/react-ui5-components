@@ -1,5 +1,5 @@
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
@@ -24,6 +24,14 @@ export const useInputState = <
     propsValue !== undefined ? propsValue : undefined // todo defaultValue?
   );
 
+  useEffect(() => {
+    setStateInputValue(propsInputValue ?? "");
+  }, [propsInputValue, setStateInputValue]);
+
+  useEffect(() => {
+    setStateValue(propsValue);
+  }, [propsValue, setStateValue]);
+
   const onInputChange = useCallback(
     (inputValue: string, event: Ui5CustomEvent<HTMLInputElement>) => {
       if (propsOnInputChange != null) {
@@ -46,14 +54,10 @@ export const useInputState = <
     [setStateValue, propsOnValueChange]
   );
 
-  const inputValue =
-    propsInputValue != null ? propsInputValue : stateInputValue;
-  const value = propsValue != null ? propsValue : stateValue;
-
   return {
     ...props,
-    inputValue,
-    value,
+    inputValue: stateInputValue,
+    value: stateValue,
     onInputChange,
     onValueChange,
   };

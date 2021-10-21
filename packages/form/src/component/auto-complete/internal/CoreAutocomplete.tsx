@@ -13,6 +13,7 @@ import {
   useRef,
 } from "react";
 
+import { useLatestRef } from "../../../hook/useLatestRef";
 import {
   CustomSuggestionProps,
   DefaultAutoCompleteOption,
@@ -118,10 +119,8 @@ export const CoreAutocomplete = forwardRef<
     ...otherProps
   } = props;
 
-  const suggestionRef = useRef<Array<DefaultAutoCompleteOption>>(items);
-  useEffect(() => {
-    suggestionRef.current = items;
-  }, [items]);
+  const valueRef = useLatestRef<string | undefined>(value);
+  const suggestionRef = useLatestRef<Array<DefaultAutoCompleteOption>>(items);
 
   const handleSuggestionItemSelect = useCallback(
     (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
@@ -147,10 +146,19 @@ export const CoreAutocomplete = forwardRef<
 
   const handleInput = useCallback(
     (event: Ui5CustomEvent<HTMLInputElement>) => {
-      if (onInputChange != null) {
-        const currentValue = (event.currentTarget as HTMLInputElement).value;
+      const currentValue = (event.currentTarget as HTMLInputElement).value;
 
+      if (onInputChange != null) {
         onInputChange(currentValue, event);
+      }
+
+      if (onValueChange != null) {
+        const item = suggestionRef.current.find(
+          (item) => getItemAttribute(item, getItemLabel) === currentValue
+        );
+        if (!item && valueRef.current != null) {
+          onValueChange(undefined);
+        }
       }
     },
     [onInputChange]
