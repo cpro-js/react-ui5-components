@@ -34,7 +34,6 @@ const defaultGetNewItem = <T = DefaultAutoCompleteOption>(
   return item as unknown as T;
 };
 
-// todo
 export const defaultFormatCreateLabel = (inputValue: string) =>
   `Create "${inputValue}"`;
 
