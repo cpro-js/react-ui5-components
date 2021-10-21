@@ -17,10 +17,10 @@ export const useInputState = <
     onValueChange: propsOnValueChange,
   } = props;
 
-  const [stateInputValue, setStateInputValue] = useState(
+  const [stateInputValue, setStateInputValue] = useState<string | undefined>(
     propsInputValue !== undefined ? propsInputValue : "" // todo defaultInputValue?
   );
-  const [stateValue, setStateValue] = useState(
+  const [stateValue, setStateValue] = useState<string | undefined>(
     propsValue !== undefined ? propsValue : undefined // todo defaultValue?
   );
 
@@ -44,12 +44,12 @@ export const useInputState = <
   );
 
   const onValueChange = useCallback(
-    (value?: TModel) => {
+    (value?: string, item?: TModel) => {
       if (propsOnValueChange != null) {
-        propsOnValueChange(value);
+        propsOnValueChange(value, item);
       }
 
-      setStateValue(value != null ? getItemValue(value) : undefined);
+      setStateValue(value);
     },
     [setStateValue, propsOnValueChange]
   );

@@ -148,21 +148,20 @@ export const useCreatable = <
   );
 
   const handleValueChange = useCallback(
-    (item?: TItemModel) => {
-      if (item && item === newItem) {
+    (value?: string, item?: TItemModel) => {
+      if (value != null && item != null && item === newItem) {
         // created item was selected
         if (onValueCreate != null) {
           onValueCreate(item);
         } else if (onValueChange != null) {
-          const value = getItemValue(item);
-          onValueChange(getNewItem(value, value));
+          onValueChange(value, getNewItem(value, value));
         }
         return;
       }
 
       // other items were selected
       if (onValueChange != null) {
-        onValueChange(item);
+        onValueChange(value, item);
       }
     },
     [newItem, getNewItem, getItemValue, onValueChange, onValueCreate]

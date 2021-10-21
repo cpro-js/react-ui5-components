@@ -65,7 +65,7 @@ export const useAsync = <
   const { onInputChange: propsOnInputChange } = restProps;
 
   const lastRequest = useRef<unknown>(undefined);
-  const mounted = useRef(false);
+  const mounted = useRef<boolean>(false);
 
   const [loadedOptions, setLoadedOptions] = useState<Array<TItemModel>>(
     defaultItems ?? []

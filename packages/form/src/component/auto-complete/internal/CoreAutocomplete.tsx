@@ -92,7 +92,7 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
      *
      * @param suggestionValue
      */
-    onValueChange?: (suggestionValue?: T) => void;
+    onValueChange?: (value?: string, item?: T) => void;
   };
 
 export const CoreAutocomplete = forwardRef<
@@ -129,7 +129,7 @@ export const CoreAutocomplete = forwardRef<
           (item) => getItemValue(item) === itemValue
         );
         if (item) {
-          onValueChange(item);
+          onValueChange(itemValue, item);
         }
       }
     },
@@ -149,7 +149,7 @@ export const CoreAutocomplete = forwardRef<
           (item) => getItemLabel(item) === currentValue
         );
         if (!item && valueRef.current != null) {
-          onValueChange(undefined);
+          onValueChange(undefined, undefined);
         }
       }
     },
