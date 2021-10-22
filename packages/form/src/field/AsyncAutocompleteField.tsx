@@ -1,8 +1,8 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { useMemo } from "react";
-import { Controller } from "react-hook-form";
+import { useImperativeHandle, useMemo, useRef } from "react";
+import { useController } from "react-hook-form";
 
 import {
   AsyncAutocomplete,
@@ -34,36 +34,46 @@ export const AsyncAutocompleteField = <T extends Object>({
 
   const getValidationErrorMessage = useI18nValidationError(name, rules);
 
-  return (
-    <Controller<any>
-      name={name}
-      rules={rules}
-      render={({ field, fieldState }) => {
-        // get error message (Note: undefined fallbacks to default message of ui5 component)
-        const errorMessage = hasError(fieldState.error)
-          ? getValidationErrorMessage(fieldState.error, field.value)
-          : undefined;
+  const { field, fieldState } = useController({
+    name: name,
+    rules,
+  });
 
-        return (
-          <AsyncAutocomplete<T>
-            {...props}
-            ref={field.ref}
-            name={field.name}
-            value={field.value}
-            onValueChange={(value) => field.onChange(value)}
-            valueState={
-              hasError(fieldState.error) ? ValueState.Error : ValueState.None
-            }
-            valueStateMessage={
-              errorMessage != null && (
-                <div slot="valueStateMessage">{errorMessage}</div>
-              )
-            }
-            onBlur={field.onBlur}
-            required={required}
-          />
-        );
-      }}
+  // store input ref for intenral usage
+  const inputRef = useRef<HTMLInputElement>();
+  // forward outer ref to custom element
+  // useImperativeHandle(forwardedRef, () => ({
+  //   focus() {
+  //     if (inputRef.current != null) {
+  //       inputRef.current.focus();
+  //     }
+  //   },
+  // }));
+  // forward field ref to stored internal input ref
+  useImperativeHandle(field.ref, () => inputRef.current);
+
+  // get error message (Note: undefined fallbacks to default message of ui5 component)
+  const errorMessage = hasError(fieldState.error)
+    ? getValidationErrorMessage(fieldState.error, field.value)
+    : undefined;
+
+  return (
+    <AsyncAutocomplete<T>
+      {...props}
+      ref={field.ref}
+      name={field.name}
+      value={field.value}
+      onValueChange={field.onChange}
+      valueState={
+        hasError(fieldState.error) ? ValueState.Error : ValueState.None
+      }
+      valueStateMessage={
+        errorMessage != null && (
+          <div slot="valueStateMessage">{errorMessage}</div>
+        )
+      }
+      onBlur={field.onBlur}
+      required={required}
     />
   );
 };
