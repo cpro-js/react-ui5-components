@@ -27,7 +27,7 @@ export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
   value: COUNTRIES[1].value,
-  defaultItems: [COUNTRIES[1]],
+  initialItems: [COUNTRIES[1]],
 };
 
 export const PrefilledWithValueOnly = Template.bind({});

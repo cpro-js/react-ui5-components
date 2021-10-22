@@ -29,7 +29,7 @@ export type UseAsyncAdditionalProps<TItemModel extends {}> = {
   /**
    * Initial items matching the initial value
    */
-  defaultItems?: Array<TItemModel>;
+  initialItems?: Array<TItemModel>;
 };
 
 type UseAsyncAdditionalPropKeys = keyof UseAsyncAdditionalProps<{}>;
@@ -61,14 +61,14 @@ export const useAsync = <
 >(
   props: UseAsyncProps<TItemModel, TAdditionalProps>
 ): UseAsyncPropsReturn<TItemModel, TAdditionalProps> => {
-  const { minCharsForSearch, onSearch, defaultItems, ...restProps } = props;
+  const { minCharsForSearch, onSearch, initialItems, ...restProps } = props;
   const { onInputChange: propsOnInputChange } = restProps;
 
   const lastRequest = useRef<unknown>(undefined);
   const mounted = useRef<boolean>(false);
 
   const [loadedOptions, setLoadedOptions] = useState<Array<TItemModel>>(
-    defaultItems ?? []
+    initialItems ?? []
   );
 
   useEffect(() => {

@@ -73,7 +73,7 @@ Standard.args = { onSearch: SEARCH_COUNTRIES };
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
-  defaultItems: [COUNTRIES[1]],
+  initialItems: [COUNTRIES[1]],
   initialValues: {
     item: COUNTRIES[1].value,
   },
