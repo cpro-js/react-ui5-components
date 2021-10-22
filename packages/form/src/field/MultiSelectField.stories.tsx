@@ -3,6 +3,7 @@ import { Story } from "@storybook/react";
 import { MultiSelectItem } from "../component/MultiSelect";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { FormViewer, useFormViewer } from "./FormViewer";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
 
 export interface MultiSelectItemAlt extends MultiSelectItem {
@@ -25,13 +26,15 @@ const Template: Story<FormControllerProps<FormData> & MultiSelectFieldProps> = (
   args
 ) => {
   const { initialValues, onSubmit, ...props } = args;
+
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <MultiSelectField {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <MultiSelectField {...props} name={"item"} />
+      <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };

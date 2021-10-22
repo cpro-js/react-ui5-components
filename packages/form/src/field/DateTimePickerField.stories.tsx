@@ -1,18 +1,28 @@
+import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
+import { FormEvent, useState } from "react";
 
+import {
+  DateTimePicker,
+  DateTimePickerProps,
+} from "../component/DateTimePicker";
+import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
+import { FormAdapter } from "../form/FormAdapter";
 import { FormController, FormControllerProps } from "../form/FormController";
-import { FormI18nProvider } from "../i18n/FormI18n";
-import { toISO8601DateString } from "../util/date";
-import { DatePickerField, DatePickerFieldProps } from "./DatePickerField";
+import {
+  DateTimePickerField,
+  DateTimePickerFieldProps,
+} from "./DateTimePickerField";
 import { FormViewer, useFormViewer } from "./FormViewer";
+import { FormI18nProvider, toISODateTimeString } from "..";
 
 interface FormData {
   date?: string;
 }
 
-const Template: Story<FormControllerProps<FormData> & DatePickerFieldProps> = (
-  args
-) => {
+const Template: Story<
+  FormControllerProps<FormData> & DateTimePickerFieldProps
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
   const { submittedValues, handleSubmit } = useFormViewer({
@@ -21,14 +31,14 @@ const Template: Story<FormControllerProps<FormData> & DatePickerFieldProps> = (
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <DatePickerField {...props} name={"date"} />
+      <DateTimePickerField {...props} name={"date"} />
       <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };
 
 const I18nTemplate: Story<
-  FormControllerProps<FormData> & DatePickerFieldProps
+  FormControllerProps<FormData> & DateTimePickerFieldProps
 > = (args, context) => {
   return (
     <FormI18nProvider
@@ -49,7 +59,7 @@ Empty.args = {};
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   initialValues: {
-    date: toISO8601DateString(new Date()),
+    date: toISODateTimeString(new Date()),
   },
 };
 
@@ -71,16 +81,16 @@ ValidationRequired.args = {
 };
 
 export const ValidationMinDateToday = Template.bind({});
-ValidationMinDateToday.args = { minDate: toISO8601DateString(new Date()) };
+ValidationMinDateToday.args = { minDate: toISODateTimeString(new Date()) };
 
 export const ValidationMaxDateToday = Template.bind({});
-ValidationMaxDateToday.args = { maxDate: toISO8601DateString(new Date()) };
+ValidationMaxDateToday.args = { maxDate: toISODateTimeString(new Date()) };
 
 export const ValidationRequiredAndOnlyToday = Template.bind({});
 ValidationRequiredAndOnlyToday.args = {
   required: true,
-  minDate: toISO8601DateString(new Date()),
-  maxDate: toISO8601DateString(new Date()),
+  minDate: toISODateTimeString(new Date()),
+  maxDate: toISODateTimeString(new Date()),
 };
 
 export const ValidationTranslationRequired = I18nTemplate.bind({});
@@ -89,8 +99,8 @@ ValidationTranslationRequired.args = {
 };
 
 export default {
-  title: "Form/Field/DatePickerField",
-  component: DatePickerField,
+  title: "Form/Field/DateTimePickerField",
+  component: DateTimePicker,
   argTypes: {
     onSubmit: {
       action: "submit",

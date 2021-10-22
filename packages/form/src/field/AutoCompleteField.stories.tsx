@@ -1,5 +1,4 @@
 import { Story } from "@storybook/react";
-import useState from "storybook-addon-state";
 
 import {
   COUNTRIES,
@@ -9,40 +8,25 @@ import { AutoCompleteProps } from "../component/AutoComplete";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { AutoCompleteField } from "./AutoCompleteField";
-import { FormActions } from "./types";
+import { FormViewer, useFormViewer } from "./FormViewer";
 
 interface FormData {
   item?: string | number;
 }
 
 const Template: Story<FormControllerProps<FormData> & AutoCompleteProps> = (
-  args,
-  context
+  args
 ) => {
-  const { initialValues, ...props } = args;
+  const { initialValues, onSubmit, ...props } = args;
 
-  const [submittedValues, setSubmittedValues] = useState(
-    `${context.name}_submittedValues`,
-    {}
-  );
-  const NoData = <p>No submitted data yet!</p>;
-
-  const onSubmit = (values: FormData, actions: FormActions<FormData>) => {
-    setSubmittedValues(values);
-  };
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
 
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <AutoCompleteField {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-
-      <h2>Submitted Values</h2>
-      {!Object.keys(submittedValues).length
-        ? NoData
-        : JSON.stringify(submittedValues)}
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <AutoCompleteField {...props} name={"item"} />
+      <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };

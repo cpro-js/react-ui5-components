@@ -2,6 +2,7 @@ import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { FormViewer, useFormViewer } from "./FormViewer";
 import { NumberInputField, NumberInputFieldProps } from "./NumberInputField";
 
 interface FormData {
@@ -13,13 +14,14 @@ const Template: Story<FormControllerProps<FormData> & NumberInputFieldProps> = (
 ) => {
   const { initialValues, onSubmit, ...props } = args;
 
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
       <NumberInputField {...props} name={"number"} />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
+      <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };
