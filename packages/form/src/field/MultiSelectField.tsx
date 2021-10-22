@@ -4,24 +4,28 @@ import { ValueState } from "@ui5/webcomponents-react";
 import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
-import { MultiSelect, MultiSelectProps } from "../component/MultiSelect";
+import {
+  MultiSelect,
+  MultiSelectItem,
+  MultiSelectProps,
+} from "../component/MultiSelect";
 import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
-export type MultiSelectFieldProps = Omit<
-  MultiSelectProps,
+export type MultiSelectFieldProps<T = MultiSelectItem> = Omit<
+  MultiSelectProps<T>,
   "name" | "value" | "onSelectionChange" | "onBlur"
 > &
   Pick<FormFieldValidation, "required"> & {
     name: string;
   };
 
-export const MultiSelectField: FC<MultiSelectFieldProps> = ({
+export function MultiSelectField<T = MultiSelectItem>({
   name,
   required,
   ...props
-}) => {
+}: MultiSelectFieldProps<T>) {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -71,4 +75,4 @@ export const MultiSelectField: FC<MultiSelectFieldProps> = ({
       }}
     />
   );
-};
+}

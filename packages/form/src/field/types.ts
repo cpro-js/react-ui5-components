@@ -1,4 +1,20 @@
 import { FieldPath } from "react-hook-form";
+import { UnpackNestedValue } from "react-hook-form/dist/types/form";
+import { DeepPartial } from "react-hook-form/dist/types/utils";
+
+export type PartialFormValues<FormValues extends {}> = UnpackNestedValue<
+  DeepPartial<FormValues>
+>;
+
+export type FormSubmitHandler<FormValues extends {}> = (
+  values: FormValues,
+  actions: FormActions<FormValues>
+) => void | Promise<void>;
+
+export type FormChangeHandler<FormValues extends {}> = (
+  values: PartialFormValues<FormValues>,
+  actions: FormActions<FormValues>
+) => void;
 
 export type FormFieldValidationRule<
   T extends boolean | number | string | RegExp
@@ -25,16 +41,48 @@ export interface FormFieldValidationError {
 
 export type FormActionErrors<FormValues> = { [P in keyof FormValues]?: string };
 
+/**
+ * Set error messages for specific fields.
+ * @param errors
+ * @param config
+ */
+export type FormActionSetErrors<FormValues> = (
+  errors: Array<{ name: FieldPath<FormValues>; message: string }>,
+  config?: { shouldFocus?: boolean }
+) => void;
+
+/**
+ * Set new form values for fields.
+ * Note: This does not override the default values of your form for the reset() method. You need to create a new form to reset the original default values.
+ *
+ * @param values
+ */
+export type FormActionSetValues<FormValues> = (
+  values: Array<{ name: FieldPath<FormValues>; value: any }>
+) => void;
+
+/**
+ * Reset form to it's initial state.
+ */
+export type FormActionResetForm<FormValues> = () => void;
+
+/**
+ * Clear all form fields.
+ */
+export type FormActionClearForm<FormValues> = () => void;
+
+/**
+ * Submit form
+ */
+export type FormActionSubmitForm<FormValues> = () => void;
+
 export interface FormActions<FormValues> {
   /**
    * Set error messages for specific fields.
    * @param errors
    * @param config
    */
-  setErrors(
-    errors: Array<{ name: FieldPath<FormValues>; message: string }>,
-    config?: { shouldFocus?: boolean }
-  ): void;
+  setErrors: FormActionSetErrors<FormValues>;
 
   /**
    * Set new form values for fields.
@@ -42,10 +90,20 @@ export interface FormActions<FormValues> {
    *
    * @param values
    */
-  setValues(values: Array<{ name: FieldPath<FormValues>; value: any }>): void;
+  setValues: FormActionSetValues<FormValues>;
 
   /**
    * Reset form to it's initial state.
    */
-  reset(): void;
+  reset: FormActionResetForm<FormValues>;
+
+  /**
+   * Clear all form fields.
+   */
+  clear: FormActionClearForm<FormValues>;
+
+  /**
+   * Submit form
+   */
+  submit: FormActionSubmitForm<FormValues>;
 }

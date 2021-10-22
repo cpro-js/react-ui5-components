@@ -27,7 +27,7 @@
     "@react-hook/debounce": "^4.0.0",
     "clsx": "^1.1.1",
     "klona": "^2.0.4",
-    "react-hook-form": "7.13.0",
+    "react-hook-form": "7.17.3",
     "react-jss": "^10.7.1"
   },
   "devDependencies": {

@@ -1,9 +1,9 @@
 import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
 
-import { FormController, FormControllerProps } from "../FormController";
+import { TextInputField } from "../field/TextInputField";
+import { FormController, FormControllerProps } from "./FormController";
 import { FormListener, FormListenerProps } from "./FormListener";
-import { TextInputField } from "./TextInputField";
 
 interface FormData {
   text?: string;
@@ -43,6 +43,6 @@ Standard.args = {
 };
 
 export default {
-  title: "Form/Field/FormListener",
+  title: "Form/FormListener",
   component: FormListener,
 };

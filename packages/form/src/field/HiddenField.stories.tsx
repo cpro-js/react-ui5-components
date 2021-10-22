@@ -1,7 +1,7 @@
 import { Story } from "@storybook/react";
 import { FormEvent, useState } from "react";
 
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { FormViewer } from "./FormViewer";
 import { HiddenField, HiddenFieldProps } from "./HiddenField";
 
