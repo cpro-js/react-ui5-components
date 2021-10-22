@@ -1,4 +1,5 @@
 import { Story } from "@storybook/react";
+import { FormEvent, useState } from "react";
 
 import { FormController, FormControllerProps } from "../FormController";
 import { CheckboxField } from "./CheckboxField";
@@ -13,22 +14,32 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData> & CheckboxFieldGroupProps> =
-  (args, context) => {
-    const { initialValues, onSubmit, ...props } = args;
+  (args) => {
+    const { initialValues, ...props } = args;
+    const onSubmitAction = args.onSubmit;
+
+    const [submittedValues, setSubmittedValues] = useState({});
+
+    const onSubmit = (values: FormData & FormEvent<HTMLElement>) => {
+      setSubmittedValues(values);
+      onSubmitAction(values);
+    };
+
+    const getSubmittedValues = () => {
+      return submittedValues;
+    };
 
     return (
-      <FormViewer
-        component={
-          <CheckboxFieldGroup {...props} name="value">
-            <CheckboxField value="cake" text={"Cake"} />
-            <CheckboxField value="waffles" text={"Waffles"} />
-            <CheckboxField value="burger" text={"Burger"} />
-          </CheckboxFieldGroup>
-        }
-        initialValues={initialValues}
-        storyName={context.name}
-        onSubmitAction={onSubmit}
-      />
+      <FormController<FormData & FormEvent<HTMLElement>>
+        {...{ initialValues, onSubmit }}
+      >
+        <CheckboxFieldGroup {...props} name="value">
+          <CheckboxField value="cake" text={"Cake"} />
+          <CheckboxField value="waffles" text={"Waffles"} />
+          <CheckboxField value="burger" text={"Burger"} />
+        </CheckboxFieldGroup>
+        <FormViewer getSubmittedValues={getSubmittedValues} />
+      </FormController>
     );
   };
 

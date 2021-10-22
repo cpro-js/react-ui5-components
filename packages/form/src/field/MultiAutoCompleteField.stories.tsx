@@ -1,11 +1,12 @@
 import { Story } from "@storybook/react";
+import { FormEvent, useState } from "react";
 
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
 } from "../component/auto-complete/AutoComplete-storyData";
 import { MultiAutoCompleteProps } from "../component/MultiAutoComplete";
-import { FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer } from "./FormViewer";
 import { MultiAutoCompleteField } from "./MultiAutoCompleteField";
@@ -15,17 +16,28 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData> & MultiAutoCompleteProps> =
-  (args, context) => {
-    const { initialValues, onSubmit, ...props } = args;
+  (args) => {
+    const { initialValues, ...props } = args;
+    const onSubmitAction = args.onSubmit;
+
+    const [submittedValues, setSubmittedValues] = useState({});
+
+    const onSubmit = (values: FormData & FormEvent<HTMLElement>) => {
+      setSubmittedValues(values);
+      onSubmitAction(values);
+    };
+
+    const getSubmittedValues = () => {
+      return submittedValues;
+    };
 
     return (
-      <FormViewer
-        component={<MultiAutoCompleteField {...props} name={"item"} />}
-        initialValues={initialValues}
-        storyName={context.name}
-        //@ts-ignore
-        onSubmitAction={onSubmit}
-      />
+      <FormController<FormData & FormEvent<HTMLElement>>
+        {...{ initialValues, onSubmit }}
+      >
+        <MultiAutoCompleteField {...props} name={"item"} />
+        <FormViewer getSubmittedValues={getSubmittedValues} />
+      </FormController>
     );
   };
 

@@ -1,4 +1,5 @@
 import { Story } from "@storybook/react";
+import { FormEvent, useState } from "react";
 
 import { SelectItem } from "../component/Select";
 import { FormController, FormControllerProps } from "../FormController";
@@ -23,17 +24,29 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
-  args,
-  context
+  args
 ) => {
-  const { initialValues, onSubmit, ...props } = args;
+  const { initialValues, ...props } = args;
+  const onSubmitAction = args.onSubmit;
+
+  const [submittedValues, setSubmittedValues] = useState({});
+
+  const onSubmit = (values: FormData & FormEvent<HTMLElement>) => {
+    setSubmittedValues(values);
+    onSubmitAction(values);
+  };
+
+  const getSubmittedValues = () => {
+    return submittedValues;
+  };
+
   return (
-    <FormViewer
-      component={<SelectField {...props} name={"item"} />}
-      initialValues={initialValues}
-      storyName={context.name}
-      onSubmitAction={onSubmit}
-    />
+    <FormController<FormData & FormEvent<HTMLElement>>
+      {...{ initialValues, onSubmit }}
+    >
+      <SelectField {...props} name={"item"} />
+      <FormViewer getSubmittedValues={getSubmittedValues} />
+    </FormController>
   );
 };
 

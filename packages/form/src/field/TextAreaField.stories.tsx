@@ -1,6 +1,7 @@
 import { Story } from "@storybook/react";
+import { FormEvent, useState } from "react";
 
-import { FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer } from "./FormViewer";
 import { TextAreaField, TextAreaFieldProps } from "./TextAreaField";
@@ -20,18 +21,29 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData> & TextAreaFieldProps> = (
-  args,
-  context
+  args
 ) => {
-  const { initialValues, onSubmit, ...props } = args;
+  const { initialValues, ...props } = args;
+  const onSubmitAction = args.onSubmit;
+
+  const [submittedValues, setSubmittedValues] = useState({});
+
+  const onSubmit = (values: FormData & FormEvent<HTMLElement>) => {
+    setSubmittedValues(values);
+    onSubmitAction(values);
+  };
+
+  const getSubmittedValues = () => {
+    return submittedValues;
+  };
 
   return (
-    <FormViewer
-      component={<TextAreaField {...props} name={"text"} />}
-      initialValues={initialValues}
-      storyName={context.name}
-      onSubmitAction={onSubmit}
-    />
+    <FormController<FormData & FormEvent<HTMLElement>>
+      {...{ initialValues, onSubmit }}
+    >
+      <TextAreaField {...props} name={"text"} />
+      <FormViewer getSubmittedValues={getSubmittedValues} />
+    </FormController>
   );
 };
 

@@ -1,4 +1,5 @@
 import { Story } from "@storybook/react";
+import { FormEvent, useState } from "react";
 
 import { FormController, FormControllerProps } from "../FormController";
 import { CheckboxField, CheckboxFieldProps } from "./CheckboxField";
@@ -16,15 +17,28 @@ const createTemplate = function <T>(): Story<
   FormControllerProps<T> & CheckboxFieldProps
 > {
   return (args, context) => {
-    const { initialValues, onSubmit, ...props } = args;
+    const { initialValues, ...props } = args;
+    const onSubmitAction = args.onSubmit;
+
+    const [submittedValues, setSubmittedValues] = useState({});
+
+    const onSubmit = (values: FormData & FormEvent<HTMLElement>) => {
+      setSubmittedValues(values);
+      onSubmitAction(values);
+    };
+
+    const getSubmittedValues = () => {
+      return submittedValues;
+    };
 
     return (
-      <FormViewer
-        component={<CheckboxField {...props} name={"value"} />}
-        initialValues={initialValues}
-        storyName={context.name}
-        onSubmitAction={onSubmit}
-      />
+      //@ts-ignore
+      <FormController<FormData & FormEvent<HTMLElement>>
+        {...{ initialValues, onSubmit }}
+      >
+        <CheckboxField {...props} name={"value"} />
+        <FormViewer getSubmittedValues={getSubmittedValues} />
+      </FormController>
     );
   };
 };

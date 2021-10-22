@@ -1,4 +1,5 @@
 import { Story } from "@storybook/react";
+import { FormEvent, useState } from "react";
 
 import { MultiSelectItem } from "../component/MultiSelect";
 import { FormController, FormControllerProps } from "../FormController";
@@ -19,17 +20,29 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData> & MultiSelectFieldProps> = (
-  args,
-  context
+  args
 ) => {
-  const { initialValues, onSubmit, ...props } = args;
+  const { initialValues, ...props } = args;
+  const onSubmitAction = args.onSubmit;
+
+  const [submittedValues, setSubmittedValues] = useState({});
+
+  const onSubmit = (values: FormData & FormEvent<HTMLElement>) => {
+    setSubmittedValues(values);
+    onSubmitAction(values);
+  };
+
+  const getSubmittedValues = () => {
+    return submittedValues;
+  };
+
   return (
-    <FormViewer
-      component={<MultiSelectField {...props} name={"item"} />}
-      initialValues={initialValues}
-      storyName={context.name}
-      onSubmitAction={onSubmit}
-    />
+    <FormController<FormData & FormEvent<HTMLElement>>
+      {...{ initialValues, onSubmit }}
+    >
+      <MultiSelectField {...props} name={"item"} />
+      <FormViewer getSubmittedValues={getSubmittedValues} />
+    </FormController>
   );
 };
 

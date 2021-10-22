@@ -17,7 +17,7 @@ export interface FormControllerProps<FormValues extends {}> {
   initialValues?: DefaultValues<FormValues>;
   onSubmit: (
     values: UnpackNestedValue<FormValues>,
-    actions: FormActions<FormValues>
+    actions?: FormActions<FormValues>
   ) => void | Promise<void>;
   children?: ReactNode;
   className?: string;

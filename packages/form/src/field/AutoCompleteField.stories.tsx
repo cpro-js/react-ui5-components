@@ -1,5 +1,5 @@
 import { Story } from "@storybook/react";
-import useState from "storybook-addon-state";
+import { FormEvent, useState } from "react";
 
 import {
   COUNTRIES,
@@ -10,26 +10,35 @@ import { FormController, FormControllerProps } from "../FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { AutoCompleteField } from "./AutoCompleteField";
 import { FormViewer } from "./FormViewer";
-import { FormActions } from "./types";
 
 interface FormData {
   item?: string | number;
 }
 
 const Template: Story<FormControllerProps<FormData> & AutoCompleteProps> = (
-  args,
-  context
+  args
 ) => {
-  const { initialValues, onSubmit, ...props } = args;
+  const { initialValues, ...props } = args;
+  const onSubmitAction = args.onSubmit;
+
+  const [submittedValues, setSubmittedValues] = useState({});
+
+  const onSubmit = (values: FormData & FormEvent<HTMLElement>) => {
+    setSubmittedValues(values);
+    onSubmitAction(values);
+  };
+
+  const getSubmittedValues = () => {
+    return submittedValues;
+  };
 
   return (
-    <FormViewer
-      component={<AutoCompleteField {...props} name={"item"} />}
-      initialValues={initialValues}
-      storyName={context.name}
-      //@ts-ignore
-      onSubmitAction={onSubmit}
-    />
+    <FormController<FormData & FormEvent<HTMLElement>>
+      {...{ initialValues, onSubmit }}
+    >
+      <AutoCompleteField {...props} name={"item"} />
+      <FormViewer getSubmittedValues={getSubmittedValues} />
+    </FormController>
   );
 };
 
