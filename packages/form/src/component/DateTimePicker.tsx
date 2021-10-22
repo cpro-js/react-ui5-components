@@ -97,17 +97,17 @@ export const DateTimePicker: FC<DateTimePickerProps<string>> = forwardRef<
     >({});
 
     const setRef = useCallback(
-      (ui5DatePicker: null | Ui5DateTimePickerDomRef) => {
-        if (ui5DatePicker == null) {
+      (ui5DateTimePicker: null | Ui5DateTimePickerDomRef) => {
+        if (ui5DateTimePicker == null) {
           ref.current = undefined;
           return;
         }
-        ref.current = ui5DatePicker as any;
+        ref.current = ui5DateTimePicker as any;
 
         setDateFormat({
           formatToUiString(dateTime: Date) {
             // todo return type of formatValue is incorrect (void instead of string)
-            return ui5DatePicker.formatValue(dateTime) as any as string;
+            return ui5DateTimePicker.formatValue(dateTime) as any as string;
           },
         });
       },
