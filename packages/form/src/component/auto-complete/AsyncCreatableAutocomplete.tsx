@@ -1,3 +1,4 @@
+import { ReactElement, Ref, forwardRef } from "react";
 import { Simplify } from "type-fest";
 
 import { DefaultAutoCompleteOption } from "../AutoCompleteModel";
@@ -33,9 +34,10 @@ export type AsyncCreatableAutocompleteProps<
     UseCreatableAdditionalProps<TModel>
 >;
 
-export const AsyncCreatableAutocomplete = (
-  props: AsyncCreatableAutocompleteProps
-) => {
+export const AsyncCreatableAutocomplete = forwardRef<
+  HTMLInputElement,
+  AsyncCreatableAutocompleteProps
+>((props, forwardedRef) => {
   const itemModelProps = useItemModel<DefaultAutoCompleteOption, typeof props>(
     props
   );
@@ -51,5 +53,9 @@ export const AsyncCreatableAutocomplete = (
     typeof stateProps
   >(stateProps);
 
-  return <CoreAutocomplete {...creatableProps} />;
-};
+  return <CoreAutocomplete ref={forwardedRef} {...creatableProps} />;
+}) as <T = DefaultAutoCompleteOption>(
+  p: AsyncCreatableAutocompleteProps<T> & {
+    ref?: Ref<HTMLInputElement | undefined>;
+  }
+) => ReactElement;
