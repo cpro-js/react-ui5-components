@@ -1,17 +1,37 @@
-import "./FormViewer.css";
-
-import { FC } from "react";
+import { Text, Title, Toolbar } from "@ui5/webcomponents-react";
+import { FC, useCallback, useState } from "react";
 
 import { Button } from "../component/Button";
+import { FormSubmitHandler } from "./types";
 
-interface FormViewerProps {
-  getSubmittedValues: Function;
+export interface useFormViewerProps<FormValues extends {}> {
+  onSubmit: FormSubmitHandler<FormValues>;
+}
+export interface FormViewerProps<T> {
+  submittedValues?: T | undefined;
 }
 
-export const FormViewer: FC<FormViewerProps> = ({
-  getSubmittedValues,
+export function useFormViewer<FormValues extends {}>(
+  props: useFormViewerProps<FormValues>
+) {
+  const { onSubmit: onSubmitAction } = props;
+  const [submittedValues, setSubmittedValues] = useState<FormValues>();
+
+  const handleSubmit: FormSubmitHandler<FormValues> = useCallback(
+    (values, actions) => {
+      setSubmittedValues(values);
+      onSubmitAction(values, actions);
+    },
+    [setSubmittedValues, onSubmitAction]
+  );
+
+  return { submittedValues, handleSubmit };
+}
+
+export function FormViewer<T>({
+  submittedValues,
   ...props
-}) => {
+}: FormViewerProps<T>) {
   return (
     <div>
       <div style={{ marginTop: "10px" }}>
@@ -20,12 +40,18 @@ export const FormViewer: FC<FormViewerProps> = ({
         </Button>
         <Button type="reset">Reset</Button>
       </div>
-      <h2>Submitted Values</h2>
-      {!Object.keys(getSubmittedValues()).length ? (
-        <p>No submitted data yet!</p>
-      ) : (
-        <p>{JSON.stringify(getSubmittedValues(), null, "\t")}</p>
-      )}
+      <Toolbar>
+        <Title> Submitted Values </Title>
+      </Toolbar>
+      <div style={{ marginTop: "10px" }}>
+        {submittedValues == null ? (
+          <Text> No submitted data yet!</Text>
+        ) : (
+          <Text renderWhitespace>
+            {JSON.stringify(submittedValues, null, 2)}{" "}
+          </Text>
+        )}
+      </div>
     </div>
   );
-};
+}

@@ -1,10 +1,9 @@
 import { Story } from "@storybook/react";
-import { FormEvent, useState } from "react";
 
 import { SelectItem } from "../component/Select";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
-import { FormViewer } from "./FormViewer";
+import { FormViewer, useFormViewer } from "./FormViewer";
 import { SelectField, SelectFieldProps } from "./SelectField";
 
 export interface SelectItemAlt extends SelectItem {
@@ -26,26 +25,16 @@ interface FormData {
 const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
   args
 ) => {
-  const { initialValues, ...props } = args;
-  const onSubmitAction = args.onSubmit;
+  const { initialValues, onSubmit, ...props } = args;
 
-  const [submittedValues, setSubmittedValues] = useState({});
-
-  const onSubmit = (values: FormData & FormEvent<HTMLElement>) => {
-    setSubmittedValues(values);
-    onSubmitAction(values);
-  };
-
-  const getSubmittedValues = () => {
-    return submittedValues;
-  };
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
 
   return (
-    <FormController<FormData & FormEvent<HTMLElement>>
-      {...{ initialValues, onSubmit }}
-    >
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
       <SelectField {...props} name={"item"} />
-      <FormViewer getSubmittedValues={getSubmittedValues} />
+      <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };
