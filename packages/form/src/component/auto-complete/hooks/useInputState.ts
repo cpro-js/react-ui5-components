@@ -29,6 +29,7 @@ export const useInputState = <
   }, [propsInputValue, setStateInputValue]);
 
   useEffect(() => {
+    setStateInputValue(propsInputValue ?? "");
     setStateValue(propsValue);
   }, [propsValue, setStateValue]);
 
