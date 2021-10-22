@@ -4,15 +4,15 @@ import useState from "storybook-addon-state";
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
-} from "../component/auto-complete/AutoComplete-storyData";
-import { DefaultAutoCompleteOption } from "../component/auto-complete/internal/CoreAutocomplete";
-import { FormController, FormControllerProps } from "../form/FormController";
-import { FormI18nProvider } from "../i18n/FormI18n";
+} from "../../component/auto-complete/AutoComplete-storyData";
+import { DefaultAutoCompleteOption } from "../../component/auto-complete/internal/CoreAutocomplete";
+import { FormController, FormControllerProps } from "../../form/FormController";
+import { FormI18nProvider } from "../../i18n/FormI18n";
+import { FormActions } from "../types";
 import {
   AsyncAutocompleteField,
   AsyncAutocompleteFieldProps,
 } from "./AsyncAutocompleteField";
-import { FormActions } from "./types";
 
 interface FormData {
   item?: string | number;
@@ -103,7 +103,7 @@ ValidationTranslationRequired.args = {
 };
 
 export default {
-  title: "Form/Field/AsyncAutocompleteField",
+  title: "Form/Field/Autocomplete/AsyncAutocompleteField",
   component: AsyncAutocompleteField,
   argTypes: {
     onSubmit: {
