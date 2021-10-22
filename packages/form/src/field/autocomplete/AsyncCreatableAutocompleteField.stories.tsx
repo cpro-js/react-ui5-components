@@ -1,5 +1,4 @@
 import { Story } from "@storybook/react";
-import useState from "storybook-addon-state";
 
 import {
   COUNTRIES,
@@ -8,7 +7,7 @@ import {
 import { DefaultAutoCompleteOption } from "../../component/auto-complete/internal/CoreAutocomplete";
 import { FormController, FormControllerProps } from "../../form/FormController";
 import { FormI18nProvider } from "../../i18n/FormI18n";
-import { FormActions } from "../types";
+import { FormViewer, useFormViewer } from "../FormViewer";
 import {
   AsyncCreatableAutocompleteField,
   AsyncCreatableAutocompleteFieldProps,
@@ -22,30 +21,16 @@ const Template: Story<
   FormControllerProps<FormData> &
     AsyncCreatableAutocompleteFieldProps<DefaultAutoCompleteOption>
 > = (args, context) => {
-  const { initialValues, ...props } = args;
+  const { initialValues, onSubmit, ...props } = args;
 
-  const [submittedValues, setSubmittedValues] = useState(
-    `${context.name}_submittedValues`,
-    {}
-  );
-  const NoData = <p>No submitted data yet!</p>;
-
-  const onSubmit = (values: FormData, actions: FormActions<FormData>) => {
-    setSubmittedValues(values);
-  };
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
 
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
       <AsyncCreatableAutocompleteField {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-
-      <h2>Submitted Values</h2>
-      {!Object.keys(submittedValues).length
-        ? NoData
-        : JSON.stringify(submittedValues)}
+      <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };
