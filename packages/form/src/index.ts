@@ -8,6 +8,9 @@ export type { CheckboxProps } from "./component/Checkbox";
 export { DatePicker } from "./component/DatePicker";
 export type { DatePickerProps } from "./component/DatePicker";
 
+export { DateTimePicker } from "./component/DateTimePicker";
+export type { DateTimePickerProps } from "./component/DateTimePicker";
+
 export { MultiSelect } from "./component/MultiSelect";
 export type {
   MultiSelectProps,
@@ -45,6 +48,9 @@ export type { CheckboxFieldGroupProps } from "./field/CheckboxFieldGroup";
 
 export { DatePickerField } from "./field/DatePickerField";
 export type { DatePickerFieldProps } from "./field/DatePickerField";
+
+export { DateTimePickerField } from "./field/DateTimePickerField";
+export type { DateTimePickerFieldProps } from "./field/DateTimePickerField";
 
 export { FormBusyIndicator } from "./field/FormBusyIndicator";
 export type { FormBusyIndicatorProps } from "./field/FormBusyIndicator";
