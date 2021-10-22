@@ -1,7 +1,5 @@
 import { action } from "@storybook/addon-actions";
 
-import { DefaultAutoCompleteOption } from "../AutoCompleteModel";
-
 export const COUNTRIES = [
   { label: "Argentina", value: "AR", withUmlaut: "Ärgentöna" },
   { label: "Bulgaria", value: "BG", withUmlaut: "Bülgäria" },
@@ -17,9 +15,11 @@ export const COUNTRIES = [
   { label: "USA", value: "US", withUmlaut: "ÜSÄ" },
 ];
 
+export type CountryItem = typeof COUNTRIES[0];
+
 export const SEARCH_COUNTRIES = (
   searchTerm: string
-): Promise<Array<DefaultAutoCompleteOption>> => {
+): Promise<Array<CountryItem>> => {
   action("onSearch")(searchTerm);
 
   const regExp = new RegExp(searchTerm, "i");

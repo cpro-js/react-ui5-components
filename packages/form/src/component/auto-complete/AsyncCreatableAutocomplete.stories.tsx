@@ -76,7 +76,7 @@ RenderSuggestion.args = {
 };
 
 export default {
-  title: "form/component/AsyncCreatableAutocomplete",
+  title: "form/component/AutoComplete/AsyncCreatableAutocomplete",
   component: AsyncCreatableAutocomplete,
   argTypes: {
     onValueCreate: {

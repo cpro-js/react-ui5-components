@@ -100,7 +100,7 @@ export const CoreAutocomplete = forwardRef<
   CoreAutocompleteProps
 >((props, forwardedRef) => {
   const {
-    items,
+    items = [],
     getItemProps,
     getItemLabel,
     getItemValue,

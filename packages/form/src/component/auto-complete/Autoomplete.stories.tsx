@@ -1,40 +1,35 @@
-import "@ui5/webcomponents-icons/dist/value-help.js";
 import "@ui5/webcomponents-icons/dist/add";
+import "@ui5/webcomponents-icons/dist/refresh";
 import "@ui5/webcomponents-icons/dist/search";
 import "@ui5/webcomponents-icons/dist/sort";
-import "@ui5/webcomponents-icons/dist/refresh";
+import "@ui5/webcomponents-icons/dist/value-help.js";
 
-import { Meta, Story, StoryContext } from "@storybook/react";
+import { Meta, Story } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
 
-import { AsyncAutocomplete, AsyncAutocompleteProps } from "./AsyncAutocomplete";
-import {
-  COUNTRIES,
-  CountryItem,
-  SEARCH_COUNTRIES,
-} from "./AutoComplete-storyData";
+import { Autocomplete, AutocompleteProps } from "./Autocomplete";
+import { COUNTRIES, CountryItem } from "./AutoComplete-storyData";
 
-const Template: Story<AsyncAutocompleteProps<CountryItem>> = ({ ...props }) => {
-  return <AsyncAutocomplete {...props} onSearch={SEARCH_COUNTRIES} />;
+const Template: Story<AutocompleteProps<CountryItem>> = ({ ...props }) => {
+  return <Autocomplete {...props} />;
 };
 
-export const Standard = Template.bind({});
-Standard.args = { value: undefined, onSearch: SEARCH_COUNTRIES };
-
 export const Empty = Template.bind({});
-Standard.args = { value: undefined };
+Empty.args = {};
+
+export const Standard = Template.bind({});
+Standard.args = { items: COUNTRIES };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
   value: COUNTRIES[1].value,
-  initialItems: [COUNTRIES[1]],
 };
 
 export const PrefilledWithValueOnly = Template.bind({});
 PrefilledWithValueOnly.args = {
   ...Standard.args,
-  value: COUNTRIES[1].value,
+  value: "Non-Existing Value",
 };
 
 export const MinCharacters = Template.bind({});
@@ -72,8 +67,8 @@ RenderSuggestion.args = {
 };
 
 export default {
-  title: "form/component/AutoComplete/AsyncAutocomplete",
-  component: AsyncAutocomplete,
+  title: "form/component/AutoComplete/Autocomplete",
+  component: Autocomplete,
   argTypes: {
     onInputChange: {
       action: "onInputChange",

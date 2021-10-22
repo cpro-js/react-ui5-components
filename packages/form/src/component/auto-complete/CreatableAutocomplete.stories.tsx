@@ -23,7 +23,7 @@ export const Standard = Template.bind({});
 Standard.args = { value: undefined, items: COUNTRIES };
 
 export default {
-  title: "form/component/CreatableAutocomplete",
+  title: "form/component/AutoComplete/CreatableAutocomplete",
   component: CreatableAutocomplete,
   argTypes: {
     onValueCreate: {
