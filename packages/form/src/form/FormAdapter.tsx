@@ -2,7 +2,6 @@ import { FC, createContext, useContext } from "react";
 
 import { ISO8601DateAdapter } from "./adapter/date/ISO8601DateAdapter";
 import { DateAdapter } from "./adapter/type/DateAdapter";
-import { ISODateTimeAdapter } from "..";
 
 export interface FormAdapterContextProps {
   /**
@@ -10,12 +9,10 @@ export interface FormAdapterContextProps {
    * Default: ISO8601 (yyyy-MM-dd)
    */
   date: DateAdapter<Date | string | number>;
-  dateTime: DateAdapter<Date | string | number>;
 }
 
 export const FormAdapterContext = createContext<FormAdapterContextProps>({
   date: ISO8601DateAdapter,
-  dateTime: ISODateTimeAdapter,
 });
 
 export interface FormAdapterProps extends Partial<FormAdapterContextProps> {}
