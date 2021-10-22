@@ -1,46 +1,32 @@
 import { Story } from "@storybook/react";
-import useState from "storybook-addon-state";
+import { FormEvent, useState } from "react";
 
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
 } from "../component/auto-complete/AutoComplete-storyData";
 import { MultiAutoCompleteProps } from "../component/MultiAutoComplete";
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { FormViewer, useFormViewer } from "./FormViewer";
 import { MultiAutoCompleteField } from "./MultiAutoCompleteField";
-import { FormActions } from "./types";
 
 interface FormData {
   items?: Array<string>;
 }
 
 const Template: Story<FormControllerProps<FormData> & MultiAutoCompleteProps> =
-  (args, context) => {
-    const { initialValues, ...props } = args;
+  (args) => {
+    const { initialValues, onSubmit, ...props } = args;
 
-    const [submittedValues, setSubmittedValues] = useState(
-      `${context.name}_submittedValues`,
-      {}
-    );
-    const NoData = <p>No submitted data yet!</p>;
-
-    const onSubmit = (values: FormData, actions: FormActions<FormData>) => {
-      setSubmittedValues(values);
-    };
+    const { submittedValues, handleSubmit } = useFormViewer({
+      onSubmit: onSubmit,
+    });
 
     return (
-      <FormController<FormData> {...{ initialValues, onSubmit }}>
-        <MultiAutoCompleteField {...props} name="items" />
-        <div>
-          <button type="submit">Submit</button>
-          <button type="reset">Reset</button>
-        </div>
-
-        <h2>Submitted Values</h2>
-        {!Object.keys(submittedValues).length
-          ? NoData
-          : JSON.stringify(submittedValues)}
+      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+        <MultiAutoCompleteField {...props} name={"item"} />
+        <FormViewer submittedValues={submittedValues} />
       </FormController>
     );
   };

@@ -1,7 +1,8 @@
 import { Story } from "@storybook/react";
 
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { FormViewer, useFormViewer } from "./FormViewer";
 import { TextAreaField, TextAreaFieldProps } from "./TextAreaField";
 
 export default {
@@ -23,13 +24,14 @@ const Template: Story<FormControllerProps<FormData> & TextAreaFieldProps> = (
 ) => {
   const { initialValues, onSubmit, ...props } = args;
 
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
       <TextAreaField {...props} name={"text"} />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
+      <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };

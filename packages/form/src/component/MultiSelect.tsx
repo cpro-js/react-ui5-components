@@ -1,7 +1,13 @@
 import { MultiComboBox, MultiComboBoxItem } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { MultiComboBoxPropTypes } from "@ui5/webcomponents-react/webComponents/MultiComboBox";
-import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
+import {
+  KeyboardEvent,
+  ReactElement,
+  Ref,
+  forwardRef,
+  useCallback,
+} from "react";
 
 import { triggerSubmitOnEnter, useAllowAction } from "./util";
 
@@ -10,7 +16,7 @@ export interface MultiSelectItem {
   label: string;
 }
 
-export interface MultiSelectProps
+export interface MultiSelectProps<T = MultiSelectItem>
   extends Omit<
     MultiComboBoxPropTypes,
     | "name"
@@ -23,6 +29,8 @@ export interface MultiSelectProps
   name?: string;
   value?: Array<string | number>;
   items?: Array<MultiSelectItem>;
+  itemValue?: keyof T | ((value: T) => string);
+  itemLabel?: keyof T | ((value: T) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
       HTMLInputElement,
@@ -34,7 +42,10 @@ export interface MultiSelectProps
   ) => void;
 }
 
-export const MultiSelect: FC<MultiSelectProps> = forwardRef<
+const DEFAULT_LABEL_PROP = "label";
+const DEFAULT_VALUE_PROP = "value";
+
+export const MultiSelect = forwardRef<
   HTMLInputElement | undefined,
   MultiSelectProps
 >((props, forwardedRef) => {
@@ -46,8 +57,38 @@ export const MultiSelect: FC<MultiSelectProps> = forwardRef<
     onKeyDown,
     onKeyPress,
     value,
+    itemValue,
+    itemLabel,
     ...otherProps
   } = props;
+
+  const retrieveItemLabel = useCallback(
+    (item: MultiSelectItem) => {
+      if (itemLabel) {
+        if (typeof itemLabel === "string") {
+          return item[itemLabel];
+        } else if (typeof itemLabel === "function") {
+          return itemLabel(item);
+        }
+      }
+      return item[DEFAULT_LABEL_PROP];
+    },
+    [itemLabel]
+  );
+
+  const retrieveItemValue = useCallback(
+    (item: MultiSelectItem) => {
+      if (itemValue) {
+        if (typeof itemValue === "string") {
+          return item[itemValue];
+        } else if (typeof itemValue === "function") {
+          return itemValue(item);
+        }
+      }
+      return item[DEFAULT_VALUE_PROP];
+    },
+    [itemValue]
+  );
 
   const handleSelectionChange = useCallback(
     (
@@ -57,12 +98,12 @@ export const MultiSelect: FC<MultiSelectProps> = forwardRef<
         const values: Array<string | number> = event.detail.items
           .map((el) => el.dataset.index)
           .filter((index) => index != null)
-          .map((index) => items[Number(index)]?.value);
+          .map((index) => retrieveItemValue(items[Number(index)]));
 
         onSelectionChange(event, values);
       }
     },
-    [items, onSelectionChange]
+    [items, onSelectionChange, retrieveItemValue]
   );
 
   const handleKeyDown = useCallback(
@@ -125,7 +166,7 @@ export const MultiSelect: FC<MultiSelectProps> = forwardRef<
           // index is the most unique value, value could be non-unique when providing numbers and strings (react keys are strings)
           <MultiComboBoxItem
             key={index}
-            text={item.label}
+            text={retrieveItemLabel(item) as string}
             data-index={index}
             selected={Array.isArray(value) && value.indexOf(item.value) !== -1}
           />
@@ -133,4 +174,6 @@ export const MultiSelect: FC<MultiSelectProps> = forwardRef<
       </MultiComboBox>
     </>
   );
-});
+}) as <T = MultiSelectItem>(
+  p: MultiSelectProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
+) => ReactElement;

@@ -16,7 +16,7 @@ import {
   SEARCH_COUNTRIES,
 } from "../component/auto-complete/AutoComplete-storyData";
 import { Button } from "../component/Button";
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { CheckboxField } from "./CheckboxField";
 import { CheckboxFieldGroup } from "./CheckboxFieldGroup";
 import { DatePickerField } from "./DatePickerField";
@@ -36,7 +36,7 @@ interface FormData {
   input2?: string;
   textarea?: string;
   numberinput?: number;
-  date?: Date;
+  date?: string;
   dish?: Array<string>;
   country: string;
   countries: Array<string>;
@@ -51,6 +51,7 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
   const {
     initialValues,
     onSubmit,
+    onChange,
     id,
     initialCurrentCountrySuggestions,
     initialCountriesSuggestions,
@@ -58,7 +59,7 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
 
   return (
     <>
-      <FormController<FormData> {...{ initialValues, onSubmit, id }}>
+      <FormController<FormData> {...{ initialValues, onSubmit, onChange, id }}>
         <HiddenField name="id" />
         <Form>
           <FormItem label="Text">
@@ -215,11 +216,26 @@ SetValuesOnSubmit.args = {
   },
 };
 
+export const SetValueOnChange = Template.bind({});
+SetValueOnChange.args = {
+  ...Prefilled.args,
+  onChange: (values, actions) => {
+    action("change")(values, actions);
+
+    if (values.input1 !== values.input2) {
+      actions.setValues([{ name: "input2", value: values.input1 }]);
+    }
+  },
+};
+
 export default {
   title: "Form/Field/Form",
   argTypes: {
     onSubmit: {
       action: "submit",
+    },
+    onChange: {
+      action: "change",
     },
   },
 };

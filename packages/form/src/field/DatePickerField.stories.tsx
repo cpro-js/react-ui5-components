@@ -1,26 +1,28 @@
 import { Story } from "@storybook/react";
 
-import { FormController, FormControllerProps } from "../FormController";
+import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { toISO8601DateString } from "../util/date";
 import { DatePickerField, DatePickerFieldProps } from "./DatePickerField";
+import { FormViewer, useFormViewer } from "./FormViewer";
 
 interface FormData {
   date?: string;
 }
 
 const Template: Story<FormControllerProps<FormData> & DatePickerFieldProps> = (
-  args,
-  context
+  args
 ) => {
   const { initialValues, onSubmit, ...props } = args;
+
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
       <DatePickerField {...props} name={"date"} />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
+      <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };
