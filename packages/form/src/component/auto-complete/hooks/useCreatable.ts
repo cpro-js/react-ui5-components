@@ -41,6 +41,7 @@ export const defaultFormatCreateLabel = (inputValue: string) =>
 
 type UsedAutocompleteProps<TItemModel> = Pick<
   CoreAutocompleteProps<TItemModel>,
+  | "value"
   | "inputValue"
   | "items"
   | "getItemLabel"
@@ -64,11 +65,11 @@ export interface UseCreatableAdditionalProps<TItemModel> {
   getNewItem?: (inputValue: string, labelValue: string) => TItemModel;
 
   /**
-   * If provided, this will be called with the input value when a new option is created, and onChange will not be called. Use this when you need more control over what happens when new options are created.
+   * If provided, this will be called with the input value when a new option is created. Use this when you need more control over what happens when new options are created.
    *
    * @param item item to create
    */
-  onValueCreate?: (item: TItemModel) => void;
+  onValueCreate?: (value: string, item: TItemModel) => void;
 }
 
 type UseCreatableAdditionalPropKeys = keyof UseCreatableAdditionalProps<{}>;
@@ -98,7 +99,8 @@ export const useCreatable = <
 
   const {
     items: originalItems,
-    inputValue: inputValue,
+    value,
+    inputValue = "",
     getItemLabel,
     getItemValue,
     onValueChange,
@@ -108,9 +110,13 @@ export const useCreatable = <
   const newItem: TItemModel | undefined = useMemo(
     () =>
       isValidNewItem(inputValue, originalItems, getItemLabel)
-        ? getNewItem(inputValue ?? "", formatCreateLabel(inputValue ?? ""))
+        ? getNewItem(
+            inputValue,
+            value === inputValue ? inputValue : formatCreateLabel(inputValue)
+          )
         : undefined,
     [
+      value,
       formatCreateLabel,
       getNewItem,
       getItemLabel,
@@ -153,8 +159,10 @@ export const useCreatable = <
       if (value != null && item != null && item === newItem) {
         // created item was selected
         if (onValueCreate != null) {
-          onValueCreate(item);
-        } else if (onValueChange != null) {
+          onValueCreate(getItemValue(item), item);
+        }
+
+        if (onValueChange != null) {
           onValueChange(value, getNewItem(value, value));
         }
         return;

@@ -1,6 +1,7 @@
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { useCallback, useEffect, useState } from "react";
+import { FocusEvent, useCallback, useEffect, useState } from "react";
 
+import { useLatestRef } from "../../../hook/useLatestRef";
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
 export const useInputState = <
@@ -11,10 +12,10 @@ export const useInputState = <
 ): TAdditionalProps => {
   const {
     inputValue: propsInputValue,
-    getItemValue,
     value: propsValue,
     onInputChange: propsOnInputChange,
     onValueChange: propsOnValueChange,
+    onBlur: propsOnBlur,
   } = props;
 
   const [stateInputValue, setStateInputValue] = useState<string | undefined>(
@@ -23,6 +24,8 @@ export const useInputState = <
   const [stateValue, setStateValue] = useState<string | undefined>(
     propsValue !== undefined ? propsValue : undefined // todo defaultValue?
   );
+
+  const latestValueRef = useLatestRef(stateValue);
 
   useEffect(() => {
     setStateInputValue(propsInputValue ?? "");
@@ -55,11 +58,26 @@ export const useInputState = <
     [setStateValue, propsOnValueChange]
   );
 
+  const onBlur = useCallback(
+    (event: FocusEvent<HTMLInputElement>) => {
+      if (propsOnBlur != null) {
+        propsOnBlur(event);
+      }
+
+      if (latestValueRef.current == null && event.currentTarget.value != "") {
+        // reset display value when user leaves the field and there is no selected value
+        setStateInputValue("");
+      }
+    },
+    [setStateValue, propsOnBlur]
+  );
+
   return {
     ...props,
     inputValue: stateInputValue,
     value: stateValue,
     onInputChange,
     onValueChange,
+    onBlur,
   };
 };
