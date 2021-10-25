@@ -32,9 +32,6 @@ PrefilledWithValueOnly.args = {
   value: "Non-Existing Value",
 };
 
-export const MinCharacters = Template.bind({});
-MinCharacters.args = { ...Standard.args, minCharsForSearch: 3 };
-
 export const CustomLabelProp = Template.bind({});
 CustomLabelProp.args = { ...Prefilled.args, itemLabel: "withUmlaut" };
 
