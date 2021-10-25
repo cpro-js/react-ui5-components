@@ -77,21 +77,3 @@ export const useAllowAction = (
 
   return [allowActionRef, setAllowAction];
 };
-
-export const getItemAttribute = <T extends {}, R extends T[keyof T]>(
-  item: T,
-  accessor: keyof T | ((item: T) => R)
-): R => {
-  if (typeof accessor === "function") {
-    return accessor(item);
-  }
-  return item[accessor] as R;
-};
-
-export const findItemByAttribute = <T extends {}, R extends T[keyof T]>(
-  items: Array<T>,
-  value: R | undefined,
-  accessor: keyof T | ((item: T) => R)
-): T | undefined => {
-  return items.find((item) => getItemAttribute(item, accessor) === value);
-};
