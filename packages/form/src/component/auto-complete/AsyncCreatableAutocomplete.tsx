@@ -1,7 +1,6 @@
 import { ReactElement, Ref, forwardRef } from "react";
 import { Simplify } from "type-fest";
 
-import { DefaultAutoCompleteOption } from "../AutoCompleteModel";
 import {
   UseAsyncAdditionalProps,
   UseAsyncManagedPropKeys,
@@ -20,6 +19,7 @@ import {
 import {
   CoreAutocomplete,
   CoreAutocompleteProps,
+  DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
 export type AsyncCreatableAutocompleteProps<

@@ -1,7 +1,6 @@
 import { ReactElement, Ref, forwardRef } from "react";
 import { Simplify } from "type-fest";
 
-import { DefaultAutoCompleteOption } from "../AutoCompleteModel";
 import {
   UseCreatableAdditionalProps,
   useCreatable,
@@ -15,6 +14,7 @@ import {
 import {
   CoreAutocomplete,
   CoreAutocompleteProps,
+  DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
 export type CreatableAutocompleteProps<TModel = DefaultAutoCompleteOption> =

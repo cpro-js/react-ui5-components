@@ -1,11 +1,13 @@
 import { useCallback } from "react";
 
-import { DefaultAutoCompleteOption } from "../../AutoCompleteModel";
 import {
   DEFAULT_LABEL_PROP,
   DEFAULT_VALUE_PROP,
 } from "../../common/CommonSelection";
-import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
+import {
+  CoreAutocompleteProps,
+  DefaultAutoCompleteOption,
+} from "../internal/CoreAutocomplete";
 
 export type UseItemModelManagedPropKeys = keyof Pick<
   CoreAutocompleteProps,
