@@ -1,6 +1,8 @@
+import { useDebounceCallback } from "@react-hook/debounce";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { DEBOUNCE_RATE } from "../../common/CommonSelection";
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
 export type UseAsyncManagedPropKeys = keyof Pick<
@@ -78,12 +80,8 @@ export const useAsync = <
     };
   }, []);
 
-  const onInputChange = useCallback(
-    (inputValue: string, event: Ui5CustomEvent<HTMLInputElement>) => {
-      if (propsOnInputChange != null) {
-        propsOnInputChange(inputValue, event);
-      }
-
+  const handleInputValueChangeDebounced = useDebounceCallback(
+    (inputValue: string) => {
       if (
         !inputValue ||
         (minCharsForSearch != null && inputValue.length < minCharsForSearch)
@@ -106,7 +104,18 @@ export const useAsync = <
         setLoadedOptions(options || []);
       });
     },
-    [loadItems, propsOnInputChange]
+    DEBOUNCE_RATE
+  );
+
+  const onInputChange = useCallback(
+    (inputValue: string, event: Ui5CustomEvent<HTMLInputElement>) => {
+      if (propsOnInputChange != null) {
+        propsOnInputChange(inputValue, event);
+      }
+
+      handleInputValueChangeDebounced(inputValue);
+    },
+    [propsOnInputChange, handleInputValueChangeDebounced]
   );
 
   // @ts-ignore TODO what's wrong here?
