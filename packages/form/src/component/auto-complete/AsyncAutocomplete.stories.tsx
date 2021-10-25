@@ -15,14 +15,11 @@ import {
 } from "./AutoComplete-storyData";
 
 const Template: Story<AsyncAutocompleteProps<CountryItem>> = ({ ...props }) => {
-  return <AsyncAutocomplete {...props} onSearch={SEARCH_COUNTRIES} />;
+  return <AsyncAutocomplete {...props} />;
 };
 
 export const Standard = Template.bind({});
-Standard.args = { value: undefined, onSearch: SEARCH_COUNTRIES };
-
-export const Empty = Template.bind({});
-Standard.args = { value: undefined };
+Standard.args = { value: undefined, loadItems: SEARCH_COUNTRIES };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {

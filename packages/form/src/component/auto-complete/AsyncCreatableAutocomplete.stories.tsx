@@ -17,11 +17,11 @@ import { DefaultAutoCompleteOption } from "./internal/CoreAutocomplete";
 const Template: Story<
   AsyncCreatableAutocompleteProps<DefaultAutoCompleteOption>
 > = ({ ...props }) => {
-  return <AsyncCreatableAutocomplete {...props} onSearch={SEARCH_COUNTRIES} />;
+  return <AsyncCreatableAutocomplete {...props} />;
 };
 
 export const Standard = Template.bind({});
-Standard.args = { value: undefined, onSearch: SEARCH_COUNTRIES };
+Standard.args = { value: undefined, loadItems: SEARCH_COUNTRIES };
 
 export const Empty = Template.bind({});
 Standard.args = { value: undefined };

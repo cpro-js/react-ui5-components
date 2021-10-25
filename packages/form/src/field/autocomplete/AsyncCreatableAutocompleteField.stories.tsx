@@ -53,7 +53,7 @@ const I18nTemplate: Story<
 };
 
 export const Standard = Template.bind({});
-Standard.args = { onSearch: SEARCH_COUNTRIES };
+Standard.args = { loadItems: SEARCH_COUNTRIES };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {

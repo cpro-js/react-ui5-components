@@ -18,13 +18,13 @@ export type UseAsyncAdditionalProps<TItemModel extends {}> = {
   minCharsForSearch?: number;
 
   /**
-   * The search method to use in order to generate suggestions.
+   * The search method to use in order to generate items.
    * This method is fired on every key press.
    *
    * @param searchTerm the entered value
-   * @returns Promise of the items to use for showing suggestions
+   * @returns Promise of the items to use for showing items
    */
-  onSearch: (searchTerm: string) => Promise<Array<TItemModel>>;
+  loadItems: (searchTerm: string) => Promise<Array<TItemModel>>;
 
   /**
    * Initial items matching the initial value
@@ -61,7 +61,7 @@ export const useAsync = <
 >(
   props: UseAsyncProps<TItemModel, TAdditionalProps>
 ): UseAsyncPropsReturn<TItemModel, TAdditionalProps> => {
-  const { minCharsForSearch, onSearch, initialItems, ...restProps } = props;
+  const { minCharsForSearch, loadItems, initialItems, ...restProps } = props;
   const { onInputChange: propsOnInputChange } = restProps;
 
   const lastRequest = useRef<unknown>(undefined);
@@ -95,7 +95,7 @@ export const useAsync = <
 
       const request = (lastRequest.current = {});
 
-      onSearch(inputValue).then((options) => {
+      loadItems(inputValue).then((options) => {
         if (!mounted) {
           return;
         }
@@ -106,7 +106,7 @@ export const useAsync = <
         setLoadedOptions(options || []);
       });
     },
-    [onSearch, propsOnInputChange]
+    [loadItems, propsOnInputChange]
   );
 
   // @ts-ignore TODO what's wrong here?
