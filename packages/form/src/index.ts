@@ -26,17 +26,17 @@ export type { TextAreaProps } from "./component/TextArea";
 export { TextInput } from "./component/TextInput";
 export type { TextInputProps } from "./component/TextInput";
 
-export { Autocomplete } from "./component/auto-complete/Autocomplete";
-export type { AutocompleteProps } from "./component/auto-complete/Autocomplete";
+export { Autocomplete } from "./component/autocomplete/Autocomplete";
+export type { AutocompleteProps } from "./component/autocomplete/Autocomplete";
 
-export { AsyncAutocomplete } from "./component/auto-complete/AsyncAutocomplete";
-export type { AsyncAutocompleteProps } from "./component/auto-complete/AsyncAutocomplete";
+export { AsyncAutocomplete } from "./component/autocomplete/AsyncAutocomplete";
+export type { AsyncAutocompleteProps } from "./component/autocomplete/AsyncAutocomplete";
 
-export { CreatableAutocomplete } from "./component/auto-complete/CreatableAutocomplete";
-export type { CreatableAutocompleteProps } from "./component/auto-complete/CreatableAutocomplete";
+export { CreatableAutocomplete } from "./component/autocomplete/CreatableAutocomplete";
+export type { CreatableAutocompleteProps } from "./component/autocomplete/CreatableAutocomplete";
 
-export { AsyncCreatableAutocomplete } from "./component/auto-complete/AsyncCreatableAutocomplete";
-export type { AsyncCreatableAutocompleteProps } from "./component/auto-complete/AsyncCreatableAutocomplete";
+export { AsyncCreatableAutocomplete } from "./component/autocomplete/AsyncCreatableAutocomplete";
+export type { AsyncCreatableAutocompleteProps } from "./component/autocomplete/AsyncCreatableAutocomplete";
 
 export { MultiAutoComplete } from "./component/MultiAutoComplete";
 export type { MultiAutoCompleteProps } from "./component/MultiAutoComplete";

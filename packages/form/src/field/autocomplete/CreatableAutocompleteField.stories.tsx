@@ -1,7 +1,7 @@
 import { Story } from "@storybook/react";
 
-import { COUNTRIES } from "../../component/auto-complete/AutoComplete-storyData";
-import { DefaultAutoCompleteOption } from "../../component/auto-complete/internal/CoreAutocomplete";
+import { COUNTRIES } from "../../component/autocomplete/AutoComplete-storyData";
+import { DefaultAutoCompleteOption } from "../../component/autocomplete/internal/CoreAutocomplete";
 import { FormController, FormControllerProps } from "../../form/FormController";
 import { FormI18nProvider } from "../../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "../FormViewer";

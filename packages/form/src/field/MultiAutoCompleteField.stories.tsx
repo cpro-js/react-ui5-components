@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
-} from "../component/auto-complete/AutoComplete-storyData";
+} from "../component/autocomplete/AutoComplete-storyData";
 import { MultiAutoCompleteProps } from "../component/MultiAutoComplete";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";

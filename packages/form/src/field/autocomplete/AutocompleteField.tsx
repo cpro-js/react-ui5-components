@@ -7,7 +7,7 @@ import { useController } from "react-hook-form";
 import {
   Autocomplete,
   AutocompleteProps,
-} from "../../component/auto-complete/Autocomplete";
+} from "../../component/autocomplete/Autocomplete";
 import { useI18nValidationError } from "../../i18n/FormI18n";
 import { FormFieldValidation } from "../types";
 import { hasError } from "../util";

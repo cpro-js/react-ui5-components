@@ -4,7 +4,6 @@ import { ValueState } from "@ui5/webcomponents-react";
 import { FC, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
-import { AutoComplete, AutoCompleteProps } from "../component/AutoComplete";
 import {
   MultiAutoComplete,
   MultiAutoCompleteProps,

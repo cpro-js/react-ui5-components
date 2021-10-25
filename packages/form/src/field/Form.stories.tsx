@@ -14,7 +14,7 @@ import {
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
-} from "../component/auto-complete/AutoComplete-storyData";
+} from "../component/autocomplete/AutoComplete-storyData";
 import { Button } from "../component/Button";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { CheckboxField } from "./CheckboxField";

@@ -7,7 +7,7 @@ import { useController } from "react-hook-form";
 import {
   CreatableAutocomplete,
   CreatableAutocompleteProps,
-} from "../../component/auto-complete/CreatableAutocomplete";
+} from "../../component/autocomplete/CreatableAutocomplete";
 import { useI18nValidationError } from "../../i18n/FormI18n";
 import { FormFieldValidation } from "../types";
 import { hasError } from "../util";
