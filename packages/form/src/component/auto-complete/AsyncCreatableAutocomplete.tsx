@@ -1,5 +1,4 @@
 import { ReactElement, Ref, forwardRef } from "react";
-import { Simplify } from "type-fest";
 
 import {
   UseAsyncAdditionalProps,
@@ -24,15 +23,13 @@ import {
 
 export type AsyncCreatableAutocompleteProps<
   TModel = DefaultAutoCompleteOption
-> = Simplify<
-  Omit<
-    CoreAutocompleteProps<TModel>,
-    UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
-  > &
-    UseAsyncAdditionalProps<TModel> &
-    UseItemAdditionalProps<TModel> &
-    UseCreatableAdditionalProps<TModel>
->;
+> = Omit<
+  CoreAutocompleteProps<TModel>,
+  UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
+> &
+  UseAsyncAdditionalProps<TModel> &
+  UseItemAdditionalProps<TModel> &
+  UseCreatableAdditionalProps<TModel>;
 
 export const AsyncCreatableAutocomplete = forwardRef<
   HTMLInputElement,

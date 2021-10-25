@@ -1,5 +1,4 @@
 import { ReactElement, Ref, forwardRef } from "react";
-import { Simplify } from "type-fest";
 
 import {
   UseCreatableAdditionalProps,
@@ -18,11 +17,9 @@ import {
 } from "./internal/CoreAutocomplete";
 
 export type CreatableAutocompleteProps<TModel = DefaultAutoCompleteOption> =
-  Simplify<
-    Omit<CoreAutocompleteProps<TModel>, UseItemModelManagedPropKeys> &
-      UseItemAdditionalProps<TModel> &
-      UseCreatableAdditionalProps<TModel>
-  >;
+  Omit<CoreAutocompleteProps<TModel>, UseItemModelManagedPropKeys> &
+    UseItemAdditionalProps<TModel> &
+    UseCreatableAdditionalProps<TModel>;
 
 export const CreatableAutocomplete = forwardRef<
   HTMLInputElement,
