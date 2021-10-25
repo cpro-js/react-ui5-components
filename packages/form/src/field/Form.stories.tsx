@@ -25,7 +25,7 @@ import { NumberInputField } from "./NumberInputField";
 import { TextAreaField } from "./TextAreaField";
 import { TextInputField } from "./TextInputField";
 import {
-  AutoCompleteField,
+  AsyncAutocompleteField,
   MultiAutoCompleteField,
   toISO8601DateString,
 } from "..";
@@ -99,10 +99,10 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
             </FlexBox>
           </FormItem>
           <FormItem label="Current Country">
-            <AutoCompleteField
+            <AsyncAutocompleteField
               name="country"
-              onSearch={SEARCH_COUNTRIES}
-              initialSuggestions={initialCurrentCountrySuggestions}
+              loadItems={SEARCH_COUNTRIES}
+              initialItems={initialCurrentCountrySuggestions}
             />
           </FormItem>
           <FormItem label="Text Area">
