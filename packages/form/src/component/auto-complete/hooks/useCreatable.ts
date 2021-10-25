@@ -2,8 +2,11 @@ import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEve
 import { useCallback, useMemo } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
-import { DefaultAutoCompleteOption } from "../../AutoCompleteModel";
-import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
+import {
+  CoreAutocompleteProps,
+  CreatedAutoCompleteOption,
+  DefaultAutoCompleteOption,
+} from "../internal/CoreAutocomplete";
 
 export const isValidNewItem = <T = DefaultAutoCompleteOption>(
   inputValue: string | undefined,
@@ -24,10 +27,9 @@ const defaultGetNewItem = <T = DefaultAutoCompleteOption>(
   inputValue: string,
   labelValue: string
 ): T => {
-  const item: DefaultAutoCompleteOption = {
+  const item: CreatedAutoCompleteOption = {
     label: labelValue,
     value: inputValue,
-    // @ts-ignore TODO maybe we need this
     __isNew__: true,
   };
 

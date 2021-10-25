@@ -5,7 +5,7 @@ import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
 export type UseAsyncManagedPropKeys = keyof Pick<
   CoreAutocompleteProps,
-  "items"
+  "items" | "filterItem"
 >;
 
 type UseAsyncUsedPropKeys = keyof Pick<CoreAutocompleteProps, "onInputChange">;
@@ -114,5 +114,6 @@ export const useAsync = <
     ...restProps,
     onInputChange,
     items: loadedOptions,
+    filterItem: null,
   };
 };

@@ -5,12 +5,22 @@ import { Input, SuggestionItem } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
 import { SuggestionItemPropTypes } from "@ui5/webcomponents-react/webComponents/SuggestionItem";
-import { KeyboardEvent, ReactNode, forwardRef, useCallback } from "react";
+import {
+  KeyboardEvent,
+  ReactNode,
+  forwardRef,
+  useCallback,
+  useMemo,
+} from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
 import { triggerSubmitOnEnter } from "../../util";
+import { startsWithPerTerm } from "./filter";
 
 export type DefaultAutoCompleteOption = { label: string; value: string };
+export type CreatedAutoCompleteOption = DefaultAutoCompleteOption & {
+  __isNew__: true;
+};
 
 /**
  * Base Props of Input we really care about. Reduced prop set of the UI5 Component <code>Input</code>
@@ -93,6 +103,15 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
      * @param suggestionValue
      */
     onValueChange?: (value?: string, item?: T) => void;
+
+    /**
+     * Custom filter method to display only items matching the search term.
+     *
+     * Note: provide null to disable filtering
+     *
+     * @param suggestionValue
+     */
+    filterItem?: null | ((inputValue: string, item: T) => boolean);
   };
 
 export const CoreAutocomplete = forwardRef<
@@ -108,11 +127,38 @@ export const CoreAutocomplete = forwardRef<
     onValueChange,
     value,
     inputValue,
+    filterItem,
     ...otherProps
   } = props;
 
   const valueRef = useLatestRef<string | undefined>(value);
   const suggestionRef = useLatestRef<Array<DefaultAutoCompleteOption>>(items);
+
+  const customItemFilter: (
+    inputValue: string,
+    item: DefaultAutoCompleteOption
+  ) => boolean = useMemo(() => {
+    if (filterItem === null) {
+      return () => true;
+    }
+
+    if (filterItem != null) {
+      return filterItem;
+    }
+
+    return (inputValue: string, item: DefaultAutoCompleteOption) =>
+      startsWithPerTerm(inputValue ?? "", getItemLabel(item) ?? "");
+  }, [filterItem, getItemLabel]);
+
+  const filteredItems: Array<DefaultAutoCompleteOption> = useMemo(
+    () =>
+      items.filter(
+        (item) =>
+          (item as CreatedAutoCompleteOption).__isNew__ ||
+          customItemFilter(inputValue ?? "", item)
+      ),
+    [inputValue, items, customItemFilter]
+  );
 
   const handleSuggestionItemSelect = useCallback(
     (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
@@ -177,7 +223,7 @@ export const CoreAutocomplete = forwardRef<
       onSuggestionItemSelect={handleSuggestionItemSelect}
       onKeyPress={handleKeyPress}
     >
-      {items.map((item) => {
+      {filteredItems.map((item) => {
         const props: Partial<SuggestionItemPropTypes> = getItemProps
           ? getItemProps(item)
           : {};
