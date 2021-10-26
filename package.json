@@ -1,11 +1,9 @@
 {
-  "name": "@christopherwalde/react-ui5-components",
+  "name": "@cpro-js/react-ui5-components",
   "private": true,
-  "homepage": "http://christopherwalde.github.io/react-ui5-components",
   "scripts": {
     "build": "yarn workspaces foreach -pt run build",
     "build-storybook": "yarn workspaces foreach -pt run build-storybook",
-    "deploy-storybook": "gh-pages -d ./packages/form/storybook-static",
     "postinstall": "is-ci || husky install",
     "postversion": "lerna publish from-git",
     "release": "env-cmd -f .env.local --no-override lerna version",
@@ -26,10 +24,6 @@
     "prettier": "^2.3.2",
     "prettier-plugin-import-sort": "^0.0.7",
     "prettier-plugin-package": "^1.3.0"
-  },
-  "devDependencies": {
-    "@storybook/storybook-deployer": "^2.8.10",
-    "gh-pages": "^3.2.3"
   },
   "importSort": {
     ".js, .jsx, .ts, .tsx": {
