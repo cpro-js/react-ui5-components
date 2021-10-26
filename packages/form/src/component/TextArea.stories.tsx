@@ -31,3 +31,9 @@ Prefilled.args = {
   value: "Prefilled Text",
   valueState: "None",
 };
+
+export const GhPages = Template.bind({});
+GhPages.args = {
+  value: "GhPages Text",
+  valueState: "None",
+};
