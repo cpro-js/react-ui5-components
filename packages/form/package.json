@@ -5,6 +5,12 @@
     "access": "public"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cpro-js/react-ui5-components.git",
+    "directory": "packages/form"
+  },
+  "homepage": "http://cpro-js.github.io/react-ui5-components",
   "main": "./dist/index.js",
   "module": "./dist/index.modern.js",
   "scripts": {
