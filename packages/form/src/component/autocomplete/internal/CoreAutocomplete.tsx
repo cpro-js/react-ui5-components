@@ -14,10 +14,12 @@ import {
 } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
+import type { DefaultAutoCompleteOption } from "../../AutoCompleteModel";
 import { triggerSubmitOnEnter } from "../../util";
 import { startsWithPerTerm } from "./filter";
 
-export type DefaultAutoCompleteOption = { label: string; value: string };
+export type { DefaultAutoCompleteOption };
+
 export type CreatedAutoCompleteOption = DefaultAutoCompleteOption & {
   __isNew__: true;
 };
