@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/cpro-js/react-ui5-components/compare/v0.20.0...v0.21.0) (2021-10-27)
+
+### Bug Fixes
+
+- remove submit on enter key for text area ([#40](https://github.com/cpro-js/react-ui5-components/issues/40)) ([9d409cf](https://github.com/cpro-js/react-ui5-components/commit/9d409cf0587f79069c0159739532d19ffa01fe43)), closes [#36](https://github.com/cpro-js/react-ui5-components/issues/36)
+
+### Features
+
+- **form:** add DateTimePicker Component & Field ([#39](https://github.com/cpro-js/react-ui5-components/issues/39)) ([ba879c4](https://github.com/cpro-js/react-ui5-components/commit/ba879c454a2aaf5ce2068afd50dbaa9adb8f9cdf)), closes [#17](https://github.com/cpro-js/react-ui5-components/issues/17)
+- **form:** add itemLabel & itemValue to multi select ([#25](https://github.com/cpro-js/react-ui5-components/issues/25)) ([3d0bfae](https://github.com/cpro-js/react-ui5-components/commit/3d0bfaec16192e3bb289845caf3412c18fa2f15e))
+- **form:** add itemLabel & itemValue to select ([#23](https://github.com/cpro-js/react-ui5-components/issues/23)) ([45c84d2](https://github.com/cpro-js/react-ui5-components/commit/45c84d2899a0652d101907549117f8210571dcf6))
+- **form:** autocomplete refactoring & additional variants ([#43](https://github.com/cpro-js/react-ui5-components/issues/43)) ([e993087](https://github.com/cpro-js/react-ui5-components/commit/e993087f618fae6849338c822d6b4796bd9c0831))
+- **form:** export form types ([#34](https://github.com/cpro-js/react-ui5-components/issues/34)) ([92fe249](https://github.com/cpro-js/react-ui5-components/commit/92fe2493305bbe8a070a484a80e81b341d10202b))
+- **form:** provide action utilities to modify form state programmatically ([#31](https://github.com/cpro-js/react-ui5-components/issues/31)) ([e71ab84](https://github.com/cpro-js/react-ui5-components/commit/e71ab841e153871acb9e997635c0363c91f9afb8))
+- **form:** provide onChange callback on FormController & useFormListener hook ([#32](https://github.com/cpro-js/react-ui5-components/issues/32)) ([cc6638c](https://github.com/cpro-js/react-ui5-components/commit/cc6638cf95351c9bf13fb07c512a690f834d9349))
+- **form:** submit form on enter in AutoComplete ([#35](https://github.com/cpro-js/react-ui5-components/issues/35)) ([918dd81](https://github.com/cpro-js/react-ui5-components/commit/918dd81aa91c583417d58257d669249a1129fed0)), closes [#20](https://github.com/cpro-js/react-ui5-components/issues/20)
+- **form:** support filter bar in forms ([#27](https://github.com/cpro-js/react-ui5-components/issues/27)) ([22fa045](https://github.com/cpro-js/react-ui5-components/commit/22fa0459521d779789f6b7314c2ee9ae722f8de7))
+
 # [0.20.0](https://github.com/cpro-js/react-ui5-components/compare/v0.19.0...v0.20.0) (2021-10-11)
 
 ### Bug Fixes
