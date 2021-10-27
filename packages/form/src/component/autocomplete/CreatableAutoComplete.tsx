@@ -24,7 +24,7 @@ import {
 export type CreatableAutoCompleteProps<TModel = DefaultAutoCompleteOption> =
   Omit<
     CoreAutocompleteProps<TModel>,
-    UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
+    UseAsyncManagedPropKeys | UseItemModelManagedPropKeys | "inputValue"
   > &
     UseAsyncAdditionalProps<TModel> &
     UseItemAdditionalProps<TModel> &

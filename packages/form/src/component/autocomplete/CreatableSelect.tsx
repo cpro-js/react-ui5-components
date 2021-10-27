@@ -18,7 +18,7 @@ import {
 
 export type CreatableSelectProps<TModel = DefaultAutoCompleteOption> = Omit<
   CoreAutocompleteProps<TModel>,
-  UseItemModelManagedPropKeys
+  UseItemModelManagedPropKeys | "inputValue"
 > &
   UseItemAdditionalProps<TModel> &
   UseCreatableAdditionalProps<TModel>;
