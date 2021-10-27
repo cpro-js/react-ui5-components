@@ -1,11 +1,13 @@
 import { Story } from "@storybook/react";
 
-import { COUNTRIES } from "../../component/autocomplete/AutoComplete-storyData";
+import {
+  COUNTRIES,
+  SEARCH_COUNTRIES,
+} from "../../component/autocomplete/AutoComplete-storyData";
 import { DefaultAutoCompleteOption } from "../../component/autocomplete/internal/CoreAutocomplete";
 import { FormController, FormControllerProps } from "../../form/FormController";
 import { FormI18nProvider } from "../../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "../FormViewer";
-import { AutocompleteField, AutocompleteFieldProps } from "./AutocompleteField";
 import {
   CreatableAutocompleteField,
   CreatableAutocompleteFieldProps,
@@ -35,7 +37,7 @@ const Template: Story<
 
 const I18nTemplate: Story<
   FormControllerProps<FormData> &
-    AutocompleteFieldProps<DefaultAutoCompleteOption>
+    CreatableAutocompleteFieldProps<DefaultAutoCompleteOption>
 > = (args, context) => {
   return (
     <FormI18nProvider
@@ -51,13 +53,12 @@ const I18nTemplate: Story<
 };
 
 export const Standard = Template.bind({});
-Standard.args = {
-  items: COUNTRIES,
-};
+Standard.args = { loadItems: SEARCH_COUNTRIES };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
+  initialItems: [COUNTRIES[1]],
   initialValues: {
     item: COUNTRIES[1].value,
   },

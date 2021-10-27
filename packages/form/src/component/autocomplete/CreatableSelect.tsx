@@ -1,11 +1,6 @@
 import { ReactElement, Ref, forwardRef } from "react";
 
 import {
-  UseAsyncAdditionalProps,
-  UseAsyncManagedPropKeys,
-  useAsync,
-} from "./hooks/useAsync";
-import {
   UseCreatableAdditionalProps,
   useCreatable,
 } from "./hooks/useCreatable";
@@ -21,30 +16,24 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type AsyncCreatableAutocompleteProps<
-  TModel = DefaultAutoCompleteOption
-> = Omit<
+export type CreatableSelectProps<TModel = DefaultAutoCompleteOption> = Omit<
   CoreAutocompleteProps<TModel>,
-  UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
+  UseItemModelManagedPropKeys
 > &
-  UseAsyncAdditionalProps<TModel> &
   UseItemAdditionalProps<TModel> &
   UseCreatableAdditionalProps<TModel>;
 
-export const AsyncCreatableAutocomplete = forwardRef<
+export const CreatableSelect = forwardRef<
   HTMLInputElement,
-  AsyncCreatableAutocompleteProps
+  CreatableSelectProps
 >((props, forwardedRef) => {
   const itemModelProps = useItemModel<DefaultAutoCompleteOption, typeof props>(
     props
   );
-  const asyncProps = useAsync<DefaultAutoCompleteOption, typeof itemModelProps>(
-    itemModelProps
-  );
   const stateProps = useInputState<
     DefaultAutoCompleteOption,
-    typeof asyncProps
-  >(asyncProps);
+    typeof itemModelProps
+  >(itemModelProps);
   const creatableProps = useCreatable<
     DefaultAutoCompleteOption,
     typeof stateProps
@@ -52,7 +41,5 @@ export const AsyncCreatableAutocomplete = forwardRef<
 
   return <CoreAutocomplete ref={forwardedRef} {...creatableProps} />;
 }) as <T = DefaultAutoCompleteOption>(
-  p: AsyncCreatableAutocompleteProps<T> & {
-    ref?: Ref<HTMLInputElement | undefined>;
-  }
+  p: CreatableSelectProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
 ) => ReactElement;

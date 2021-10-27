@@ -1,36 +1,41 @@
+import "@ui5/webcomponents-icons/dist/value-help.js";
 import "@ui5/webcomponents-icons/dist/add";
-import "@ui5/webcomponents-icons/dist/refresh";
 import "@ui5/webcomponents-icons/dist/search";
 import "@ui5/webcomponents-icons/dist/sort";
-import "@ui5/webcomponents-icons/dist/value-help.js";
+import "@ui5/webcomponents-icons/dist/refresh";
 
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story, StoryContext } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
 
 import { Autocomplete, AutocompleteProps } from "./Autocomplete";
-import { COUNTRIES, CountryItem } from "./AutoComplete-storyData";
+import {
+  COUNTRIES,
+  CountryItem,
+  SEARCH_COUNTRIES,
+} from "./AutoComplete-storyData";
 
 const Template: Story<AutocompleteProps<CountryItem>> = ({ ...props }) => {
   return <Autocomplete {...props} />;
 };
 
-export const Empty = Template.bind({});
-Empty.args = {};
-
 export const Standard = Template.bind({});
-Standard.args = { items: COUNTRIES };
+Standard.args = { value: undefined, loadItems: SEARCH_COUNTRIES };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
   value: COUNTRIES[1].value,
+  initialItems: [COUNTRIES[1]],
 };
 
 export const PrefilledWithValueOnly = Template.bind({});
 PrefilledWithValueOnly.args = {
   ...Standard.args,
-  value: "Non-Existing Value",
+  value: COUNTRIES[1].value,
 };
+
+export const MinCharacters = Template.bind({});
+MinCharacters.args = { ...Standard.args, minCharsForSearch: 3 };
 
 export const CustomLabelProp = Template.bind({});
 CustomLabelProp.args = { ...Prefilled.args, itemLabel: "withUmlaut" };

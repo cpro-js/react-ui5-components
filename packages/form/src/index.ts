@@ -29,14 +29,11 @@ export type { TextInputProps } from "./component/TextInput";
 export { Autocomplete } from "./component/autocomplete/Autocomplete";
 export type { AutocompleteProps } from "./component/autocomplete/Autocomplete";
 
-export { AsyncAutocomplete } from "./component/autocomplete/AsyncAutocomplete";
-export type { AsyncAutocompleteProps } from "./component/autocomplete/AsyncAutocomplete";
+export { CreatableSelect } from "./component/autocomplete/CreatableSelect";
+export type { CreatableSelectProps } from "./component/autocomplete/CreatableSelect";
 
 export { CreatableAutocomplete } from "./component/autocomplete/CreatableAutocomplete";
 export type { CreatableAutocompleteProps } from "./component/autocomplete/CreatableAutocomplete";
-
-export { AsyncCreatableAutocomplete } from "./component/autocomplete/AsyncCreatableAutocomplete";
-export type { AsyncCreatableAutocompleteProps } from "./component/autocomplete/AsyncCreatableAutocomplete";
 
 export { MultiAutoComplete } from "./component/MultiAutoComplete";
 export type { MultiAutoCompleteProps } from "./component/MultiAutoComplete";
@@ -91,14 +88,11 @@ export type { TextInputFieldProps } from "./field/TextInputField";
 export { AutocompleteField } from "./field/autocomplete/AutocompleteField";
 export type { AutocompleteFieldProps } from "./field/autocomplete/AutocompleteField";
 
-export { AsyncAutocompleteField } from "./field/autocomplete/AsyncAutocompleteField";
-export type { AsyncAutocompleteFieldProps } from "./field/autocomplete/AsyncAutocompleteField";
+export { CreatableSelectField } from "./field/autocomplete/CreatableSelectField";
+export type { CreatableSelectFieldProps } from "./field/autocomplete/CreatableSelectField";
 
 export { CreatableAutocompleteField } from "./field/autocomplete/CreatableAutocompleteField";
 export type { CreatableAutocompleteFieldProps } from "./field/autocomplete/CreatableAutocompleteField";
-
-export { AsyncCreatableAutocompleteField } from "./field/autocomplete/AsyncCreatableAutocompleteField";
-export type { AsyncCreatableAutocompleteFieldProps } from "./field/autocomplete/AsyncCreatableAutocompleteField";
 
 export { MultiAutoCompleteField } from "./field/MultiAutoCompleteField";
 export type { MultiAutoCompleteFieldProps } from "./field/MultiAutoCompleteField";

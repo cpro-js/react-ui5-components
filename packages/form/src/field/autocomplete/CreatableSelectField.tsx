@@ -5,26 +5,26 @@ import { useImperativeHandle, useMemo, useRef } from "react";
 import { useController } from "react-hook-form";
 
 import {
-  AsyncCreatableAutocomplete,
-  AsyncCreatableAutocompleteProps,
-} from "../../component/autocomplete/AsyncCreatableAutocomplete";
+  CreatableSelect,
+  CreatableSelectProps,
+} from "../../component/autocomplete/CreatableSelect";
 import { useI18nValidationError } from "../../i18n/FormI18n";
 import { FormFieldValidation } from "../types";
 import { hasError } from "../util";
 
-export type AsyncCreatableAutocompleteFieldProps<T> = Omit<
-  AsyncCreatableAutocompleteProps<T>,
+export type CreatableSelectFieldProps<T> = Omit<
+  CreatableSelectProps<T>,
   "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
 > &
   Pick<FormFieldValidation, "required"> & {
     name: string;
   };
 
-export const AsyncCreatableAutocompleteField = <T extends Object>({
+export const CreatableSelectField = <T extends Object>({
   name,
   required,
   ...props
-}: AsyncCreatableAutocompleteFieldProps<T>) => {
+}: CreatableSelectFieldProps<T>) => {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -58,7 +58,7 @@ export const AsyncCreatableAutocompleteField = <T extends Object>({
     : undefined;
 
   return (
-    <AsyncCreatableAutocomplete<T>
+    <CreatableSelect<T>
       {...props}
       ref={field.ref}
       name={field.name}

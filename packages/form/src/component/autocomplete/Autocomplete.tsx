@@ -1,5 +1,10 @@
 import { ReactElement, Ref, forwardRef } from "react";
 
+import {
+  UseAsyncAdditionalProps,
+  UseAsyncManagedPropKeys,
+  useAsync,
+} from "./hooks/useAsync";
 import { useInputState } from "./hooks/useInputState";
 import {
   UseItemAdditionalProps,
@@ -14,8 +19,9 @@ import {
 
 export type AutocompleteProps<TModel = DefaultAutoCompleteOption> = Omit<
   CoreAutocompleteProps<TModel>,
-  UseItemModelManagedPropKeys
+  UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
 > &
+  UseAsyncAdditionalProps<TModel> &
   UseItemAdditionalProps<TModel>;
 
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
@@ -24,10 +30,15 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       DefaultAutoCompleteOption,
       typeof props
     >(props);
-    const stateProps = useInputState<
+
+    const asyncProps = useAsync<
       DefaultAutoCompleteOption,
       typeof itemModelProps
     >(itemModelProps);
+    const stateProps = useInputState<
+      DefaultAutoCompleteOption,
+      typeof asyncProps
+    >(asyncProps);
 
     return <CoreAutocomplete ref={forwardedRef} {...stateProps} />;
   }
