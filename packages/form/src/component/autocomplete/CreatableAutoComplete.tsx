@@ -21,7 +21,7 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type CreatableAutocompleteProps<TModel = DefaultAutoCompleteOption> =
+export type CreatableAutoCompleteProps<TModel = DefaultAutoCompleteOption> =
   Omit<
     CoreAutocompleteProps<TModel>,
     UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
@@ -30,9 +30,9 @@ export type CreatableAutocompleteProps<TModel = DefaultAutoCompleteOption> =
     UseItemAdditionalProps<TModel> &
     UseCreatableAdditionalProps<TModel>;
 
-export const CreatableAutocomplete = forwardRef<
+export const CreatableAutoComplete = forwardRef<
   HTMLInputElement,
-  CreatableAutocompleteProps
+  CreatableAutoCompleteProps
 >((props, forwardedRef) => {
   const itemModelProps = useItemModel<DefaultAutoCompleteOption, typeof props>(
     props
@@ -51,7 +51,7 @@ export const CreatableAutocomplete = forwardRef<
 
   return <CoreAutocomplete ref={forwardedRef} {...creatableProps} />;
 }) as <T = DefaultAutoCompleteOption>(
-  p: CreatableAutocompleteProps<T> & {
+  p: CreatableAutoCompleteProps<T> & {
     ref?: Ref<HTMLInputElement | undefined>;
   }
 ) => ReactElement;

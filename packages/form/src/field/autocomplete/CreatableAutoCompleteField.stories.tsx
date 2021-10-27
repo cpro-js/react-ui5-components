@@ -9,9 +9,9 @@ import { FormController, FormControllerProps } from "../../form/FormController";
 import { FormI18nProvider } from "../../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "../FormViewer";
 import {
-  CreatableAutocompleteField,
-  CreatableAutocompleteFieldProps,
-} from "./CreatableAutocompleteField";
+  CreatableAutoCompleteField,
+  CreatableAutoCompleteFieldProps,
+} from "./CreatableAutoCompleteField";
 
 interface FormData {
   item?: string | number;
@@ -19,7 +19,7 @@ interface FormData {
 
 const Template: Story<
   FormControllerProps<FormData> &
-    CreatableAutocompleteFieldProps<DefaultAutoCompleteOption>
+    CreatableAutoCompleteFieldProps<DefaultAutoCompleteOption>
 > = (args, context) => {
   const { initialValues, onSubmit, ...props } = args;
 
@@ -29,7 +29,7 @@ const Template: Story<
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <CreatableAutocompleteField {...props} name="item" />
+      <CreatableAutoCompleteField {...props} name="item" />
       <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
@@ -37,7 +37,7 @@ const Template: Story<
 
 const I18nTemplate: Story<
   FormControllerProps<FormData> &
-    CreatableAutocompleteFieldProps<DefaultAutoCompleteOption>
+    CreatableAutoCompleteFieldProps<DefaultAutoCompleteOption>
 > = (args, context) => {
   return (
     <FormI18nProvider
@@ -88,8 +88,8 @@ ValidationTranslationRequired.args = {
 };
 
 export default {
-  title: "Form/Field/Autocomplete/CreatableAutocompleteField",
-  component: CreatableAutocompleteField,
+  title: "Form/Field/Autocomplete/CreatableAutoCompleteField",
+  component: CreatableAutoCompleteField,
   argTypes: {
     onSubmit: {
       action: "submit",

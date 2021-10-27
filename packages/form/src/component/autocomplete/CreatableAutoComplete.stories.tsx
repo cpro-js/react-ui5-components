@@ -9,14 +9,14 @@ import { ValueState } from "@ui5/webcomponents-react";
 
 import { COUNTRIES, SEARCH_COUNTRIES } from "./AutoComplete-storyData";
 import {
-  CreatableAutocomplete,
-  CreatableAutocompleteProps,
-} from "./CreatableAutocomplete";
+  CreatableAutoComplete,
+  CreatableAutoCompleteProps,
+} from "./CreatableAutoComplete";
 import { DefaultAutoCompleteOption } from "./internal/CoreAutocomplete";
 
-const Template: Story<CreatableAutocompleteProps<DefaultAutoCompleteOption>> =
+const Template: Story<CreatableAutoCompleteProps<DefaultAutoCompleteOption>> =
   ({ ...props }) => {
-    return <CreatableAutocomplete {...props} />;
+    return <CreatableAutoComplete {...props} />;
   };
 
 export const Standard = Template.bind({});
@@ -76,7 +76,7 @@ RenderSuggestion.args = {
 
 export default {
   title: "form/component/AutoComplete/CreatableAutocomplete",
-  component: CreatableAutocomplete,
+  component: CreatableAutoComplete,
   argTypes: {
     onValueCreate: {
       action: "onValueCreate",

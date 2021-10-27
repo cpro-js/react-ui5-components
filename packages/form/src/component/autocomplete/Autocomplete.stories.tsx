@@ -7,15 +7,15 @@ import "@ui5/webcomponents-icons/dist/refresh";
 import { Meta, Story, StoryContext } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
 
-import { Autocomplete, AutocompleteProps } from "./Autocomplete";
+import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
 import {
   COUNTRIES,
   CountryItem,
   SEARCH_COUNTRIES,
 } from "./AutoComplete-storyData";
 
-const Template: Story<AutocompleteProps<CountryItem>> = ({ ...props }) => {
-  return <Autocomplete {...props} />;
+const Template: Story<AutoCompleteProps<CountryItem>> = ({ ...props }) => {
+  return <AutoComplete {...props} />;
 };
 
 export const Standard = Template.bind({});
@@ -69,8 +69,8 @@ RenderSuggestion.args = {
 };
 
 export default {
-  title: "form/component/AutoComplete/Autocomplete",
-  component: Autocomplete,
+  title: "form/component/AutoComplete/AutoComplete",
+  component: AutoComplete,
   argTypes: {
     onInputChange: {
       action: "onInputChange",

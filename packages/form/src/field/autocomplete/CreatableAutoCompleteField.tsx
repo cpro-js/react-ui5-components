@@ -5,26 +5,26 @@ import { useImperativeHandle, useMemo, useRef } from "react";
 import { useController } from "react-hook-form";
 
 import {
-  CreatableAutocomplete,
-  CreatableAutocompleteProps,
-} from "../../component/autocomplete/CreatableAutocomplete";
+  CreatableAutoComplete,
+  CreatableAutoCompleteProps,
+} from "../../component/autocomplete/CreatableAutoComplete";
 import { useI18nValidationError } from "../../i18n/FormI18n";
 import { FormFieldValidation } from "../types";
 import { hasError } from "../util";
 
-export type CreatableAutocompleteFieldProps<T> = Omit<
-  CreatableAutocompleteProps<T>,
+export type CreatableAutoCompleteFieldProps<T> = Omit<
+  CreatableAutoCompleteProps<T>,
   "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
 > &
   Pick<FormFieldValidation, "required"> & {
     name: string;
   };
 
-export const CreatableAutocompleteField = <T extends Object>({
+export const CreatableAutoCompleteField = <T extends Object>({
   name,
   required,
   ...props
-}: CreatableAutocompleteFieldProps<T>) => {
+}: CreatableAutoCompleteFieldProps<T>) => {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -58,7 +58,7 @@ export const CreatableAutocompleteField = <T extends Object>({
     : undefined;
 
   return (
-    <CreatableAutocomplete<T>
+    <CreatableAutoComplete<T>
       {...props}
       ref={field.ref}
       name={field.name}

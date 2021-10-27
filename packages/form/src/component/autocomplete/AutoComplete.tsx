@@ -17,14 +17,14 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type AutocompleteProps<TModel = DefaultAutoCompleteOption> = Omit<
+export type AutoCompleteProps<TModel = DefaultAutoCompleteOption> = Omit<
   CoreAutocompleteProps<TModel>,
   UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
 > &
   UseAsyncAdditionalProps<TModel> &
   UseItemAdditionalProps<TModel>;
 
-export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
+export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
   (props, forwardedRef) => {
     const itemModelProps = useItemModel<
       DefaultAutoCompleteOption,
@@ -43,5 +43,5 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     return <CoreAutocomplete ref={forwardedRef} {...stateProps} />;
   }
 ) as <T = DefaultAutoCompleteOption>(
-  p: AutocompleteProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
+  p: AutoCompleteProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
 ) => ReactElement;
