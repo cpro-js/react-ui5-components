@@ -59,7 +59,7 @@ CustomValueFunction.args = {
 export const RenderSuggestion = Template.bind({});
 RenderSuggestion.args = {
   ...Standard.args,
-  getItemProps: (country) => ({
+  itemProps: (country) => ({
     text: country.label,
     description: country.withUmlaut as string,
     icon: "add",

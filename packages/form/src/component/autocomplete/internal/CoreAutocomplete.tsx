@@ -63,7 +63,7 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
     /**
      * Render <code>SuggestionItem</code>s from UI5.
      */
-    getItemProps?: (item: T) => Partial<SuggestionItemPropTypes>;
+    itemProps?: (item: T) => Partial<SuggestionItemPropTypes>;
 
     /**
      * Controls which text is used to display options.
@@ -120,7 +120,7 @@ export const CoreAutocomplete = forwardRef<
 >((props, forwardedRef) => {
   const {
     items = [],
-    getItemProps,
+    itemProps,
     getItemLabel,
     getItemValue,
     onInputChange,
@@ -224,8 +224,8 @@ export const CoreAutocomplete = forwardRef<
       onKeyPress={handleKeyPress}
     >
       {filteredItems.map((item) => {
-        const props: Partial<SuggestionItemPropTypes> = getItemProps
-          ? getItemProps(item)
+        const props: Partial<SuggestionItemPropTypes> = itemProps
+          ? itemProps(item)
           : {};
 
         const value = getItemValue(item);
