@@ -3,20 +3,24 @@ import { Story } from "@storybook/react";
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
-} from "../component/auto-complete/AutoComplete-storyData";
-import { AutoCompleteProps } from "../component/AutoComplete";
-import { FormController, FormControllerProps } from "../form/FormController";
-import { FormI18nProvider } from "../i18n/FormI18n";
-import { AutoCompleteField } from "./AutoCompleteField";
-import { FormViewer, useFormViewer } from "./FormViewer";
+} from "../../component/autocomplete/AutoComplete-storyData";
+import { DefaultAutoCompleteOption } from "../../component/autocomplete/internal/CoreAutocomplete";
+import { FormController, FormControllerProps } from "../../form/FormController";
+import { FormI18nProvider } from "../../i18n/FormI18n";
+import { FormViewer, useFormViewer } from "../FormViewer";
+import {
+  CreatableAutoCompleteField,
+  CreatableAutoCompleteFieldProps,
+} from "./CreatableAutoCompleteField";
 
 interface FormData {
   item?: string | number;
 }
 
-const Template: Story<FormControllerProps<FormData> & AutoCompleteProps> = (
-  args
-) => {
+const Template: Story<
+  FormControllerProps<FormData> &
+    CreatableAutoCompleteFieldProps<DefaultAutoCompleteOption>
+> = (args, context) => {
   const { initialValues, onSubmit, ...props } = args;
 
   const { submittedValues, handleSubmit } = useFormViewer({
@@ -25,16 +29,16 @@ const Template: Story<FormControllerProps<FormData> & AutoCompleteProps> = (
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <AutoCompleteField {...props} name={"item"} />
+      <CreatableAutoCompleteField {...props} name="item" />
       <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };
 
-const I18nTemplate: Story<FormControllerProps<FormData> & AutoCompleteProps> = (
-  args,
-  context
-) => {
+const I18nTemplate: Story<
+  FormControllerProps<FormData> &
+    CreatableAutoCompleteFieldProps<DefaultAutoCompleteOption>
+> = (args, context) => {
   return (
     <FormI18nProvider
       getValidationErrorMessage={({ name }, error) => {
@@ -49,12 +53,12 @@ const I18nTemplate: Story<FormControllerProps<FormData> & AutoCompleteProps> = (
 };
 
 export const Standard = Template.bind({});
-Standard.args = { value: undefined, onSearch: SEARCH_COUNTRIES };
+Standard.args = { loadItems: SEARCH_COUNTRIES };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
-  initialSuggestions: [COUNTRIES[1]],
+  initialItems: [COUNTRIES[1]],
   initialValues: {
     item: COUNTRIES[1].value,
   },
@@ -84,11 +88,14 @@ ValidationTranslationRequired.args = {
 };
 
 export default {
-  title: "Form/Field/AutoCompleteField",
-  component: AutoCompleteField,
+  title: "Form/Field/Autocomplete/CreatableAutoCompleteField",
+  component: CreatableAutoCompleteField,
   argTypes: {
     onSubmit: {
       action: "submit",
+    },
+    onValueCreate: {
+      action: "onValueCreate",
     },
   },
 };

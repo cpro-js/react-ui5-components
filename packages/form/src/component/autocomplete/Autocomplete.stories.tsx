@@ -7,30 +7,25 @@ import "@ui5/webcomponents-icons/dist/refresh";
 import { Meta, Story, StoryContext } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
 
+import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
 import {
   COUNTRIES,
+  CountryItem,
   SEARCH_COUNTRIES,
-} from "./auto-complete/AutoComplete-storyData";
-import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
-import { DefaultAutoCompleteOption } from "./AutoCompleteModel";
+} from "./AutoComplete-storyData";
 
-const Template: Story<AutoCompleteProps<DefaultAutoCompleteOption>> = ({
-  ...props
-}) => {
-  return <AutoComplete {...props} onSearch={SEARCH_COUNTRIES} />;
+const Template: Story<AutoCompleteProps<CountryItem>> = ({ ...props }) => {
+  return <AutoComplete {...props} />;
 };
 
 export const Standard = Template.bind({});
-Standard.args = { value: undefined, onSearch: SEARCH_COUNTRIES };
-
-export const Empty = Template.bind({});
-Standard.args = { value: undefined };
+Standard.args = { value: undefined, loadItems: SEARCH_COUNTRIES };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
   value: COUNTRIES[1].value,
-  initialSuggestions: [COUNTRIES[1]],
+  initialItems: [COUNTRIES[1]],
 };
 
 export const PrefilledWithValueOnly = Template.bind({});
@@ -64,18 +59,24 @@ CustomValueFunction.args = {
 export const RenderSuggestion = Template.bind({});
 RenderSuggestion.args = {
   ...Standard.args,
-  suggestionProps: (country) => ({
+  itemProps: (country) => ({
     text: country.label,
-    // @ts-ignore
     description: country.withUmlaut as string,
     icon: "add",
-    // iconEnd: "info",
     info: "Infozzz",
     infoState: ValueState.Success,
   }),
 };
 
 export default {
-  title: "form/component/AutoComplete",
+  title: "form/component/AutoComplete/AutoComplete",
   component: AutoComplete,
+  argTypes: {
+    onInputChange: {
+      action: "onInputChange",
+    },
+    onValueChange: {
+      action: "onValueChange",
+    },
+  },
 } as Meta;

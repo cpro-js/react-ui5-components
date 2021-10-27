@@ -26,8 +26,14 @@ export type { TextAreaProps } from "./component/TextArea";
 export { TextInput } from "./component/TextInput";
 export type { TextInputProps } from "./component/TextInput";
 
-export { AutoComplete } from "./component/AutoComplete";
-export type { AutoCompleteProps } from "./component/AutoComplete";
+export { AutoComplete } from "./component/autocomplete/AutoComplete";
+export type { AutoCompleteProps } from "./component/autocomplete/AutoComplete";
+
+export { CreatableSelect } from "./component/autocomplete/CreatableSelect";
+export type { CreatableSelectProps } from "./component/autocomplete/CreatableSelect";
+
+export { CreatableAutoComplete } from "./component/autocomplete/CreatableAutoComplete";
+export type { CreatableAutoCompleteProps } from "./component/autocomplete/CreatableAutoComplete";
 
 export { MultiAutoComplete } from "./component/MultiAutoComplete";
 export type { MultiAutoCompleteProps } from "./component/MultiAutoComplete";
@@ -79,8 +85,14 @@ export type { TextAreaFieldProps } from "./field/TextAreaField";
 export { TextInputField } from "./field/TextInputField";
 export type { TextInputFieldProps } from "./field/TextInputField";
 
-export { AutoCompleteField } from "./field/AutoCompleteField";
-export type { AutoCompleteFieldProps } from "./field/AutoCompleteField";
+export { AutoCompleteField } from "./field/autocomplete/AutoCompleteField";
+export type { AutoCompleteFieldProps } from "./field/autocomplete/AutoCompleteField";
+
+export { CreatableSelectField } from "./field/autocomplete/CreatableSelectField";
+export type { CreatableSelectFieldProps } from "./field/autocomplete/CreatableSelectField";
+
+export { CreatableAutoCompleteField } from "./field/autocomplete/CreatableAutoCompleteField";
+export type { CreatableAutoCompleteFieldProps } from "./field/autocomplete/CreatableAutoCompleteField";
 
 export { MultiAutoCompleteField } from "./field/MultiAutoCompleteField";
 export type { MultiAutoCompleteFieldProps } from "./field/MultiAutoCompleteField";
