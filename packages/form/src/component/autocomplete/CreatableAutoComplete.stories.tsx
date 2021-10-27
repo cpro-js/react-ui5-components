@@ -22,9 +22,6 @@ const Template: Story<CreatableAutoCompleteProps<DefaultAutoCompleteOption>> =
 export const Standard = Template.bind({});
 Standard.args = { value: undefined, loadItems: SEARCH_COUNTRIES };
 
-export const Empty = Template.bind({});
-Standard.args = { value: undefined };
-
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
