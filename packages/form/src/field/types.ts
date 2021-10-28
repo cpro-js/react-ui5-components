@@ -1,6 +1,15 @@
 import { FieldPath } from "react-hook-form";
 import { UnpackNestedValue } from "react-hook-form/dist/types/form";
-import { DeepPartial } from "react-hook-form/dist/types/utils";
+
+export type DeepPartial<T> = T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends { [key in keyof T]: T[key] }
+  ? {
+      [K in keyof T]?: DeepPartial<T[K]>;
+    }
+  : T;
 
 export type PartialFormValues<FormValues extends {}> = UnpackNestedValue<
   DeepPartial<FormValues>
