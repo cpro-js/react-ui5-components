@@ -6,6 +6,7 @@ import {
   UseFormReturn,
   useForm,
 } from "react-hook-form";
+import { DefaultValues } from "react-hook-form/dist/types/form";
 
 import {
   FormActionClearForm,
@@ -50,7 +51,7 @@ export function useFormController<FormValues extends {}>(
   );
 
   const form = useForm<FormValues>({
-    defaultValues: initialValuesRef.current,
+    defaultValues: initialValuesRef.current as DefaultValues<FormValues>,
     mode: "onTouched", // Validation will trigger on the first blur event. After that, it will trigger on every change event.
     reValidateMode: "onChange", // Validation will trigger on the change event with each input, and lead to multiple re-renders.
     criteriaMode: "firstError",
@@ -104,14 +105,14 @@ export function useFormController<FormValues extends {}>(
 
   const resetForm: FormActionResetForm<FormValues> = useCallback(() => {
     if (initialValuesRef.current != null) {
-      reset(initialValuesRef.current);
+      reset(initialValuesRef.current as DefaultValues<FormValues>);
     } else {
       reset();
     }
   }, [reset]);
 
   const clearForm: FormActionClearForm<FormValues> = useCallback(() => {
-    reset({} as PartialFormValues<FormValues>);
+    reset({} as DefaultValues<FormValues>);
   }, [reset]);
 
   const submitHandler: HookFormSubmitHandler<FormValues> = useCallback(

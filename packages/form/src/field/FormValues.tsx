@@ -8,5 +8,5 @@ export type FormValuesProps<FormValues extends {}> = {
 
 export function FormValues<T extends {}>(props: FormValuesProps<T>) {
   const x = useWatch<T>({});
-  return props.render(x);
+  return props.render(x as PartialFormValues<T>);
 }
