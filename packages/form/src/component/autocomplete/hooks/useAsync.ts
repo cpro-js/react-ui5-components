@@ -2,6 +2,7 @@ import { useDebounceCallback } from "@react-hook/debounce";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useLatestRef } from "../../../hook/useLatestRef";
 import { DEBOUNCE_RATE } from "../../common/CommonSelection";
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
@@ -10,7 +11,10 @@ export type UseAsyncManagedPropKeys = keyof Pick<
   "items" | "filterItem"
 >;
 
-type UseAsyncUsedPropKeys = keyof Pick<CoreAutocompleteProps, "onInputChange">;
+type UseAsyncUsedPropKeys = keyof Pick<
+  CoreAutocompleteProps,
+  "onInputChange" | "onValueChange" | "getItemLabel"
+>;
 
 export type UseAsyncAdditionalProps<TItemModel extends {}> = {
   /**
@@ -64,14 +68,20 @@ export const useAsync = <
   props: UseAsyncProps<TItemModel, TAdditionalProps>
 ): UseAsyncPropsReturn<TItemModel, TAdditionalProps> => {
   const { minCharsForSearch, loadItems, initialItems, ...restProps } = props;
-  const { onInputChange: propsOnInputChange } = restProps;
-
-  const lastRequest = useRef<unknown>(undefined);
-  const mounted = useRef<boolean>(false);
+  const {
+    onInputChange: propsOnInputChange,
+    getItemLabel: propsGetItemLabel,
+    onValueChange: propsOnValueChange,
+  } = restProps;
 
   const [loadedOptions, setLoadedOptions] = useState<Array<TItemModel>>(
     initialItems ?? []
   );
+
+  const lastRequest = useRef<unknown>(undefined);
+  const mounted = useRef<boolean>(false);
+  const lastItemSelection = useRef<TItemModel | undefined>();
+  const latestGetItemLabel = useLatestRef(propsGetItemLabel);
 
   useEffect(() => {
     mounted.current = true;
@@ -88,6 +98,18 @@ export const useAsync = <
       ) {
         lastRequest.current = undefined;
         setLoadedOptions([]);
+        return;
+      }
+
+      // there is one case where we shouldn't search, after a selection has been made.
+      // First a search is not necessary, second it can be harmful: The label which is put
+      // into the input field after selection, doesn't need to be a proper & matching search term
+      // => only search if the search term doesn't match the label of the current value
+      const hasBeenSelected =
+        lastItemSelection.current != null &&
+        inputValue === latestGetItemLabel.current(lastItemSelection.current);
+
+      if (hasBeenSelected) {
         return;
       }
 
@@ -118,10 +140,22 @@ export const useAsync = <
     [propsOnInputChange, handleInputValueChangeDebounced]
   );
 
+  const onValueChange = useCallback(
+    (value?: string, item?: TItemModel) => {
+      lastItemSelection.current = item;
+
+      if (propsOnValueChange != null) {
+        propsOnValueChange(value, item);
+      }
+    },
+    [propsOnValueChange]
+  );
+
   // @ts-ignore TODO what's wrong here?
   return {
     ...restProps,
     onInputChange,
+    onValueChange,
     items: loadedOptions,
     filterItem: null,
   };
