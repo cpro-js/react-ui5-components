@@ -1,8 +1,8 @@
-import { PartialFormValues } from "../field/types";
+import { FormChangeHandler } from "../field/types";
 import { useFormListener } from "./useFormListener";
 
 export type FormListenerProps<FormValues extends {}> = {
-  onChange: (values: PartialFormValues<FormValues>) => void;
+  onChange: FormChangeHandler<FormValues>;
 };
 
 export function FormListener<FormValues extends {}>(
