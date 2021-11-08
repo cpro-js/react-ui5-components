@@ -103,6 +103,7 @@ export type {
   FormActions,
   FormSubmitHandler,
   FormChangeHandler,
+  ChangedField,
 } from "./field/types";
 
 export { useFormController } from "./form/useFormController";
@@ -117,7 +118,6 @@ export type { FormProviderProps } from "./form/FormProvider";
 export { FormListener } from "./form/FormListener";
 export type { FormListenerProps } from "./form/FormListener";
 export { useFormListener } from "./form/useFormListener";
-export type { UseFormListenerCallback } from "./form/useFormListener";
 
 export { FormFilterBar } from "./form/FormFilterBar";
 export type { FormFilterBarProps } from "./form/FormFilterBar";

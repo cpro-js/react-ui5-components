@@ -15,7 +15,6 @@ import {
   UseFormControllerReturn,
   useFormController,
 } from "./useFormController";
-import { UseFormListenerCallback } from "./useFormListener";
 
 export interface FormControllerProps<FormValues extends {}>
   extends UseFormControllerProps<FormValues> {
@@ -39,23 +38,6 @@ export function FormController<FormValues extends {}>(
 
   const { handleSubmit, handleReset } = form;
 
-  // ref to store latest version of form
-  const formRef = useRef<UseFormControllerReturn<FormValues>>(form);
-  useEffect(() => {
-    formRef.current = form;
-  });
-
-  const onChangeHandler: UseFormListenerCallback<FormValues> = useCallback(
-    (values) => {
-      if (onChange != null) {
-        const { setValues, reset, setErrors, clear, submit } = formRef.current;
-
-        onChange(values, { setValues, reset, setErrors, clear, submit });
-      }
-    },
-    [onChange]
-  );
-
   return (
     <form
       id={id}
@@ -65,7 +47,7 @@ export function FormController<FormValues extends {}>(
       style={style}
     >
       <FormProvider {...form}>
-        {onChange != null && <FormListener onChange={onChangeHandler} />}
+        {onChange != null && <FormListener onChange={onChange} />}
         {children}
       </FormProvider>
     </form>

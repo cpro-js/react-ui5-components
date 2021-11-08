@@ -30,12 +30,6 @@ export const Standard = Template.bind({});
 Standard.args = {
   onSubmit: async (...args) => {
     action("submit")(...args);
-
-    const [values, actions] = args;
-
-    actions.setValues([
-      { name: "text", value: "Random value: " + new Date().getTime() },
-    ]);
   },
   onChange: (...args) => {
     action("change")(...args);

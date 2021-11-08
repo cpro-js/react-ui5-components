@@ -118,6 +118,10 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
               initialSuggestions={initialCountriesSuggestions}
             />
           </FormItem>
+          <FormItem label="Hierarchical Checkboxes (via name)">
+            <CheckboxField name="root.selected" boolean />
+            <CheckboxField name="root.test.selected" boolean />
+          </FormItem>
           <FormItem>
             <Toolbar>
               <ToolbarSpacer />
