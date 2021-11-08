@@ -1,4 +1,4 @@
-import { FieldPath } from "react-hook-form";
+import { EventType, FieldPath } from "react-hook-form";
 import { UnpackNestedValue } from "react-hook-form/dist/types/form";
 
 export type DeepPartial<T> = T extends Array<infer U>
@@ -20,9 +20,14 @@ export type FormSubmitHandler<FormValues extends {}> = (
   actions: FormActions<FormValues>
 ) => void | Promise<void>;
 
+export type ChangedField<FormValues> = {
+  name: FieldPath<FormValues>;
+};
+
 export type FormChangeHandler<FormValues extends {}> = (
   values: PartialFormValues<FormValues>,
-  actions: FormActions<FormValues>
+  actions: FormActions<FormValues>,
+  changedField: ChangedField<FormValues>
 ) => void;
 
 export type FormFieldValidationRule<
