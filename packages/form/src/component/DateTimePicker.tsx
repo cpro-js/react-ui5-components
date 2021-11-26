@@ -2,8 +2,10 @@ import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
 import { DateTimePicker as UI5DateTimePicker } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { Ui5DateTimePickerDomRef } from "@ui5/webcomponents-react/interfaces/Ui5DateTimePickerDomRef";
-import { DateTimePickerPropTypes } from "@ui5/webcomponents-react/webComponents/DateTimePicker";
+import {
+  DateTimePickerDomRef,
+  DateTimePickerPropTypes,
+} from "@ui5/webcomponents-react/webComponents/DateTimePicker";
 import clsx from "clsx";
 import {
   FC,
@@ -97,7 +99,7 @@ export const DateTimePicker: FC<DateTimePickerProps<string>> = forwardRef<
     >({});
 
     const setRef = useCallback(
-      (ui5DateTimePicker: null | Ui5DateTimePickerDomRef) => {
+      (ui5DateTimePicker: null | DateTimePickerDomRef) => {
         if (ui5DateTimePicker == null) {
           ref.current = undefined;
           return;
@@ -127,15 +129,22 @@ export const DateTimePicker: FC<DateTimePickerProps<string>> = forwardRef<
     );
 
     const handleChange = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement>) => {
+      (
+        event: Ui5CustomEvent<
+          HTMLInputElement,
+          { value: string; valid: boolean }
+        >
+      ) => {
         if (!ui5Loaded) {
           return;
         }
         if (onChange != null) {
           const value: Date | undefined | null = (event.target as any)
             .dateValue;
+          const formattedValue = event.detail.value;
 
-          const normalizedValue = value == null ? null : (format(value) as any);
+          const normalizedValue =
+            value == null || !formattedValue ? null : (format(value) as any);
 
           onChange(event, normalizedValue);
         }
