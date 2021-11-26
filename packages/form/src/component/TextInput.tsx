@@ -1,7 +1,10 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
 import { Input } from "@ui5/webcomponents-react";
-import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
+import {
+  InputDomRef,
+  InputPropTypes,
+} from "@ui5/webcomponents-react/webComponents/Input";
 import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
 
 import { triggerSubmitOnEnter } from "./util";
@@ -9,7 +12,7 @@ import { triggerSubmitOnEnter } from "./util";
 export interface TextInputProps extends InputPropTypes {}
 
 export const TextInput: FC<TextInputProps> = forwardRef<
-  HTMLInputElement | undefined,
+  InputDomRef,
   TextInputProps
 >(({ onKeyPress, ...props }, forwardedRef) => {
   const handleKeyPress = useCallback(

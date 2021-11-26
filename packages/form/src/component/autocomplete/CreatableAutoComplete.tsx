@@ -1,3 +1,4 @@
+import { InputDomRef } from "@ui5/webcomponents-react/webComponents/Input";
 import { ReactElement, Ref, forwardRef } from "react";
 
 import {
@@ -31,7 +32,7 @@ export type CreatableAutoCompleteProps<TModel = DefaultAutoCompleteOption> =
     UseCreatableAdditionalProps<TModel>;
 
 export const CreatableAutoComplete = forwardRef<
-  HTMLInputElement,
+  InputDomRef,
   CreatableAutoCompleteProps
 >((props, forwardedRef) => {
   const itemModelProps = useItemModel<DefaultAutoCompleteOption, typeof props>(
