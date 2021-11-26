@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/cpro-js/react-ui5-components/compare/v0.22.0...v0.23.0) (2021-11-26)
+
+### Features
+
+- upgrade to webcomponents-react 0.20 ([#51](https://github.com/cpro-js/react-ui5-components/issues/51)) ([26a2ce1](https://github.com/cpro-js/react-ui5-components/commit/26a2ce10f65787bf29424a224406df612552bedd))
+
 # [0.22.0](https://github.com/cpro-js/react-ui5-components/compare/v0.21.1...v0.22.0) (2021-11-08)
 
 ### Features
