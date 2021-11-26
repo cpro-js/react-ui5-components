@@ -33,10 +33,10 @@ interface FormData {
 }
 
 const Template: Story<FormControllerProps<FormData>> = (args) => {
-  const { initialValues, onSubmit } = args;
+  const { initialValues, onSubmit, onChange } = args;
 
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
+    <FormController<FormData> {...{ initialValues, onSubmit, onChange }}>
       <FormFilterBar
         showFilterConfiguration
         showGo
@@ -89,13 +89,18 @@ export const Standard = Template.bind({});
 Standard.args = {};
 
 export const Prefilled = Template.bind({});
-Prefilled.args = { initialValues: { input1: "test1", input2: "test2" } };
+Prefilled.args = {
+  initialValues: { input1: "test1", input2: "test2", date: "" },
+};
 
 export default {
   title: "Form/Field/FormFilterBar",
   argTypes: {
     onSubmit: {
       action: "submit",
+    },
+    onChange: {
+      action: "change",
     },
   },
 };

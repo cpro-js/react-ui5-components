@@ -3,7 +3,10 @@ import "@ui5/webcomponents/dist/features/InputSuggestions.js";
 
 import { Input, SuggestionItem } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
+import {
+  InputDomRef,
+  InputPropTypes,
+} from "@ui5/webcomponents-react/webComponents/Input";
 import { SuggestionItemPropTypes } from "@ui5/webcomponents-react/webComponents/SuggestionItem";
 import {
   KeyboardEvent,
@@ -116,127 +119,131 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
     filterItem?: null | ((inputValue: string, item: T) => boolean);
   };
 
-export const CoreAutocomplete = forwardRef<
-  HTMLInputElement,
-  CoreAutocompleteProps
->((props, forwardedRef) => {
-  const {
-    items = [],
-    itemProps,
-    getItemLabel,
-    getItemValue,
-    onInputChange,
-    onValueChange,
-    value,
-    inputValue,
-    filterItem,
-    ...otherProps
-  } = props;
+export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
+  (props, forwardedRef) => {
+    const {
+      items = [],
+      itemProps,
+      getItemLabel,
+      getItemValue,
+      onInputChange,
+      onValueChange,
+      value,
+      inputValue,
+      filterItem,
+      ...otherProps
+    } = props;
 
-  const valueRef = useLatestRef<string | undefined>(value);
-  const suggestionRef = useLatestRef<Array<DefaultAutoCompleteOption>>(items);
+    const valueRef = useLatestRef<string | undefined>(value);
+    const suggestionRef = useLatestRef<Array<DefaultAutoCompleteOption>>(items);
 
-  const customItemFilter: (
-    inputValue: string,
-    item: DefaultAutoCompleteOption
-  ) => boolean = useMemo(() => {
-    if (filterItem === null) {
-      return () => true;
+    const customItemFilter: (
+      inputValue: string,
+      item: DefaultAutoCompleteOption
+    ) => boolean = useMemo(() => {
+      if (filterItem === null) {
+        return () => true;
+      }
+
+      if (filterItem != null) {
+        return filterItem;
+      }
+
+      return (inputValue: string, item: DefaultAutoCompleteOption) =>
+        startsWithPerTerm(inputValue ?? "", getItemLabel(item) ?? "");
+    }, [filterItem, getItemLabel]);
+
+    const filteredItems: Array<DefaultAutoCompleteOption> = useMemo(
+      () =>
+        items.filter(
+          (item) =>
+            (item as CreatedAutoCompleteOption).__isNew__ ||
+            customItemFilter(inputValue ?? "", item)
+        ),
+      [inputValue, items, customItemFilter]
+    );
+
+    const handleSuggestionItemSelect = useCallback(
+      (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
+        if (onValueChange == null) {
+          return;
+        }
+
+        const element = event.detail.item as unknown as HTMLElement & {
+          text: string;
+        };
+        if (element?.dataset?.id != null) {
+          const itemValue = element?.dataset?.id;
+          const item = suggestionRef.current.find(
+            (item) => getItemValue(item) === itemValue
+          );
+          if (item) {
+            onValueChange(itemValue, item);
+          }
+        }
+      },
+      [onValueChange, getItemValue]
+    );
+
+    const handleInput = useCallback(
+      (event: Ui5CustomEvent<HTMLInputElement>) => {
+        const currentValue = (event.currentTarget as HTMLInputElement).value;
+
+        if (onInputChange != null) {
+          onInputChange(currentValue, event);
+        }
+
+        if (onValueChange != null) {
+          const item = suggestionRef.current.find(
+            (item) => getItemLabel(item) === currentValue
+          );
+          if (!item && valueRef.current != null) {
+            onValueChange(undefined, undefined);
+          }
+        }
+      },
+      [onInputChange]
+    );
+
+    const handleKeyPress = useCallback((event: KeyboardEvent<HTMLElement>) => {
+      triggerSubmitOnEnter(event);
+    }, []);
+
+    let shownValue: string = inputValue ?? "";
+
+    if (value != null) {
+      const item = items.find((item) => getItemValue(item) === value);
+      shownValue = item == null ? value : getItemLabel(item);
     }
 
-    if (filterItem != null) {
-      return filterItem;
-    }
+    return (
+      <Input
+        {...otherProps}
+        value={shownValue}
+        ref={forwardedRef}
+        showSuggestions={true}
+        onInput={handleInput}
+        onSuggestionItemSelect={handleSuggestionItemSelect}
+        onKeyPress={handleKeyPress}
+      >
+        {filteredItems.map((item) => {
+          const props: Partial<SuggestionItemPropTypes> = itemProps
+            ? itemProps(item)
+            : {};
 
-    return (inputValue: string, item: DefaultAutoCompleteOption) =>
-      startsWithPerTerm(inputValue ?? "", getItemLabel(item) ?? "");
-  }, [filterItem, getItemLabel]);
+          const value = getItemValue(item);
+          const label = props.text || getItemLabel(item);
 
-  const filteredItems: Array<DefaultAutoCompleteOption> = useMemo(
-    () =>
-      items.filter(
-        (item) =>
-          (item as CreatedAutoCompleteOption).__isNew__ ||
-          customItemFilter(inputValue ?? "", item)
-      ),
-    [inputValue, items, customItemFilter]
-  );
-
-  const handleSuggestionItemSelect = useCallback(
-    (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
-      if (onValueChange == null) {
-        return;
-      }
-
-      const element = event.detail.item as unknown as HTMLElement & {
-        text: string;
-      };
-      if (element?.dataset?.id != null) {
-        const itemValue = element?.dataset?.id;
-        const item = suggestionRef.current.find(
-          (item) => getItemValue(item) === itemValue
-        );
-        if (item) {
-          onValueChange(itemValue, item);
-        }
-      }
-    },
-    [onValueChange, getItemValue]
-  );
-
-  const handleInput = useCallback(
-    (event: Ui5CustomEvent<HTMLInputElement>) => {
-      const currentValue = (event.currentTarget as HTMLInputElement).value;
-
-      if (onInputChange != null) {
-        onInputChange(currentValue, event);
-      }
-
-      if (onValueChange != null) {
-        const item = suggestionRef.current.find(
-          (item) => getItemLabel(item) === currentValue
-        );
-        if (!item && valueRef.current != null) {
-          onValueChange(undefined, undefined);
-        }
-      }
-    },
-    [onInputChange]
-  );
-
-  const handleKeyPress = useCallback((event: KeyboardEvent<HTMLElement>) => {
-    triggerSubmitOnEnter(event);
-  }, []);
-
-  let shownValue: string = inputValue ?? "";
-
-  if (value != null) {
-    const item = items.find((item) => getItemValue(item) === value);
-    shownValue = item == null ? value : getItemLabel(item);
+          return (
+            <SuggestionItem
+              {...props}
+              key={value}
+              data-id={value}
+              text={label}
+            />
+          );
+        })}
+      </Input>
+    );
   }
-
-  return (
-    <Input
-      {...otherProps}
-      value={shownValue}
-      ref={forwardedRef}
-      showSuggestions={true}
-      onInput={handleInput}
-      onSuggestionItemSelect={handleSuggestionItemSelect}
-      onKeyPress={handleKeyPress}
-    >
-      {filteredItems.map((item) => {
-        const props: Partial<SuggestionItemPropTypes> = itemProps
-          ? itemProps(item)
-          : {};
-
-        const value = getItemValue(item);
-        const label = props.text || getItemLabel(item);
-
-        return (
-          <SuggestionItem {...props} key={value} data-id={value} text={label} />
-        );
-      })}
-    </Input>
-  );
-});
+);

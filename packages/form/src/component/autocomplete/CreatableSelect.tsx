@@ -1,3 +1,4 @@
+import { InputDomRef } from "@ui5/webcomponents-react/webComponents/Input";
 import { ReactElement, Ref, forwardRef } from "react";
 
 import {
@@ -23,23 +24,23 @@ export type CreatableSelectProps<TModel = DefaultAutoCompleteOption> = Omit<
   UseItemAdditionalProps<TModel> &
   UseCreatableAdditionalProps<TModel>;
 
-export const CreatableSelect = forwardRef<
-  HTMLInputElement,
-  CreatableSelectProps
->((props, forwardedRef) => {
-  const itemModelProps = useItemModel<DefaultAutoCompleteOption, typeof props>(
-    props
-  );
-  const stateProps = useInputState<
-    DefaultAutoCompleteOption,
-    typeof itemModelProps
-  >(itemModelProps);
-  const creatableProps = useCreatable<
-    DefaultAutoCompleteOption,
-    typeof stateProps
-  >(stateProps);
+export const CreatableSelect = forwardRef<InputDomRef, CreatableSelectProps>(
+  (props, forwardedRef) => {
+    const itemModelProps = useItemModel<
+      DefaultAutoCompleteOption,
+      typeof props
+    >(props);
+    const stateProps = useInputState<
+      DefaultAutoCompleteOption,
+      typeof itemModelProps
+    >(itemModelProps);
+    const creatableProps = useCreatable<
+      DefaultAutoCompleteOption,
+      typeof stateProps
+    >(stateProps);
 
-  return <CoreAutocomplete ref={forwardedRef} {...creatableProps} />;
-}) as <T = DefaultAutoCompleteOption>(
+    return <CoreAutocomplete ref={forwardedRef} {...creatableProps} />;
+  }
+) as <T = DefaultAutoCompleteOption>(
   p: CreatableSelectProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
 ) => ReactElement;
