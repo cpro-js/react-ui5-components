@@ -9,12 +9,14 @@ import {
   KeyboardEvent,
   forwardRef,
   useCallback,
+  useContext,
   useMemo,
   useRef,
   useState,
 } from "react";
 
 import { triggerSubmitOnEnter } from "../util";
+import { NumberContext } from "./context/NumberContext";
 import {
   getCurrencyConfig,
   getCurrencyFormatter,
@@ -52,7 +54,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 >((props, forwardedRef) => {
   const {
     value,
-    locale,
+    locale: explicitLocale,
     onValue,
     displayConfig,
     inputConfig,
@@ -67,6 +69,9 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     ...passThrough
   } = props;
 
+  const numberContext = useContext(NumberContext);
+  const locale = explicitLocale || numberContext.locale;
+  const currency = inputConfig.currency;
   const isFocusRef = useRef(false);
   const isPasteRef = useRef(false);
   const parser = useMemo(() => getParser(locale), [locale]);
@@ -77,8 +82,6 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 
   // Format numbers for input
   const formatForInput = useMemo(() => {
-    const isCurrency = inputConfig.style === "currency";
-
     const specialConf = {
       ...inputConfig,
       // always allow for less then the regular fraction digits while typing
@@ -90,16 +93,19 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     // number input:
     const formatter = getFormatter(
       locale,
-      isCurrency ? getCurrencyConfig(specialConf) : specialConf
+      currency ? getCurrencyConfig(specialConf, currency) : specialConf
     );
 
-    return isCurrency ? getCurrencyFormatter(formatter) : formatter.format;
+    return currency
+      ? getCurrencyFormatter(formatter, currency)
+      : formatter.format;
   }, [inputConfig, locale]);
 
   // Format numbers for display
   const formatForDisplay = useMemo(() => {
-    const isCurrency = displayConfig.style === "currency";
-    const conf = isCurrency ? getCurrencyConfig(displayConfig) : displayConfig;
+    const conf = currency
+      ? getCurrencyConfig(displayConfig, currency)
+      : displayConfig;
 
     // number display: grouping is false by default
     const formatter = getFormatter(locale, {
@@ -107,7 +113,9 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       ...conf,
     });
 
-    return isCurrency ? getCurrencyFormatter(formatter) : formatter.format;
+    return currency
+      ? getCurrencyFormatter(formatter, currency)
+      : formatter.format;
   }, [displayConfig, locale]);
 
   // number parser with max restriction
@@ -139,6 +147,12 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     value !== undefined ? formatForInput(parseValue(String(value))) : undefined
   );
 
+  const maxFractionDigits = useMemo(() => {
+    const decimalTest = formatForInput(0.1111111111111111);
+
+    return decimalTest.length <= 1 ? 0 : decimalTest.length - 2;
+  }, [formatForInput]);
+
   /**
    * Prevent invalid data, e.g. not a number.
    */
@@ -165,9 +179,14 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         // since selection & current cursor position are not taken into account
         const newValue = originalValue + event.key;
         const value = parser.parse(newValue);
+        const isNan = newValue && value === undefined;
+
+        // no fraction digits, but fraction sign
+        const isBlockedFraction =
+          maxFractionDigits === 0 && event.key === decimalSeparator;
 
         // block invalid content
-        if (newValue && value === undefined) {
+        if (isNan || isBlockedFraction) {
           event.preventDefault();
           event.stopPropagation();
           return false;
@@ -179,7 +198,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         onKeyDownOriginal(event);
       }
     },
-    [parser, onKeyDownOriginal]
+    [parser, maxFractionDigits, decimalSeparator, onKeyDownOriginal]
   );
 
   /**
@@ -213,7 +232,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         const decIndex = originalValue.indexOf(decimalSeparator);
         const fracDigits =
           decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
-        if (fracDigits > parser.getMaxFractionDigits()) {
+        if (fracDigits > maxFractionDigits) {
           event.currentTarget.value = currentValueRef.current || "";
           return;
         }

@@ -1,17 +1,24 @@
 import { NumberFormatter } from "./NumberFormatter";
 
-export const getCurrencyConfig = (toMerge: Intl.NumberFormatOptions = {}) => ({
+export const getCurrencyConfig = (
+  toMerge: Intl.NumberFormatOptions = {},
+  currency: string
+) => ({
   ...toMerge,
-  currency: "USD",
+  currency,
   currencyDisplay: "code",
 });
 
-export const getCurrencyFormatter = (formatter: NumberFormatter) => {
+export const getCurrencyFormatter = (
+  formatter: NumberFormatter,
+  currency: string
+) => {
   return (val?: number) => {
     if (!val && val !== 0) {
       return "";
     }
 
-    return formatter.format(val).replace(/[\s]*USD[\s]*/, "");
+    const regExp = new RegExp(`[\s]*${currency}[\s]*`);
+    return formatter.format(val).replace(regExp, "");
   };
 };

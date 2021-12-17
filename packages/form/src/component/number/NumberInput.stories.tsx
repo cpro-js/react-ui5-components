@@ -1,6 +1,12 @@
 import { Story } from "@storybook/react";
 
+import { NumberLocaleProvider } from "./context/NumberContext";
 import { NumberInput, NumberInputProps } from "./NumberInput";
+
+export default {
+  title: "Form/Component/NumberInput",
+  component: NumberInput,
+};
 
 const Template: Story<NumberInputProps> = (args) => {
   return <NumberInput {...args} />;
@@ -100,9 +106,4 @@ InputMaxSignificantDigits.storyName = "Input Config: MaxSignificantDigits";
 InputMaxSignificantDigits.args = {
   ...Prefilled.args,
   inputConfig: { maximumSignificantDigits: 1 },
-};
-
-export default {
-  title: "Form/Component/NumberInput",
-  component: NumberInput,
 };

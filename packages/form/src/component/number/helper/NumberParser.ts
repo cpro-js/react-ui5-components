@@ -9,16 +9,19 @@ export class NumberParser {
   private numeral: RegExp;
   private index: any;
 
+  private currencyAppended: boolean;
   private decimalSign: string;
   private groupSign: string;
-  private maxFraction: number;
 
   constructor(locale: string) {
+    const prependTest = new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: "USD",
+      currencyDisplay: "code",
+    }).format(1);
+    this.currencyAppended = !prependTest.startsWith("USD");
+
     const formatter = new Intl.NumberFormat(locale);
-
-    const decimalTest = formatter.format(0.1111111111111111);
-    this.maxFraction = decimalTest.length <= 1 ? 0 : decimalTest.length - 2;
-
     const parts = formatter.formatToParts(12345.6);
     this.decimalSign = parts.find((d) => d.type === "decimal")!.value;
     this.decimal = new RegExp(`[${this.decimalSign}]`);
@@ -35,16 +38,16 @@ export class NumberParser {
     this.index = (d: string) => index.get(d);
   }
 
+  public isCurrencyAppended() {
+    return this.currencyAppended;
+  }
+
   public getDecimalSeparator() {
     return this.decimalSign;
   }
 
   public getGroupingSeparator() {
     return this.groupSign;
-  }
-
-  public getMaxFractionDigits() {
-    return this.maxFraction;
   }
 
   public parse(formattedNumber?: string, allowGroup: boolean = false) {

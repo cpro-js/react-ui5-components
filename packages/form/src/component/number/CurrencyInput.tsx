@@ -1,13 +1,12 @@
-import { FC, useMemo } from "react";
+import { FC, useContext, useMemo } from "react";
 
 import { BaseNumberInput, CommonNumberInputProps } from "./BaseNumberInput";
+import { NumberContext, NumberLocaleProvider } from "./context/NumberContext";
 import { NumberDisplayConfig, NumberInputConfig } from "./NumberInput";
 
 export interface CurrencyInputProps extends CommonNumberInputProps {
   /**
    * Three letter ISO code of currency, e.g. EUR or USD
-   *
-   * When currency code is undefined, then no currency will be shown.
    */
   currency?: string;
   displayConfig?: NumberDisplayConfig;
@@ -16,12 +15,18 @@ export interface CurrencyInputProps extends CommonNumberInputProps {
 
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   const {
-    currency,
+    currency: explicitCurrency,
     style = {},
     displayConfig,
     inputConfig,
     ...passThrough
   } = props;
+
+  const providedCurrency = useContext(NumberContext);
+  const currency = explicitCurrency || providedCurrency.currency;
+  if (!currency) {
+    throw Error("Currency must be provided ot CurrencyInput!");
+  }
 
   const displayFormatter: Intl.NumberFormatOptions = useMemo(
     () => ({ ...displayConfig, style: "currency", currency }),
