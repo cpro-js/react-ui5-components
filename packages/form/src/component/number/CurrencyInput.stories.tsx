@@ -31,3 +31,9 @@ WithLocaleDe.args = {
   ...WithGrouping.args,
   locale: "de",
 };
+
+export const WithCurrency = Template.bind({});
+WithCurrency.args = {
+  ...WithGrouping.args,
+  currency: "EUR",
+};

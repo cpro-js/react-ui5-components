@@ -1,4 +1,4 @@
-import { Input, InputType } from "@ui5/webcomponents-react";
+import { Input, InputType, ValueState } from "@ui5/webcomponents-react";
 import {
   InputDomRef,
   InputPropTypes,
@@ -10,29 +10,17 @@ import {
   forwardRef,
   useCallback,
   useMemo,
-  useReducer,
   useRef,
   useState,
 } from "react";
 
-import { getFormatter } from "../helper/NumberFormatter";
-import { NumberParser, getParser } from "../helper/NumberParser";
 import { triggerSubmitOnEnter } from "../util";
-
-/**
- * We're only interested in those keys which change our number value
- * and these consist of a single char.
- * Control keys / special keys get a descriptive name, i.e. longer than 1 char.
- *
- * Special handling:
- * - key combinations (pressing STRG/ALT simultaneously)
- *
- * @param event the keyboard event
- * @returns
- */
-function isKeyRelevant(event: KeyboardEvent<HTMLInputElement>) {
-  return event.key.length === 1 && !event.ctrlKey && !event.altKey;
-}
+import {
+  getCurrencyConfig,
+  getCurrencyFormatter,
+} from "./helper/CurrencyHelper";
+import { getFormatter } from "./helper/NumberFormatter";
+import { getParser } from "./helper/NumberParser";
 
 /**
  * Shared props among all number inputs.
@@ -74,48 +62,44 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     onFocus: onFocusOriginal,
     onBlur: onBlurOriginal,
     onPaste: onPasteOriginal,
+    onMouseEnter: onMouseEnterOriginal,
+    onMouseLeave: onMouseLeaveOriginal,
     ...passThrough
   } = props;
 
   const isFocusRef = useRef(false);
   const isPasteRef = useRef(false);
   const parser = useMemo(() => getParser(locale), [locale]);
+  const groupingSeparator = parser.getGroupingSeparator();
+  const decimalSeparator = parser.getDecimalSeparator();
 
   const [inputState, setInputState] = useState(false);
-  // const [currentValue, setCurrentValue] = useState(value);
 
   // Format numbers for input
   const formatForInput = useMemo(() => {
     const isCurrency = inputConfig.style === "currency";
-    const conf: Intl.NumberFormatOptions = isCurrency
-      ? {
-          ...inputConfig,
-          currency: "USD",
-          currencyDisplay: "code",
-          minimumFractionDigits: 0,
-        }
-      : inputConfig;
 
-    const formatter = getFormatter(locale, {
-      ...conf,
+    const specialConf = {
+      ...inputConfig,
+      // always allow for less then the regular fraction digits while typing
+      minimumFractionDigits: 0,
+      // grouping would change all the time while typing => always off
       useGrouping: false,
-    });
+    };
 
-    return !isCurrency
-      ? formatter.format
-      : (val?: number) => formatter.format(val).replace(/USD[\s]+/, "");
+    // number input:
+    const formatter = getFormatter(
+      locale,
+      isCurrency ? getCurrencyConfig(specialConf) : specialConf
+    );
+
+    return isCurrency ? getCurrencyFormatter(formatter) : formatter.format;
   }, [inputConfig, locale]);
 
   // Format numbers for display
   const formatForDisplay = useMemo(() => {
     const isCurrency = displayConfig.style === "currency";
-    const conf: Intl.NumberFormatOptions = isCurrency
-      ? {
-          ...displayConfig,
-          currency: "USD",
-          currencyDisplay: "code",
-        }
-      : displayConfig;
+    const conf = isCurrency ? getCurrencyConfig(displayConfig) : displayConfig;
 
     // number display: grouping is false by default
     const formatter = getFormatter(locale, {
@@ -123,9 +107,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       ...conf,
     });
 
-    return !isCurrency
-      ? formatter.format
-      : (val?: number) => formatter.format(val).replace(/USD[\s]*/, "");
+    return isCurrency ? getCurrencyFormatter(formatter) : formatter.format;
   }, [displayConfig, locale]);
 
   // number parser with max restriction
@@ -154,7 +136,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 
   // current value
   const currentValueRef = useRef(
-    value !== undefined ? String(parseValue(String(value))) : undefined
+    value !== undefined ? formatForInput(parseValue(String(value))) : undefined
   );
 
   /**
@@ -164,21 +146,31 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     (event: KeyboardEvent<HTMLInputElement>) => {
       const originalValue = event.currentTarget.value;
 
-      if (isKeyRelevant(event)) {
+      /**
+       * We're only interested in those keys which change our number value
+       * and these consist of a single char.
+       * Control keys / special keys get a descriptive name, i.e. longer than 1 char.
+       *
+       * Special handling:
+       * - key combinations (pressing STRG/ALT simultaneously)
+       */
+      if (
+        event.key.length === 1 &&
+        !event.ctrlKey &&
+        !event.altKey &&
+        !event.metaKey &&
+        event.key !== "-"
+      ) {
         // note: newValue might not be the real current value,
         // since selection & current cursor position are not taken into account
         const newValue = originalValue + event.key;
         const value = parser.parse(newValue);
 
-        // validations
-        const isNan = newValue && value === undefined;
-
         // block invalid content
-        if (isNan) {
-          console.log("blocking!!!", newValue, value);
+        if (newValue && value === undefined) {
           event.preventDefault();
           event.stopPropagation();
-          return;
+          return false;
         }
       }
 
@@ -196,35 +188,43 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   const onKeyUp = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
       const originalValue = event.currentTarget.value;
-      const value = parseValue(originalValue); //parser.parse(originalValue, true);
+      const parsedValue = parser.parse(originalValue);
+      const safeValue = parseValue(originalValue);
+      const valueChanged =
+        parser.parse(currentValueRef.current) !== parsedValue;
 
-      if (isKeyRelevant(event) || isPasteRef.current) {
+      if (valueChanged) {
         isPasteRef.current = false;
 
-        const isValueChange = parser.parse(originalValue) !== value;
-        const maxLength = formatForDisplay(value).replace(
-          parser.getGroupingSeparator(),
-          ""
-        ).length;
-        const isTooManyZeros = originalValue.length > maxLength;
-
-        if (isValueChange) {
-          currentValueRef.current = formatForInput(value);
-          event.currentTarget.value = currentValueRef.current;
-          return;
-        }
-        if (isTooManyZeros) {
+        // value is now invalid, but was valid before
+        if (parsedValue === undefined) {
           event.currentTarget.value = currentValueRef.current || "";
           return;
         }
-      }
 
-      // set the current value
-      currentValueRef.current = originalValue;
+        // if parseValue changed the value, then reset the input to our value
+        if (safeValue !== parsedValue) {
+          currentValueRef.current = formatForInput(safeValue);
+          event.currentTarget.value = currentValueRef.current || "";
+          return;
+        }
 
-      // extra method to provide the value as number
-      if (onValue) {
-        onValue(value);
+        // handle too many fraction digits
+        const decIndex = originalValue.indexOf(decimalSeparator);
+        const fracDigits =
+          decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
+        if (fracDigits > parser.getMaxFractionDigits()) {
+          event.currentTarget.value = currentValueRef.current || "";
+          return;
+        }
+
+        // set the current value
+        currentValueRef.current = originalValue;
+
+        // extra method to provide the value as number
+        if (onValue) {
+          onValue(safeValue);
+        }
       }
 
       // allow for submit via enter
@@ -235,41 +235,68 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         onKeyUpOriginal(event);
       }
     },
-    [parser, parseValue, onValue, onKeyUpOriginal]
+    [
+      parser,
+      groupingSeparator,
+      decimalSeparator,
+      parseValue,
+      onValue,
+      onKeyUpOriginal,
+    ]
   );
 
-  const triggerInputState = useCallback(() => {
-    setInputState(true);
-  }, [setInputState]);
-
-  const triggerDisplayState = useCallback(() => {
-    if (!isFocusRef.current) {
-      setInputState(false);
-    }
-  }, [setInputState]);
+  const leaveInputState = useCallback(() => {
+    setInputState(false);
+    currentValueRef.current = formatForInput(
+      parseValue(currentValueRef.current)
+    );
+  }, [setInputState, formatForInput, parseValue]);
 
   const onFocus = useCallback(
     (event) => {
       isFocusRef.current = true;
-      triggerInputState();
+      setInputState(true);
 
       if (onFocusOriginal) {
         onFocusOriginal(event);
       }
     },
-    [onFocusOriginal]
+    [setInputState, onFocusOriginal]
   );
 
   const onBlur = useCallback(
     (event) => {
       isFocusRef.current = false;
-      triggerDisplayState();
+      leaveInputState();
 
       if (onBlurOriginal) {
         onBlurOriginal(event);
       }
     },
-    [onBlurOriginal]
+    [leaveInputState, onBlurOriginal]
+  );
+
+  const onMouseEnter = useCallback(
+    (event) => {
+      setInputState(true);
+      if (onMouseEnterOriginal) {
+        onMouseEnterOriginal(event);
+      }
+    },
+    [setInputState, onMouseEnterOriginal]
+  );
+
+  const onMouseLeave = useCallback(
+    (event) => {
+      if (!isFocusRef.current) {
+        leaveInputState();
+      }
+
+      if (onMouseLeaveOriginal) {
+        onMouseLeaveOriginal(event);
+      }
+    },
+    [leaveInputState, onMouseLeaveOriginal]
   );
 
   const onPaste = useCallback(
@@ -300,15 +327,15 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   return (
     <Input
       {...passThrough}
-      type={inputState ? InputType.Text : InputType.Text}
+      // type={inputState ? InputType.Number : InputType.Text}
       ref={forwardedRef}
       value={formattedValue}
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
       onFocus={onFocus}
       onBlur={onBlur}
-      onMouseEnter={triggerInputState}
-      onMouseOut={triggerDisplayState}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       onPaste={onPaste}
     />
   );

@@ -1,4 +1,4 @@
-import { NumberParser } from "./../../../src/component/helper/NumberParser";
+import { NumberParser } from "../../../src/component/number/helper/NumberParser";
 
 describe("NumberParser Test", () => {
   const PARSER_EN = new NumberParser("en");
@@ -23,7 +23,6 @@ describe("NumberParser Test", () => {
   });
 
   test("returns undefined if not a number", () => {
-    // @ts-expect-error
     expect(PARSER_EN.parse(undefined)).toBeUndefined();
     // @ts-expect-error
     expect(PARSER_EN.parse(null)).toBeUndefined();

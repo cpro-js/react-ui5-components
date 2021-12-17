@@ -11,9 +11,15 @@ export class NumberParser {
 
   private decimalSign: string;
   private groupSign: string;
+  private maxFraction: number;
 
   constructor(locale: string) {
-    const parts = new Intl.NumberFormat(locale).formatToParts(12345.6);
+    const formatter = new Intl.NumberFormat(locale);
+
+    const decimalTest = formatter.format(0.1111111111111111);
+    this.maxFraction = decimalTest.length <= 1 ? 0 : decimalTest.length - 2;
+
+    const parts = formatter.formatToParts(12345.6);
     this.decimalSign = parts.find((d) => d.type === "decimal")!.value;
     this.decimal = new RegExp(`[${this.decimalSign}]`);
     this.groupSign = parts.find((d) => d.type === "group")!.value;
@@ -37,7 +43,11 @@ export class NumberParser {
     return this.groupSign;
   }
 
-  public parse(formattedNumber: string, allowGroup: boolean = false) {
+  public getMaxFractionDigits() {
+    return this.maxFraction;
+  }
+
+  public parse(formattedNumber?: string, allowGroup: boolean = false) {
     let fn = formattedNumber?.trim();
     if (!fn) {
       return undefined;

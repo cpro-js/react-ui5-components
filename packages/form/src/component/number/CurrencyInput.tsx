@@ -1,11 +1,7 @@
 import { FC, useMemo } from "react";
 
 import { BaseNumberInput, CommonNumberInputProps } from "./BaseNumberInput";
-import {
-  NumberDisplayConfig,
-  NumberInput,
-  NumberInputConfig,
-} from "./NumberInput";
+import { NumberDisplayConfig, NumberInputConfig } from "./NumberInput";
 
 export interface CurrencyInputProps extends CommonNumberInputProps {
   /**
@@ -19,7 +15,13 @@ export interface CurrencyInputProps extends CommonNumberInputProps {
 }
 
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
-  const { currency, displayConfig, inputConfig, ...passThrough } = props;
+  const {
+    currency,
+    style = {},
+    displayConfig,
+    inputConfig,
+    ...passThrough
+  } = props;
 
   const displayFormatter: Intl.NumberFormatOptions = useMemo(
     () => ({ ...displayConfig, style: "currency", currency }),
@@ -33,9 +35,11 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
 
   return (
     <BaseNumberInput
+      icon={currency ? <span>{currency}</span> : undefined}
+      {...passThrough}
       displayConfig={displayFormatter}
       inputConfig={inputFormatter}
-      {...passThrough}
+      style={{ textAlign: "right", ...style }}
     />
   );
 };
