@@ -12,7 +12,7 @@ const Template: Story<CurrencyInputProps> = (args) => {
 };
 
 export const Standard = Template.bind({});
-Standard.args = {};
+Standard.args = { currency: "USD" };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = { ...Standard.args, value: 123456.789 };
@@ -30,10 +30,5 @@ export const WithLocaleDe = Template.bind({});
 WithLocaleDe.args = {
   ...WithGrouping.args,
   locale: "de",
-};
-
-export const WithCurrency = Template.bind({});
-WithCurrency.args = {
-  ...WithGrouping.args,
   currency: "EUR",
 };
