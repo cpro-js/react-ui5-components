@@ -216,7 +216,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         isPasteRef.current = false;
 
         // value is now invalid, but was valid before
-        if (parsedValue === undefined) {
+        if (parsedValue === undefined && originalValue !== "") {
           event.currentTarget.value = currentValueRef.current || "";
           return;
         }
