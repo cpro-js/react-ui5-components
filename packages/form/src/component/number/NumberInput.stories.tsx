@@ -1,6 +1,5 @@
 import { Story } from "@storybook/react";
 
-import { NumberLocaleProvider } from "./context/NumberContext";
 import { NumberInput, NumberInputProps } from "./NumberInput";
 
 export default {
@@ -43,7 +42,7 @@ WithIcon.args = {
 };
 
 export const MinIntegerDigits = Template.bind({});
-MinIntegerDigits.storyName = "Display Config: MinIntegerDigits";
+MinIntegerDigits.storyName = "Display Config: MinIntegerDigits = 3";
 MinIntegerDigits.args = {
   ...Standard.args,
   displayConfig: { minimumIntegerDigits: 3 },
@@ -51,22 +50,23 @@ MinIntegerDigits.args = {
 };
 
 export const MinFractionDigits = Template.bind({});
-MinFractionDigits.storyName = "Display Config: MinFractionDigits";
+MinFractionDigits.storyName = "Display Config: MinFractionDigits = 6";
 MinFractionDigits.args = {
   ...Standard.args,
-  displayConfig: { minimumFractionDigits: 6 },
-  value: 1,
+  displayConfig: { minimumFractionDigits: 6, maximumFractionDigits: 9 },
+  inputConfig: { maximumFractionDigits: 9 },
+  value: 1.234,
 };
 
 export const MaxFractionDigits = Template.bind({});
-MaxFractionDigits.storyName = "Display Config: MaxFractionDigits";
+MaxFractionDigits.storyName = "Display Config: MaxFractionDigits = 1";
 MaxFractionDigits.args = {
   ...Prefilled.args,
   displayConfig: { maximumFractionDigits: 1 },
 };
 
 export const MinSignificantDigits = Template.bind({});
-MinSignificantDigits.storyName = "Display Config: MinSignificantDigits";
+MinSignificantDigits.storyName = "Display Config: MinSignificantDigits = 3";
 MinSignificantDigits.args = {
   ...Standard.args,
   displayConfig: { minimumSignificantDigits: 3 },
@@ -74,10 +74,10 @@ MinSignificantDigits.args = {
 };
 
 export const MaxSignificantDigits = Template.bind({});
-MaxSignificantDigits.storyName = "Display Config: MaxSignificantDigits";
+MaxSignificantDigits.storyName = "Display Config: MaxSignificantDigits = 3";
 MaxSignificantDigits.args = {
   ...Prefilled.args,
-  displayConfig: { maximumSignificantDigits: 1 },
+  displayConfig: { maximumSignificantDigits: 3 },
 };
 
 export const InputMax = Template.bind({});
@@ -95,15 +95,16 @@ InputMaxFractionDigits.args = {
 };
 
 export const InputIntegersOnly = Template.bind({});
-InputIntegersOnly.storyName = "Input Config: Integers Only";
+InputIntegersOnly.storyName =
+  "Input Config: Integers Only = maxFractionDigits = 0";
 InputIntegersOnly.args = {
   ...Prefilled.args,
   inputConfig: { maximumFractionDigits: 0 },
 };
 
 export const InputMaxSignificantDigits = Template.bind({});
-InputMaxSignificantDigits.storyName = "Input Config: MaxSignificantDigits";
+InputMaxSignificantDigits.storyName = "Input Config: MaxSignificantDigits = 3";
 InputMaxSignificantDigits.args = {
   ...Prefilled.args,
-  inputConfig: { maximumSignificantDigits: 1 },
+  inputConfig: { maximumSignificantDigits: 3 },
 };

@@ -48,7 +48,7 @@ Empty.args = {};
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   initialValues: {
-    number: 10,
+    number: 10.29,
   },
 };
 

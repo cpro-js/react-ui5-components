@@ -1,4 +1,4 @@
-import { Input, InputType, ValueState } from "@ui5/webcomponents-react";
+import { Input, InputType } from "@ui5/webcomponents-react";
 import {
   InputDomRef,
   InputPropTypes,
@@ -77,6 +77,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   const parser = useMemo(() => getParser(locale), [locale]);
   const groupingSeparator = parser.getGroupingSeparator();
   const decimalSeparator = parser.getDecimalSeparator();
+  const lastValueRef = useRef(value);
 
   const [inputState, setInputState] = useState(false);
 
@@ -339,6 +340,19 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     [parseValue, onPasteOriginal]
   );
 
+  // support externally set values, required for form reset
+  if (lastValueRef.current !== value) {
+    const val =
+      value !== undefined
+        ? formatForInput(parseValue(String(value)))
+        : undefined;
+    if (val !== currentValueRef.current) {
+      currentValueRef.current = val;
+    }
+  }
+  lastValueRef.current = value;
+
+  // the final value for the input field
   const formattedValue = inputState
     ? currentValueRef.current || ""
     : formatForDisplay(parseValue(currentValueRef.current));
@@ -346,7 +360,8 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   return (
     <Input
       {...passThrough}
-      // type={inputState ? InputType.Number : InputType.Text}
+      type={InputType.Text}
+      inputMode={maxFractionDigits === 0 ? "numeric" : "decimal"}
       maxlength={16}
       ref={forwardedRef}
       value={formattedValue}
