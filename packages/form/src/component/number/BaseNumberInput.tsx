@@ -246,11 +246,6 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 
         // set the current value
         currentValueRef.current = originalValue;
-
-        // extra method to provide the value as number
-        if (onValue) {
-          onValue(safeValue);
-        }
       }
 
       // allow for submit via enter
@@ -273,9 +268,14 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 
   const leaveInputState = useCallback(() => {
     setInputState(false);
-    currentValueRef.current = formatForInput(
-      parseValue(currentValueRef.current)
-    );
+    const val = parseValue(currentValueRef.current);
+    currentValueRef.current = formatForInput(val);
+
+    // extra method to provide the value as number
+    if (onValue) {
+      console.log("vvv", `[${val}]`);
+      onValue(val);
+    }
   }, [setInputState, formatForInput, parseValue]);
 
   const onFocus = useCallback(
