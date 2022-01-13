@@ -161,6 +161,12 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     (event: KeyboardEvent<HTMLInputElement>) => {
       const originalValue = event.currentTarget.value;
 
+      if (event.key === "Space") {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+
       /**
        * We're only interested in those keys which change our number value
        * and these consist of a single char.
@@ -352,7 +358,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   }
   lastValueRef.current = value;
 
-  // the final value for the input field
+  // the final string value for the input field
   const formattedValue = inputState
     ? currentValueRef.current || ""
     : formatForDisplay(parseValue(currentValueRef.current));
