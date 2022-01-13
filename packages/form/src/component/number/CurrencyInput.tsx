@@ -9,6 +9,7 @@ export interface CurrencyInputProps extends CommonNumberInputProps {
    * Three letter ISO code of currency, e.g. EUR or USD
    */
   currency?: string;
+  showCurrency?: boolean;
   displayConfig?: NumberDisplayConfig;
   inputConfig?: NumberInputConfig;
 }
@@ -16,6 +17,7 @@ export interface CurrencyInputProps extends CommonNumberInputProps {
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   const {
     currency: explicitCurrency,
+    showCurrency = true,
     style = {},
     displayConfig,
     inputConfig,
@@ -40,7 +42,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
 
   return (
     <BaseNumberInput
-      icon={currency ? <span>{currency}</span> : undefined}
+      icon={showCurrency ? <span>{currency}</span> : undefined}
       {...passThrough}
       displayConfig={displayFormatter}
       inputConfig={inputFormatter}

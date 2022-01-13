@@ -17,6 +17,12 @@ Standard.args = { currency: "USD" };
 export const Prefilled = Template.bind({});
 Prefilled.args = { ...Standard.args, value: 123456.789 };
 
+export const WithoutCurrency = Template.bind({});
+WithoutCurrency.args = { ...Prefilled.args, showCurrency: false };
+
+export const AlignLeft = Template.bind({});
+AlignLeft.args = { ...Prefilled.args, style: { textAlign: "left" } };
+
 export const PrefilledWithZeros = Template.bind({});
 PrefilledWithZeros.args = { ...Standard.args, value: 500.0 };
 
