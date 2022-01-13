@@ -347,6 +347,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     <Input
       {...passThrough}
       // type={inputState ? InputType.Number : InputType.Text}
+      maxlength={16}
       ref={forwardedRef}
       value={formattedValue}
       onKeyDown={onKeyDown}
