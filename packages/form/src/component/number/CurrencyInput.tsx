@@ -1,7 +1,7 @@
 import { FC, useContext, useMemo } from "react";
 
 import { BaseNumberInput, CommonNumberInputProps } from "./BaseNumberInput";
-import { NumberContext, NumberLocaleProvider } from "./context/NumberContext";
+import { NumberContext } from "./context/NumberContext";
 import { NumberDisplayConfig, NumberInputConfig } from "./NumberInput";
 
 export interface CurrencyInputProps extends CommonNumberInputProps {
