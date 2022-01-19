@@ -6,7 +6,7 @@ import { FormViewer, useFormViewer } from "./FormViewer";
 import { NumberInputField, NumberInputFieldProps } from "./NumberInputField";
 
 interface FormData {
-  number?: number;
+  theNumber?: number;
 }
 
 const Template: Story<FormControllerProps<FormData> & NumberInputFieldProps> = (
@@ -20,7 +20,7 @@ const Template: Story<FormControllerProps<FormData> & NumberInputFieldProps> = (
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <NumberInputField {...props} name={"number"} />
+      <NumberInputField {...props} name={"theNumber"} />
       <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
@@ -48,7 +48,7 @@ Empty.args = { useGrouping: true };
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   initialValues: {
-    number: 123456.789,
+    theNumber: 123456.789,
   },
 };
 

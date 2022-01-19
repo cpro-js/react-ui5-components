@@ -9,7 +9,7 @@ import {
 import { FormViewer, useFormViewer } from "./FormViewer";
 
 interface FormData {
-  number?: number;
+  theNumber?: number;
 }
 
 const Template: Story<FormControllerProps<FormData> & CurrencyInputFieldProps> =
@@ -22,7 +22,7 @@ const Template: Story<FormControllerProps<FormData> & CurrencyInputFieldProps> =
 
     return (
       <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <CurrencyInputField {...props} name={"number"} />
+        <CurrencyInputField {...props} name={"theNumber"} />
         <FormViewer submittedValues={submittedValues} />
       </FormController>
     );
@@ -51,7 +51,7 @@ export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Empty.args,
   initialValues: {
-    number: 10.29,
+    theNumber: 10.29,
   },
 };
 
