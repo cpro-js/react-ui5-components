@@ -30,7 +30,7 @@ PrefilledWithZeros.args = { ...Standard.args, value: 500.0 };
 export const WithGrouping = Template.bind({});
 WithGrouping.args = {
   ...Prefilled.args,
-  displayConfig: { useGrouping: true },
+  useGrouping: true,
 };
 
 export const WithLocaleDe = Template.bind({});

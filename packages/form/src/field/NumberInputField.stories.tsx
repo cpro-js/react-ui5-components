@@ -43,12 +43,12 @@ const I18nTemplate: Story<
 };
 
 export const Empty = Template.bind({});
-Empty.args = {};
+Empty.args = { useGrouping: true };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   initialValues: {
-    number: 10.29,
+    number: 123456.789,
   },
 };
 

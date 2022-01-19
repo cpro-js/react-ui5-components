@@ -18,7 +18,7 @@ export const getCurrencyFormatter = (
       return "";
     }
 
-    const regExp = new RegExp(`[^0-9]*${currency}[^0-9]*`);
+    const regExp = new RegExp(`\\s*${currency}\\s*`);
     return formatter.format(val).replace(regExp, "");
   };
 };

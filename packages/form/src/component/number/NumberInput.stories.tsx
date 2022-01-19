@@ -20,7 +20,7 @@ Prefilled.args = { ...Standard.args, value: 123456.789 };
 export const WithGrouping = Template.bind({});
 WithGrouping.args = {
   ...Prefilled.args,
-  displayConfig: { useGrouping: true },
+  useGrouping: true,
 };
 
 export const WithLocaleDe = Template.bind({});
@@ -45,7 +45,7 @@ export const MinIntegerDigits = Template.bind({});
 MinIntegerDigits.storyName = "Display Config: MinIntegerDigits = 3";
 MinIntegerDigits.args = {
   ...Standard.args,
-  displayConfig: { minimumIntegerDigits: 3 },
+  minimumIntegerDigits: 3,
   value: 1,
 };
 
@@ -53,8 +53,8 @@ export const MinFractionDigits = Template.bind({});
 MinFractionDigits.storyName = "Display Config: MinFractionDigits = 6";
 MinFractionDigits.args = {
   ...Standard.args,
-  displayConfig: { minimumFractionDigits: 6, maximumFractionDigits: 9 },
-  inputConfig: { maximumFractionDigits: 9 },
+  minimumFractionDigits: 6,
+  maximumFractionDigits: 9,
   value: 1.234,
 };
 
@@ -62,14 +62,14 @@ export const MaxFractionDigits = Template.bind({});
 MaxFractionDigits.storyName = "Display Config: MaxFractionDigits = 1";
 MaxFractionDigits.args = {
   ...Prefilled.args,
-  displayConfig: { maximumFractionDigits: 1 },
+  maximumFractionDigits: 1,
 };
 
 export const MinSignificantDigits = Template.bind({});
 MinSignificantDigits.storyName = "Display Config: MinSignificantDigits = 3";
 MinSignificantDigits.args = {
   ...Standard.args,
-  displayConfig: { minimumSignificantDigits: 3 },
+  minimumSignificantDigits: 3,
   value: 1,
 };
 
@@ -77,21 +77,49 @@ export const MaxSignificantDigits = Template.bind({});
 MaxSignificantDigits.storyName = "Display Config: MaxSignificantDigits = 3";
 MaxSignificantDigits.args = {
   ...Prefilled.args,
-  displayConfig: { maximumSignificantDigits: 3 },
+  maximumSignificantDigits: 3,
+};
+
+export const InputMin = Template.bind({});
+InputMin.storyName = "Input Config: MinValue = 0";
+InputMin.args = {
+  ...Prefilled.args,
+  minimumValue: 0,
+};
+
+export const InputMinAlt = Template.bind({});
+InputMinAlt.storyName = "Input Config: MinValue = -3";
+InputMinAlt.args = {
+  ...Prefilled.args,
+  minimumValue: -3,
+};
+
+export const InputMinFailure = Template.bind({});
+InputMinFailure.storyName = "Input Config: Fails for MinValue = 2";
+InputMinFailure.args = {
+  ...Prefilled.args,
+  minimumValue: 2,
 };
 
 export const InputMax = Template.bind({});
-InputMax.storyName = "Input Config: Max = 100";
+InputMax.storyName = "Input Config: MaxValue = 999";
 InputMax.args = {
   ...Prefilled.args,
-  max: 100,
+  maximumValue: 999,
+};
+
+export const InputMaxFailure = Template.bind({});
+InputMaxFailure.storyName = "Input Config: Fails for MaxValue = -2";
+InputMaxFailure.args = {
+  ...Prefilled.args,
+  maximumValue: -2,
 };
 
 export const InputMaxFractionDigits = Template.bind({});
 InputMaxFractionDigits.storyName = "Input Config: MaxFractionDigits = 1";
 InputMaxFractionDigits.args = {
   ...Prefilled.args,
-  inputConfig: { maximumFractionDigits: 1 },
+  maximumFractionDigits: 1,
 };
 
 export const InputIntegersOnly = Template.bind({});
@@ -99,12 +127,5 @@ InputIntegersOnly.storyName =
   "Input Config: Integers Only = maxFractionDigits = 0";
 InputIntegersOnly.args = {
   ...Prefilled.args,
-  inputConfig: { maximumFractionDigits: 0 },
-};
-
-export const InputMaxSignificantDigits = Template.bind({});
-InputMaxSignificantDigits.storyName = "Input Config: MaxSignificantDigits = 3";
-InputMaxSignificantDigits.args = {
-  ...Prefilled.args,
-  inputConfig: { maximumSignificantDigits: 3 },
+  maximumFractionDigits: 0,
 };

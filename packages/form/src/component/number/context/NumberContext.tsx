@@ -1,6 +1,15 @@
 import { FC, createContext, useContext } from "react";
 
-export interface NumberContextProps {
+import { NumberInputProps } from "../NumberInput";
+import { CommonNumberInputProps, NumberDisplayConfig } from "../NumberModel";
+
+export interface NumberContextProps
+  extends NumberDisplayConfig,
+    NumberInputProps,
+    Pick<
+      CommonNumberInputProps,
+      "showNumberWarningMessages" | "getNumberWarningMessage"
+    > {
   locale: string;
   currency?: string;
 }
@@ -9,9 +18,12 @@ export const NumberContext = createContext<NumberContextProps>({
   locale: "en-US",
 });
 
-export interface NumberI18nProviderProps extends Partial<NumberContextProps> {}
+export interface NumberContextProviderProps
+  extends Partial<NumberContextProps> {}
 
-export const NumberI18nProvider: FC<NumberI18nProviderProps> = (props) => {
+export const NumberContextProvider: FC<NumberContextProviderProps> = (
+  props
+) => {
   const { children, ...context } = props;
   const existingContext = useContext(NumberContext);
 

@@ -1,17 +1,22 @@
-import { FC, useContext, useMemo } from "react";
+import { FC, useContext } from "react";
 
-import { BaseNumberInput, CommonNumberInputProps } from "./BaseNumberInput";
+import { BaseNumberInput } from "./BaseNumberInput";
 import { NumberContext } from "./context/NumberContext";
-import { NumberDisplayConfig, NumberInputConfig } from "./NumberInput";
+import type {
+  CommonNumberInputProps,
+  NumberDisplayConfig,
+  NumberInputConfig,
+} from "./NumberModel";
 
-export interface CurrencyInputProps extends CommonNumberInputProps {
+export interface CurrencyInputProps
+  extends CommonNumberInputProps,
+    NumberDisplayConfig,
+    NumberInputConfig {
   /**
    * Three letter ISO code of currency, e.g. EUR or USD
    */
   currency?: string;
   showCurrency?: boolean;
-  displayConfig?: NumberDisplayConfig;
-  inputConfig?: NumberInputConfig;
 }
 
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
@@ -19,33 +24,22 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
     currency: explicitCurrency,
     showCurrency = true,
     style = {},
-    displayConfig,
-    inputConfig,
     ...passThrough
   } = props;
 
-  const providedCurrency = useContext(NumberContext);
-  const currency = explicitCurrency || providedCurrency.currency;
+  const numberContext = useContext(NumberContext);
+  const currency = explicitCurrency || numberContext.currency;
+
   if (!currency) {
-    throw Error("Currency must be provided ot CurrencyInput!");
+    throw Error("Currency must be provided to CurrencyInput!");
   }
-
-  const displayFormatter: Intl.NumberFormatOptions = useMemo(
-    () => ({ ...displayConfig, style: "currency", currency }),
-    [displayConfig]
-  );
-
-  const inputFormatter: Intl.NumberFormatOptions = useMemo(
-    () => ({ ...inputConfig, style: "currency", currency }),
-    [inputConfig]
-  );
 
   return (
     <BaseNumberInput
       icon={showCurrency ? <span>{currency}</span> : undefined}
+      {...numberContext}
       {...passThrough}
-      displayConfig={displayFormatter}
-      inputConfig={inputFormatter}
+      currency={currency}
       style={{ textAlign: "right", ...style }}
     />
   );

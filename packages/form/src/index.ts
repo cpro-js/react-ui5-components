@@ -83,6 +83,9 @@ export type { MultiSelectFieldProps } from "./field/MultiSelectField";
 export { NumberInputField } from "./field/NumberInputField";
 export type { NumberInputFieldProps } from "./field/NumberInputField";
 
+export { CurrencyInputField } from "./field/CurrencyInputField";
+export type { CurrencyInputFieldProps } from "./field/CurrencyInputField";
+
 export { SelectField } from "./field/SelectField";
 export type { SelectFieldProps } from "./field/SelectField";
 
@@ -142,5 +145,5 @@ export { ISODateTimeAdapter } from "./form/adapter/date/ISODateTimeAdapter";
 
 export { toISO8601DateString, toISODateTimeString } from "./util/date";
 
-export { NumberI18nProvider } from "./component/number/context/NumberContext";
-export type { NumberI18nProviderProps } from "./component/number/context/NumberContext";
+export { NumberContextProvider } from "./component/number/context/NumberContext";
+export type { NumberContextProviderProps } from "./component/number/context/NumberContext";

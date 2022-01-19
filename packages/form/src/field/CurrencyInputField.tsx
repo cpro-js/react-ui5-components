@@ -11,7 +11,7 @@ import { CurrencyInput, CurrencyInputProps } from "..";
 
 export type CurrencyInputFieldProps = Omit<
   CurrencyInputProps,
-  "name" | "value" | "onChange" | "valueState" | "onBlur" | "max"
+  "name" | "value" | "onChange" | "valueState" | "onBlur"
 > &
   Pick<FormFieldValidation, "required" | "min" | "max"> & {
     name: string;

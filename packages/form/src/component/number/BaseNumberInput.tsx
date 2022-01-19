@@ -1,51 +1,53 @@
-import { Input, InputType } from "@ui5/webcomponents-react";
-import {
-  InputDomRef,
-  InputPropTypes,
-} from "@ui5/webcomponents-react/webComponents/Input";
+import { Input, InputType, ValueState } from "@ui5/webcomponents-react";
+import { InputDomRef } from "@ui5/webcomponents-react/webComponents/Input";
 import {
   ClipboardEvent,
   FC,
   KeyboardEvent,
   forwardRef,
   useCallback,
-  useContext,
   useMemo,
   useRef,
   useState,
 } from "react";
 
 import { triggerSubmitOnEnter } from "../util";
-import { NumberContext } from "./context/NumberContext";
 import {
   getCurrencyConfig,
   getCurrencyFormatter,
 } from "./helper/CurrencyHelper";
 import { getFormatter } from "./helper/NumberFormatter";
 import { getParser } from "./helper/NumberParser";
+import {
+  NumberWarningMessage,
+  WarningMessageTypes,
+  defaultNumberWarningMessageGetter,
+} from "./helper/NumberWarningMessage";
+import type {
+  CommonNumberInputProps,
+  NumberDisplayConfig,
+  NumberInputConfig,
+} from "./NumberModel";
 
-/**
- * Shared props among all number inputs.
- */
-export interface CommonNumberInputProps
-  extends Omit<
-    InputPropTypes,
-    | "type"
-    | "value"
-    | "maxlength"
-    | "showSuggestions"
-    | "onSuggestionItemPreview"
-    | "onSuggestionItemSelect"
-  > {
-  value?: number;
-  onValue?: (value?: number) => void;
-  locale?: string;
-  max?: number;
-}
+const getDefinedNumberFormatOptions = (
+  props: BaseNumberInputProps,
+  propNames: Array<string>
+) => {
+  return propNames
+    .filter((pn) => props.hasOwnProperty(pn))
+    .reduce((collector, pn) => {
+      // @ts-ignore: index signature not compatible with defined object shape
+      collector[pn] = props[pn];
+      return collector;
+    }, {});
+};
 
-export interface BaseNumberInputProps extends CommonNumberInputProps {
-  displayConfig: Intl.NumberFormatOptions;
-  inputConfig: Intl.NumberFormatOptions;
+export interface BaseNumberInputProps
+  extends CommonNumberInputProps,
+    NumberDisplayConfig,
+    NumberInputConfig {
+  locale: string;
+  currency?: string;
 }
 
 export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
@@ -54,11 +56,17 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 >((props, forwardedRef) => {
   const {
     value,
-    locale: explicitLocale,
     onValue,
-    displayConfig,
-    inputConfig,
-    max,
+    locale,
+    currency,
+    minimumValue = Number.MIN_SAFE_INTEGER,
+    maximumValue = Number.MAX_SAFE_INTEGER,
+    minimumIntegerDigits,
+    minimumFractionDigits,
+    maximumFractionDigits,
+    minimumSignificantDigits,
+    maximumSignificantDigits,
+    useGrouping = false,
     onKeyDown: onKeyDownOriginal,
     onKeyUp: onKeyUpOriginal,
     onFocus: onFocusOriginal,
@@ -66,27 +74,75 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     onPaste: onPasteOriginal,
     onMouseEnter: onMouseEnterOriginal,
     onMouseLeave: onMouseLeaveOriginal,
+    valueState,
+    valueStateMessage,
+    showNumberWarningMessages = true,
+    getNumberWarningMessage = defaultNumberWarningMessageGetter,
     ...passThrough
   } = props;
 
-  const numberContext = useContext(NumberContext);
-  const locale = explicitLocale || numberContext.locale;
-  const currency = inputConfig.currency;
   const isFocusRef = useRef(false);
   const isPasteRef = useRef(false);
   const parser = useMemo(() => getParser(locale), [locale]);
   const groupingSeparator = parser.getGroupingSeparator();
   const decimalSeparator = parser.getDecimalSeparator();
   const lastValueRef = useRef(value);
-
+  const [message, setMessage] = useState<NumberWarningMessage>();
   const [inputState, setInputState] = useState(false);
+  const inputConfig = useMemo(() => {
+    const result: Intl.NumberFormatOptions = getDefinedNumberFormatOptions(
+      props,
+      ["maximumFractionDigits", "currency"]
+    );
+    if (currency) {
+      result.style = "currency";
+    }
+
+    result.useGrouping = false;
+    return result;
+  }, [maximumFractionDigits, currency]);
+  const displayConfig = useMemo(() => {
+    const result: Intl.NumberFormatOptions = getDefinedNumberFormatOptions(
+      props,
+      [
+        "minimumIntegerDigits",
+        "minimumFractionDigits",
+        "maximumFractionDigits",
+        "minimumSignificantDigits",
+        "maximumSignificantDigits",
+        "useGrouping",
+        "currency",
+      ]
+    );
+    if (currency) {
+      result.style = "currency";
+    }
+    return result;
+  }, [
+    minimumIntegerDigits,
+    minimumFractionDigits,
+    maximumFractionDigits,
+    minimumSignificantDigits,
+    maximumSignificantDigits,
+    useGrouping,
+    currency,
+  ]);
+
+  if (minimumValue > 1) {
+    throw Error("MinValue must be between Number.MIN_SAFE_INTEGER and 1!");
+  } else if (maximumValue < -1) {
+    throw Error("MaxValue must be between -1 and Number.MAX_SAFE_INTEGER!");
+  }
 
   // Format numbers for input
   const formatForInput = useMemo(() => {
-    const specialConf = {
+    const specialConf: Intl.NumberFormatOptions = {
       ...inputConfig,
       // always allow for less then the regular fraction digits while typing
-      minimumFractionDigits: 0,
+      minimumIntegerDigits: undefined,
+      minimumFractionDigits: undefined,
+      minimumSignificantDigits: undefined,
+      maximumSignificantDigits: undefined,
       // grouping would change all the time while typing => always off
       useGrouping: false,
     };
@@ -119,7 +175,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       : formatter.format;
   }, [displayConfig, locale]);
 
-  // number parser with max restriction
+  // number parser with min & max restriction
   const parseValue = useCallback(
     (inputValue?: string): number | undefined => {
       if (!inputValue) {
@@ -129,13 +185,11 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       // parse the formatted number: max restrictions might apply
       let result = parser.parse(formatForInput(parser.parse(inputValue)));
 
-      // check for max number
-      const calculatedMax =
-        max !== undefined && max < Number.MAX_SAFE_INTEGER
-          ? max
-          : Number.MAX_SAFE_INTEGER;
-      if (result !== undefined && result > calculatedMax) {
-        result = calculatedMax;
+      if (result !== undefined && result > maximumValue) {
+        result = maximumValue;
+      }
+      if (result !== undefined && result < minimumValue) {
+        result = minimumValue;
       }
 
       return result;
@@ -161,9 +215,25 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     (event: KeyboardEvent<HTMLInputElement>) => {
       const originalValue = event.currentTarget.value;
 
-      if (event.key === "Space") {
+      if (event.code === "Space") {
         event.preventDefault();
         event.stopPropagation();
+
+        setMessage({
+          type: WarningMessageTypes.BLOCKED_WHITESPACE,
+          discardedValue: " ",
+        });
+        return false;
+      }
+
+      if (minimumValue === 0 && event.key === "-") {
+        event.preventDefault();
+        event.stopPropagation();
+
+        setMessage({
+          type: WarningMessageTypes.BLOCKED_NEGATIVE_NUMBER,
+          discardedValue: event.key,
+        });
         return false;
       }
 
@@ -196,6 +266,13 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         if (isNan || isBlockedFraction) {
           event.preventDefault();
           event.stopPropagation();
+
+          setMessage({
+            type: isNan
+              ? WarningMessageTypes.BLOCKED_NOT_A_NUMBER
+              : WarningMessageTypes.BLOCKED_FRACTION,
+            discardedValue: event.key,
+          });
           return false;
         }
       }
@@ -204,6 +281,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       if (onKeyDownOriginal) {
         onKeyDownOriginal(event);
       }
+      setMessage(undefined);
     },
     [parser, maxFractionDigits, decimalSeparator, onKeyDownOriginal]
   );
@@ -219,28 +297,42 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       const valueChanged =
         parser.parse(currentValueRef.current) !== parsedValue;
 
-      if (valueChanged) {
+      if (valueChanged && originalValue !== "-") {
         isPasteRef.current = false;
 
-        // value is now invalid, but was valid before
+        // parsed value is invalid, but the original value has content
+        // => reset to last valid value before the change
         if (parsedValue === undefined && originalValue !== "") {
+          setMessage({
+            type: WarningMessageTypes.RESET_NOT_A_NUMBER,
+            discardedValue: originalValue,
+          });
           event.currentTarget.value = currentValueRef.current || "";
           return;
         }
 
-        // if parseValue changed the value, then reset the input to our value
-        if (safeValue !== parsedValue) {
-          currentValueRef.current = formatForInput(safeValue);
-          event.currentTarget.value = currentValueRef.current || "";
-          return;
-        }
-
-        // handle too many fraction digits
+        // too many fraction digits
         const decIndex = originalValue.indexOf(decimalSeparator);
         const fracDigits =
           decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
-        if (fracDigits > maxFractionDigits) {
+        const tooManyFracs = fracDigits > maxFractionDigits;
+
+        // if parseValue changed the value, then reset the input to our value
+        if (safeValue !== parsedValue) {
+          const isChanged =
+            safeValue !== undefined && parsedValue !== undefined;
+          currentValueRef.current = formatForInput(safeValue);
           event.currentTarget.value = currentValueRef.current || "";
+          setMessage({
+            type: tooManyFracs
+              ? WarningMessageTypes.MODIFIED_MAX_FRACTION_DIGITS
+              : !isChanged
+              ? WarningMessageTypes.MODIFIED
+              : safeValue > parsedValue
+              ? WarningMessageTypes.MODIFIED_MIN_NUMBER
+              : WarningMessageTypes.MODIFIED_MAX_NUMBER,
+            discardedValue: originalValue,
+          });
           return;
         }
 
@@ -273,7 +365,6 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 
     // extra method to provide the value as number
     if (onValue) {
-      console.log("vvv", `[${val}]`);
       onValue(val);
     }
   }, [setInputState, formatForInput, parseValue]);
@@ -332,6 +423,10 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 
       // not a number
       if (parsed === undefined) {
+        setMessage({
+          type: WarningMessageTypes.BLOCKED_NOT_A_NUMBER,
+          discardedValue: data,
+        });
         event.preventDefault();
         event.stopPropagation();
         return;
@@ -358,6 +453,22 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   }
   lastValueRef.current = value;
 
+  //
+  // if (
+  //   (valueStateMessage || valueState) &&
+  //   lastValueStateRef.current !== valueState
+  // ) {
+  //   lastValueStateRef.current = valueState;
+
+  //   messageType = valueState;
+  //   msg = valueStateMessage;
+  // } else if (message?.type) {
+  const showWarning = message && showNumberWarningMessages;
+  const messageType = showWarning ? ValueState.Warning : undefined;
+  const msg = showWarning
+    ? getNumberWarningMessage(message.type, message.discardedValue)
+    : undefined;
+
   // the final string value for the input field
   const formattedValue = inputState
     ? currentValueRef.current || ""
@@ -368,9 +479,11 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       {...passThrough}
       type={InputType.Text}
       inputMode={maxFractionDigits === 0 ? "numeric" : "decimal"}
-      maxlength={16}
+      maxlength={18}
       ref={forwardedRef}
       value={formattedValue}
+      valueState={messageType}
+      valueStateMessage={msg && <div slot="valueStateMessage">{msg}</div>}
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
       onFocus={onFocus}

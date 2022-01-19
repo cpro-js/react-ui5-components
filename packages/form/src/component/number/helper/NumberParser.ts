@@ -1,3 +1,5 @@
+const STATIC_CURRENCY = "USD";
+
 /**
  * Source: https://observablehq.com/@mbostock/localized-number-parsing
  *
@@ -16,10 +18,10 @@ export class NumberParser {
   constructor(locale: string) {
     const prependTest = new Intl.NumberFormat(locale, {
       style: "currency",
-      currency: "USD",
+      currency: STATIC_CURRENCY,
       currencyDisplay: "code",
     }).format(1);
-    this.currencyAppended = !prependTest.startsWith("USD");
+    this.currencyAppended = !prependTest.startsWith(STATIC_CURRENCY);
 
     const formatter = new Intl.NumberFormat(locale);
     const parts = formatter.formatToParts(12345.6);

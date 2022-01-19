@@ -2,81 +2,74 @@ import { Story } from "@storybook/react";
 
 import { CurrencyInput } from "../CurrencyInput";
 import { NumberInput } from "../NumberInput";
-import { NumberI18nProvider, NumberI18nProviderProps } from "./NumberContext";
+import {
+  NumberContextProvider,
+  NumberContextProviderProps,
+} from "./NumberContext";
 
 export default {
-  title: "Form/Component/NumberI18nProvider",
-  component: NumberI18nProvider,
+  title: "Form/Component/NumberContextProvider",
+  component: NumberContextProvider,
 };
 
-const Template: Story<NumberI18nProviderProps> = (args) => {
+const Template: Story<NumberContextProviderProps> = (args) => {
   const value = 1000555.482;
-  const displayConfig = { useGrouping: true };
 
   return (
     <>
       <h2>Locale Provider with Locale [{args.locale}]</h2>
-      <NumberI18nProvider {...args}>
+      <NumberContextProvider {...args}>
         <h3>Number Input via Provider</h3>
-        <NumberInput value={value} displayConfig={displayConfig} />
+        <NumberInput value={value} />
         <h3>Currency Input via Provider</h3>
-        <CurrencyInput value={value} displayConfig={displayConfig} />
+        <CurrencyInput value={value} />
         <h3>Explicit IN</h3>
-        <NumberInput
-          value={value}
-          displayConfig={displayConfig}
-          locale="en-IN"
-        />
-        <CurrencyInput
-          value={value}
-          displayConfig={displayConfig}
-          locale="en-IN"
-          currency="INR"
-        />
-        <h3>Explicit JA (without fraction digits)</h3>
-        <NumberInput
-          value={value}
-          displayConfig={displayConfig}
-          locale="ja-JP"
-        />
-        <CurrencyInput
-          value={value}
-          displayConfig={displayConfig}
-          locale="ja-JP"
-          currency="JPY"
-        />
-      </NumberI18nProvider>
+        <NumberInput value={value} locale="en-IN" />
+        <CurrencyInput value={value} locale="en-IN" currency="INR" />
+        <h3>Explicit JA (without fraction digits for currency)</h3>
+        <NumberInput value={value} locale="ja-JP" />
+        <CurrencyInput value={value} locale="ja-JP" currency="JPY" />
+      </NumberContextProvider>
     </>
   );
 };
 
 export const Standard = Template.bind({});
-Standard.args = { locale: "en", currency: "USD" };
+Standard.args = { locale: "en", currency: "USD", useGrouping: true };
 
 export const Locale_DE = Template.bind({});
-Locale_DE.args = { locale: "de", currency: "EUR" };
+Locale_DE.args = { locale: "de", currency: "EUR", useGrouping: true };
 
-export const Nested: Story<NumberI18nProviderProps> = (args) => {
+export const Nested: Story<NumberContextProviderProps> = (args) => {
   const value = 1000555.482;
-  const displayConfig = { useGrouping: true };
 
   return (
-    <NumberI18nProvider locale="en-IN">
+    <NumberContextProvider locale="en-IN" currency="USD" useGrouping>
       <h2>Outer Part (en-IN)</h2>
-      <NumberInput value={value} displayConfig={displayConfig} />
-      <CurrencyInput
-        value={value}
-        displayConfig={displayConfig}
-        currency="INR"
-      />
+      <NumberInput value={value} />
+      <CurrencyInput value={value} currency="INR" />
 
       <div>
         <h2>Inner Part (de)</h2>
-        <NumberI18nProvider locale="de" currency="EUR">
-          <NumberInput value={value} displayConfig={displayConfig} />
-          <CurrencyInput value={value} displayConfig={displayConfig} />
-        </NumberI18nProvider>
+        <NumberContextProvider locale="de" currency="EUR">
+          <NumberInput value={value} />
+          <CurrencyInput value={value} />
+        </NumberContextProvider>
       </div>
-    </NumberI18nProvider>
+
+      <div>
+        <h2>No Grouping, special warning message, 1 maxFractionDigits</h2>
+        <NumberContextProvider
+          useGrouping={false}
+          maximumFractionDigits={1}
+          getNumberWarningMessage={(type, discardedValue) =>
+            `${type}: ${discardedValue}`
+          }
+        >
+          <NumberInput value={value} />
+          <CurrencyInput value={value} />
+        </NumberContextProvider>
+      </div>
+    </NumberContextProvider>
   );
 };
