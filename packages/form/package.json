@@ -1,6 +1,6 @@
 {
   "name": "@cpro-js/react-ui5-webcomponents-form",
-  "version": "0.24.0",
+  "version": "0.24.1",
   "publishConfig": {
     "access": "public"
   },

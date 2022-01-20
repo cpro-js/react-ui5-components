@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.24.1](https://github.com/cpro-js/react-ui5-components/compare/v0.24.0...v0.24.1) (2022-01-20)
+
+### Bug Fixes
+
+- numberContext with showCurrency prop ([80fe167](https://github.com/cpro-js/react-ui5-components/commit/80fe167d1adede7123e2bd386201a5bfb79a6b54))
+- onKeyUp for number & currency fields only when needed ([2cf6225](https://github.com/cpro-js/react-ui5-components/commit/2cf6225f80c0ac6ff301fea256347ec4f9bd9cd4))
+
 # [0.24.0](https://github.com/cpro-js/react-ui5-components/compare/v0.23.0...v0.24.0) (2022-01-20)
 
 ### Features
