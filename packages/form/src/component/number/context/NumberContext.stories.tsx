@@ -54,6 +54,7 @@ export const Nested: Story<NumberContextProviderProps> = (args) => {
         <NumberContextProvider locale="de" currency="EUR">
           <NumberInput value={value} />
           <CurrencyInput value={value} />
+          <CurrencyInput value={value} showCurrency={false} />
         </NumberContextProvider>
       </div>
 
@@ -62,12 +63,14 @@ export const Nested: Story<NumberContextProviderProps> = (args) => {
         <NumberContextProvider
           useGrouping={false}
           maximumFractionDigits={1}
+          showCurrency={false}
           getNumberWarningMessage={(type, discardedValue) =>
             `${type}: ${discardedValue}`
           }
         >
           <NumberInput value={value} />
           <CurrencyInput value={value} />
+          <CurrencyInput value={value} showCurrency />
         </NumberContextProvider>
       </div>
     </NumberContextProvider>

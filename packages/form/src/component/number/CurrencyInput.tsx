@@ -22,7 +22,7 @@ export interface CurrencyInputProps
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   const {
     currency: explicitCurrency,
-    showCurrency = true,
+    showCurrency,
     style = {},
     ...passThrough
   } = props;
@@ -34,9 +34,15 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
     throw Error("Currency must be provided to CurrencyInput!");
   }
 
+  const isShowCurrency = props.hasOwnProperty("showCurrency")
+    ? showCurrency
+    : numberContext.hasOwnProperty("showCurrency")
+    ? numberContext.showCurrency
+    : true;
+
   return (
     <BaseNumberInput
-      icon={showCurrency ? <span>{currency}</span> : undefined}
+      icon={isShowCurrency ? <span>{currency}</span> : undefined}
       {...numberContext}
       {...passThrough}
       currency={currency}

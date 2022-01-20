@@ -1,5 +1,6 @@
 import { FC, createContext, useContext } from "react";
 
+import { CurrencyInputProps } from "../CurrencyInput";
 import { NumberInputProps } from "../NumberInput";
 import { CommonNumberInputProps, NumberDisplayConfig } from "../NumberModel";
 
@@ -9,9 +10,9 @@ export interface NumberContextProps
     Pick<
       CommonNumberInputProps,
       "showNumberWarningMessages" | "getNumberWarningMessage"
-    > {
+    >,
+    Pick<CurrencyInputProps, "currency" | "showCurrency"> {
   locale: string;
-  currency?: string;
 }
 
 export const NumberContext = createContext<NumberContextProps>({

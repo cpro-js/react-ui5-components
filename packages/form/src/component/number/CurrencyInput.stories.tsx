@@ -1,4 +1,3 @@
-import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
 
 import { CurrencyInput, CurrencyInputProps } from "./CurrencyInput";
@@ -20,6 +19,9 @@ Prefilled.args = { ...Standard.args, value: 123456.789 };
 
 export const WithoutCurrency = Template.bind({});
 WithoutCurrency.args = { ...Prefilled.args, showCurrency: false };
+
+export const WithIcon = Template.bind({});
+WithIcon.args = { ...Prefilled.args, icon: <span>Hey</span> };
 
 export const AlignLeft = Template.bind({});
 AlignLeft.args = { ...Prefilled.args, style: { textAlign: "left" } };

@@ -18,7 +18,8 @@ export const NumberInput: FC<NumberInputProps> = forwardRef<
   InputDomRef,
   NumberInputProps
 >((props, forwardedRef) => {
-  const { currency, ...contextProps } = useContext(NumberContext);
+  // extract currency specific fields from context
+  const { currency, showCurrency, ...contextProps } = useContext(NumberContext);
 
   return <BaseNumberInput {...contextProps} {...props} ref={forwardedRef} />;
 });
