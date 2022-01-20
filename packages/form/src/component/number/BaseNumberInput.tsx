@@ -202,11 +202,37 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     value !== undefined ? formatForInput(parseValue(String(value))) : undefined
   );
 
+  // determine maxFracDigits
   const maxFractionDigits = useMemo(() => {
     const decimalTest = formatForInput(0.1111111111111111);
-
     return decimalTest.length <= 1 ? 0 : decimalTest.length - 2;
   }, [formatForInput]);
+
+  const onPaste = useCallback(
+    (event: ClipboardEvent<HTMLInputElement>) => {
+      const data = event.clipboardData.getData("text");
+      const parsed = parseValue(data);
+
+      // not a number
+      if (parsed === undefined) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        setMessage({
+          type: WarningMessageTypes.BLOCKED_NOT_A_NUMBER,
+          discardedValue: data,
+        });
+        return;
+      }
+
+      isPasteRef.current = true;
+
+      if (onPasteOriginal) {
+        onPasteOriginal(event);
+      }
+    },
+    [parseValue, onPasteOriginal]
+  );
 
   /**
    * Prevent invalid data, e.g. not a number.
@@ -281,6 +307,8 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       if (onKeyDownOriginal) {
         onKeyDownOriginal(event);
       }
+
+      // changed
       setMessage(undefined);
     },
     [parser, maxFractionDigits, decimalSeparator, onKeyDownOriginal]
@@ -294,20 +322,18 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       const originalValue = event.currentTarget.value;
       const parsedValue = parser.parse(originalValue);
       const safeValue = parseValue(originalValue);
-      const valueChanged =
-        parser.parse(currentValueRef.current) !== parsedValue;
 
-      if (valueChanged && originalValue !== "-") {
+      if (originalValue !== currentValueRef.current && originalValue !== "-") {
         isPasteRef.current = false;
 
         // parsed value is invalid, but the original value has content
         // => reset to last valid value before the change
         if (parsedValue === undefined && originalValue !== "") {
+          event.currentTarget.value = currentValueRef.current || "";
           setMessage({
             type: WarningMessageTypes.RESET_NOT_A_NUMBER,
             discardedValue: originalValue,
           });
-          event.currentTarget.value = currentValueRef.current || "";
           return;
         }
 
@@ -318,7 +344,8 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         const tooManyFracs = fracDigits > maxFractionDigits;
 
         // if parseValue changed the value, then reset the input to our value
-        if (safeValue !== parsedValue) {
+        // corner case for checking tooManyFracs: 1.110 => 1.11
+        if (safeValue !== parsedValue || tooManyFracs) {
           const isChanged =
             safeValue !== undefined && parsedValue !== undefined;
           currentValueRef.current = formatForInput(safeValue);
@@ -360,6 +387,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 
   const leaveInputState = useCallback(() => {
     setInputState(false);
+    setMessage(undefined);
     const val = parseValue(currentValueRef.current);
     currentValueRef.current = formatForInput(val);
 
@@ -416,31 +444,6 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     [leaveInputState, onMouseLeaveOriginal]
   );
 
-  const onPaste = useCallback(
-    (event: ClipboardEvent<HTMLInputElement>) => {
-      const data = event.clipboardData.getData("text");
-      const parsed = parseValue(data);
-
-      // not a number
-      if (parsed === undefined) {
-        setMessage({
-          type: WarningMessageTypes.BLOCKED_NOT_A_NUMBER,
-          discardedValue: data,
-        });
-        event.preventDefault();
-        event.stopPropagation();
-        return;
-      }
-
-      isPasteRef.current = true;
-
-      if (onPasteOriginal) {
-        onPasteOriginal(event);
-      }
-    },
-    [parseValue, onPasteOriginal]
-  );
-
   // support externally set values, required for form reset
   if (lastValueRef.current !== value) {
     const val =
@@ -453,21 +456,16 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   }
   lastValueRef.current = value;
 
-  //
-  // if (
-  //   (valueStateMessage || valueState) &&
-  //   lastValueStateRef.current !== valueState
-  // ) {
-  //   lastValueStateRef.current = valueState;
-
-  //   messageType = valueState;
-  //   msg = valueStateMessage;
-  // } else if (message?.type) {
-  const showWarning = message && showNumberWarningMessages;
-  const messageType = showWarning ? ValueState.Warning : undefined;
-  const msg = showWarning
-    ? getNumberWarningMessage(message.type, message.discardedValue)
-    : undefined;
+  // handle warnings
+  const showWarning = showNumberWarningMessages && message;
+  const msgType = showWarning ? ValueState.Warning : valueState;
+  const msg = !showWarning ? (
+    valueStateMessage
+  ) : (
+    <div slot="valueStateMessage">
+      {getNumberWarningMessage(message.type, message.discardedValue)}
+    </div>
+  );
 
   // the final string value for the input field
   const formattedValue = inputState
@@ -482,8 +480,8 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       maxlength={18}
       ref={forwardedRef}
       value={formattedValue}
-      valueState={messageType}
-      valueStateMessage={msg && <div slot="valueStateMessage">{msg}</div>}
+      valueState={msgType}
+      valueStateMessage={msg}
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
       onFocus={onFocus}
