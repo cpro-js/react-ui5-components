@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.24.0](https://github.com/cpro-js/react-ui5-components/compare/v0.23.0...v0.24.0) (2022-01-20)
+
+### Features
+
+- numberInput & currencyInput ([#52](https://github.com/cpro-js/react-ui5-components/issues/52)) ([b12bf8c](https://github.com/cpro-js/react-ui5-components/commit/b12bf8c199401f88d7bc25ec0eb9b0378a57bb16))
+
 # [0.23.0](https://github.com/cpro-js/react-ui5-components/compare/v0.22.0...v0.23.0) (2021-11-26)
 
 ### Features
