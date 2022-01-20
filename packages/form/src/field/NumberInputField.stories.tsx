@@ -31,10 +31,12 @@ const I18nTemplate: Story<
 > = (args, context) => {
   return (
     <FormI18nProvider
-      getValidationErrorMessage={({ name }, error) => {
+      getValidationErrorMessage={({ name, value }, error) => {
         return `Field '${name}' has Error '${
           error.type
-        }'. Original error message: ${error.message || "---"}`;
+        }'. Offending value: '${value}'. Original error message: ${
+          error.message || "---"
+        }`;
       }}
     >
       {Template(args, context)}
@@ -71,12 +73,14 @@ ValidationRequired.args = {
 };
 
 export const ValidationMin = Template.bind({});
+ValidationMin.storyName = "Validation Min (4)";
 ValidationMin.args = {
   ...Empty.args,
   min: 4,
 };
 
 export const ValidationMinMax = Template.bind({});
+ValidationMinMax.storyName = "Validation MinMax (4-10)";
 ValidationMinMax.args = {
   ...Empty.args,
   min: 4,
@@ -89,12 +93,20 @@ ValidationTranslationRequired.args = {
 };
 
 export const ValidationTranslationMin = I18nTemplate.bind({});
+ValidationTranslationMin.storyName = "Validation Translation Min (4)";
 ValidationTranslationMin.args = {
   ...ValidationMin.args,
 };
 
 export const ValidationTranslationMinMax = I18nTemplate.bind({});
+ValidationTranslationMinMax.storyName = "Validation Translation MinMax (4-10)";
 ValidationTranslationMinMax.args = {
+  ...ValidationMinMax.args,
+};
+
+export const LocalizedDe = I18nTemplate.bind({});
+LocalizedDe.storyName = "Localized DE MinMax (4-10)";
+LocalizedDe.args = {
   ...ValidationMinMax.args,
 };
 

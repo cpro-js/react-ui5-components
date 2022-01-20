@@ -1,3 +1,6 @@
+import "@ui5/webcomponents-icons/dist/error";
+import "@ui5/webcomponents-icons/dist/alert";
+
 import { Story } from "@storybook/react";
 
 import { NumberInput, NumberInputProps } from "./NumberInput";

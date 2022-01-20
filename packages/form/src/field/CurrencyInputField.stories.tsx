@@ -55,6 +55,15 @@ Prefilled.args = {
   },
 };
 
+export const PrefilledAndRounded = Template.bind({});
+PrefilledAndRounded.storyName = "Prefilled (10.299) and Rounded";
+PrefilledAndRounded.args = {
+  ...Empty.args,
+  initialValues: {
+    theNumber: 10.299,
+  },
+};
+
 export const Disabled = Template.bind({});
 Disabled.args = {
   ...Prefilled.args,
@@ -74,12 +83,14 @@ ValidationRequired.args = {
 };
 
 export const ValidationMin = Template.bind({});
+ValidationMin.storyName = "Validation Min (> 4)";
 ValidationMin.args = {
   ...Empty.args,
   min: 4,
 };
 
 export const ValidationMinMax = Template.bind({});
+ValidationMinMax.storyName = "Validation MinMax (4 - 10)";
 ValidationMinMax.args = {
   ...Empty.args,
   min: 4,
@@ -92,17 +103,28 @@ ValidationTranslationRequired.args = {
 };
 
 export const ValidationTranslationMin = I18nTemplate.bind({});
+ValidationTranslationMin.storyName = "Validation Translation Min (min: 4c)";
 ValidationTranslationMin.args = {
   ...ValidationMin.args,
 };
 
 export const ValidationTranslationMinMax = I18nTemplate.bind({});
+ValidationTranslationMinMax.storyName =
+  "Validation Translation (min: 4, max: 10)";
 ValidationTranslationMinMax.args = {
   ...ValidationMinMax.args,
 };
 
 export const LocalizedDe = I18nTemplate.bind({});
+LocalizedDe.storyName = "Localized DE";
 LocalizedDe.args = {
+  ...Prefilled.args,
+  locale: "de",
+};
+
+export const LocalizedDeMinMax = I18nTemplate.bind({});
+LocalizedDeMinMax.storyName = "Localized Min Max DE (min: 4, max: 10)";
+LocalizedDeMinMax.args = {
   ...ValidationMinMax.args,
   locale: "de",
 };

@@ -72,6 +72,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     onFocus: onFocusOriginal,
     onBlur: onBlurOriginal,
     onPaste: onPasteOriginal,
+    onChange: onChangeOriginal,
     onMouseEnter: onMouseEnterOriginal,
     onMouseLeave: onMouseLeaveOriginal,
     valueState,
@@ -82,7 +83,6 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   } = props;
 
   const isFocusRef = useRef(false);
-  const isPasteRef = useRef(false);
   const parser = useMemo(() => getParser(locale), [locale]);
   const groupingSeparator = parser.getGroupingSeparator();
   const decimalSeparator = parser.getDecimalSeparator();
@@ -225,8 +225,6 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         return;
       }
 
-      isPasteRef.current = true;
-
       if (onPasteOriginal) {
         onPasteOriginal(event);
       }
@@ -324,8 +322,6 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       const safeValue = parseValue(originalValue);
 
       if (originalValue !== currentValueRef.current && originalValue !== "-") {
-        isPasteRef.current = false;
-
         // parsed value is invalid, but the original value has content
         // => reset to last valid value before the change
         if (parsedValue === undefined && originalValue !== "") {
@@ -372,30 +368,16 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
 
       // allow consumers to have access to onKeyUp too
       if (onKeyUpOriginal) {
-        onKeyUpOriginal(event);
+        onKeyUpOriginal(event, parseValue(currentValueRef.current));
       }
     },
-    [
-      parser,
-      groupingSeparator,
-      decimalSeparator,
-      parseValue,
-      onValue,
-      onKeyUpOriginal,
-    ]
+    [parser, groupingSeparator, decimalSeparator, parseValue, onKeyUpOriginal]
   );
 
   const leaveInputState = useCallback(() => {
     setInputState(false);
     setMessage(undefined);
-    const val = parseValue(currentValueRef.current);
-    currentValueRef.current = formatForInput(val);
-
-    // extra method to provide the value as number
-    if (onValue) {
-      onValue(val);
-    }
-  }, [setInputState, formatForInput, parseValue]);
+  }, [setInputState, setMessage]);
 
   const onFocus = useCallback(
     (event) => {
@@ -419,6 +401,21 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       }
     },
     [leaveInputState, onBlurOriginal]
+  );
+
+  const onChange = useCallback(
+    (event) => {
+      const val = parseValue(currentValueRef.current);
+
+      // extra method to provide the value as number
+      if (onValue && val !== value) {
+        onValue(val);
+      }
+      if (onChangeOriginal) {
+        onChangeOriginal(event, val);
+      }
+    },
+    [parseValue, value]
   );
 
   const onMouseEnter = useCallback(
@@ -489,6 +486,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onPaste={onPaste}
+      onChange={onChange}
     />
   );
 });
