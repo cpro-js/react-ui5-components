@@ -48,10 +48,8 @@ export const CurrencyInputField: FC<CurrencyInputFieldProps> = ({
 
   // clear error on first change
   const onKeyUp = useCallback(() => {
-    if (hasError(fieldState.error)) {
-      clearErrors(name);
-    }
-  }, [fieldState, clearErrors]);
+    clearErrors(name);
+  }, [clearErrors, name]);
 
   return (
     <CurrencyInput
@@ -78,7 +76,7 @@ export const CurrencyInputField: FC<CurrencyInputFieldProps> = ({
       aria-valuemax={
         max != null ? (typeof max === "number" ? max : max.value) : undefined
       }
-      onKeyUp={onKeyUp}
+      onKeyUp={hasError(fieldState.error) ? onKeyUp : undefined}
     />
   );
 };

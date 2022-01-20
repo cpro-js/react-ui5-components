@@ -48,10 +48,8 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
 
   // clear error on first change
   const onKeyUp = useCallback(() => {
-    if (hasError(fieldState.error)) {
-      clearErrors(name);
-    }
-  }, [fieldState, clearErrors]);
+    clearErrors(name);
+  }, [clearErrors, name]);
 
   return (
     <NumberInput
@@ -78,7 +76,7 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
       aria-valuemax={
         max != null ? (typeof max === "number" ? max : max.value) : undefined
       }
-      onKeyUp={onKeyUp}
+      onKeyUp={hasError(fieldState.error) ? onKeyUp : undefined}
     />
   );
 };
