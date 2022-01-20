@@ -7,17 +7,17 @@ import { useController, useFormContext } from "react-hook-form";
 import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 import { hasError } from "./util";
-import { NumberInput, NumberInputProps } from "..";
+import { CurrencyInput, CurrencyInputProps } from "..";
 
-export type NumberInputFieldProps = Omit<
-  NumberInputProps,
-  "name" | "value" | "onChange" | "valueState" | "onBlur" | "max"
+export type CurrencyInputFieldProps = Omit<
+  CurrencyInputProps,
+  "name" | "value" | "onChange" | "valueState" | "onBlur"
 > &
   Pick<FormFieldValidation, "required" | "min" | "max"> & {
     name: string;
   };
 
-export const NumberInputField: FC<NumberInputFieldProps> = ({
+export const CurrencyInputField: FC<CurrencyInputFieldProps> = ({
   name,
   required,
   min,
@@ -54,7 +54,7 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
   }, [fieldState, clearErrors]);
 
   return (
-    <NumberInput
+    <CurrencyInput
       {...props}
       ref={field.ref}
       name={field.name}

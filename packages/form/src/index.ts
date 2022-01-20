@@ -1,3 +1,4 @@
+import { Component } from "react";
 // basic form component wrappers
 export { Button } from "./component/Button";
 export type { ButtonProps } from "./component/Button";
@@ -25,6 +26,12 @@ export type { TextAreaProps } from "./component/TextArea";
 
 export { TextInput } from "./component/TextInput";
 export type { TextInputProps } from "./component/TextInput";
+
+export { NumberInput } from "./component/number/NumberInput";
+export type { NumberInputProps } from "./component/number/NumberInput";
+
+export { CurrencyInput } from "./component/number/CurrencyInput";
+export type { CurrencyInputProps } from "./component/number/CurrencyInput";
 
 export { AutoComplete } from "./component/autocomplete/AutoComplete";
 export type { AutoCompleteProps } from "./component/autocomplete/AutoComplete";
@@ -75,6 +82,9 @@ export type { MultiSelectFieldProps } from "./field/MultiSelectField";
 
 export { NumberInputField } from "./field/NumberInputField";
 export type { NumberInputFieldProps } from "./field/NumberInputField";
+
+export { CurrencyInputField } from "./field/CurrencyInputField";
+export type { CurrencyInputFieldProps } from "./field/CurrencyInputField";
 
 export { SelectField } from "./field/SelectField";
 export type { SelectFieldProps } from "./field/SelectField";
@@ -134,3 +144,6 @@ export { ISO8601DateAdapter } from "./form/adapter/date/ISO8601DateAdapter";
 export { ISODateTimeAdapter } from "./form/adapter/date/ISODateTimeAdapter";
 
 export { toISO8601DateString, toISODateTimeString } from "./util/date";
+
+export { NumberContextProvider } from "./component/number/context/NumberContext";
+export type { NumberContextProviderProps } from "./component/number/context/NumberContext";
