@@ -145,5 +145,8 @@ export { ISODateTimeAdapter } from "./form/adapter/date/ISODateTimeAdapter";
 
 export { toISO8601DateString, toISODateTimeString } from "./util/date";
 
-export { NumberContextProvider } from "./component/number/context/NumberContext";
+export {
+  NumberContextProvider,
+  NumberContext,
+} from "./component/number/context/NumberContext";
 export type { NumberContextProviderProps } from "./component/number/context/NumberContext";
