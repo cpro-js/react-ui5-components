@@ -32,18 +32,15 @@ export type CreatedAutoCompleteOption = DefaultAutoCompleteOption & {
  * => Controlled Component
  */
 export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
-  Pick<
+  Omit<
     InputPropTypes,
-    | "style"
-    | "className"
-    | "id"
-    | "placeholder"
-    | "valueState"
-    | "valueStateMessage"
-    | "onBlur"
-    | "required"
-    | "disabled"
-    | "readonly"
+    | "children"
+    | "value"
+    | "name"
+    | "onChange"
+    | "onInput"
+    | "showSuggestions"
+    | "type"
   > & {
     /**
      * Name of the input.
@@ -117,6 +114,12 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
      * @param suggestionValue
      */
     filterItem?: null | ((inputValue: string, item: T) => boolean);
+
+    /**
+     * If user doesn't select a suggested value, her input will be lost if this prop is set to true.
+     * Default: true;
+     */
+    forceSelection?: boolean;
   };
 
 export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
