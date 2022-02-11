@@ -6,14 +6,14 @@ const STATIC_CURRENCY = "USD";
  * Adapted to TS.
  */
 export class NumberParser {
-  private group: RegExp;
+  private group: RegExp | undefined;
   private decimal: RegExp;
   private numeral: RegExp;
   private index: any;
 
   private currencyAppended: boolean;
   private decimalSign: string;
-  private groupSign: string;
+  private groupSign: string | undefined;
 
   constructor(locale: string) {
     const prependTest = new Intl.NumberFormat(locale, {
@@ -27,8 +27,10 @@ export class NumberParser {
     const parts = formatter.formatToParts(12345.6);
     this.decimalSign = parts.find((d) => d.type === "decimal")!.value;
     this.decimal = new RegExp(`[${this.decimalSign}]`);
-    this.groupSign = parts.find((d) => d.type === "group")!.value;
-    this.group = new RegExp(`[${this.groupSign}]`, "g");
+    this.groupSign = parts.find((d) => d.type === "group")?.value;
+    this.group = this.groupSign
+      ? new RegExp(`[${this.groupSign}]`, "g")
+      : undefined;
 
     const numerals = [
       ...new Intl.NumberFormat(locale, { useGrouping: false }).format(
@@ -58,7 +60,7 @@ export class NumberParser {
       return undefined;
     }
 
-    if (allowGroup) {
+    if (allowGroup && this.group) {
       fn = fn.replace(this.group, "");
     }
 

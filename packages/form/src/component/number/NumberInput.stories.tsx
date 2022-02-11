@@ -38,6 +38,12 @@ WithLocaleIn.args = {
   locale: "en-IN",
 };
 
+export const WithLocalePl = Template.bind({});
+WithLocalePl.args = {
+  ...WithGrouping.args,
+  locale: "pl",
+};
+
 export const WithIcon = Template.bind({});
 WithIcon.args = {
   ...Standard.args,
