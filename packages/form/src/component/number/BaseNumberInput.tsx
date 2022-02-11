@@ -216,15 +216,14 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       // not a number
       if (parsed === undefined) {
         event.preventDefault();
-        event.stopPropagation();
 
         setMessage({
           type: WarningMessageTypes.BLOCKED_NOT_A_NUMBER,
           discardedValue: data,
         });
-        return;
       }
 
+      // allow consumers to use onPaste as well
       if (onPasteOriginal) {
         onPasteOriginal(event);
       }
@@ -239,37 +238,27 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     (event: KeyboardEvent<HTMLInputElement>) => {
       const originalValue = event.currentTarget.value;
 
-      if (event.code === "Space") {
-        event.preventDefault();
-        event.stopPropagation();
+      let invalidDataMsg: NumberWarningMessage | undefined;
 
-        setMessage({
+      if (event.code === "Space") {
+        invalidDataMsg = {
           type: WarningMessageTypes.BLOCKED_WHITESPACE,
           discardedValue: " ",
-        });
-        return false;
-      }
-
-      if (minimumValue === 0 && event.key === "-") {
-        event.preventDefault();
-        event.stopPropagation();
-
-        setMessage({
+        };
+      } else if (minimumValue === 0 && event.key === "-") {
+        invalidDataMsg = {
           type: WarningMessageTypes.BLOCKED_NEGATIVE_NUMBER,
           discardedValue: event.key,
-        });
-        return false;
-      }
-
-      /**
-       * We're only interested in those keys which change our number value
-       * and these consist of a single char.
-       * Control keys / special keys get a descriptive name, i.e. longer than 1 char.
-       *
-       * Special handling:
-       * - key combinations (pressing STRG/ALT simultaneously)
-       */
-      if (
+        };
+      } else if (
+        /**
+         * We're only interested in those keys which change our number value
+         * and these consist of a single char.
+         * Control keys / special keys get a descriptive name, i.e. longer than 1 char.
+         *
+         * Special handling:
+         * - key combinations (pressing STRG/ALT simultaneously)
+         */
         event.key.length === 1 &&
         !event.ctrlKey &&
         !event.altKey &&
@@ -281,24 +270,25 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         const newValue = originalValue + event.key;
         const value = parser.parse(newValue);
         const isNan = newValue && value === undefined;
-
-        // no fraction digits, but fraction sign
-        const isBlockedFraction =
-          maxFractionDigits === 0 && event.key === decimalSeparator;
-
-        // block invalid content
-        if (isNan || isBlockedFraction) {
-          event.preventDefault();
-          event.stopPropagation();
-
-          setMessage({
-            type: isNan
-              ? WarningMessageTypes.BLOCKED_NOT_A_NUMBER
-              : WarningMessageTypes.BLOCKED_FRACTION,
+        // not a number
+        if (isNan) {
+          invalidDataMsg = {
+            type: WarningMessageTypes.BLOCKED_NOT_A_NUMBER,
             discardedValue: event.key,
-          });
-          return false;
+          };
         }
+        // no fraction digits, but fraction sign
+        else if (maxFractionDigits === 0 && event.key === decimalSeparator) {
+          invalidDataMsg = {
+            type: WarningMessageTypes.BLOCKED_FRACTION,
+            discardedValue: event.key,
+          };
+        }
+      }
+
+      // block invalid data input
+      if (invalidDataMsg) {
+        event.preventDefault();
       }
 
       // allow consumers to have access to onKeyDown too
@@ -306,8 +296,8 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         onKeyDownOriginal(event);
       }
 
-      // changed
-      setMessage(undefined);
+      // update message
+      setMessage(invalidDataMsg ?? undefined);
     },
     [parser, maxFractionDigits, decimalSeparator, onKeyDownOriginal]
   );
@@ -321,57 +311,62 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
       const parsedValue = parser.parse(originalValue);
       const safeValue = parseValue(originalValue);
 
+      let invalidDataMsg: NumberWarningMessage | undefined;
+
       if (originalValue !== currentValueRef.current && originalValue !== "-") {
         // parsed value is invalid, but the original value has content
         // => reset to last valid value before the change
         if (parsedValue === undefined && originalValue !== "") {
           event.currentTarget.value = currentValueRef.current || "";
-          setMessage({
+          invalidDataMsg = {
             type: WarningMessageTypes.RESET_NOT_A_NUMBER,
             discardedValue: originalValue,
-          });
-          return;
+          };
+        } else {
+          // too many fraction digits
+          const decIndex = originalValue.indexOf(decimalSeparator);
+          const fracDigits =
+            decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
+          const tooManyFracs = fracDigits > maxFractionDigits;
+
+          // if parseValue changed the value, then reset the input to our value
+          // corner case for checking tooManyFracs: 1.110 => 1.11
+          if (safeValue !== parsedValue || tooManyFracs) {
+            const isChanged =
+              safeValue !== undefined && parsedValue !== undefined;
+
+            currentValueRef.current = formatForInput(safeValue);
+            event.currentTarget.value = currentValueRef.current || "";
+            invalidDataMsg = {
+              type: tooManyFracs
+                ? WarningMessageTypes.MODIFIED_MAX_FRACTION_DIGITS
+                : !isChanged
+                ? WarningMessageTypes.MODIFIED
+                : safeValue > parsedValue
+                ? WarningMessageTypes.MODIFIED_MIN_NUMBER
+                : WarningMessageTypes.MODIFIED_MAX_NUMBER,
+              discardedValue: originalValue,
+            };
+          } else {
+            // set the current value to the changed value
+            currentValueRef.current = originalValue;
+          }
         }
-
-        // too many fraction digits
-        const decIndex = originalValue.indexOf(decimalSeparator);
-        const fracDigits =
-          decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
-        const tooManyFracs = fracDigits > maxFractionDigits;
-
-        // if parseValue changed the value, then reset the input to our value
-        // corner case for checking tooManyFracs: 1.110 => 1.11
-        if (safeValue !== parsedValue || tooManyFracs) {
-          const isChanged =
-            safeValue !== undefined && parsedValue !== undefined;
-          currentValueRef.current = formatForInput(safeValue);
-          event.currentTarget.value = currentValueRef.current || "";
-          setMessage({
-            type: tooManyFracs
-              ? WarningMessageTypes.MODIFIED_MAX_FRACTION_DIGITS
-              : !isChanged
-              ? WarningMessageTypes.MODIFIED
-              : safeValue > parsedValue
-              ? WarningMessageTypes.MODIFIED_MIN_NUMBER
-              : WarningMessageTypes.MODIFIED_MAX_NUMBER,
-            discardedValue: originalValue,
-          });
-          return;
-        }
-
-        // set the current value
-        currentValueRef.current = originalValue;
       }
 
-      // allow for submit via enter
-      triggerSubmitOnEnter(event);
+      if (invalidDataMsg) {
+        setMessage(invalidDataMsg);
+      } else {
+        // allow for submit via enter
+        triggerSubmitOnEnter(event);
+      }
 
       // allow consumers to have access to onKeyUp too
       if (onKeyUpOriginal) {
         onKeyUpOriginal(event, parseValue(currentValueRef.current));
       }
     },
-    [parser, groupingSeparator, decimalSeparator, parseValue, onKeyUpOriginal]
+    [parser, decimalSeparator, parseValue, onKeyUpOriginal]
   );
 
   const leaveInputState = useCallback(() => {
