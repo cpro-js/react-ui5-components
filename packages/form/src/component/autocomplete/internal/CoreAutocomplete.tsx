@@ -32,18 +32,15 @@ export type CreatedAutoCompleteOption = DefaultAutoCompleteOption & {
  * => Controlled Component
  */
 export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
-  Pick<
+  Omit<
     InputPropTypes,
-    | "style"
-    | "className"
-    | "id"
-    | "placeholder"
-    | "valueState"
-    | "valueStateMessage"
-    | "onBlur"
-    | "required"
-    | "disabled"
-    | "readonly"
+    | "children"
+    | "value"
+    | "name"
+    | "onChange"
+    | "onInput"
+    | "showSuggestions"
+    | "type"
   > & {
     /**
      * Name of the input.
