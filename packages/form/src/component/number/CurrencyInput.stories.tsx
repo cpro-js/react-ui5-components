@@ -41,3 +41,10 @@ WithLocaleDe.args = {
   locale: "de",
   currency: "EUR",
 };
+
+export const WithLocalePl = Template.bind({});
+WithLocalePl.args = {
+  ...WithGrouping.args,
+  locale: "pl",
+  currency: "EUR",
+};
