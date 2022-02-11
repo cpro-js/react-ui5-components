@@ -117,6 +117,12 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
      * @param suggestionValue
      */
     filterItem?: null | ((inputValue: string, item: T) => boolean);
+
+    /**
+     * If user doesn't select a suggested value, her input will be lost if this prop is set to true.
+     * Default: true;
+     */
+    forceSelection?: boolean;
   };
 
 export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(

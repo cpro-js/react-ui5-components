@@ -16,6 +16,7 @@ export const useInputState = <
     onInputChange: propsOnInputChange,
     onValueChange: propsOnValueChange,
     onBlur: propsOnBlur,
+    forceSelection = true,
   } = props;
 
   const [stateInputValue, setStateInputValue] = useState<string | undefined>(
@@ -64,12 +65,24 @@ export const useInputState = <
         propsOnBlur(event);
       }
 
-      if (latestValueRef.current == null && event.currentTarget.value != "") {
-        // reset display value when user leaves the field and there is no selected value
+      // reset display value when user leaves the field and there is no selected value
+      if (
+        forceSelection &&
+        latestValueRef.current == null &&
+        event.currentTarget.value != ""
+      ) {
         setStateInputValue("");
       }
+
+      // trigger onValue if selection is not forced
+      if (
+        !forceSelection &&
+        latestValueRef.current !== event.currentTarget.value
+      ) {
+        onValueChange(event.currentTarget.value);
+      }
     },
-    [setStateValue, propsOnBlur]
+    [setStateValue, propsOnBlur, onValueChange, forceSelection]
   );
 
   return {
