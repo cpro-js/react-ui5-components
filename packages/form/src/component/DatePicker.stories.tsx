@@ -1,5 +1,6 @@
 import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
+import { ThemeProvider } from "@ui5/webcomponents-react";
 
 import { ISO8601DateAdapter } from "../form/adapter/date/ISO8601DateAdapter";
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
@@ -8,7 +9,11 @@ import { toISO8601DateString } from "../util/date";
 import { DatePicker, DatePickerProps } from "./DatePicker";
 
 const Template: Story<DatePickerProps> = (args) => {
-  return <DatePicker {...args} />;
+  return (
+    <ThemeProvider>
+      <DatePicker {...args} />
+    </ThemeProvider>
+  );
 };
 
 export const Standard = Template.bind({});
