@@ -24,11 +24,14 @@ Standard.args = {
   },
 };
 
-export const CustomFormat = Template.bind({});
-CustomFormat.args = { ...Standard.args, formatPattern: "dd.MM.yyyy" };
-
 export const Prefilled = Template.bind({});
 Prefilled.args = { ...Standard.args, value: new Date() };
+
+export const ShortFormat = Template.bind({});
+ShortFormat.args = { ...Prefilled.args, formatPattern: "short" };
+
+export const CustomFormat = Template.bind({});
+CustomFormat.args = { ...Prefilled.args, formatPattern: "dd.MM.yyyy" };
 
 export const MinDateToday = Template.bind({});
 MinDateToday.args = { ...Standard.args, minDate: new Date() };
@@ -38,9 +41,11 @@ MaxDateToday.args = { ...Standard.args, maxDate: new Date() };
 
 const ISO8601DateTemplate: Story<DatePickerProps> = (args) => {
   return (
-    <FormAdapter date={ISO8601DateAdapter}>
-      <DatePicker {...args} />
-    </FormAdapter>
+    <ThemeProvider>
+      <FormAdapter date={ISO8601DateAdapter}>
+        <DatePicker {...args} />
+      </FormAdapter>
+    </ThemeProvider>
   );
 };
 

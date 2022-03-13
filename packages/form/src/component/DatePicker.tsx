@@ -157,7 +157,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
     const finalValues = useMemo(() => {
       // @ts-ignore
       const formatToUiString = ref.current?.formatValue?.bind(ref.current);
-      if (!ui5Loaded || !formatToUiString) {
+      if (!formatToUiString) {
         return { value: "" };
       }
 
@@ -165,7 +165,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
       const normalizedMinDate = convertToDate(minDate, parse);
       const normalizedMaxDate = convertToDate(maxDate, parse);
       return {
-        value: normalizedValue ? formatToUiString(value) : "",
+        value: normalizedValue ? formatToUiString(normalizedValue) : "",
         minDate: normalizedMinDate
           ? formatToUiString(normalizedMinDate)
           : undefined,
