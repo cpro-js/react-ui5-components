@@ -181,11 +181,11 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
         className={clsx(className, classes.fixWidth)}
         ref={setRef}
         value={finalValues.value}
+        minDate={finalValues.minDate}
+        maxDate={finalValues.maxDate}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onKeyPress={handleKeyPress}
-        minDate={finalValues.minDate}
-        maxDate={finalValues.maxDate}
       />
     );
   }
