@@ -1,6 +1,6 @@
 import { FilterBar } from "@ui5/webcomponents-react";
 import { FilterBarPropTypes } from "@ui5/webcomponents-react/components/FilterBar";
-import { FC, useCallback, useEffect, useRef } from "react";
+import { FC, forwardRef, useCallback, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { useFormActions } from "./useFormActions";
@@ -11,7 +11,10 @@ export interface FormFilterBarProps extends FilterBarPropTypes {}
 /**
  * Checkbox wrapper to transform the UI5 checkbox into a HTML compliant checkbox
  */
-export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
+export const FormFilterBar: FC<FormFilterBarProps> = forwardRef<
+  HTMLDivElement,
+  FormFilterBarProps
+>((props, forwardedRef) => {
   const {
     children,
 
@@ -163,6 +166,7 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   return (
     <FilterBar
+      ref={forwardedRef}
       {...others}
       onFiltersDialogOpen={handleFiltersDialogOpen}
       onFiltersDialogClose={handleFiltersDialogClose}
@@ -176,4 +180,4 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
       {children}
     </FilterBar>
   );
-};
+});
