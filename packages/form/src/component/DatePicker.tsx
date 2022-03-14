@@ -157,7 +157,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
     const finalValues = useMemo(() => {
       // @ts-ignore
       const formatToUiString = ref.current?.formatValue?.bind(ref.current);
-      if (!formatToUiString) {
+      if (!ui5Loaded || !formatToUiString) {
         return { value: "" };
       }
 
@@ -173,7 +173,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
           ? formatToUiString(normalizedMaxDate)
           : undefined,
       };
-    }, [isRefSet, value, minDate, maxDate]);
+    }, [ui5Loaded, isRefSet, value, minDate, maxDate]);
 
     return (
       <UI5DatePicker
