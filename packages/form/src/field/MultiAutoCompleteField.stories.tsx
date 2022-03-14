@@ -25,7 +25,7 @@ const Template: Story<FormControllerProps<FormData> & MultiAutoCompleteProps> =
 
     return (
       <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <MultiAutoCompleteField {...props} name={"item"} />
+        <MultiAutoCompleteField {...props} name={"items"} />
         <FormViewer submittedValues={submittedValues} />
       </FormController>
     );
@@ -50,6 +50,11 @@ const I18nTemplate: Story<
 export const Standard = Template.bind({});
 Standard.args = { values: undefined, onSearch: SEARCH_COUNTRIES };
 
+export const Disabled = Template.bind({});
+Disabled.args = {
+  disabled: true,
+};
+
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   ...Standard.args,
@@ -59,8 +64,8 @@ Prefilled.args = {
   },
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
+export const PrefilledAndDisabled = Template.bind({});
+PrefilledAndDisabled.args = {
   ...Prefilled.args,
   disabled: true,
 };
