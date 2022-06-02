@@ -1,7 +1,7 @@
 import { AsyncModuleRegistry } from "@cpro-js/react-core";
 
-import { NotificationStore } from "../dist";
 import { NotificationService } from "./NotificationService";
+import { NotificationStore } from "./NotificationStore";
 
 export { NotificationRenderer } from "./NotificationRenderer";
 export { NotificationService };
