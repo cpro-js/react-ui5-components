@@ -1,13 +1,5 @@
-import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
-import { FormEvent, useState } from "react";
 
-import {
-  DateTimePicker,
-  DateTimePickerProps,
-} from "../component/DateTimePicker";
-import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
-import { FormAdapter } from "../form/FormAdapter";
 import { FormController, FormControllerProps } from "../form/FormController";
 import {
   DateTimePickerField,
@@ -100,7 +92,7 @@ ValidationTranslationRequired.args = {
 
 export default {
   title: "Form/Field/DateTimePickerField",
-  component: DateTimePicker,
+  component: DateTimePickerField,
   argTypes: {
     onSubmit: {
       action: "submit",

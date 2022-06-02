@@ -4,10 +4,10 @@ import { ValueState } from "@ui5/webcomponents-react";
 import { FC, useCallback, useMemo } from "react";
 import { useController, useFormContext } from "react-hook-form";
 
+import { NumberInput, NumberInputProps } from "../component/number/NumberInput";
 import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 import { hasError } from "./util";
-import { NumberInput, NumberInputProps } from "..";
 
 export type NumberInputFieldProps = Omit<
   NumberInputProps,

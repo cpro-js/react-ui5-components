@@ -1,4 +1,4 @@
-import { FC, createContext, useContext } from "react";
+import { FC, ReactNode, createContext, useContext } from "react";
 
 import { ISO8601DateAdapter } from "./adapter/date/ISO8601DateAdapter";
 import { ISODateTimeAdapter } from "./adapter/date/ISODateTimeAdapter";
@@ -18,7 +18,9 @@ export const FormAdapterContext = createContext<FormAdapterContextProps>({
   dateTime: ISODateTimeAdapter,
 });
 
-export interface FormAdapterProps extends Partial<FormAdapterContextProps> {}
+export interface FormAdapterProps extends Partial<FormAdapterContextProps> {
+  children?: ReactNode;
+}
 
 export const FormAdapter: FC<Partial<FormAdapterProps>> = ({
   children,

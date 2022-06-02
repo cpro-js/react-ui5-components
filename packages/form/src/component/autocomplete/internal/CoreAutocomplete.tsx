@@ -8,13 +8,7 @@ import {
   InputPropTypes,
 } from "@ui5/webcomponents-react/webComponents/Input";
 import { SuggestionItemPropTypes } from "@ui5/webcomponents-react/webComponents/SuggestionItem";
-import {
-  KeyboardEvent,
-  ReactNode,
-  forwardRef,
-  useCallback,
-  useMemo,
-} from "react";
+import { KeyboardEvent, forwardRef, useCallback, useMemo } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
 import type { DefaultAutoCompleteOption } from "../../AutoCompleteModel";
@@ -167,12 +161,12 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
     );
 
     const handleSuggestionItemSelect = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
+      (event: Ui5CustomEvent<HTMLInputElement, { item: HTMLElement }>) => {
         if (onValueChange == null) {
           return;
         }
 
-        const element = event.detail.item as unknown as HTMLElement & {
+        const element = event.detail.item as HTMLElement & {
           text: string;
         };
         if (element?.dataset?.id != null) {

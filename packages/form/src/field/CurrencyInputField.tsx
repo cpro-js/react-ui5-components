@@ -4,10 +4,13 @@ import { ValueState } from "@ui5/webcomponents-react";
 import { FC, useCallback, useMemo } from "react";
 import { useController, useFormContext } from "react-hook-form";
 
+import {
+  CurrencyInput,
+  CurrencyInputProps,
+} from "../component/number/CurrencyInput";
 import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldValidation } from "./types";
 import { hasError } from "./util";
-import { CurrencyInput, CurrencyInputProps } from "..";
 
 export type CurrencyInputFieldProps = Omit<
   CurrencyInputProps,

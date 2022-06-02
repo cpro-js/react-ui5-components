@@ -1,4 +1,5 @@
 import { Input, InputType, ValueState } from "@ui5/webcomponents-react";
+import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import { InputDomRef } from "@ui5/webcomponents-react/webComponents/Input";
 import {
   ClipboardEvent,
@@ -374,19 +375,19 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     setMessage(undefined);
   }, [setInputState, setMessage]);
 
-  const onFocus = useCallback(
-    (event) => {
+  const onFocus = useCallback<NonNullable<typeof onFocusOriginal>>(
+    (...args) => {
       isFocusRef.current = true;
       setInputState(true);
 
       if (onFocusOriginal) {
-        onFocusOriginal(event);
+        onFocusOriginal(...args);
       }
     },
     [setInputState, onFocusOriginal]
   );
 
-  const onBlur = useCallback(
+  const onBlur = useCallback<NonNullable<typeof onBlurOriginal>>(
     (event) => {
       isFocusRef.current = false;
       leaveInputState();
@@ -399,7 +400,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   );
 
   const onChange = useCallback(
-    (event) => {
+    (event: Ui5CustomEvent<HTMLInputElement>) => {
       const val = parseValue(currentValueRef.current);
 
       // extra method to provide the value as number
@@ -413,24 +414,24 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     [parseValue, value]
   );
 
-  const onMouseEnter = useCallback(
-    (event) => {
+  const onMouseEnter = useCallback<NonNullable<typeof onMouseEnterOriginal>>(
+    (...args) => {
       setInputState(true);
       if (onMouseEnterOriginal) {
-        onMouseEnterOriginal(event);
+        onMouseEnterOriginal(...args);
       }
     },
     [setInputState, onMouseEnterOriginal]
   );
 
-  const onMouseLeave = useCallback(
-    (event) => {
+  const onMouseLeave = useCallback<NonNullable<typeof onMouseLeaveOriginal>>(
+    (...args) => {
       if (!isFocusRef.current) {
         leaveInputState();
       }
 
       if (onMouseLeaveOriginal) {
-        onMouseLeaveOriginal(event);
+        onMouseLeaveOriginal(...args);
       }
     },
     [leaveInputState, onMouseLeaveOriginal]

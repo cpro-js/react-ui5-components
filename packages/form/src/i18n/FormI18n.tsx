@@ -1,4 +1,10 @@
-import React, { FC, createContext, useContext, useMemo } from "react";
+import React, {
+  FC,
+  ReactNode,
+  createContext,
+  useContext,
+  useMemo,
+} from "react";
 
 import { FormFieldValidation, FormFieldValidationError } from "../field/types";
 
@@ -21,6 +27,7 @@ export const FormI18nContext = createContext<FormI18nContextProps>({
 });
 
 export interface FormI18nProviderProps {
+  children?: ReactNode;
   getValidationErrorMessage: GetValidationErrorMessage;
 }
 
