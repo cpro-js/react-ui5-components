@@ -1,4 +1,14 @@
-export type { UserErrorModel } from "./NotificationModel";
+import { AsyncModuleRegistry } from "@cpro-js/react-core";
+
+import { NotificationStore } from "../dist";
+import { NotificationService } from "./NotificationService";
+
 export { NotificationRenderer } from "./NotificationRenderer";
-export { NotificationService } from "./NotificationService";
-export { NotificationStore } from "./NotificationStore";
+export { NotificationService };
+
+export const createNotificationRegistry: AsyncModuleRegistry = async (
+  container
+) => {
+  container.bindSingleton(NotificationStore);
+  container.bindSingleton(NotificationService);
+};
