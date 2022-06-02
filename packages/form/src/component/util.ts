@@ -38,7 +38,17 @@ export const triggerSubmit = (
   const formElement = getForm(event, form);
 
   if (formElement != null) {
-    formElement.requestSubmit();
+    const submitEvent = new SubmitEvent("submit", {
+      bubbles: true,
+      cancelable: true,
+      // submitter: event.target as HTMLElement
+    });
+
+    formElement.dispatchEvent(submitEvent);
+
+    if (!submitEvent.defaultPrevented) {
+      formElement.submit();
+    }
   }
 };
 
