@@ -1969,50 +1969,50 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cpro-js/react-app-state@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@cpro-js/react-app-state@npm:0.1.0"
+"@cpro-js/react-app-state@npm:0.2.0":
+  version: 0.2.0
+  resolution: "@cpro-js/react-app-state@npm:0.2.0"
   dependencies:
-    mobx: 6.3.2
-    mobx-react: 7.2.0
-    mobx-utils: 6.0.4
+    mobx: 6.6.0
+    mobx-react: 7.5.0
+    mobx-utils: 6.0.5
   peerDependencies:
-    "@types/react": ^17.0.0
-    react: ^17.0.0
-  checksum: a14c7fd46fc1e82a447f2ee65acb5bdd50293eee4ae0d06c40a818d97aaa3aafd13c5db7f0a90b7db2f093ecc66bc9eba1155c305ef8e22b8bf5b19e16f4408e
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: 1e968cd0892507f7c5b2ffe29f268231b6e859ee2a70d60b068d83a39cdb3b89e6270a4e5604fb8cfa6705824e7dc58ec6da97234eebd4941f55c74db84f0533
   languageName: node
   linkType: hard
 
-"@cpro-js/react-core@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@cpro-js/react-core@npm:0.1.0"
+"@cpro-js/react-core@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@cpro-js/react-core@npm:0.2.0"
   dependencies:
-    "@cpro-js/react-app-state": 0.1.0
-    "@cpro-js/react-di": 0.1.0
-    "@cpro-js/react-i18n": 0.1.0
+    "@cpro-js/react-app-state": 0.2.0
+    "@cpro-js/react-di": 0.2.0
+    "@cpro-js/react-i18n": 0.2.0
   peerDependencies:
-    "@types/react": ^17.0.0
-    react: ^17.0.0
-  checksum: 1f90a85f0276668aa3f8573859eb9ce5a5d7ca0aa6681a772c0ed601f19f335b66e6bca55f380351698666f648b3654e6535eac48f74e0fdbe3ed36f8ffcf998
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: b61bf648ce7411da3ab7f2475e860e2eca3af6cc87a96e1108abeea4607da7391f459f437efb79eec481eacbcc9d5655054b5e50112b74c62b9bfa1710c2f684
   languageName: node
   linkType: hard
 
-"@cpro-js/react-di@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@cpro-js/react-di@npm:0.1.0"
+"@cpro-js/react-di@npm:0.2.0":
+  version: 0.2.0
+  resolution: "@cpro-js/react-di@npm:0.2.0"
   dependencies:
     inversify: ^5.1.1
-    inversify-react: ^1.0.0
+    inversify-react: ^1.0.2
   peerDependencies:
-    "@types/react": ^17.0.0
-    react: ^17.0.0
-  checksum: 9c604919424a5787fdaa3972b88d864de85c2d225f989dc9f5e8b1bfeed91ecb358ef7171fb10eac89d00ab7040a4c53200c7b2c7b8e5abbafe751ac52145007
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: 3d9f7bf7215be186ce40a912f42884dd3f77295e7acddb093bc76bf0cdb4b715415179c36eed737a8e9151efc600eaeefb2eb9d9e3c8b306a661325e087a85db
   languageName: node
   linkType: hard
 
-"@cpro-js/react-i18n@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@cpro-js/react-i18n@npm:0.1.0"
+"@cpro-js/react-i18n@npm:0.2.0":
+  version: 0.2.0
+  resolution: "@cpro-js/react-i18n@npm:0.2.0"
   dependencies:
     date-fns: 2.16.1
     date-fns-tz: ^1.1.6
@@ -2023,9 +2023,9 @@ __metadata:
   peerDependencies:
     "@cpro-js/react-app-state": "*"
     "@cpro-js/react-di": "*"
-    "@types/react": ^17.0.0
-    react: ^17.0.0
-  checksum: c5f2085e955db988e00791b26b7f20dcbaa5b78369bf1282dd046c7b8ddf0fcd116ecf6678950abfcbec0d9206d028b9c40900c72aea5c4ac40a0a84f27678ce
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: 5147d6acb9dd20112f54dda91f5ca55767f9d4ffd2beff3bdc5f66998f57c015eb766002f10c93780fda70040c0251171f25d62ced66a1504bac9badcceef342
   languageName: node
   linkType: hard
 
@@ -2053,7 +2053,7 @@ __metadata:
   resolution: "@cpro-js/react-ui5-notification@workspace:packages/notification"
   dependencies:
     "@babel/core": ^7.15.0
-    "@cpro-js/react-core": ^0.1.0
+    "@cpro-js/react-core": ^0.2.0
     "@mdx-js/react": ^1.6.22
     "@storybook/addon-actions": ^6.5.6
     "@storybook/addon-docs": ^6.5.6
@@ -2080,7 +2080,7 @@ __metadata:
     ts-jest: ^27.0.5
     typescript: ^4.4.2
   peerDependencies:
-    "@cpro-js/react-core": ^0.1.0
+    "@cpro-js/react-core": <1.0.0
     "@ui5/webcomponents-react": ">0.20.0"
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
@@ -13370,7 +13370,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"inversify-react@npm:^1.0.0":
+"inversify-react@npm:^1.0.2":
   version: 1.0.2
   resolution: "inversify-react@npm:1.0.2"
   peerDependencies:
@@ -16502,7 +16502,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mobx-react-lite@npm:^3.2.0":
+"mobx-react-lite@npm:^3.4.0":
   version: 3.4.0
   resolution: "mobx-react-lite@npm:3.4.0"
   peerDependencies:
@@ -16517,36 +16517,36 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mobx-react@npm:7.2.0":
-  version: 7.2.0
-  resolution: "mobx-react@npm:7.2.0"
+"mobx-react@npm:7.5.0":
+  version: 7.5.0
+  resolution: "mobx-react@npm:7.5.0"
   dependencies:
-    mobx-react-lite: ^3.2.0
+    mobx-react-lite: ^3.4.0
   peerDependencies:
     mobx: ^6.1.0
-    react: ^16.8.0 || ^17
+    react: ^16.8.0 || ^17 || ^18
   peerDependenciesMeta:
     react-dom:
       optional: true
     react-native:
       optional: true
-  checksum: b19bc40c330bd7006a9a0b41dd1859815ee98498c67793bc0b2b5c2721a115821afeb7eba85f4e855ac4d62f9c6b30f5d271e0be502b87464c0d8bb9a52f9b56
+  checksum: a1e3cf182bbec7d190eea247eaabeb81b9cbf8bbd5fe51513889de7c6f73d2ffe2655befece7873f41fb897996ab6e31834e309917b47ae7db7e111240cdd078
   languageName: node
   linkType: hard
 
-"mobx-utils@npm:6.0.4":
-  version: 6.0.4
-  resolution: "mobx-utils@npm:6.0.4"
+"mobx-utils@npm:6.0.5":
+  version: 6.0.5
+  resolution: "mobx-utils@npm:6.0.5"
   peerDependencies:
     mobx: ^6.0.0
-  checksum: f8a1b20b0668bb2ea64f32271f237bc8885d182d7a3ca73acc0976d6cfbf930ed380a31c5201a7a60a83b4bdf948ccf1d69ba7a1b906fe3b001c5bdd4bafbd47
+  checksum: 51fc38c6395d0bc852c26d7473286e53019eadba56587f8b0a8773ddd36638dc5fae9c1d044ee1da5ee799dc613bc3ae0095eae5991d305bedf3086b301f8992
   languageName: node
   linkType: hard
 
-"mobx@npm:6.3.2":
-  version: 6.3.2
-  resolution: "mobx@npm:6.3.2"
-  checksum: da853901ddd9bc5347f778b1aebfcbf5215d0cb0909fa17a9580dec2915b034b385e8cea6f2a85bd917078a29fcbb129c28be10e61db06c59bd3c94ace15f4a9
+"mobx@npm:6.6.0":
+  version: 6.6.0
+  resolution: "mobx@npm:6.6.0"
+  checksum: 369b8d6830ec286e9c856c80002c7a554d46bca739b7f76432cb56b3ce1fe0a7ed7e5a994b9793d30023beeff0dd16300a501e831fa97107104e4fedc7d4af8f
   languageName: node
   linkType: hard
 
