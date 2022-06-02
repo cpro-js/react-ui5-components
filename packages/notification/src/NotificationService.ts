@@ -14,8 +14,4 @@ export class NotificationService {
   public showSuccess(successMessage: string) {
     this.store.appendSuccessMessage(successMessage);
   }
-
-  public getNextError = () => this.store.getNextError();
-
-  public getSuccessMessages = () => this.store.getSuccessMessages();
 }

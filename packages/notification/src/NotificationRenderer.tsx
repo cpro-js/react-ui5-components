@@ -3,7 +3,7 @@ import { FC } from "react";
 
 import { ErrorMessageBox } from "./component/ErrorMessageBox";
 import { SuccessMessageToast } from "./component/SuccessMessageToast";
-import { NotificationService } from "./NotificationService";
+import { NotificationStore } from "./NotificationStore";
 
 export interface NotificationRendererProps {
   /**
@@ -18,10 +18,10 @@ const DEFAULT_DURATION = 3000;
 export const NotificationRenderer: FC<NotificationRendererProps> = observer(
   (props) => {
     const { successNotiDuration } = props;
-    const notificationService = useInjection(NotificationService);
+    const notiStore = useInjection(NotificationStore);
 
-    const error = notificationService.getNextError();
-    const successMessages = notificationService.getSuccessMessages();
+    const error = notiStore.getNextError();
+    const successMessages = notiStore.getSuccessMessages();
     const successDuration =
       typeof successNotiDuration === "number"
         ? successNotiDuration

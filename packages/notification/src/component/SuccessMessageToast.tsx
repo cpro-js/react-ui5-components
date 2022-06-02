@@ -1,6 +1,5 @@
 import { observer, useInjection } from "@cpro-js/react-core";
-import { Toast, ToastPlacement } from "@ui5/webcomponents-react";
-import { ToastDomRef } from "@ui5/webcomponents-react/dist/Toast";
+import { Toast, ToastDomRef, ToastPlacement } from "@ui5/webcomponents-react";
 import { FC, useEffect, useRef } from "react";
 
 import { NotificationStore } from "../NotificationStore";
