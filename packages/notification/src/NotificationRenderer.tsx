@@ -29,7 +29,7 @@ export const NotificationRenderer: FC<NotificationRendererProps> = observer(
 
     return (
       <>
-        {successMessages.length && (
+        {successMessages.length > 0 && (
           <SuccessMessageToast
             successMessages={successMessages}
             duration={successDuration}
