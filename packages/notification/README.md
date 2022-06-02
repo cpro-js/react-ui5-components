@@ -45,7 +45,9 @@ export const SomeScreen: FC<{}> = () => {
       showSuccess("Yippie!")
     }
     catch(error: any) {
-      showError("Oh no!", error);
+      showError("Oh no!", error);                       // must be instance of Error
+      showError("Oh no!", "my own error message");      // custom error message
+      showError("Oh no!", <div>Some complex jsx</div>); // custom complex error message
     }
   }
 
