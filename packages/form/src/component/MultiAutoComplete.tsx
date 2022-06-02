@@ -12,7 +12,7 @@ import {
 import { SuggestionItem } from "@ui5/webcomponents-react/dist/SuggestionItem";
 import { Token } from "@ui5/webcomponents-react/dist/Token";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { Component, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
+import { Component, FocusEvent, KeyboardEvent, SyntheticEvent } from "react";
 
 import {
   AutoCompleteOptions,
@@ -28,7 +28,10 @@ import {
 } from "./common/CommonSelection";
 
 // UI5 Event Types
-type TokenDeleteEvent = Ui5CustomEvent<HTMLInputElement, { token: ReactNode }>;
+type TokenDeleteEvent = Ui5CustomEvent<
+  HTMLInputElement,
+  { token: HTMLElement }
+>;
 interface FocusOutEvent<T = Element> extends SyntheticEvent<T, FocusEvent> {
   relatedTarget: EventTarget | null;
   target: EventTarget & T;
@@ -148,10 +151,12 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     this.search(this.searchTerm, hasMinChars);
   };
 
-  onSelect = (event: Ui5CustomEvent<HTMLInputElement, { item: ReactNode }>) => {
+  onSelect = (
+    event: Ui5CustomEvent<HTMLInputElement, { item: HTMLElement }>
+  ) => {
     const { onAdd, onChange, onSelectionChange } = this.props;
     const { values } = this.state;
-    const id = (event.detail.item as unknown as HTMLElement).dataset.id;
+    const id = event.detail.item.dataset.id;
     const toAdd = this.findItemFromSuggestions(id);
 
     // nothing to do
@@ -181,7 +186,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     });
   };
 
-  onBlur = (event: FocusOutEvent<HTMLInputElement>) => {
+  onBlur = (event: FocusEvent<HTMLInputElement>) => {
     event.target.value = "";
   };
 

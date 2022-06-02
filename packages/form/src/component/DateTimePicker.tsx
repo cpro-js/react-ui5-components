@@ -1,4 +1,4 @@
-import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
+import "../form/formSupport";
 
 import { DateTimePicker as UI5DateTimePicker } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";

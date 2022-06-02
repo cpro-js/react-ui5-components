@@ -1,4 +1,4 @@
-import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
+import "../form/formSupport";
 
 import { Input } from "@ui5/webcomponents-react";
 import {
