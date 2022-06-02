@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.26.0](https://github.com/cpro-js/react-ui5-components/compare/v0.25.0...v0.26.0) (2022-06-02)
+
+### Bug Fixes
+
+- support form submit on safari ([#59](https://github.com/cpro-js/react-ui5-components/issues/59)) ([79b1cb3](https://github.com/cpro-js/react-ui5-components/commit/79b1cb3ae94f1a8b2a3bddb8421a96910763053b))
+
+### Features
+
+- support react 18 & ui5 webcomponents 0.25.x ([#58](https://github.com/cpro-js/react-ui5-components/issues/58)) ([df44a6e](https://github.com/cpro-js/react-ui5-components/commit/df44a6e5f62d51c0ff1186e5c6da8d7a87f3a2dc))
+
 # [0.25.0](https://github.com/cpro-js/react-ui5-components/compare/v0.24.2...v0.25.0) (2022-03-14)
 
 ### Features
