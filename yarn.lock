@@ -2006,7 +2006,7 @@ __metadata:
     typescript: ^4.4.2
   peerDependencies:
     "@ui5/webcomponents": "*"
-    "@ui5/webcomponents-react": "*"
+    "@ui5/webcomponents-react": ">0.22.0"
     react: ^17.0.0 || ^18.0.0
     react-jss: ^10.9.0
   languageName: unknown
