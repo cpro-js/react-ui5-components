@@ -1,4 +1,4 @@
-import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
+import "../form/formSupport";
 
 import { TextArea as UI5TextArea } from "@ui5/webcomponents-react";
 import {

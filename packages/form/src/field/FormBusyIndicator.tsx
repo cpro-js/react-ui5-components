@@ -3,10 +3,11 @@ import {
   FlexBox,
   FlexBoxDirection,
 } from "@ui5/webcomponents-react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { useFormState } from "react-hook-form";
 
 export interface FormBusyIndicatorProps {
+  children?: ReactNode;
   /**
    * Overrides busy state regardless of the current form state
    */
