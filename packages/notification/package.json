@@ -1,6 +1,6 @@
 {
   "name": "@cpro-js/react-ui5-notification",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
