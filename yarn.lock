@@ -1645,7 +1645,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.17.8":
+"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.17.8":
   version: 7.18.3
   resolution: "@babel/runtime@npm:7.18.3"
   dependencies:
@@ -1953,6 +1953,66 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cpro-js/react-app-state@npm:0.2.0":
+  version: 0.2.0
+  resolution: "@cpro-js/react-app-state@npm:0.2.0"
+  dependencies:
+    mobx: 6.6.0
+    mobx-react: 7.5.0
+    mobx-utils: 6.0.5
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: 1e968cd0892507f7c5b2ffe29f268231b6e859ee2a70d60b068d83a39cdb3b89e6270a4e5604fb8cfa6705824e7dc58ec6da97234eebd4941f55c74db84f0533
+  languageName: node
+  linkType: hard
+
+"@cpro-js/react-core@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@cpro-js/react-core@npm:0.2.0"
+  dependencies:
+    "@cpro-js/react-app-state": 0.2.0
+    "@cpro-js/react-di": 0.2.0
+    "@cpro-js/react-i18n": 0.2.0
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: b61bf648ce7411da3ab7f2475e860e2eca3af6cc87a96e1108abeea4607da7391f459f437efb79eec481eacbcc9d5655054b5e50112b74c62b9bfa1710c2f684
+  languageName: node
+  linkType: hard
+
+"@cpro-js/react-di@npm:0.2.0":
+  version: 0.2.0
+  resolution: "@cpro-js/react-di@npm:0.2.0"
+  dependencies:
+    inversify: ^5.1.1
+    inversify-react: ^1.0.2
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: 3d9f7bf7215be186ce40a912f42884dd3f77295e7acddb093bc76bf0cdb4b715415179c36eed737a8e9151efc600eaeefb2eb9d9e3c8b306a661325e087a85db
+  languageName: node
+  linkType: hard
+
+"@cpro-js/react-i18n@npm:0.2.0":
+  version: 0.2.0
+  resolution: "@cpro-js/react-i18n@npm:0.2.0"
+  dependencies:
+    date-fns: 2.16.1
+    date-fns-tz: ^1.1.6
+    duration-relativetimeformat: 2.0.1
+    i18next: 19.8.4
+    intl-format-cache: ^4.3.1
+    pretty-bytes: ^5.6.0
+  peerDependencies:
+    "@cpro-js/react-app-state": "*"
+    "@cpro-js/react-di": "*"
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: 5147d6acb9dd20112f54dda91f5ca55767f9d4ffd2beff3bdc5f66998f57c015eb766002f10c93780fda70040c0251171f25d62ced66a1504bac9badcceef342
+  languageName: node
+  linkType: hard
+
 "@cpro-js/react-ui5-components@workspace:.":
   version: 0.0.0-use.local
   resolution: "@cpro-js/react-ui5-components@workspace:."
@@ -1969,6 +2029,45 @@ __metadata:
     prettier: ^2.3.2
     prettier-plugin-import-sort: ^0.0.7
     prettier-plugin-package: ^1.3.0
+  languageName: unknown
+  linkType: soft
+
+"@cpro-js/react-ui5-notification@workspace:packages/notification":
+  version: 0.0.0-use.local
+  resolution: "@cpro-js/react-ui5-notification@workspace:packages/notification"
+  dependencies:
+    "@babel/core": ^7.15.0
+    "@cpro-js/react-core": ^0.2.0
+    "@mdx-js/react": ^1.6.22
+    "@storybook/addon-actions": ^6.5.6
+    "@storybook/addon-docs": ^6.5.6
+    "@storybook/addon-essentials": ^6.5.6
+    "@storybook/addon-links": ^6.5.6
+    "@storybook/react": ^6.5.6
+    "@types/jest": ^27.0.1
+    "@types/react": ^18.0.10
+    "@types/react-dom": ^18.0.5
+    "@types/react-test-renderer": ^18.0.0
+    "@ui5/webcomponents": ^1.4.0
+    "@ui5/webcomponents-fiori": ^1.4.0
+    "@ui5/webcomponents-react": ^0.25.0
+    babel-loader: ^8.2.2
+    jest: ^27.1.0
+    microbundle: ^0.13.3
+    react: ^18.1.0
+    react-dom: ^18.1.0
+    react-jss: ^10.9.0
+    react-test-renderer: ^18.1.0
+    rimraf: ^3.0.2
+    storybook-addon-react-docgen: ^1.2.42
+    storybook-addon-state: ^1.0.3
+    ts-jest: ^27.0.5
+    typescript: ^4.4.2
+  peerDependencies:
+    "@cpro-js/react-core": <1.0.0
+    "@ui5/webcomponents-react": ">0.20.0"
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
   languageName: unknown
   linkType: soft
 
@@ -5019,6 +5118,15 @@ __metadata:
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
   checksum: 7fd6f9c25053e9b5bb6bc9f9f76c1d89e6c04f7707a7ba0e44cc01f17ef5284adb82f230f542c2d5557d69407c9a40f0f3515e8319afd14e1e16b5543ac6cdba
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:^18.0.5":
+  version: 18.0.5
+  resolution: "@types/react-dom@npm:18.0.5"
+  dependencies:
+    "@types/react": "*"
+  checksum: cd48b81950f499b52a3f0c08261f00046f9b7c96699fa249c9664e257e820daf6ecac815cd1028cebc9d105094adc39d047d1efd79214394b8b2d515574c0787
   languageName: node
   linkType: hard
 
@@ -8434,6 +8542,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns-tz@npm:^1.1.6":
+  version: 1.3.4
+  resolution: "date-fns-tz@npm:1.3.4"
+  peerDependencies:
+    date-fns: ">=2.0.0"
+  checksum: d9b929f2d65b2c4ed96bb09a8bc38f3884b2c44525d58f9329bd374556bb0445bd13308747d209afda513c9b1fac33dfee91d0633b1e9c579d376715a1ac01c5
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:2.16.1":
+  version: 2.16.1
+  resolution: "date-fns@npm:2.16.1"
+  checksum: f19c2b3b9bd62fdbc55b160c87b4656b3a260d79ee7a32a9cbc19107c3d61d71b569c0957351f9a07fc84c35283f74b0af5276620d4a37e36eef1898fa6c25b2
+  languageName: node
+  linkType: hard
+
 "dateformat@npm:^3.0.0":
   version: 3.0.3
   resolution: "dateformat@npm:3.0.3"
@@ -8890,6 +9014,13 @@ __metadata:
     readable-stream: ^2.0.0
     stream-shift: ^1.0.0
   checksum: 3c2ed2223d956a5da713dae12ba8295acb61d9acd966ccbba938090d04f4574ca4dca75cca089b5077c2d7e66101f32e6ea9b36a78ca213eff574e7a8b8accf2
+  languageName: node
+  linkType: hard
+
+"duration-relativetimeformat@npm:2.0.1":
+  version: 2.0.1
+  resolution: "duration-relativetimeformat@npm:2.0.1"
+  checksum: 9759615813a7bbf8968f0cc73d6cee3e639e71c7ecb03550644073db3d53d67888b2068f52a78387c04d97db3d3a67090912bf083d19a112abbd3e7f3dd22755
   languageName: node
   linkType: hard
 
@@ -11033,6 +11164,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"i18next@npm:19.8.4":
+  version: 19.8.4
+  resolution: "i18next@npm:19.8.4"
+  dependencies:
+    "@babel/runtime": ^7.12.0
+  checksum: 49707e82681984ccc96eb29e0b85e29609a434f04d51e730f649448036b613994b3f4a14b113a20e128a4441bce2b4be683529a400bce8124f8c50b5557a49e6
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:0.4.24, iconv-lite@npm:^0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
@@ -11372,6 +11512,30 @@ fsevents@^1.2.7:
   version: 0.12.0
   resolution: "intersection-observer@npm:0.12.0"
   checksum: 96d2f3ea4995b7b429b79646467c975230cfbe3ede7fb08d0c022cfe6ee0c89dfa98aa4377e8b5f7bee880322eb118e6c0275607a53043f9c50921da8363c1e8
+  languageName: node
+  linkType: hard
+
+"intl-format-cache@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "intl-format-cache@npm:4.3.1"
+  checksum: d55581edaba0d083a3ff26a46e2ed953c434420918e61991db78140e3e0a7db14f924f195fcd0c01cf3de65cb18dda0c549d35f683e01dd8f062d27fe0524fae
+  languageName: node
+  linkType: hard
+
+"inversify-react@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "inversify-react@npm:1.0.2"
+  peerDependencies:
+    inversify: ^5.0.5 || ^6.0.1
+    react: ^16.3.0 || ^17.0.0 || ^18.0.0
+  checksum: a01e97d60b656beafdecf2d5591f1d0c25dcf2b2401cd2beb3b07494d923447ea3dc8cd1dacd0e32c73811ff7fca42f16e8a93256577cfa47d3c4d83f019f40f
+  languageName: node
+  linkType: hard
+
+"inversify@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "inversify@npm:5.1.1"
+  checksum: 22d201647b572024333c58bed8ac929da4724a4c0c8a261ecc261a180afcb899359013fafb8d87ce4d606000149fb4590dc5c8278b9feb544a5f69a6159e4ffb
   languageName: node
   linkType: hard
 
@@ -14268,6 +14432,54 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"mobx-react-lite@npm:^3.4.0":
+  version: 3.4.0
+  resolution: "mobx-react-lite@npm:3.4.0"
+  peerDependencies:
+    mobx: ^6.1.0
+    react: ^16.8.0 || ^17 || ^18
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 9294e127e281c8b37ec7bcaf17de479f50519e6ad485b58d7b991291900511541a5a718653759d3cf6503462c70325d025e1c2ed376d4584fb1b2d3aac9d9b48
+  languageName: node
+  linkType: hard
+
+"mobx-react@npm:7.5.0":
+  version: 7.5.0
+  resolution: "mobx-react@npm:7.5.0"
+  dependencies:
+    mobx-react-lite: ^3.4.0
+  peerDependencies:
+    mobx: ^6.1.0
+    react: ^16.8.0 || ^17 || ^18
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: a1e3cf182bbec7d190eea247eaabeb81b9cbf8bbd5fe51513889de7c6f73d2ffe2655befece7873f41fb897996ab6e31834e309917b47ae7db7e111240cdd078
+  languageName: node
+  linkType: hard
+
+"mobx-utils@npm:6.0.5":
+  version: 6.0.5
+  resolution: "mobx-utils@npm:6.0.5"
+  peerDependencies:
+    mobx: ^6.0.0
+  checksum: 51fc38c6395d0bc852c26d7473286e53019eadba56587f8b0a8773ddd36638dc5fae9c1d044ee1da5ee799dc613bc3ae0095eae5991d305bedf3086b301f8992
+  languageName: node
+  linkType: hard
+
+"mobx@npm:6.6.0":
+  version: 6.6.0
+  resolution: "mobx@npm:6.6.0"
+  checksum: 369b8d6830ec286e9c856c80002c7a554d46bca739b7f76432cb56b3ce1fe0a7ed7e5a994b9793d30023beeff0dd16300a501e831fa97107104e4fedc7d4af8f
+  languageName: node
+  linkType: hard
+
 "modify-values@npm:^1.0.0":
   version: 1.0.1
   resolution: "modify-values@npm:1.0.1"
@@ -16261,7 +16473,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pretty-bytes@npm:^5.4.1":
+"pretty-bytes@npm:^5.4.1, pretty-bytes@npm:^5.6.0":
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
   checksum: 9c082500d1e93434b5b291bd651662936b8bd6204ec9fa17d563116a192d6d86b98f6d328526b4e8d783c07d5499e2614a807520249692da9ec81564b2f439cd
