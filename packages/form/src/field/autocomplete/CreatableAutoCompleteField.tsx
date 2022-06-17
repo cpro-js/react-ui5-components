@@ -1,30 +1,38 @@
 import "../../form/formSupport";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { useImperativeHandle, useMemo, useRef } from "react";
+import {
+  ReactElement,
+  Ref,
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 import { useController } from "react-hook-form";
 
 import {
   CreatableAutoComplete,
   CreatableAutoCompleteProps,
 } from "../../component/autocomplete/CreatableAutoComplete";
+import { DefaultAutoCompleteOption } from "../../component/AutoCompleteModel";
 import { useI18nValidationError } from "../../i18n/FormI18n";
-import { FormFieldValidation } from "../types";
+import { FormFieldElement, FormFieldValidation } from "../types";
 import { hasError } from "../util";
 
-export type CreatableAutoCompleteFieldProps<T> = Omit<
-  CreatableAutoCompleteProps<T>,
-  "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
-> &
-  Pick<FormFieldValidation, "required"> & {
-    name: string;
-  };
+export type CreatableAutoCompleteFieldProps<T = DefaultAutoCompleteOption> =
+  Omit<
+    CreatableAutoCompleteProps<T>,
+    "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
+  > &
+    Pick<FormFieldValidation, "required"> & {
+      name: string;
+    };
 
-export const CreatableAutoCompleteField = <T extends Object>({
-  name,
-  required,
-  ...props
-}: CreatableAutoCompleteFieldProps<T>) => {
+export const CreatableAutoCompleteField = forwardRef<
+  FormFieldElement,
+  CreatableAutoCompleteFieldProps
+>(({ name, required, ...props }, forwardedRef) => {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -40,17 +48,17 @@ export const CreatableAutoCompleteField = <T extends Object>({
   });
 
   // store input ref for intenral usage
-  const inputRef = useRef<HTMLInputElement>();
+  const internalRef = useRef<HTMLInputElement>();
   // forward outer ref to custom element
-  // useImperativeHandle(forwardedRef, () => ({
-  //   focus() {
-  //     if (inputRef.current != null) {
-  //       inputRef.current.focus();
-  //     }
-  //   },
-  // }));
+  useImperativeHandle(forwardedRef, () => ({
+    focus() {
+      if (internalRef.current != null) {
+        internalRef.current.focus();
+      }
+    },
+  }));
   // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => inputRef.current);
+  useImperativeHandle(field.ref, () => internalRef.current);
 
   // get error message (Note: undefined fallbacks to default message of ui5 component)
   const errorMessage = hasError(fieldState.error)
@@ -58,9 +66,9 @@ export const CreatableAutoCompleteField = <T extends Object>({
     : undefined;
 
   return (
-    <CreatableAutoComplete<T>
+    <CreatableAutoComplete
       {...props}
-      ref={field.ref}
+      ref={internalRef}
       name={field.name}
       value={field.value}
       onValueChange={field.onChange}
@@ -76,4 +84,8 @@ export const CreatableAutoCompleteField = <T extends Object>({
       required={required}
     />
   );
-};
+}) as <T = DefaultAutoCompleteOption>(
+  p: CreatableAutoCompleteFieldProps<T> & {
+    ref?: Ref<FormFieldElement | undefined>;
+  }
+) => ReactElement;
