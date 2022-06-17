@@ -1,8 +1,15 @@
 import "../form/formSupport";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { FC, useContext, useMemo } from "react";
-import { Controller, FieldError, useController } from "react-hook-form";
+import {
+  FC,
+  forwardRef,
+  useContext,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
+import { FieldError, useController } from "react-hook-form";
 
 import {
   DateTimePicker,
@@ -10,7 +17,7 @@ import {
 } from "../component/DateTimePicker";
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldValidation } from "./types";
+import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
 const convertToDateOnly = (
@@ -37,13 +44,10 @@ export type DateTimePickerFieldProps = Omit<
     name: string;
   };
 
-export const DateTimePickerField: FC<DateTimePickerFieldProps> = ({
-  name,
-  required,
-  minDate,
-  maxDate,
-  ...props
-}) => {
+export const DateTimePickerField: FC<DateTimePickerFieldProps> = forwardRef<
+  FormFieldElement,
+  DateTimePickerFieldProps
+>(({ name, required, minDate, maxDate, ...props }, forwardedRef) => {
   const {
     dateTime: { parse },
   } = useContext(FormAdapterContext);
@@ -98,6 +102,19 @@ export const DateTimePickerField: FC<DateTimePickerFieldProps> = ({
     rules,
   });
 
+  // store input ref for intenral usage
+  const internalRef = useRef<HTMLInputElement>();
+  // forward outer ref to custom element
+  useImperativeHandle(forwardedRef, () => ({
+    focus() {
+      if (internalRef.current != null) {
+        internalRef.current.focus();
+      }
+    },
+  }));
+  // forward field ref to stored internal input ref
+  useImperativeHandle(field.ref, () => internalRef.current);
+
   // use null to reset value, undefined will be ignored by web component
   const value = field.value === undefined ? null : field.value;
 
@@ -110,7 +127,7 @@ export const DateTimePickerField: FC<DateTimePickerFieldProps> = ({
   return (
     <DateTimePicker
       {...props}
-      ref={field.ref}
+      ref={internalRef}
       name={field.name}
       value={value}
       minDate={minDate}
@@ -130,4 +147,4 @@ export const DateTimePickerField: FC<DateTimePickerFieldProps> = ({
       required={required}
     />
   );
-};
+});
