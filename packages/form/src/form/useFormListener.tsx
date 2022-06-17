@@ -1,11 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { PartialFormValues } from "../field/types";
-
-export type UseFormListenerCallback<FormValues extends {}> = (
-  values: PartialFormValues<FormValues>
-) => void;
+import {
+  ChangedField,
+  FormChangeHandler,
+  PartialFormValues,
+} from "../field/types";
+import { useLatestRef } from "../hook/useLatestRef";
+import { useFormActions } from "./useFormActions";
 
 /**
  * Form listener hook that will trigger the callback on every value change
@@ -13,21 +15,26 @@ export type UseFormListenerCallback<FormValues extends {}> = (
  * @param onChange
  */
 export function useFormListener<FormValues extends {}>(
-  onChange: UseFormListenerCallback<FormValues>
+  onChange: FormChangeHandler<FormValues>
 ): void {
   const { watch } = useFormContext<FormValues>();
 
   // Remember the latest callback.
   const changeCallbackRef =
-    useRef<UseFormListenerCallback<FormValues>>(onChange);
-  useEffect(() => {
-    changeCallbackRef.current = onChange;
-  }, [onChange]);
+    useLatestRef<FormChangeHandler<FormValues>>(onChange);
+
+  // Get actions
+  const actions = useFormActions<FormValues>();
+  const actionsRef = useLatestRef(actions);
 
   // Set up the watcher
   useEffect(() => {
-    const subscription = watch((values) => {
-      changeCallbackRef.current(values as PartialFormValues<FormValues>);
+    const subscription = watch((values, { name }) => {
+      changeCallbackRef.current(
+        values as PartialFormValues<FormValues>,
+        actionsRef.current,
+        { name } as ChangedField<FormValues>
+      );
     });
 
     return () => {

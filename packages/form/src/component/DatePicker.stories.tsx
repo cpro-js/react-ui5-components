@@ -1,4 +1,6 @@
+import { action } from "@storybook/addon-actions";
 import { Story } from "@storybook/react";
+import { ThemeProvider } from "@ui5/webcomponents-react";
 
 import { ISO8601DateAdapter } from "../form/adapter/date/ISO8601DateAdapter";
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
@@ -7,17 +9,29 @@ import { toISO8601DateString } from "../util/date";
 import { DatePicker, DatePickerProps } from "./DatePicker";
 
 const Template: Story<DatePickerProps> = (args) => {
-  return <DatePicker {...args} />;
+  return (
+    <ThemeProvider>
+      <DatePicker {...args} />
+    </ThemeProvider>
+  );
 };
 
 export const Standard = Template.bind({});
-Standard.args = {};
-
-export const CustomFormat = Template.bind({});
-CustomFormat.args = { ...Standard.args, formatPattern: "dd.MM.yyyy" };
+Standard.args = {
+  onChange: (...args) => {
+    console.log("onChange", ...args);
+    action("onChange")(...args);
+  },
+};
 
 export const Prefilled = Template.bind({});
 Prefilled.args = { ...Standard.args, value: new Date() };
+
+export const ShortFormat = Template.bind({});
+ShortFormat.args = { ...Prefilled.args, formatPattern: "short" };
+
+export const CustomFormat = Template.bind({});
+CustomFormat.args = { ...Prefilled.args, formatPattern: "dd.MM.yyyy" };
 
 export const MinDateToday = Template.bind({});
 MinDateToday.args = { ...Standard.args, minDate: new Date() };
@@ -27,14 +41,21 @@ MaxDateToday.args = { ...Standard.args, maxDate: new Date() };
 
 const ISO8601DateTemplate: Story<DatePickerProps> = (args) => {
   return (
-    <FormAdapter date={ISO8601DateAdapter}>
-      <DatePicker {...args} />
-    </FormAdapter>
+    <ThemeProvider>
+      <FormAdapter date={ISO8601DateAdapter}>
+        <DatePicker {...args} />
+      </FormAdapter>
+    </ThemeProvider>
   );
 };
 
 export const ISO8601DateStandard = ISO8601DateTemplate.bind({});
-ISO8601DateStandard.args = {};
+ISO8601DateStandard.args = {
+  onChange: (...args) => {
+    console.log("onChange", ...args);
+    action("onChange")(...args);
+  },
+};
 ISO8601DateStandard.argTypes = {
   value: { type: "string", control: "text" },
   minDate: { type: "string", control: "text" },
@@ -78,7 +99,12 @@ const ISODateTimeTemplate: Story<DatePickerProps> = (args) => {
 };
 
 export const ISODateTimeStandard = ISODateTimeTemplate.bind({});
-ISODateTimeStandard.args = {};
+ISODateTimeStandard.args = {
+  onChange: (...args) => {
+    console.log("onChange", ...args);
+    action("onChange")(...args);
+  },
+};
 // TODO iso date string does not for type text: https://github.com/storybookjs/storybook/issues/13713
 ISODateTimeStandard.argTypes = {
   value: { type: "string", control: "text" },

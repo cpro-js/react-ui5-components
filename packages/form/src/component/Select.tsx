@@ -1,6 +1,9 @@
 import { ComboBox, ComboBoxItem } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { ComboBoxPropTypes } from "@ui5/webcomponents-react/webComponents/ComboBox";
+import {
+  ComboBoxDomRef,
+  ComboBoxPropTypes,
+} from "@ui5/webcomponents-react/webComponents/ComboBox";
 import {
   KeyboardEvent,
   ReactElement,
@@ -63,7 +66,7 @@ export interface SelectProps<T = SelectItem>
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
 
-export const Select = forwardRef<HTMLInputElement | undefined, SelectProps>(
+export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
   (props, forwardedRef) => {
     const {
       name,

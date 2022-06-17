@@ -1,6 +1,6 @@
 import { FilterBar } from "@ui5/webcomponents-react";
 import { FilterBarPropTypes } from "@ui5/webcomponents-react/components/FilterBar";
-import { FC, useCallback, useEffect, useRef } from "react";
+import { FC, forwardRef, useCallback, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { useFormActions } from "./useFormActions";
@@ -11,7 +11,10 @@ export interface FormFilterBarProps extends FilterBarPropTypes {}
 /**
  * Checkbox wrapper to transform the UI5 checkbox into a HTML compliant checkbox
  */
-export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
+export const FormFilterBar: FC<FormFilterBarProps> = forwardRef<
+  HTMLDivElement,
+  FormFilterBarProps
+>((props, forwardedRef) => {
   const {
     children,
 
@@ -26,7 +29,7 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
     ...others
   } = props;
 
-  const { getValues, setValue, watch } = useFormContext();
+  const { getValues, setValue } = useFormContext();
   const { clear, reset, submit } = useFormActions();
 
   const valuesBeforeRef = useRef<any>();
@@ -65,66 +68,76 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
     }
   }, [getValues, setValue]);
 
-  const handleFiltersDialogOpen: typeof onFiltersDialogOpen = useCallback(
-    (event) => {
+  const handleFiltersDialogOpen = useCallback<
+    NonNullable<typeof onFiltersDialogOpen>
+  >(
+    (...args) => {
       valuesChangedRef.current = null;
       valuesBeforeRef.current = getValues();
       openRef.current = true;
 
       if (onFiltersDialogOpen != null) {
-        onFiltersDialogOpen(event);
+        onFiltersDialogOpen(...args);
       }
     },
     [onFiltersDialogOpen]
   );
 
-  const handleFiltersDialogClose: typeof onFiltersDialogClose = useCallback(
-    (event) => {
+  const handleFiltersDialogClose = useCallback<
+    NonNullable<typeof onFiltersDialogClose>
+  >(
+    (...args) => {
       openRef.current = false;
       valuesBeforeRef.current = null;
 
       if (onFiltersDialogClose != null) {
-        onFiltersDialogClose(event);
+        onFiltersDialogClose(...args);
       }
     },
     [onFiltersDialogClose]
   );
 
-  const handleFiltersDialogClear: typeof onFiltersDialogClear = useCallback(
-    (event) => {
+  const handleFiltersDialogClear = useCallback<
+    NonNullable<typeof onFiltersDialogClear>
+  >(
+    (...args) => {
       clearValues();
 
       if (onFiltersDialogClear != null) {
-        onFiltersDialogClear(event);
+        onFiltersDialogClear(...args);
       }
     },
     [onFiltersDialogClear, clearValues]
   );
 
-  const handleFiltersDialogCancel: typeof onFiltersDialogCancel = useCallback(
-    (event) => {
+  const handleFiltersDialogCancel = useCallback<
+    NonNullable<typeof onFiltersDialogCancel>
+  >(
+    (...args) => {
       resetChanges();
 
       if (onFiltersDialogCancel != null) {
-        onFiltersDialogCancel(event);
+        onFiltersDialogCancel(...args);
       }
     },
     [onFiltersDialogCancel, resetChanges]
   );
 
-  const handleFiltersDialogSave: typeof onFiltersDialogSave = useCallback(
-    (event) => {
+  const handleFiltersDialogSave = useCallback<
+    NonNullable<typeof onFiltersDialogSave>
+  >(
+    (...args) => {
       saveValues();
 
       if (onFiltersDialogSave != null) {
-        onFiltersDialogSave(event);
+        onFiltersDialogSave(...args);
       }
     },
     [onFiltersDialogSave, saveValues]
   );
 
-  const handleGo: typeof onGo = useCallback(
-    (event) => {
+  const handleGo = useCallback<NonNullable<typeof onGo>>(
+    (...args) => {
       if (openRef.current) {
         // filter bar is opened and submitted via Go Button -> we need to save new values before
         saveValues();
@@ -133,29 +146,29 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
       submit();
 
       if (onGo != null) {
-        onGo(event);
+        onGo(...args);
       }
     },
     [onGo]
   );
 
-  const handleRestore: typeof onRestore = useCallback(
-    (event) => {
+  const handleRestore = useCallback<NonNullable<typeof onRestore>>(
+    (...args) => {
       restoreValues();
 
       if (onRestore != null) {
-        onRestore(event);
+        onRestore(...args);
       }
     },
     [onRestore, restoreValues]
   );
 
-  const handleClear: typeof onClear = useCallback(
-    (event) => {
+  const handleClear = useCallback<NonNullable<typeof onClear>>(
+    (...args) => {
       clearValues();
 
       if (onClear != null) {
-        onClear(event);
+        onClear(...args);
       }
     },
     [onClear, clearValues]
@@ -163,6 +176,7 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
 
   return (
     <FilterBar
+      ref={forwardedRef}
       {...others}
       onFiltersDialogOpen={handleFiltersDialogOpen}
       onFiltersDialogClose={handleFiltersDialogClose}
@@ -176,4 +190,4 @@ export const FormFilterBar: FC<FormFilterBarProps> = (props) => {
       {children}
     </FilterBar>
   );
-};
+});

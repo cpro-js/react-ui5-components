@@ -1,6 +1,7 @@
-import { FC, createContext, useContext } from "react";
+import { FC, ReactNode, createContext, useContext } from "react";
 
 import { ISO8601DateAdapter } from "./adapter/date/ISO8601DateAdapter";
+import { ISODateTimeAdapter } from "./adapter/date/ISODateTimeAdapter";
 import { DateAdapter } from "./adapter/type/DateAdapter";
 
 export interface FormAdapterContextProps {
@@ -9,13 +10,17 @@ export interface FormAdapterContextProps {
    * Default: ISO8601 (yyyy-MM-dd)
    */
   date: DateAdapter<Date | string | number>;
+  dateTime: DateAdapter<Date | string | number>;
 }
 
 export const FormAdapterContext = createContext<FormAdapterContextProps>({
   date: ISO8601DateAdapter,
+  dateTime: ISODateTimeAdapter,
 });
 
-export interface FormAdapterProps extends Partial<FormAdapterContextProps> {}
+export interface FormAdapterProps extends Partial<FormAdapterContextProps> {
+  children?: ReactNode;
+}
 
 export const FormAdapter: FC<Partial<FormAdapterProps>> = ({
   children,

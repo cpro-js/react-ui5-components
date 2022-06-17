@@ -47,8 +47,9 @@ const TemplateExternalForm: Story<{ buttons: Array<ButtonProps> }> = ({
           e.preventDefault();
           action("onSubmit")(e);
         }}
-      />
-      <input type={"text"} defaultValue="change value and reset" />
+      >
+        <input type={"text"} defaultValue="change value and reset" />
+      </form>
       {buttons.map((props, index) => (
         <Button key={index} {...props} />
       ))}

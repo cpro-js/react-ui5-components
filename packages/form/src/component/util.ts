@@ -15,7 +15,7 @@ export const triggerSubmitOnEnter = (event: KeyboardEvent<HTMLElement>) => {
   // delay dispatch to avoid race conditions between storing new value in onChange and submitting form state in onSubmit
   setTimeout(() => {
     triggerSubmit(event);
-  }, 1);
+  }, 150);
 };
 
 export const getForm = (
@@ -38,7 +38,17 @@ export const triggerSubmit = (
   const formElement = getForm(event, form);
 
   if (formElement != null) {
-    formElement.requestSubmit();
+    const submitEvent = new SubmitEvent("submit", {
+      bubbles: true,
+      cancelable: true,
+      // submitter: event.target as HTMLElement
+    });
+
+    formElement.dispatchEvent(submitEvent);
+
+    if (!submitEvent.defaultPrevented) {
+      formElement.submit();
+    }
   }
 };
 

@@ -2,10 +2,11 @@ import { Story } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
+import { FormViewer, useFormViewer } from "./FormViewer";
 import { NumberInputField, NumberInputFieldProps } from "./NumberInputField";
 
 interface FormData {
-  number?: number;
+  theNumber?: number;
 }
 
 const Template: Story<FormControllerProps<FormData> & NumberInputFieldProps> = (
@@ -13,13 +14,14 @@ const Template: Story<FormControllerProps<FormData> & NumberInputFieldProps> = (
 ) => {
   const { initialValues, onSubmit, ...props } = args;
 
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <NumberInputField {...props} name={"number"} />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <NumberInputField {...props} name={"theNumber"} />
+      <FormViewer submittedValues={submittedValues} />
     </FormController>
   );
 };
@@ -29,10 +31,12 @@ const I18nTemplate: Story<
 > = (args, context) => {
   return (
     <FormI18nProvider
-      getValidationErrorMessage={({ name }, error) => {
+      getValidationErrorMessage={({ name, value }, error) => {
         return `Field '${name}' has Error '${
           error.type
-        }'. Original error message: ${error.message || "---"}`;
+        }'. Offending value: '${value}'. Original error message: ${
+          error.message || "---"
+        }`;
       }}
     >
       {Template(args, context)}
@@ -41,12 +45,12 @@ const I18nTemplate: Story<
 };
 
 export const Empty = Template.bind({});
-Empty.args = {};
+Empty.args = { useGrouping: true };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   initialValues: {
-    number: 10,
+    theNumber: 123456.789,
   },
 };
 
@@ -69,12 +73,14 @@ ValidationRequired.args = {
 };
 
 export const ValidationMin = Template.bind({});
+ValidationMin.storyName = "Validation Min (4)";
 ValidationMin.args = {
   ...Empty.args,
   min: 4,
 };
 
 export const ValidationMinMax = Template.bind({});
+ValidationMinMax.storyName = "Validation MinMax (4-10)";
 ValidationMinMax.args = {
   ...Empty.args,
   min: 4,
@@ -87,12 +93,20 @@ ValidationTranslationRequired.args = {
 };
 
 export const ValidationTranslationMin = I18nTemplate.bind({});
+ValidationTranslationMin.storyName = "Validation Translation Min (4)";
 ValidationTranslationMin.args = {
   ...ValidationMin.args,
 };
 
 export const ValidationTranslationMinMax = I18nTemplate.bind({});
+ValidationTranslationMinMax.storyName = "Validation Translation MinMax (4-10)";
 ValidationTranslationMinMax.args = {
+  ...ValidationMinMax.args,
+};
+
+export const LocalizedDe = I18nTemplate.bind({});
+LocalizedDe.storyName = "Localized DE MinMax (4-10)";
+LocalizedDe.args = {
   ...ValidationMinMax.args,
 };
 

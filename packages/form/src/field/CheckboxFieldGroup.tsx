@@ -1,4 +1,4 @@
-import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
+import "../form/formSupport";
 
 import { FC, createContext } from "react";
 

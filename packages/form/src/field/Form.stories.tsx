@@ -14,7 +14,7 @@ import {
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
-} from "../component/auto-complete/AutoComplete-storyData";
+} from "../component/autocomplete/AutoComplete-storyData";
 import { Button } from "../component/Button";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { CheckboxField } from "./CheckboxField";
@@ -101,8 +101,8 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
           <FormItem label="Current Country">
             <AutoCompleteField
               name="country"
-              onSearch={SEARCH_COUNTRIES}
-              initialSuggestions={initialCurrentCountrySuggestions}
+              loadItems={SEARCH_COUNTRIES}
+              initialItems={initialCurrentCountrySuggestions}
             />
           </FormItem>
           <FormItem label="Text Area">
@@ -117,6 +117,10 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
               onSearch={SEARCH_COUNTRIES}
               initialSuggestions={initialCountriesSuggestions}
             />
+          </FormItem>
+          <FormItem label="Hierarchical Checkboxes (via name)">
+            <CheckboxField name="root.selected" boolean />
+            <CheckboxField name="root.test.selected" boolean />
           </FormItem>
           <FormItem>
             <Toolbar>

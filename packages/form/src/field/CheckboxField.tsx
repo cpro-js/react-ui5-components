@@ -1,4 +1,4 @@
-import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
+import "../form/formSupport";
 
 import { ValueState } from "@ui5/webcomponents-react";
 import { ChangeEvent, FC, useContext, useMemo } from "react";

@@ -7,12 +7,11 @@ import "@ui5/webcomponents-icons/dist/refresh";
 import { action } from "@storybook/addon-actions";
 import { Meta, Story, StoryContext } from "@storybook/react";
 import { Icon, ValueState } from "@ui5/webcomponents-react";
-import useState from "storybook-addon-state";
 
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
-} from "./auto-complete/AutoComplete-storyData";
+} from "./autocomplete/AutoComplete-storyData";
 import { MultiAutoComplete, MultiAutoCompleteProps } from "./MultiAutoComplete";
 import { DefaultAutoCompletOption } from "./MultiAutoCompleteModel";
 
