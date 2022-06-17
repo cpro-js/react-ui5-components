@@ -181,5 +181,5 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
     );
   }
 ) as <T = MultiSelectItem>(
-  p: MultiSelectProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
+  p: MultiSelectProps<T> & { ref?: Ref<MultiComboBoxDomRef | undefined> }
 ) => ReactElement;

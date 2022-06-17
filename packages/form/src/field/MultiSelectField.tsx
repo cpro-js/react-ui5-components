@@ -1,8 +1,16 @@
 import "../form/formSupport";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { FC, useMemo } from "react";
-import { Controller } from "react-hook-form";
+import { MultiComboBoxDomRef } from "@ui5/webcomponents-react/webComponents/MultiComboBox";
+import {
+  ReactElement,
+  Ref,
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
+import { useController } from "react-hook-form";
 
 import {
   MultiSelect,
@@ -10,7 +18,7 @@ import {
   MultiSelectProps,
 } from "../component/MultiSelect";
 import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldValidation } from "./types";
+import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
 export type MultiSelectFieldProps<T = MultiSelectItem> = Omit<
@@ -21,11 +29,10 @@ export type MultiSelectFieldProps<T = MultiSelectItem> = Omit<
     name: string;
   };
 
-export function MultiSelectField<T = MultiSelectItem>({
-  name,
-  required,
-  ...props
-}: MultiSelectFieldProps<T>) {
+export const MultiSelectField = forwardRef<
+  FormFieldElement,
+  MultiSelectFieldProps
+>(({ name, required, ...props }, forwardedRef) => {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -35,44 +42,56 @@ export function MultiSelectField<T = MultiSelectItem>({
 
   const getValidationErrorMessage = useI18nValidationError(name, rules);
 
-  return (
-    <Controller<any>
-      name={name}
-      rules={rules}
-      render={({ field, fieldState }) => {
-        // get error message (Note: undefined fallbacks to default message of ui5 component)
-        const errorMessage = hasError(fieldState.error)
-          ? getValidationErrorMessage(fieldState.error, field.value)
-          : undefined;
+  const { field, fieldState } = useController({
+    name: name,
+    rules,
+  });
 
-        return (
-          <MultiSelect
-            {...props}
-            ref={field.ref}
-            name={field.name}
-            value={field.value}
-            onSelectionChange={(_, value) => {
-              field.onChange(value);
-            }}
-            valueState={
-              hasError(fieldState.error) ? ValueState.Error : ValueState.None
-            }
-            valueStateMessage={
-              errorMessage != null && (
-                <div slot="valueStateMessage">{errorMessage}</div>
-              )
-            }
-            onBlur={(event) => {
-              // ignore blur event when combobox items are clicked
-              if ((event.target as any).open && event.relatedTarget != null) {
-                return;
-              }
-              field.onBlur();
-            }}
-            required={required}
-          />
-        );
+  // store input ref for intenral usage
+  const internalRef = useRef<MultiComboBoxDomRef>();
+  // forward outer ref to custom element
+  useImperativeHandle(forwardedRef, () => ({
+    focus() {
+      if (internalRef.current != null) {
+        internalRef.current.focus();
+      }
+    },
+  }));
+  // forward field ref to stored internal input ref
+  useImperativeHandle(field.ref, () => internalRef.current);
+
+  // get error message (Note: undefined fallbacks to default message of ui5 component)
+  const errorMessage = hasError(fieldState.error)
+    ? getValidationErrorMessage(fieldState.error, field.value)
+    : undefined;
+
+  return (
+    <MultiSelect
+      {...props}
+      ref={internalRef}
+      name={field.name}
+      value={field.value}
+      onSelectionChange={(_, value) => {
+        field.onChange(value);
       }}
+      valueState={
+        hasError(fieldState.error) ? ValueState.Error : ValueState.None
+      }
+      valueStateMessage={
+        errorMessage != null && (
+          <div slot="valueStateMessage">{errorMessage}</div>
+        )
+      }
+      onBlur={(event) => {
+        // ignore blur event when combobox items are clicked
+        if ((event.target as any).open && event.relatedTarget != null) {
+          return;
+        }
+        field.onBlur();
+      }}
+      required={required}
     />
   );
-}
+}) as <T = MultiSelectItem>(
+  p: MultiSelectFieldProps<T> & { ref?: Ref<FormFieldElement | undefined> }
+) => ReactElement;
