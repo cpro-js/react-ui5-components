@@ -1,6 +1,6 @@
 import "../form/formSupport";
 
-import { FC, createContext } from "react";
+import { FC, createContext, forwardRef } from "react";
 
 import { CheckboxFieldProps } from "./CheckboxField";
 
@@ -16,13 +16,12 @@ export interface ForwardedCheckboxFieldProps
 
 export interface CheckboxFieldGroupProps extends ForwardedCheckboxFieldProps {}
 
-export const CheckboxFieldGroup: FC<CheckboxFieldGroupProps> = ({
-  children,
-  ...props
-}) => {
-  return (
-    <CheckboxFieldGroupContext.Provider value={props}>
-      {children}
-    </CheckboxFieldGroupContext.Provider>
-  );
-};
+export const CheckboxFieldGroup: FC<CheckboxFieldGroupProps> = forwardRef(
+  ({ children, ...props }) => {
+    return (
+      <CheckboxFieldGroupContext.Provider value={props}>
+        {children}
+      </CheckboxFieldGroupContext.Provider>
+    );
+  }
+);
