@@ -1,7 +1,14 @@
 import "../form/formSupport";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { FC, useCallback, useMemo } from "react";
+import {
+  FC,
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 import { useController, useFormContext } from "react-hook-form";
 
 import {
@@ -9,7 +16,7 @@ import {
   CurrencyInputProps,
 } from "../component/number/CurrencyInput";
 import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldValidation } from "./types";
+import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
 export type CurrencyInputFieldProps = Omit<
@@ -20,13 +27,10 @@ export type CurrencyInputFieldProps = Omit<
     name: string;
   };
 
-export const CurrencyInputField: FC<CurrencyInputFieldProps> = ({
-  name,
-  required,
-  min,
-  max,
-  ...props
-}) => {
+export const CurrencyInputField: FC<CurrencyInputFieldProps> = forwardRef<
+  FormFieldElement,
+  CurrencyInputFieldProps
+>(({ name, required, min, max, ...props }, forwardedRef) => {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -40,6 +44,19 @@ export const CurrencyInputField: FC<CurrencyInputFieldProps> = ({
 
   const { field, fieldState } = useController({ name, rules });
   const { clearErrors } = useFormContext();
+
+  // store input ref for intenral usage
+  const internalRef = useRef<HTMLInputElement>();
+  // forward outer ref to custom element
+  useImperativeHandle(forwardedRef, () => ({
+    focus() {
+      if (internalRef.current != null) {
+        internalRef.current.focus();
+      }
+    },
+  }));
+  // forward field ref to stored internal input ref
+  useImperativeHandle(field.ref, () => internalRef.current);
 
   // use empty string to reset value, undefined will be ignored by web component
   const value = field.value;
@@ -57,7 +74,7 @@ export const CurrencyInputField: FC<CurrencyInputFieldProps> = ({
   return (
     <CurrencyInput
       {...props}
-      ref={field.ref}
+      ref={internalRef}
       name={field.name}
       value={value}
       onChange={(_, val) => {
@@ -82,4 +99,4 @@ export const CurrencyInputField: FC<CurrencyInputFieldProps> = ({
       onKeyUp={hasError(fieldState.error) ? onKeyUp : undefined}
     />
   );
-};
+});
