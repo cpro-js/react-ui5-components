@@ -192,5 +192,5 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
     );
   }
 ) as <T = SelectItem>(
-  p: SelectProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
+  p: SelectProps<T> & { ref?: Ref<ComboBoxDomRef | undefined> }
 ) => ReactElement;
