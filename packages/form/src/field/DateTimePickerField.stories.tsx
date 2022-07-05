@@ -1,4 +1,5 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import {
@@ -6,6 +7,7 @@ import {
   DateTimePickerFieldProps,
 } from "./DateTimePickerField";
 import { FormViewer, useFormViewer } from "./FormViewer";
+import { FormFieldElement } from "./types";
 import { FormI18nProvider, toISODateTimeString } from "..";
 
 interface FormData {
@@ -20,11 +22,12 @@ const Template: Story<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
+  const fieldRef = useRef<FormFieldElement>();
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <DateTimePickerField {...props} name={"date"} />
-      <FormViewer submittedValues={submittedValues} />
+      <DateTimePickerField {...props} ref={fieldRef} name={"date"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };

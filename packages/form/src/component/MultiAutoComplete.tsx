@@ -11,8 +11,17 @@ import {
 } from "@ui5/webcomponents-react/dist/MultiInput";
 import { SuggestionItem } from "@ui5/webcomponents-react/dist/SuggestionItem";
 import { Token } from "@ui5/webcomponents-react/dist/Token";
+import { MultiInputDomRef } from "@ui5/webcomponents-react/dist/webComponents/MultiInput";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { Component, FocusEvent, KeyboardEvent, SyntheticEvent } from "react";
+import {
+  Component,
+  FocusEvent,
+  KeyboardEvent,
+  MutableRefObject,
+  RefObject,
+  SyntheticEvent,
+  createRef,
+} from "react";
 
 import {
   AutoCompleteOptions,
@@ -32,6 +41,7 @@ type TokenDeleteEvent = Ui5CustomEvent<
   HTMLInputElement,
   { token: HTMLElement }
 >;
+
 interface FocusOutEvent<T = Element> extends SyntheticEvent<T, FocusEvent> {
   relatedTarget: EventTarget | null;
   target: EventTarget & T;
@@ -81,6 +91,8 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   searchTerm: string = "";
   searching: boolean = false;
 
+  private inputRef: RefObject<MultiInputDomRef> = createRef();
+
   state = {
     values: this.props.values || [],
     suggestions: [] as Array<T>,
@@ -103,6 +115,12 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
       }
     }
   }
+
+  focus = () => {
+    if (this.inputRef.current != null) {
+      this.inputRef.current.focus();
+    }
+  };
 
   search = debounce((searchTerm: string, hasMinChars: boolean) => {
     const { selectedItems } = this.state;
@@ -377,6 +395,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     return (
       <MultiInput
         {...originalProps}
+        ref={this.inputRef}
         showSuggestions={true}
         tokens={this.renderTokens()}
         onTokenDelete={this.onDelete}

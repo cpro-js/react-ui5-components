@@ -1,5 +1,5 @@
 import { Story } from "@storybook/react";
-import { FormEvent, useState } from "react";
+import { useRef } from "react";
 
 import {
   COUNTRIES,
@@ -10,6 +10,7 @@ import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { MultiAutoCompleteField } from "./MultiAutoCompleteField";
+import { FormFieldElement } from "./types";
 
 interface FormData {
   items?: Array<string>;
@@ -22,11 +23,12 @@ const Template: Story<FormControllerProps<FormData> & MultiAutoCompleteProps> =
     const { submittedValues, handleSubmit } = useFormViewer({
       onSubmit: onSubmit,
     });
+    const fieldRef = useRef<FormFieldElement>();
 
     return (
       <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <MultiAutoCompleteField {...props} name={"items"} />
-        <FormViewer submittedValues={submittedValues} />
+        <MultiAutoCompleteField {...props} ref={fieldRef} name={"items"} />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
       </FormController>
     );
   };

@@ -1,14 +1,18 @@
 import { Text, Title, Toolbar } from "@ui5/webcomponents-react";
-import { FC, useCallback, useState } from "react";
+import { MutableRefObject, RefObject, useCallback, useState } from "react";
 
 import { Button } from "../component/Button";
-import { FormSubmitHandler } from "./types";
+import { FormFieldElement, FormSubmitHandler } from "./types";
 
 export interface useFormViewerProps<FormValues extends {}> {
   onSubmit: FormSubmitHandler<FormValues>;
 }
+
 export interface FormViewerProps<T> {
   submittedValues?: T | undefined;
+  fieldRef?:
+    | MutableRefObject<FormFieldElement | undefined>
+    | RefObject<FormFieldElement | undefined>;
 }
 
 export function useFormViewer<FormValues extends {}>(
@@ -30,7 +34,7 @@ export function useFormViewer<FormValues extends {}>(
 
 export function FormViewer<T>({
   submittedValues,
-  ...props
+  fieldRef,
 }: FormViewerProps<T>) {
   return (
     <div>
@@ -38,7 +42,14 @@ export function FormViewer<T>({
         <Button style={{ marginRight: "10px" }} type="submit">
           Submit
         </Button>
-        <Button type="reset">Reset</Button>
+        <Button style={{ marginRight: "10px" }} type="reset">
+          Reset
+        </Button>
+        {fieldRef != null && (
+          <Button onClick={() => fieldRef?.current?.focus()} type="button">
+            Focus
+          </Button>
+        )}
       </div>
       <Toolbar>
         <Title> Submitted Values </Title>

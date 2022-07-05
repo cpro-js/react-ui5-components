@@ -1,4 +1,5 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import {
   COUNTRIES,
@@ -8,6 +9,7 @@ import { DefaultAutoCompleteOption } from "../../component/autocomplete/internal
 import { FormController, FormControllerProps } from "../../form/FormController";
 import { FormI18nProvider } from "../../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "../FormViewer";
+import { FormFieldElement } from "../types";
 import { AutoCompleteField, AutoCompleteFieldProps } from "./AutoCompleteField";
 
 interface FormData {
@@ -23,11 +25,12 @@ const Template: Story<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
+  const fieldRef = useRef<FormFieldElement>();
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <AutoCompleteField {...props} name="item" />
-      <FormViewer submittedValues={submittedValues} />
+      <AutoCompleteField {...props} ref={fieldRef} name="item" />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };

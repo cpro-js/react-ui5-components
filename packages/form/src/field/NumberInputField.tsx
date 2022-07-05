@@ -1,12 +1,20 @@
 import "../form/formSupport";
 
 import { ValueState } from "@ui5/webcomponents-react";
-import { FC, useCallback, useMemo } from "react";
+import {
+  FC,
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 import { useController, useFormContext } from "react-hook-form";
 
 import { NumberInput, NumberInputProps } from "../component/number/NumberInput";
 import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldValidation } from "./types";
+import { CurrencyInputFieldProps } from "./CurrencyInputField";
+import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
 export type NumberInputFieldProps = Omit<
@@ -17,13 +25,10 @@ export type NumberInputFieldProps = Omit<
     name: string;
   };
 
-export const NumberInputField: FC<NumberInputFieldProps> = ({
-  name,
-  required,
-  min,
-  max,
-  ...props
-}) => {
+export const NumberInputField: FC<NumberInputFieldProps> = forwardRef<
+  FormFieldElement,
+  CurrencyInputFieldProps
+>(({ name, required, min, max, ...props }, forwardedRef) => {
   const rules: Partial<FormFieldValidation> = useMemo(
     () => ({
       required,
@@ -37,6 +42,19 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
 
   const { field, fieldState } = useController({ name, rules });
   const { clearErrors } = useFormContext();
+
+  // store input ref for intenral usage
+  const internalRef = useRef<HTMLInputElement>();
+  // forward outer ref to custom element
+  useImperativeHandle(forwardedRef, () => ({
+    focus() {
+      if (internalRef.current != null) {
+        internalRef.current.focus();
+      }
+    },
+  }));
+  // forward field ref to stored internal input ref
+  useImperativeHandle(field.ref, () => internalRef.current);
 
   // use empty string to reset value, undefined will be ignored by web component
   const value = field.value;
@@ -54,7 +72,7 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
   return (
     <NumberInput
       {...props}
-      ref={field.ref}
+      ref={internalRef}
       name={field.name}
       value={value}
       onChange={(_, val) => {
@@ -79,4 +97,4 @@ export const NumberInputField: FC<NumberInputFieldProps> = ({
       onKeyUp={hasError(fieldState.error) ? onKeyUp : undefined}
     />
   );
-};
+});

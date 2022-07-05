@@ -1,10 +1,12 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import { COUNTRIES } from "../../component/autocomplete/AutoComplete-storyData";
 import { DefaultAutoCompleteOption } from "../../component/autocomplete/internal/CoreAutocomplete";
 import { FormController, FormControllerProps } from "../../form/FormController";
 import { FormI18nProvider } from "../../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "../FormViewer";
+import { FormFieldElement } from "../types";
 import {
   CreatableSelectField,
   CreatableSelectFieldProps,
@@ -23,11 +25,12 @@ const Template: Story<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
+  const fieldRef = useRef<FormFieldElement>();
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <CreatableSelectField {...props} name="item" />
-      <FormViewer submittedValues={submittedValues} />
+      <CreatableSelectField {...props} ref={fieldRef} name="item" />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };

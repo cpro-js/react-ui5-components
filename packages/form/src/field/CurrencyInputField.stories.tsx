@@ -1,4 +1,5 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
@@ -7,6 +8,7 @@ import {
   CurrencyInputFieldProps,
 } from "./CurrencyInputField";
 import { FormViewer, useFormViewer } from "./FormViewer";
+import { FormFieldElement } from "./types";
 
 interface FormData {
   theNumber?: number;
@@ -19,11 +21,12 @@ const Template: Story<FormControllerProps<FormData> & CurrencyInputFieldProps> =
     const { submittedValues, handleSubmit } = useFormViewer({
       onSubmit: onSubmit,
     });
+    const fieldRef = useRef<FormFieldElement>();
 
     return (
       <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <CurrencyInputField {...props} name={"theNumber"} />
-        <FormViewer submittedValues={submittedValues} />
+        <CurrencyInputField {...props} ref={fieldRef} name={"theNumber"} />{" "}
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
       </FormController>
     );
   };

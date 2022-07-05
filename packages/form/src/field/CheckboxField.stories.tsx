@@ -1,8 +1,10 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { CheckboxField, CheckboxFieldProps } from "./CheckboxField";
 import { FormViewer, useFormViewer } from "./FormViewer";
+import { FormFieldElement } from "./types";
 
 interface FormData {
   value?: string;
@@ -21,11 +23,12 @@ const createTemplate = function <T>(): Story<
     const { submittedValues, handleSubmit } = useFormViewer<T>({
       onSubmit: onSubmit,
     });
+    const fieldRef = useRef<FormFieldElement>();
 
     return (
       <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <CheckboxField {...props} name={"value"} />
-        <FormViewer submittedValues={submittedValues} />
+        <CheckboxField {...props} ref={fieldRef} name={"value"} />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
       </FormController>
     );
   };

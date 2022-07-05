@@ -1,5 +1,13 @@
-import { FC } from "react";
-import { Controller } from "react-hook-form";
+import {
+  FC,
+  MutableRefObject,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from "react";
+import { useController } from "react-hook-form";
+
+import { FormFieldElement } from "./types";
 
 export interface HiddenFieldProps {
   name: string;
@@ -8,19 +16,31 @@ export interface HiddenFieldProps {
   // disabled?: boolean;
 }
 
-export const HiddenField: FC<HiddenFieldProps> = ({ name }) => {
+export const HiddenField: FC<HiddenFieldProps> = forwardRef<
+  FormFieldElement,
+  HiddenFieldProps
+>(({ name }, forwardedRef) => {
+  const { field } = useController({ name });
+
+  // store input ref for intenral usage
+  const internalRef = useRef<HTMLInputElement>();
+  // forward outer ref to custom element
+  useImperativeHandle(forwardedRef, () => ({
+    focus() {
+      if (internalRef.current != null) {
+        internalRef.current.focus();
+      }
+    },
+  }));
+  // forward field ref to stored internal input ref
+  useImperativeHandle(field.ref, () => internalRef.current);
+
   return (
-    <Controller<any>
-      name={name}
-      render={({ field }) => {
-        return (
-          <input
-            {...field}
-            type="hidden"
-            value={field.value == null ? "" : field.value}
-          />
-        );
-      }}
+    <input
+      {...field}
+      ref={internalRef as MutableRefObject<HTMLInputElement>}
+      type="hidden"
+      value={field.value == null ? "" : field.value}
     />
   );
-};
+});
