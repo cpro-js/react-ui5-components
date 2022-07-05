@@ -90,7 +90,7 @@ export const CheckboxField: FC<CheckboxFieldProps> = forwardRef<
     <Checkbox
       {...checkboxGroupProps}
       {...props}
-      ref={field.ref}
+      ref={internalRef}
       name={field.name}
       value={value}
       checked={checked}
