@@ -1,10 +1,12 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import { SelectItem } from "../component/Select";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { SelectField, SelectFieldProps } from "./SelectField";
+import { FormFieldElement } from "./types";
 
 export interface SelectItemAlt extends SelectItem {
   alt: string;
@@ -30,11 +32,12 @@ const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
+  const fieldRef = useRef<FormFieldElement>();
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <SelectField {...props} name={"item"} />
-      <FormViewer submittedValues={submittedValues} />
+      <SelectField {...props} ref={fieldRef} name={"item"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };

@@ -1,9 +1,13 @@
 import { Story } from "@storybook/react";
+import { Title, Toolbar } from "@ui5/webcomponents-react";
+import { useRef } from "react";
 
+import { Button } from "../component/Button";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { TextInputField, TextInputFieldProps } from "./TextInputField";
+import { FormFieldElement } from "./types";
 
 interface FormData {
   text?: string;
@@ -17,11 +21,12 @@ const Template: Story<FormControllerProps<FormData> & TextInputFieldProps> = (
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
+  const fieldRef = useRef<FormFieldElement>();
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <TextInputField {...props} name={"text"} />
-      <FormViewer submittedValues={submittedValues} />
+      <TextInputField {...props} ref={fieldRef} name={"text"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };

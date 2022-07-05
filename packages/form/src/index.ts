@@ -1,4 +1,3 @@
-import { Component } from "react";
 // basic form component wrappers
 export { Button } from "./component/Button";
 export type { ButtonProps } from "./component/Button";

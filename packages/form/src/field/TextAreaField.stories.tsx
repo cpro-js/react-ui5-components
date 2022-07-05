@@ -1,9 +1,11 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { TextAreaField, TextAreaFieldProps } from "./TextAreaField";
+import { FormFieldElement } from "./types";
 
 export default {
   title: "Form/Field/TextAreaField",
@@ -27,11 +29,12 @@ const Template: Story<FormControllerProps<FormData> & TextAreaFieldProps> = (
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
+  const fieldRef = useRef<FormFieldElement>();
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <TextAreaField {...props} name={"text"} />
-      <FormViewer submittedValues={submittedValues} />
+      <TextAreaField {...props} ref={fieldRef} name={"text"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };

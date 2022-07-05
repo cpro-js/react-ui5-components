@@ -1,10 +1,12 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { toISO8601DateString } from "../util/date";
 import { DatePickerField, DatePickerFieldProps } from "./DatePickerField";
 import { FormViewer, useFormViewer } from "./FormViewer";
+import { FormFieldElement } from "./types";
 
 interface FormData {
   date?: string;
@@ -18,11 +20,12 @@ const Template: Story<FormControllerProps<FormData> & DatePickerFieldProps> = (
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
+  const fieldRef = useRef<FormFieldElement>();
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <DatePickerField {...props} name={"date"} />
-      <FormViewer submittedValues={submittedValues} />
+      <DatePickerField {...props} ref={fieldRef} name={"date"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };

@@ -1,10 +1,12 @@
 import { Story } from "@storybook/react";
+import { useRef } from "react";
 
 import { MultiSelectItem } from "../component/MultiSelect";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
+import { FormFieldElement } from "./types";
 
 export interface MultiSelectItemAlt extends MultiSelectItem {
   alt: string;
@@ -30,11 +32,12 @@ const Template: Story<FormControllerProps<FormData> & MultiSelectFieldProps> = (
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
+  const fieldRef = useRef<FormFieldElement>();
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <MultiSelectField {...props} name={"item"} />
-      <FormViewer submittedValues={submittedValues} />
+      <MultiSelectField {...props} ref={fieldRef} name={"item"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };
