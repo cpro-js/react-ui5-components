@@ -24,7 +24,7 @@ export interface CheckboxProps extends Omit<CheckBoxPropTypes, "onChange"> {
    * HTML checkbox compliant event handler (except that the input type is hidden instead of checkbox)
    * @param event
    */
-  onChange: (event: Ui5CustomEvent<CheckBoxDomRef>) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 /**
@@ -38,15 +38,17 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<
     { name, value = "on", checked, disabled, onChange, ...props },
     forwardedRef
   ) => {
-    const inputRef = useRef<CheckBoxDomRef>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const [isChecked, setChecked] = useState<boolean | undefined>(checked);
 
     const handleChange = useCallback(
-      (event: Ui5CustomEvent<CheckBoxDomRef>) => {
+      (
+        event: Ui5CustomEvent<CheckBoxDomRef> | ChangeEvent<HTMLInputElement>
+      ) => {
         if (inputRef.current != null && inputRef.current !== event.target) {
           setChecked(event.target.checked);
           inputRef.current.disabled = !event.target.checked;
-          inputRef.current.checked = event.target.checked;
+          inputRef.current.checked = !!event.target.checked;
 
           const customEvent = new Event("change", {
             bubbles: true,
@@ -57,7 +59,8 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<
         }
 
         if (inputRef.current === event.target) {
-          onChange(event);
+          // use only the change event of the internal input
+          onChange(event as ChangeEvent<HTMLInputElement>);
         }
       },
       [setChecked, onChange]
@@ -79,7 +82,7 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<
         onChange={handleChange}
       >
         <input
-          ref={inputRef as RefObject<unknown> as RefObject<HTMLInputElement>}
+          ref={inputRef}
           type="hidden"
           disabled={disabled || !isChecked}
           name={name}

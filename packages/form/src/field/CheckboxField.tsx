@@ -1,6 +1,6 @@
 import "../form/formSupport";
 
-import { ValueState } from "@ui5/webcomponents-react";
+import { CheckBoxDomRef, ValueState } from "@ui5/webcomponents-react";
 import {
   ChangeEvent,
   FC,
@@ -66,7 +66,7 @@ export const CheckboxField: FC<CheckboxFieldProps> = forwardRef<
   });
 
   // store input ref for intenral usage
-  const internalRef = useRef<HTMLInputElement>();
+  const internalRef = useRef<CheckBoxDomRef>();
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {

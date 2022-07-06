@@ -1,4 +1,4 @@
-import { Ui5CustomEvent } from "@ui5/webcomponents-react";
+import { InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
 import { FocusEvent, useCallback, useEffect, useState } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
@@ -38,7 +38,7 @@ export const useInputState = <
   }, [propsValue, setStateValue]);
 
   const onInputChange = useCallback(
-    (inputValue: string, event: Ui5CustomEvent<HTMLInputElement>) => {
+    (inputValue: string, event: Ui5CustomEvent<InputDomRef>) => {
       if (propsOnInputChange != null) {
         propsOnInputChange(inputValue, event);
       }
