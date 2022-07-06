@@ -36,7 +36,7 @@ export interface MultiSelectProps<T = MultiSelectItem>
   itemLabel?: keyof T | ((value: T) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
-      HTMLInputElement,
+      MultiComboBoxDomRef,
       {
         items: Array<HTMLElement>;
       }
@@ -93,7 +93,10 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
 
     const handleSelectionChange = useCallback(
       (
-        event: Ui5CustomEvent<HTMLInputElement, { items: Array<HTMLElement> }>
+        event: Ui5CustomEvent<
+          MultiComboBoxDomRef,
+          { items: Array<HTMLElement> }
+        >
       ) => {
         if (onSelectionChange != null) {
           const values: Array<string | number> = event.detail.items
@@ -154,12 +157,10 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           ref={forwardedRef}
           onSelectionChange={
             handleSelectionChange as (
-              event: Ui5CustomEvent<unknown, { items: unknown[] }>
+              event: Ui5CustomEvent<MultiComboBoxDomRef, { items: unknown[] }>
             ) => void
           }
-          onOpenChange={
-            handleOpenChange as (event: Ui5CustomEvent<unknown>) => void
-          }
+          onOpenChange={handleOpenChange}
           onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}
         >

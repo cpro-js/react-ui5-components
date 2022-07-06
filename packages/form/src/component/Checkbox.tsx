@@ -24,7 +24,7 @@ export interface CheckboxProps extends Omit<CheckBoxPropTypes, "onChange"> {
    * HTML checkbox compliant event handler (except that the input type is hidden instead of checkbox)
    * @param event
    */
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: Ui5CustomEvent<CheckBoxDomRef>) => void;
 }
 
 /**
@@ -57,7 +57,7 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<
         }
 
         if (inputRef.current === event.target) {
-          onChange(event as unknown as ChangeEvent<HTMLInputElement>);
+          onChange(event);
         }
       },
       [setChecked, onChange]

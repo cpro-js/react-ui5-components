@@ -47,7 +47,7 @@ export interface SelectProps<T = SelectItem>
   itemLabel?: keyof T | ((value: T) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
-      HTMLInputElement,
+      ComboBoxDomRef,
       {
         item: HTMLElement;
       }
@@ -55,7 +55,7 @@ export interface SelectProps<T = SelectItem>
     value?: string | number
   ) => void;
   onChange?: (
-    event: Ui5CustomEvent<HTMLInputElement>,
+    event: Ui5CustomEvent<ComboBoxDomRef>,
     value?: string | number
   ) => void;
 }
@@ -114,10 +114,7 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
           const selectedItem = index == null ? undefined : items[Number(index)];
           const value =
             selectedItem == null ? undefined : retrieveItemValue(selectedItem);
-          onSelectionChange(
-            event as Ui5CustomEvent<unknown> as Ui5CustomEvent<HTMLInputElement>,
-            value
-          );
+          onSelectionChange(event, value);
         }
       },
       [items, onSelectionChange, retrieveItemValue]
@@ -135,10 +132,7 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
           const value =
             selectedItem == null ? undefined : retrieveItemValue(selectedItem);
 
-          onChange(
-            event as Ui5CustomEvent<unknown> as Ui5CustomEvent<HTMLInputElement>,
-            value
-          );
+          onChange(event, value);
         }
       },
       [items, onChange, retrieveItemValue]
