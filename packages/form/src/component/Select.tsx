@@ -1,6 +1,10 @@
-import { ComboBox, ComboBoxItem } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react";
-import { ComboBoxDomRef, ComboBoxPropTypes } from "@ui5/webcomponents-react";
+import {
+  ComboBox,
+  ComboBoxDomRef,
+  ComboBoxItem,
+  ComboBoxPropTypes,
+  Ui5CustomEvent,
+} from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,
   ReactElement,

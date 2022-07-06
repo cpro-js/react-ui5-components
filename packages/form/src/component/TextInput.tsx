@@ -2,16 +2,24 @@ import "../form/formSupport";
 
 import { Input } from "@ui5/webcomponents-react";
 import { InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
-import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
+import {
+  FC,
+  KeyboardEvent,
+  MutableRefObject,
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+} from "react";
 
-import { triggerSubmitOnEnter } from "./util";
+import { triggerSubmitOnEnter, useOnChangeWorkaround } from "./util";
 
 export interface TextInputProps extends InputPropTypes {}
 
 export const TextInput: FC<TextInputProps> = forwardRef<
   InputDomRef,
   TextInputProps
->(({ onKeyPress, ...props }, forwardedRef) => {
+>(({ value, onKeyPress, ...props }, forwardedRef) => {
   const handleKeyPress = useCallback(
     (event: KeyboardEvent<HTMLElement>) => {
       // Workaround: Webcomponents catches enter -> need to submit manually
@@ -24,5 +32,18 @@ export const TextInput: FC<TextInputProps> = forwardRef<
     [onKeyPress]
   );
 
-  return <Input {...props} ref={forwardedRef} onKeyPress={handleKeyPress} />;
+  // store input ref for internal usage
+  const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
+  useImperativeHandle(forwardedRef, () => inputRef.current);
+  // apply workaround to fix onChange event
+  useOnChangeWorkaround(inputRef, value);
+
+  return (
+    <Input
+      {...props}
+      ref={inputRef}
+      onKeyPress={handleKeyPress}
+      value={value}
+    />
+  );
 });

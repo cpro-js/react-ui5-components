@@ -29,13 +29,12 @@ const Template: Story<
 export const Standard = Template.bind({});
 Standard.args = {
   onSubmit: async (...args) => {
+    console.log("submit", ...args);
     action("submit")(...args);
 
     const [values, actions] = args;
 
-    actions.setValues([
-      { name: "text", value: "Random value: " + new Date().getTime() },
-    ]);
+    actions.setValues([{ name: "text", value: "1" }]);
   },
   render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
 };
