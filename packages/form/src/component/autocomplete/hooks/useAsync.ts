@@ -1,5 +1,5 @@
 import { useDebounceCallback } from "@react-hook/debounce";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
@@ -130,7 +130,7 @@ export const useAsync = <
   );
 
   const onInputChange = useCallback(
-    (inputValue: string, event: Ui5CustomEvent<HTMLInputElement>) => {
+    (inputValue: string, event: Ui5CustomEvent<InputDomRef>) => {
       if (propsOnInputChange != null) {
         propsOnInputChange(inputValue, event);
       }

@@ -1,12 +1,13 @@
-import { CheckBox as UI5Checkbox } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import {
   CheckBoxDomRef,
   CheckBoxPropTypes,
-} from "@ui5/webcomponents-react/webComponents/CheckBox";
+  CheckBox as UI5Checkbox,
+  Ui5CustomEvent,
+} from "@ui5/webcomponents-react";
 import {
   ChangeEvent,
   FC,
+  RefObject,
   forwardRef,
   useCallback,
   useEffect,
@@ -42,12 +43,12 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<
 
     const handleChange = useCallback(
       (
-        event: Ui5CustomEvent<HTMLInputElement> | ChangeEvent<HTMLInputElement>
+        event: Ui5CustomEvent<CheckBoxDomRef> | ChangeEvent<HTMLInputElement>
       ) => {
         if (inputRef.current != null && inputRef.current !== event.target) {
           setChecked(event.target.checked);
           inputRef.current.disabled = !event.target.checked;
-          inputRef.current.checked = event.target.checked;
+          inputRef.current.checked = !!event.target.checked;
 
           const customEvent = new Event("change", {
             bubbles: true,
@@ -58,6 +59,7 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<
         }
 
         if (inputRef.current === event.target) {
+          // use only the change event of the internal input
           onChange(event as ChangeEvent<HTMLInputElement>);
         }
       },

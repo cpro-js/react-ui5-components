@@ -1,5 +1,8 @@
-import { Button as UI5Button } from "@ui5/webcomponents-react";
-import { ButtonPropTypes } from "@ui5/webcomponents-react/webComponents/Button";
+import {
+  ButtonDomRef,
+  ButtonPropTypes,
+  Button as UI5Button,
+} from "@ui5/webcomponents-react";
 import { FC, MouseEvent, useCallback } from "react";
 
 import { triggerReset, triggerSubmit } from "./util";
@@ -11,7 +14,7 @@ export interface ButtonProps extends Omit<ButtonPropTypes, "submits"> {
 
 export const Button: FC<ButtonProps> = ({ form, type, onClick, ...others }) => {
   const handleClick = useCallback(
-    (event: MouseEvent<HTMLElement>) => {
+    (event: MouseEvent<ButtonDomRef>) => {
       if (onClick != null) {
         onClick(event);
       }

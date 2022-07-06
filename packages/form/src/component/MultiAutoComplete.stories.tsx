@@ -16,14 +16,8 @@ import { MultiAutoComplete, MultiAutoCompleteProps } from "./MultiAutoComplete";
 import { DefaultAutoCompletOption } from "./MultiAutoCompleteModel";
 
 const Template: Story<MultiAutoCompleteProps<DefaultAutoCompletOption>> = (
-  { ...props },
-  context: StoryContext
+  props
 ) => {
-  /* const [storedValues, setStoredValues] = useState(
-    `${context.name}_values`,
-    values || []
-  ); */
-
   const onSelect = (values: Array<string>) => {
     // setStoredValues(values);
     action("onSelect")(values);

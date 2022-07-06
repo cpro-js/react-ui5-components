@@ -1,9 +1,9 @@
 import { MultiComboBox, MultiComboBoxItem } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
   MultiComboBoxDomRef,
   MultiComboBoxPropTypes,
-} from "@ui5/webcomponents-react/webComponents/MultiComboBox";
+} from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,
   ReactElement,
@@ -36,7 +36,7 @@ export interface MultiSelectProps<T = MultiSelectItem>
   itemLabel?: keyof T | ((value: T) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
-      HTMLInputElement,
+      MultiComboBoxDomRef,
       {
         items: Array<HTMLElement>;
       }
@@ -93,7 +93,10 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
 
     const handleSelectionChange = useCallback(
       (
-        event: Ui5CustomEvent<HTMLInputElement, { items: Array<HTMLElement> }>
+        event: Ui5CustomEvent<
+          MultiComboBoxDomRef,
+          { items: Array<HTMLElement> }
+        >
       ) => {
         if (onSelectionChange != null) {
           const values: Array<string | number> = event.detail.items
@@ -121,7 +124,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
 
     const [allowSubmitOnEnter, setAllowSubmitOnEnter] = useAllowAction(true);
     const handleOpenChange = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement & { open: boolean }>) => {
+      (event: Ui5CustomEvent<MultiComboBoxDomRef & { open: boolean }>) => {
         setAllowSubmitOnEnter(!event.target.open);
 
         if (onOpenChange != null) {
@@ -154,14 +157,10 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           ref={forwardedRef}
           onSelectionChange={
             handleSelectionChange as (
-              event: Ui5CustomEvent<HTMLInputElement, { items: unknown[] }>
+              event: Ui5CustomEvent<MultiComboBoxDomRef, { items: unknown[] }>
             ) => void
           }
-          onOpenChange={
-            handleOpenChange as (
-              event: Ui5CustomEvent<HTMLInputElement>
-            ) => void
-          }
+          onOpenChange={handleOpenChange}
           onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}
         >

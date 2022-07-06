@@ -1,11 +1,11 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
 import { DatePicker as UI5DatePicker } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
   DatePickerDomRef,
   DatePickerPropTypes,
-} from "@ui5/webcomponents-react/webComponents/DatePicker";
+} from "@ui5/webcomponents-react";
 import clsx from "clsx";
 import {
   FC,
@@ -59,13 +59,13 @@ export interface DatePickerProps<TDate extends Date | string | number = string>
   minDate?: Date | TDate;
   maxDate?: Date | TDate;
   onChange?: (
-    event: Ui5CustomEvent<HTMLInputElement, { valid: boolean; value: string }>,
+    event: Ui5CustomEvent<DatePickerDomRef, { valid: boolean; value: string }>,
     value: TDate | null
   ) => void;
 }
 
 export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
-  HTMLInputElement | undefined,
+  DatePickerDomRef | undefined,
   DatePickerProps
 >(
   (
@@ -82,7 +82,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
     forwardedRef
   ) => {
     const classes = useStyles();
-    const ref = useRef<HTMLInputElement>();
+    const ref = useRef<DatePickerDomRef>();
 
     // forward our internal ref as external
     useImperativeHandle(forwardedRef, () => ref.current);
@@ -122,7 +122,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
     const handleChange = useCallback(
       (
         event: Ui5CustomEvent<
-          HTMLInputElement,
+          DatePickerDomRef,
           { value: string; valid: boolean }
         >
       ) => {

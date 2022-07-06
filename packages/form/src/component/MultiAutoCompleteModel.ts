@@ -1,7 +1,9 @@
-import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
-import { MultiInputPropTypes } from "@ui5/webcomponents-react/webComponents/MultiInput";
-import { SuggestionItemPropTypes } from "@ui5/webcomponents-react/webComponents/SuggestionItem";
-import { TokenPropTypes } from "@ui5/webcomponents-react/webComponents/Token";
+import {
+  InputPropTypes,
+  MultiInputPropTypes,
+  SuggestionItemPropTypes,
+  TokenPropTypes,
+} from "@ui5/webcomponents-react";
 import { HTMLAttributes } from "react";
 
 /**

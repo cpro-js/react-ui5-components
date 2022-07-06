@@ -61,7 +61,7 @@ const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
     <>
       <FormController<FormData> {...{ initialValues, onSubmit, onChange, id }}>
         <HiddenField name="id" />
-        <Form>
+        <Form as="div">
           <FormItem label="Text">
             <Text> Test</Text>
           </FormItem>

@@ -1,4 +1,4 @@
-import { InputDomRef } from "@ui5/webcomponents-react/webComponents/Input";
+import { InputDomRef } from "@ui5/webcomponents-react";
 import { FC, forwardRef, useContext } from "react";
 
 import { BaseNumberInput } from "./BaseNumberInput";

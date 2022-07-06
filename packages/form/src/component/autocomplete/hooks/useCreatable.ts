@@ -1,4 +1,4 @@
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
 import { useCallback, useMemo } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
@@ -135,7 +135,7 @@ export const useCreatable = <
   );
 
   const handleInput = useCallback(
-    (inputValue: string, event: Ui5CustomEvent<HTMLInputElement>) => {
+    (inputValue: string, event: Ui5CustomEvent<InputDomRef>) => {
       let inputValueCorrected = inputValue;
       if (
         newItemRef.current != null &&

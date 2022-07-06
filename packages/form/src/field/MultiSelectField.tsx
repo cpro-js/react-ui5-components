@@ -1,7 +1,6 @@
 import "../form/formSupport";
 
-import { ValueState } from "@ui5/webcomponents-react";
-import { MultiComboBoxDomRef } from "@ui5/webcomponents-react/webComponents/MultiComboBox";
+import { MultiComboBoxDomRef, ValueState } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,

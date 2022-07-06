@@ -15,7 +15,7 @@ export const triggerSubmitOnEnter = (event: KeyboardEvent<HTMLElement>) => {
   // delay dispatch to avoid race conditions between storing new value in onChange and submitting form state in onSubmit
   setTimeout(() => {
     triggerSubmit(event);
-  }, 150);
+  }, 1);
 };
 
 export const getForm = (

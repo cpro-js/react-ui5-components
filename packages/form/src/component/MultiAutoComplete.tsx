@@ -4,20 +4,19 @@
  */
 import "@ui5/webcomponents/dist/features/InputSuggestions";
 
-import { debounce } from "@ui5/webcomponents-react-base/dist/Utils";
 import {
   MultiInput,
+  MultiInputDomRef,
   MultiInputPropTypes,
-} from "@ui5/webcomponents-react/dist/MultiInput";
-import { SuggestionItem } from "@ui5/webcomponents-react/dist/SuggestionItem";
-import { Token } from "@ui5/webcomponents-react/dist/Token";
-import { MultiInputDomRef } from "@ui5/webcomponents-react/dist/webComponents/MultiInput";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+  SuggestionItem,
+  Token,
+  Ui5CustomEvent,
+} from "@ui5/webcomponents-react";
+import { debounce } from "@ui5/webcomponents-react-base";
 import {
   Component,
   FocusEvent,
   KeyboardEvent,
-  MutableRefObject,
   RefObject,
   SyntheticEvent,
   createRef,
@@ -38,7 +37,7 @@ import {
 
 // UI5 Event Types
 type TokenDeleteEvent = Ui5CustomEvent<
-  HTMLInputElement,
+  MultiInputDomRef,
   { token: HTMLElement }
 >;
 
@@ -76,7 +75,7 @@ export type MultiAutoCompleteProps<T = DefaultAutoCompleteOption> =
     onRemove?: (value: T) => void;
 
     onChange?: (
-      event: Ui5CustomEvent<HTMLInputElement>,
+      event: Ui5CustomEvent<MultiInputDomRef>,
       values: Array<string>
     ) => void;
   };
@@ -155,7 +154,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   }, DEBOUNCE_RATE);
 
-  onInput = (event: Ui5CustomEvent<HTMLInputElement>) => {
+  onInput = (event: Ui5CustomEvent<MultiInputDomRef>) => {
     const { minCharsForSearch } = this.props;
     const currentValue = (event.currentTarget as MultiInputPropTypes).value;
     this.searchTerm = currentValue ? currentValue.trim() : "";
@@ -170,7 +169,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   };
 
   onSelect = (
-    event: Ui5CustomEvent<HTMLInputElement, { item: HTMLElement }>
+    event: Ui5CustomEvent<MultiInputDomRef, { item: HTMLElement }>
   ) => {
     const { onAdd, onChange, onSelectionChange } = this.props;
     const { values } = this.state;
@@ -189,7 +188,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
       onAdd(toAdd);
     }
     if (onChange) {
-      onChange(event as Ui5CustomEvent<HTMLInputElement>, selected);
+      onChange(event as Ui5CustomEvent<MultiInputDomRef>, selected);
     }
     if (onSelectionChange) {
       onSelectionChange(selected, Object.values(selectedItems));
@@ -219,7 +218,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   onDelete = (event: TokenDeleteEvent) => {
     const { onRemove, onChange, onSelectionChange } = this.props;
     const { values, selectedItems } = this.state;
-    const id = (event.detail.token as unknown as HTMLElement).dataset.id;
+    const id = event.detail.token.dataset.id;
 
     // nothing to do
     if (!id) {
@@ -235,7 +234,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
       onRemove(toDelete);
     }
     if (onChange) {
-      onChange(event as Ui5CustomEvent<HTMLInputElement>, newValues);
+      onChange(event as Ui5CustomEvent<MultiInputDomRef>, newValues);
     }
     if (onSelectionChange) {
       onSelectionChange(newValues, Object.values(newItems));

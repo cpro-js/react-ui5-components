@@ -1,13 +1,14 @@
 import "@ui5/webcomponents-icons/dist/search.js";
 import "@ui5/webcomponents/dist/features/InputSuggestions.js";
 
-import { Input, SuggestionItem } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
 import {
+  Input,
   InputDomRef,
   InputPropTypes,
-} from "@ui5/webcomponents-react/webComponents/Input";
-import { SuggestionItemPropTypes } from "@ui5/webcomponents-react/webComponents/SuggestionItem";
+  SuggestionItem,
+  SuggestionItemPropTypes,
+  Ui5CustomEvent,
+} from "@ui5/webcomponents-react";
 import { KeyboardEvent, forwardRef, useCallback, useMemo } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
@@ -89,7 +90,7 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
      */
     onInputChange?: (
       inputValue: string,
-      event: Ui5CustomEvent<HTMLInputElement>
+      event: Ui5CustomEvent<InputDomRef>
     ) => void;
 
     /**
@@ -161,7 +162,7 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
     );
 
     const handleSuggestionItemSelect = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement, { item: HTMLElement }>) => {
+      (event: Ui5CustomEvent<InputDomRef, { item: HTMLElement }>) => {
         if (onValueChange == null) {
           return;
         }
@@ -183,7 +184,7 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
     );
 
     const handleInput = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement>) => {
+      (event: Ui5CustomEvent<InputDomRef>) => {
         const currentValue = (event.currentTarget as HTMLInputElement).value;
 
         if (onInputChange != null) {
