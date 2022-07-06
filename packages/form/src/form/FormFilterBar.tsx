@@ -1,5 +1,4 @@
-import { FilterBar } from "@ui5/webcomponents-react";
-import { FilterBarPropTypes } from "@ui5/webcomponents-react/components/FilterBar";
+import { FilterBar, FilterBarPropTypes } from "@ui5/webcomponents-react";
 import { FC, forwardRef, useCallback, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 

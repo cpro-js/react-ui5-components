@@ -1,10 +1,7 @@
 import "../form/formSupport";
 
 import { Input } from "@ui5/webcomponents-react";
-import {
-  InputDomRef,
-  InputPropTypes,
-} from "@ui5/webcomponents-react/webComponents/Input";
+import { InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import { FC, KeyboardEvent, forwardRef, useCallback } from "react";
 
 import { triggerSubmitOnEnter } from "./util";

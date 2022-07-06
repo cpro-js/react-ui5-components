@@ -1,11 +1,11 @@
 import "../form/formSupport";
 
 import { DateTimePicker as UI5DateTimePicker } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
   DateTimePickerDomRef,
   DateTimePickerPropTypes,
-} from "@ui5/webcomponents-react/webComponents/DateTimePicker";
+} from "@ui5/webcomponents-react";
 import clsx from "clsx";
 import {
   FC,
@@ -126,7 +126,7 @@ export const DateTimePicker: FC<DateTimePickerProps<string>> = forwardRef<
     const handleChange = useCallback(
       (
         event: Ui5CustomEvent<
-          HTMLInputElement,
+          DateTimePickerDomRef,
           { value: string; valid: boolean }
         >
       ) => {
@@ -141,7 +141,13 @@ export const DateTimePicker: FC<DateTimePickerProps<string>> = forwardRef<
           const normalizedValue =
             value == null || !formattedValue ? null : (format(value) as any);
 
-          onChange(event, normalizedValue);
+          onChange(
+            event as unknown as Ui5CustomEvent<
+              HTMLInputElement,
+              { valid: boolean; value: string }
+            >,
+            normalizedValue
+          );
         }
       },
       [onChange, ui5Loaded, format]

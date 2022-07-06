@@ -1,7 +1,6 @@
 import "../form/formSupport";
 
-import { ValueState } from "@ui5/webcomponents-react";
-import { ComboBoxDomRef } from "@ui5/webcomponents-react/webComponents/ComboBox";
+import { ComboBoxDomRef, ValueState } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,

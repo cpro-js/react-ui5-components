@@ -1,9 +1,6 @@
 import { ComboBox, ComboBoxItem } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import {
-  ComboBoxDomRef,
-  ComboBoxPropTypes,
-} from "@ui5/webcomponents-react/webComponents/ComboBox";
+import { Ui5CustomEvent } from "@ui5/webcomponents-react";
+import { ComboBoxDomRef, ComboBoxPropTypes } from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,
   ReactElement,
@@ -111,20 +108,23 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
     );
 
     const handleSelectionChange = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement, { item: any }>) => {
+      (event: Ui5CustomEvent<ComboBoxDomRef, { item: any }>) => {
         if (onSelectionChange != null) {
           const index = event.detail.item.dataset.index;
           const selectedItem = index == null ? undefined : items[Number(index)];
           const value =
             selectedItem == null ? undefined : retrieveItemValue(selectedItem);
-          onSelectionChange(event, value);
+          onSelectionChange(
+            event as Ui5CustomEvent<unknown> as Ui5CustomEvent<HTMLInputElement>,
+            value
+          );
         }
       },
       [items, onSelectionChange, retrieveItemValue]
     );
 
     const handleChange = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement>) => {
+      (event: Ui5CustomEvent<ComboBoxDomRef>) => {
         if (onChange != null) {
           const item = (
             Array.from(event.target.childNodes) as Array<HTMLElement>
@@ -135,7 +135,10 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
           const value =
             selectedItem == null ? undefined : retrieveItemValue(selectedItem);
 
-          onChange(event, value);
+          onChange(
+            event as Ui5CustomEvent<unknown> as Ui5CustomEvent<HTMLInputElement>,
+            value
+          );
         }
       },
       [items, onChange, retrieveItemValue]

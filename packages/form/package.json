@@ -26,7 +26,7 @@
   ],
   "peerDependencies": {
     "@ui5/webcomponents": "*",
-    "@ui5/webcomponents-react": ">0.22.0",
+    "@ui5/webcomponents-react": ">0.26.0",
     "react": "^17.0.0 || ^18.0.0",
     "react-jss": "^10.9.0"
   },
@@ -46,9 +46,9 @@
     "@types/jest": "^27.0.1",
     "@types/react": "^18.0.10",
     "@types/react-test-renderer": "^18.0.0",
-    "@ui5/webcomponents": "^1.4.0",
-    "@ui5/webcomponents-fiori": "^1.4.0",
-    "@ui5/webcomponents-react": "^0.25.0",
+    "@ui5/webcomponents": "^1.5.0",
+    "@ui5/webcomponents-fiori": "^1.5.0",
+    "@ui5/webcomponents-react": "^0.26.0",
     "babel-loader": "^8.2.2",
     "jest": "^27.1.0",
     "microbundle": "^0.13.3",

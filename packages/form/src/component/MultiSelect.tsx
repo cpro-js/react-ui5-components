@@ -1,9 +1,9 @@
 import { MultiComboBox, MultiComboBoxItem } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
   MultiComboBoxDomRef,
   MultiComboBoxPropTypes,
-} from "@ui5/webcomponents-react/webComponents/MultiComboBox";
+} from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,
   ReactElement,
@@ -121,7 +121,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
 
     const [allowSubmitOnEnter, setAllowSubmitOnEnter] = useAllowAction(true);
     const handleOpenChange = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement & { open: boolean }>) => {
+      (event: Ui5CustomEvent<MultiComboBoxDomRef & { open: boolean }>) => {
         setAllowSubmitOnEnter(!event.target.open);
 
         if (onOpenChange != null) {
@@ -154,13 +154,11 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           ref={forwardedRef}
           onSelectionChange={
             handleSelectionChange as (
-              event: Ui5CustomEvent<HTMLInputElement, { items: unknown[] }>
+              event: Ui5CustomEvent<unknown, { items: unknown[] }>
             ) => void
           }
           onOpenChange={
-            handleOpenChange as (
-              event: Ui5CustomEvent<HTMLInputElement>
-            ) => void
+            handleOpenChange as (event: Ui5CustomEvent<unknown>) => void
           }
           onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}

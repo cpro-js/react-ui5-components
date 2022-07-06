@@ -1,6 +1,10 @@
-import { Input, InputType, ValueState } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { InputDomRef } from "@ui5/webcomponents-react/webComponents/Input";
+import {
+  Input,
+  InputDomRef,
+  InputType,
+  Ui5CustomEvent,
+  ValueState,
+} from "@ui5/webcomponents-react";
 import {
   ClipboardEvent,
   FC,
@@ -400,7 +404,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   );
 
   const onChange = useCallback(
-    (event: Ui5CustomEvent<HTMLInputElement>) => {
+    (event: Ui5CustomEvent<InputDomRef>) => {
       const val = parseValue(currentValueRef.current);
 
       // extra method to provide the value as number
@@ -408,7 +412,10 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         onValue(val);
       }
       if (onChangeOriginal) {
-        onChangeOriginal(event, val);
+        onChangeOriginal(
+          event as unknown as Ui5CustomEvent<HTMLInputElement>,
+          val
+        );
       }
     },
     [parseValue, value]

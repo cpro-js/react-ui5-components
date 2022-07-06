@@ -1,5 +1,5 @@
 import { useDebounceCallback } from "@react-hook/debounce";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";

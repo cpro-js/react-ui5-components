@@ -1,4 +1,4 @@
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
+import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import { useCallback, useMemo } from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";

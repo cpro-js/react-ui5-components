@@ -1,5 +1,4 @@
-import { Ui5CustomEvent } from "@ui5/webcomponents-react/interfaces/Ui5CustomEvent";
-import { InputPropTypes } from "@ui5/webcomponents-react/webComponents/Input";
+import { InputPropTypes, Ui5CustomEvent } from "@ui5/webcomponents-react";
 import { KeyboardEvent } from "react";
 
 import { GetNumberWarningMessage } from "./helper/NumberWarningMessage";
