@@ -1,8 +1,9 @@
-import { MultiComboBox, MultiComboBoxItem } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
+  MultiComboBox,
   MultiComboBoxDomRef,
+  MultiComboBoxItem,
   MultiComboBoxPropTypes,
+  Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,

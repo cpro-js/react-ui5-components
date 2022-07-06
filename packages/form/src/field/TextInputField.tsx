@@ -1,6 +1,6 @@
 import "../form/formSupport";
 
-import { ValueState } from "@ui5/webcomponents-react";
+import { InputDomRef, ValueState } from "@ui5/webcomponents-react";
 import { FC, forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { useController } from "react-hook-form";
 
@@ -38,7 +38,7 @@ export const TextInputField: FC<TextInputFieldProps> = forwardRef<
   });
 
   // store input ref for intenral usage
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<InputDomRef>();
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {

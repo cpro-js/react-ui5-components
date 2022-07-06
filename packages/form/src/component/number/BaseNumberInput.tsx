@@ -9,14 +9,16 @@ import {
   ClipboardEvent,
   FC,
   KeyboardEvent,
+  MutableRefObject,
   forwardRef,
   useCallback,
+  useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from "react";
 
-import { triggerSubmitOnEnter } from "../util";
+import { triggerSubmitOnEnter, useOnChangeWorkaround } from "../util";
 import {
   getCurrencyConfig,
   getCurrencyFormatter,
@@ -469,13 +471,19 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     ? currentValueRef.current || ""
     : formatForDisplay(parseValue(currentValueRef.current));
 
+  // store input ref for internal usage
+  const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
+  useImperativeHandle(forwardedRef, () => inputRef.current);
+  // apply workaround to fix onChange event
+  useOnChangeWorkaround(inputRef, formattedValue);
+
   return (
     <Input
       {...passThrough}
       type={InputType.Text}
       inputMode={maxFractionDigits === 0 ? "numeric" : "decimal"}
       maxlength={18}
-      ref={forwardedRef}
+      ref={inputRef}
       value={formattedValue}
       valueState={msgType}
       valueStateMessage={msg}

@@ -9,11 +9,19 @@ import {
   SuggestionItemPropTypes,
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
-import { KeyboardEvent, forwardRef, useCallback, useMemo } from "react";
+import {
+  KeyboardEvent,
+  MutableRefObject,
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 
 import { useLatestRef } from "../../../hook/useLatestRef";
 import type { DefaultAutoCompleteOption } from "../../AutoCompleteModel";
-import { triggerSubmitOnEnter } from "../../util";
+import { triggerSubmitOnEnter, useOnChangeWorkaround } from "../../util";
 import { startsWithPerTerm } from "./filter";
 
 export type { DefaultAutoCompleteOption };
@@ -214,11 +222,17 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
       shownValue = item == null ? value : getItemLabel(item);
     }
 
+    // store input ref for internal usage
+    const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
+    useImperativeHandle(forwardedRef, () => inputRef.current);
+    // apply workaround to fix onChange event
+    useOnChangeWorkaround(inputRef, value);
+
     return (
       <Input
         {...otherProps}
         value={shownValue}
-        ref={forwardedRef}
+        ref={inputRef}
         showSuggestions={true}
         onInput={handleInput}
         onSuggestionItemSelect={handleSuggestionItemSelect}
