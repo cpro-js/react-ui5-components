@@ -59,13 +59,13 @@ export interface DatePickerProps<TDate extends Date | string | number = string>
   minDate?: Date | TDate;
   maxDate?: Date | TDate;
   onChange?: (
-    event: Ui5CustomEvent<HTMLInputElement, { valid: boolean; value: string }>,
+    event: Ui5CustomEvent<DatePickerDomRef, { valid: boolean; value: string }>,
     value: TDate | null
   ) => void;
 }
 
 export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
-  HTMLInputElement | undefined,
+  DatePickerDomRef | undefined,
   DatePickerProps
 >(
   (
@@ -82,7 +82,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
     forwardedRef
   ) => {
     const classes = useStyles();
-    const ref = useRef<HTMLInputElement>();
+    const ref = useRef<DatePickerDomRef>();
 
     // forward our internal ref as external
     useImperativeHandle(forwardedRef, () => ref.current);
@@ -136,13 +136,7 @@ export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
 
           const normalizedValue =
             value == null || !formattedValue ? null : (format(value) as any);
-          onChange(
-            event as unknown as Ui5CustomEvent<
-              HTMLInputElement,
-              { valid: boolean; value: string }
-            >,
-            normalizedValue
-          );
+          onChange(event, normalizedValue);
         }
       },
       [onChange, ui5Loaded, format]

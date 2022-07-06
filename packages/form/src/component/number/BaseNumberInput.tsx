@@ -412,10 +412,7 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
         onValue(val);
       }
       if (onChangeOriginal) {
-        onChangeOriginal(
-          event as unknown as Ui5CustomEvent<HTMLInputElement>,
-          val
-        );
+        onChangeOriginal(event, val);
       }
     },
     [parseValue, value]

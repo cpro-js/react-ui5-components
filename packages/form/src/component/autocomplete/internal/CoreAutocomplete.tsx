@@ -90,7 +90,7 @@ export type CoreAutocompleteProps<T extends {} = DefaultAutoCompleteOption> =
      */
     onInputChange?: (
       inputValue: string,
-      event: Ui5CustomEvent<HTMLInputElement>
+      event: Ui5CustomEvent<InputDomRef>
     ) => void;
 
     /**
@@ -188,10 +188,7 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
         const currentValue = (event.currentTarget as HTMLInputElement).value;
 
         if (onInputChange != null) {
-          onInputChange(
-            currentValue,
-            event as unknown as Ui5CustomEvent<HTMLInputElement>
-          );
+          onInputChange(currentValue, event);
         }
 
         if (onValueChange != null) {

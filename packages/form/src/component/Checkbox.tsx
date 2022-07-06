@@ -7,6 +7,7 @@ import {
 import {
   ChangeEvent,
   FC,
+  RefObject,
   forwardRef,
   useCallback,
   useEffect,
@@ -37,11 +38,11 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<
     { name, value = "on", checked, disabled, onChange, ...props },
     forwardedRef
   ) => {
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<CheckBoxDomRef>(null);
     const [isChecked, setChecked] = useState<boolean | undefined>(checked);
 
     const handleChange = useCallback(
-      (event: Ui5CustomEvent<HTMLInputElement>) => {
+      (event: Ui5CustomEvent<CheckBoxDomRef>) => {
         if (inputRef.current != null && inputRef.current !== event.target) {
           setChecked(event.target.checked);
           inputRef.current.disabled = !event.target.checked;
@@ -75,14 +76,10 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<
         ref={forwardedRef}
         checked={isChecked}
         disabled={disabled}
-        onChange={
-          handleChange as unknown as (
-            event: Ui5CustomEvent<CheckBoxDomRef>
-          ) => void
-        }
+        onChange={handleChange}
       >
         <input
-          ref={inputRef}
+          ref={inputRef as RefObject<unknown> as RefObject<HTMLInputElement>}
           type="hidden"
           disabled={disabled || !isChecked}
           name={name}

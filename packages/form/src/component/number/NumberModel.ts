@@ -1,4 +1,8 @@
-import { InputPropTypes, Ui5CustomEvent } from "@ui5/webcomponents-react";
+import {
+  InputDomRef,
+  InputPropTypes,
+  Ui5CustomEvent,
+} from "@ui5/webcomponents-react";
 import { KeyboardEvent } from "react";
 
 import { GetNumberWarningMessage } from "./helper/NumberWarningMessage";
@@ -27,7 +31,7 @@ export interface CommonNumberInputProps
    * Modified onChange method, which also supplies the consumer with the parsed number value.
    */
   onChange?: (
-    event: Ui5CustomEvent<HTMLInputElement>,
+    event: Ui5CustomEvent<InputDomRef>,
     value: number | undefined
   ) => void;
   /**
