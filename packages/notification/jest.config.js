@@ -1,8 +1,9 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  testEnvironment: "node",
+  displayName: require("./package.json").name,
+  testEnvironment: "jest-environment-jsdom",
   snapshotResolver: require.resolve("./.jest/snapshotResolver"),
-  setupFiles: [require.resolve("./.jest/setupTestsAfterEnv")],
+  setupFilesAfterEnv: [require.resolve("./.jest/setupTestsAfterEnv")],
   transformIgnorePatterns: ["node_modules/(?!(@ui5|@react-hook|lit-html))"],
   transform: {
     "^.+\\.(t|j)sx?$": [

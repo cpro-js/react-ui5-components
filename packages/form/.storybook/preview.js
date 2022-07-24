@@ -1,6 +1,6 @@
-import "@ui5/webcomponents/dist/Assets";
-import "@ui5/webcomponents-fiori/dist/Assets";
-import "@ui5/webcomponents-react/dist/Assets";
+import "@ui5/webcomponents/dist/Assets.js";
+import "@ui5/webcomponents-fiori/dist/Assets.js";
+import "@ui5/webcomponents-react/dist/Assets.js";
 
 import { ThemeProvider } from "@ui5/webcomponents-react";
 
