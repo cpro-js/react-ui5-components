@@ -14,4 +14,4 @@ setGlobalConfig(globalStorybookConfig);
 
 window.ResizeObserver = ResizeObserverPolyfill;
 
-jest.useFakeTimers().setSystemTime(new Date("2022-01-01"));
+jest.useFakeTimers().setSystemTime(new Date("2022-01-02T13:30:36.000Z"));

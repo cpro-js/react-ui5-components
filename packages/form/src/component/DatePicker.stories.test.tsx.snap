@@ -6,7 +6,7 @@ exports[`Renders CustomFormat story 1`] = `
     class="fixWidth-0-2-1"
     format-pattern="dd.MM.yyyy"
     ui5-date-picker=""
-    value="01.01.2022"
+    value="02.01.2022"
     value-state="None"
   />
 </div>
@@ -28,7 +28,7 @@ exports[`Renders ISO8601DateMaxDateToday story 1`] = `
 <div>
   <ui5-date-picker
     class="fixWidth-0-2-1"
-    max-date="Jan 1, 2022"
+    max-date="Jan 2, 2022"
     ui5-date-picker=""
     value=""
     value-state="None"
@@ -40,7 +40,7 @@ exports[`Renders ISO8601DateMinDateToday story 1`] = `
 <div>
   <ui5-date-picker
     class="fixWidth-0-2-1"
-    min-date="Jan 1, 2022"
+    min-date="Jan 2, 2022"
     ui5-date-picker=""
     value=""
     value-state="None"
@@ -53,7 +53,7 @@ exports[`Renders ISO8601DatePrefilled story 1`] = `
   <ui5-date-picker
     class="fixWidth-0-2-1"
     ui5-date-picker=""
-    value="Jan 1, 2022"
+    value="Jan 2, 2022"
     value-state="None"
   />
 </div>
@@ -86,7 +86,7 @@ exports[`Renders ISODateTimeMaxDateToday story 1`] = `
 <div>
   <ui5-date-picker
     class="fixWidth-0-2-1"
-    max-date="Jan 1, 2022"
+    max-date="Jan 2, 2022"
     ui5-date-picker=""
     value=""
     value-state="None"
@@ -98,7 +98,7 @@ exports[`Renders ISODateTimeMinDateToday story 1`] = `
 <div>
   <ui5-date-picker
     class="fixWidth-0-2-1"
-    min-date="Jan 1, 2022"
+    min-date="Jan 2, 2022"
     ui5-date-picker=""
     value=""
     value-state="None"
@@ -111,7 +111,7 @@ exports[`Renders ISODateTimePrefilled story 1`] = `
   <ui5-date-picker
     class="fixWidth-0-2-1"
     ui5-date-picker=""
-    value="Jan 1, 2022"
+    value="Jan 2, 2022"
     value-state="None"
   />
 </div>
@@ -132,7 +132,7 @@ exports[`Renders MaxDateToday story 1`] = `
 <div>
   <ui5-date-picker
     class="fixWidth-0-2-1"
-    max-date="Jan 1, 2022"
+    max-date="Jan 2, 2022"
     ui5-date-picker=""
     value=""
     value-state="None"
@@ -144,7 +144,7 @@ exports[`Renders MinDateToday story 1`] = `
 <div>
   <ui5-date-picker
     class="fixWidth-0-2-1"
-    min-date="Jan 1, 2022"
+    min-date="Jan 2, 2022"
     ui5-date-picker=""
     value=""
     value-state="None"
@@ -157,7 +157,7 @@ exports[`Renders Prefilled story 1`] = `
   <ui5-date-picker
     class="fixWidth-0-2-1"
     ui5-date-picker=""
-    value="Jan 1, 2022"
+    value="Jan 2, 2022"
     value-state="None"
   />
 </div>
@@ -169,7 +169,7 @@ exports[`Renders ShortFormat story 1`] = `
     class="fixWidth-0-2-1"
     format-pattern="short"
     ui5-date-picker=""
-    value="1/1/22"
+    value="1/2/22"
     value-state="None"
   />
 </div>
