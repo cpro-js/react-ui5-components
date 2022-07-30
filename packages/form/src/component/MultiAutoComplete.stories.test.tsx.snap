@@ -1,0 +1,343 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders CustomLabelFunction story 1`] = `
+<div>
+  <ui5-multi-input
+    initialsuggestions="[object Object],[object Object],[object Object]"
+    show-suggestions="true"
+    style="width: 50%;"
+    type="Text"
+    ui5-multi-input=""
+    value-state="None"
+  >
+    <ui5-token
+      data-id="AR"
+      slot="tokens"
+      text="ISO code: AR"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="DE"
+      slot="tokens"
+      text="ISO code: DE"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="HU"
+      slot="tokens"
+      text="ISO code: HU"
+      ui5-token=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="AR"
+      text="ISO code: AR"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="DE"
+      text="ISO code: DE"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="HU"
+      text="ISO code: HU"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-multi-input>
+</div>
+`;
+
+exports[`Renders CustomLabelProp story 1`] = `
+<div>
+  <ui5-multi-input
+    initialsuggestions="[object Object],[object Object],[object Object]"
+    show-suggestions="true"
+    style="width: 50%;"
+    type="Text"
+    ui5-multi-input=""
+    value-state="None"
+  >
+    <ui5-token
+      data-id="AR"
+      slot="tokens"
+      text="Ärgentöna"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="DE"
+      slot="tokens"
+      text="Gärmöny"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="HU"
+      slot="tokens"
+      text="Hüngary"
+      ui5-token=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="AR"
+      text="Ärgentöna"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="DE"
+      text="Gärmöny"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="HU"
+      text="Hüngary"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-multi-input>
+</div>
+`;
+
+exports[`Renders CustomValueFunction story 1`] = `
+<div>
+  <ui5-multi-input
+    initialsuggestions="[object Object],[object Object],[object Object]"
+    show-suggestions="true"
+    style="width: 50%;"
+    type="Text"
+    ui5-multi-input=""
+    value-state="None"
+  >
+    <ui5-token
+      data-id="AR"
+      slot="tokens"
+      text="AR"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="DE"
+      slot="tokens"
+      text="DE"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="HU"
+      slot="tokens"
+      text="HU"
+      ui5-token=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="VALUE_ARGENTINA"
+      text="Argentina"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="VALUE_GERMANY"
+      text="Germany"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="VALUE_HUNGARY"
+      text="Hungary"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-multi-input>
+</div>
+`;
+
+exports[`Renders CustomValueProp story 1`] = `
+<div>
+  <ui5-multi-input
+    initialsuggestions="[object Object],[object Object],[object Object]"
+    show-suggestions="true"
+    style="width: 50%;"
+    type="Text"
+    ui5-multi-input=""
+    value-state="None"
+  >
+    <ui5-token
+      data-id="AR"
+      slot="tokens"
+      text="AR"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="DE"
+      slot="tokens"
+      text="DE"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="HU"
+      slot="tokens"
+      text="HU"
+      ui5-token=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="Argentina"
+      text="Argentina"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="Germany"
+      text="Germany"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="Hungary"
+      text="Hungary"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-multi-input>
+</div>
+`;
+
+exports[`Renders Prefilled story 1`] = `
+<div>
+  <ui5-multi-input
+    initialsuggestions="[object Object],[object Object],[object Object]"
+    show-suggestions="true"
+    style="width: 50%;"
+    type="Text"
+    ui5-multi-input=""
+    value-state="None"
+  >
+    <ui5-token
+      data-id="AR"
+      slot="tokens"
+      text="Argentina"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="DE"
+      slot="tokens"
+      text="Germany"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="HU"
+      slot="tokens"
+      text="Hungary"
+      ui5-token=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="AR"
+      text="Argentina"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="DE"
+      text="Germany"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="HU"
+      text="Hungary"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-multi-input>
+</div>
+`;
+
+exports[`Renders RenderSuggestion story 1`] = `
+<div>
+  <ui5-multi-input
+    show-suggestions="true"
+    style="width: 50%;"
+    type="Text"
+    ui5-multi-input=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders RenderValue story 1`] = `
+<div>
+  <ui5-multi-input
+    initialsuggestions="[object Object],[object Object],[object Object]"
+    show-suggestions="true"
+    style="width: 50%;"
+    type="Text"
+    ui5-multi-input=""
+    value-state="None"
+  >
+    <ui5-token
+      data-id="AR"
+      slot="tokens"
+      text="Argentina - custom !!!"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="DE"
+      slot="tokens"
+      text="Germany - custom !!!"
+      ui5-token=""
+    />
+    <ui5-token
+      data-id="HU"
+      slot="tokens"
+      text="Hungary - custom !!!"
+      ui5-token=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="AR"
+      text="Argentina"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="DE"
+      text="Germany"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="HU"
+      text="Hungary"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-multi-input>
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-multi-input
+    show-suggestions="true"
+    style="width: 50%;"
+    type="Text"
+    ui5-multi-input=""
+    value-state="None"
+  />
+</div>
+`;

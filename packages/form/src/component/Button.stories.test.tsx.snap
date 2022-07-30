@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders ExternalForm story 1`] = `
+<div>
+  <form
+    id="my-form-id"
+  >
+    <input
+      type="text"
+      value="change value and reset"
+    />
+  </form>
+  <ui5-button
+    design="Default"
+    ui5-button=""
+  >
+    Button
+  </ui5-button>
+  <ui5-button
+    design="Default"
+    ui5-button=""
+  >
+    Submit
+  </ui5-button>
+  <ui5-button
+    design="Default"
+    ui5-button=""
+  >
+    Reset
+  </ui5-button>
+</div>
+`;
+
+exports[`Renders ParentForm story 1`] = `
+<div>
+  <form>
+    <input
+      type="text"
+      value="change value and reset"
+    />
+    <ui5-button
+      design="Default"
+      ui5-button=""
+    >
+      Button
+    </ui5-button>
+    <ui5-button
+      design="Default"
+      ui5-button=""
+    >
+      Submit
+    </ui5-button>
+    <ui5-button
+      design="Default"
+      ui5-button=""
+    >
+      Reset
+    </ui5-button>
+  </form>
+</div>
+`;

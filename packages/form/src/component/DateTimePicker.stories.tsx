@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react";
 
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
 import { FormAdapter } from "../form/FormAdapter";
@@ -79,7 +79,7 @@ ISODateTimeMaxDateToday.args = {
 };
 ISODateTimeMaxDateToday.argTypes = { ...ISODateTimeStandard.argTypes };
 
-export default {
+const meta: Meta = {
   title: "Form/Component/DateTimePicker",
   component: DateTimePicker,
   argTypes: {
@@ -88,3 +88,5 @@ export default {
     maxDate: { type: "string", control: "text" },
   },
 };
+
+export default meta;

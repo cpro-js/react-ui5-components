@@ -13,3 +13,5 @@ import * as globalStorybookConfig from "../.storybook/preview"; // path of your 
 setGlobalConfig(globalStorybookConfig);
 
 window.ResizeObserver = ResizeObserverPolyfill;
+
+jest.useFakeTimers().setSystemTime(new Date("2022-01-01"));

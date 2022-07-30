@@ -1,0 +1,228 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders Display Config: MaxFractionDigits = 1 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123456.8"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Display Config: MaxSignificantDigits = 3 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123000"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Display Config: MinFractionDigits = 6 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="1.234000"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Display Config: MinIntegerDigits = 3 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="001"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Display Config: MinSignificantDigits = 3 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="1.00"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Input Config: Integers Only = maxFractionDigits = 0 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="numeric"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123457"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Input Config: MaxFractionDigits = 1 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123456.8"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Input Config: MaxValue = 999 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="999"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Input Config: MinValue = -3 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123456.789"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Input Config: MinValue = 0 story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123456.789"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Prefilled story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123456.789"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders WithGrouping story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123,456.789"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders WithIcon story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      EUR
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders WithLocaleDe story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123.456,789"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders WithLocaleIn story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="1,23,456.789"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders WithLocalePl story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    type="Text"
+    ui5-input=""
+    value="123 456,789"
+    value-state="None"
+  />
+</div>
+`;

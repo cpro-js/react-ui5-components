@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders Prefilled story 1`] = `
+<div>
+  <ui5-input
+    type="Text"
+    ui5-input=""
+    value="test"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-input
+    type="Text"
+    ui5-input=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders WithIcon story 1`] = `
+<div>
+  <ui5-input
+    type="Text"
+    ui5-input=""
+    value-state="None"
+  >
+    <ui5-icon
+      interactive="true"
+      name="value-help"
+      slot="icon"
+      ui5-icon=""
+    />
+  </ui5-input>
+</div>
+`;

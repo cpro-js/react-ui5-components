@@ -1,7 +1,7 @@
-import "@ui5/webcomponents-icons/dist/value-help";
+import "@ui5/webcomponents-icons/dist/value-help.js";
 
 import { Story } from "@storybook/react";
-import { Icon, Text } from "@ui5/webcomponents-react";
+import { Icon } from "@ui5/webcomponents-react";
 
 import { TextInput, TextInputProps } from "./TextInput";
 

@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders AlignLeft story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: left;"
+    type="Text"
+    ui5-input=""
+    value="123456.79"
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      USD
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders Prefilled story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: right;"
+    type="Text"
+    ui5-input=""
+    value="123456.79"
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      USD
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders PrefilledWithZeros story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: right;"
+    type="Text"
+    ui5-input=""
+    value="500.00"
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      USD
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: right;"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      USD
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders WithGrouping story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: right;"
+    type="Text"
+    ui5-input=""
+    value="123,456.79"
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      USD
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders WithIcon story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: right;"
+    type="Text"
+    ui5-input=""
+    value="123456.79"
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      Hey
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders WithLocaleDe story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: right;"
+    type="Text"
+    ui5-input=""
+    value="123.456,79"
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      EUR
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders WithLocalePl story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: right;"
+    type="Text"
+    ui5-input=""
+    value="123 456,79"
+    value-state="None"
+  >
+    <span
+      slot="icon"
+    >
+      EUR
+    </span>
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders WithoutCurrency story 1`] = `
+<div>
+  <ui5-input
+    inputmode="decimal"
+    maxlength="18"
+    style="text-align: right;"
+    type="Text"
+    ui5-input=""
+    value="123456.79"
+    value-state="None"
+  />
+</div>
+`;

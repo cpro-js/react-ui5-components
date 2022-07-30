@@ -1,14 +1,12 @@
-import "@ui5/webcomponents-icons/dist/error";
-import "@ui5/webcomponents-icons/dist/alert";
-
-import { Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react";
 
 import { NumberInput, NumberInputProps } from "./NumberInput";
 
-export default {
+const meta: Meta = {
   title: "Form/Component/NumberInput",
   component: NumberInput,
 };
+export default meta;
 
 const Template: Story<NumberInputProps> = (args) => {
   return <NumberInput {...args} />;

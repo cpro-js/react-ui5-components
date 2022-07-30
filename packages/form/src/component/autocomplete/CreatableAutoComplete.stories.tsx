@@ -1,8 +1,4 @@
-import "@ui5/webcomponents-icons/dist/add";
-import "@ui5/webcomponents-icons/dist/refresh";
-import "@ui5/webcomponents-icons/dist/search";
-import "@ui5/webcomponents-icons/dist/sort";
-import "@ui5/webcomponents-icons/dist/value-help.js";
+import "@ui5/webcomponents-icons/dist/add.js";
 
 import { Meta, Story } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
@@ -71,7 +67,7 @@ RenderSuggestion.args = {
   }),
 };
 
-export default {
+const meta: Meta = {
   title: "form/component/AutoComplete/CreatableAutocomplete",
   component: CreatableAutoComplete,
   argTypes: {
@@ -85,4 +81,5 @@ export default {
       action: "onValueChange",
     },
   },
-} as Meta;
+};
+export default meta;

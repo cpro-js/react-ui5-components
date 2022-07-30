@@ -1,12 +1,8 @@
-import "@ui5/webcomponents-icons/dist/value-help.js";
-import "@ui5/webcomponents-icons/dist/add";
-import "@ui5/webcomponents-icons/dist/search";
-import "@ui5/webcomponents-icons/dist/sort";
-import "@ui5/webcomponents-icons/dist/refresh";
+import "@ui5/webcomponents-icons/dist/add.js";
 
 import { action } from "@storybook/addon-actions";
-import { Meta, Story, StoryContext } from "@storybook/react";
-import { Icon, ValueState } from "@ui5/webcomponents-react";
+import { Meta, Story } from "@storybook/react";
+import { ValueState } from "@ui5/webcomponents-react";
 
 import {
   COUNTRIES,
@@ -88,7 +84,9 @@ RenderValue.args = {
   },
 };
 
-export default {
+const meta: Meta = {
   title: "Form/Component/MultiAutoComplete",
   component: MultiAutoComplete,
-} as Meta;
+};
+
+export default meta;

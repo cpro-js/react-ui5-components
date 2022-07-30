@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders CustomFormat story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    format-pattern="dd.MM.yyyy, HH:mm:ss"
+    ui5-datetime-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimeCustomFormat story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    format-pattern="dd.MM.yyyy, HH:mm:ss"
+    ui5-datetime-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimeMaxDateToday story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    max-date="Jan 1, 2022, 1:00:00 AM"
+    ui5-datetime-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimeMinDateToday story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    min-date="Jan 1, 2022, 1:00:00 AM"
+    ui5-datetime-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimePrefilled story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    ui5-datetime-picker=""
+    value="Jan 1, 2022, 1:00:00 AM"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimeStandard story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    ui5-datetime-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders MaxDateToday story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    max-date="Jan 1, 2022, 1:00:00 AM"
+    ui5-datetime-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders MinDateToday story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    min-date="Jan 1, 2022, 1:00:00 AM"
+    ui5-datetime-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Prefilled story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    ui5-datetime-picker=""
+    value="Jan 1, 2022, 1:00:00 AM"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-datetime-picker
+    class="fixWidth-0-2-1"
+    ui5-datetime-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;

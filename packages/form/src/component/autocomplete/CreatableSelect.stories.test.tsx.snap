@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders Empty story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  >
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="AR"
+      text="Argentina"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="BG"
+      text="Bulgaria"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="GB"
+      text="England"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="FI"
+      text="Finland"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="DE"
+      text="Germany"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="HU"
+      text="Hungary"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="IT"
+      text="Italy"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="LU"
+      text="Luxembourg"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="MX"
+      text="Mexico"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="PH"
+      text="Philippines"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="SE"
+      text="Sweden"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="US"
+      text="USA"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-input>
+</div>
+`;
