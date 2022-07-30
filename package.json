@@ -7,8 +7,8 @@
     "postinstall": "is-ci || husky install",
     "postversion": "lerna publish from-git",
     "release": "env-cmd -f .env.local --no-override lerna version",
-    "test": "yarn workspaces foreach -pt run test",
-    "test:ci": "yarn workspaces foreach -pt run test",
+    "test": "jest",
+    "test:ci": "jest",
     "version": "yarn install && git add yarn.lock"
   },
   "dependencies": {
@@ -24,6 +24,10 @@
     "prettier": "^2.3.2",
     "prettier-plugin-import-sort": "^0.0.7",
     "prettier-plugin-package": "^1.3.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.6",
+    "jest": "^28.1.3"
   },
   "importSort": {
     ".js, .jsx, .ts, .tsx": {

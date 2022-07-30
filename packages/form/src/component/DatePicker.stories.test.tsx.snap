@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders CustomFormat story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    format-pattern="dd.MM.yyyy"
+    ui5-date-picker=""
+    value="02.01.2022"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISO8601DateCustomFormat story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    format-pattern="dd.MM.yyyy"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISO8601DateMaxDateToday story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    max-date="Jan 2, 2022"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISO8601DateMinDateToday story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    min-date="Jan 2, 2022"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISO8601DatePrefilled story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    ui5-date-picker=""
+    value="Jan 2, 2022"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISO8601DateStandard story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimeCustomFormat story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    format-pattern="dd.MM.yyyy"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimeMaxDateToday story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    max-date="Jan 2, 2022"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimeMinDateToday story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    min-date="Jan 2, 2022"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimePrefilled story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    ui5-date-picker=""
+    value="Jan 2, 2022"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ISODateTimeStandard story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders MaxDateToday story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    max-date="Jan 2, 2022"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders MinDateToday story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    min-date="Jan 2, 2022"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Prefilled story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    ui5-date-picker=""
+    value="Jan 2, 2022"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders ShortFormat story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    format-pattern="short"
+    ui5-date-picker=""
+    value="1/2/22"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-date-picker
+    class="fixWidth-0-2-1"
+    ui5-date-picker=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;

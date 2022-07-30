@@ -2,7 +2,7 @@
  * MultiAutoComplete
  * Uses the MultiInput of ui5-webcomponents-react.
  */
-import "@ui5/webcomponents/dist/features/InputSuggestions";
+import "@ui5/webcomponents/dist/features/InputSuggestions.js";
 
 import {
   MultiInput,

@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react";
 
 import { Checkbox, CheckboxProps } from "./Checkbox";
 
@@ -61,7 +61,7 @@ HtmlFormWithValue.args = {
   value: "my-value",
 };
 
-export default {
+const meta: Meta = {
   title: "Form/Component/Checkbox",
   component: Checkbox,
   argTypes: {
@@ -70,3 +70,5 @@ export default {
     },
   },
 };
+
+export default meta;

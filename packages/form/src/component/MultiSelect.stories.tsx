@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react";
 
 import { MultiSelect, MultiSelectItem, MultiSelectProps } from "./MultiSelect";
 
@@ -6,7 +6,7 @@ const Template: Story<MultiSelectProps> = (args) => {
   return <MultiSelect {...args} />;
 };
 
-export interface MultiSelectItemAlt extends MultiSelectItem {
+interface MultiSelectItemAlt extends MultiSelectItem {
   alt: string;
 }
 
@@ -48,7 +48,7 @@ WithItemLabel.args = { ...Standard.args, itemLabel: "alt" };
 export const WithItemValue = TemplateAlt.bind({});
 WithItemValue.args = { ...Standard.args, itemValue: "alt" };
 
-export default {
+const meta: Meta = {
   title: "Form/Component/MultiSelect",
   component: MultiSelect,
   argTypes: {
@@ -63,3 +63,5 @@ export default {
     },
   },
 };
+
+export default meta;

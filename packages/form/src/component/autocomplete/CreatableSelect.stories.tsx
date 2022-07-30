@@ -1,9 +1,3 @@
-import "@ui5/webcomponents-icons/dist/add";
-import "@ui5/webcomponents-icons/dist/refresh";
-import "@ui5/webcomponents-icons/dist/search";
-import "@ui5/webcomponents-icons/dist/sort";
-import "@ui5/webcomponents-icons/dist/value-help.js";
-
 import { Meta, Story } from "@storybook/react";
 
 import { COUNTRIES } from "./AutoComplete-storyData";
@@ -19,7 +13,7 @@ Empty.args = { value: undefined, items: [] };
 export const Standard = Template.bind({});
 Standard.args = { value: undefined, items: COUNTRIES };
 
-export default {
+const meta: Meta = {
   title: "form/component/AutoComplete/CreatableSelect",
   component: CreatableSelect,
   argTypes: {
@@ -33,4 +27,5 @@ export default {
       action: "onValueChange",
     },
   },
-} as Meta;
+};
+export default meta;

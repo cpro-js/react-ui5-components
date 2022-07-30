@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders CustomLabelFunction story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value="ISO code: BG => Bulgaria"
+    value-state="None"
+  >
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="BG"
+      text="ISO code: BG => Bulgaria"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders CustomLabelProp story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value="Bülgäria"
+    value-state="None"
+  >
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="BG"
+      text="Bülgäria"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders CustomValueFunction story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value="BG"
+    value-state="None"
+  >
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="Bulgaria (BG)"
+      text="Bulgaria"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders CustomValueProp story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value="BG"
+    value-state="None"
+  >
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="Bulgaria"
+      text="Bulgaria"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders DontForceSelection story 1`] = `
+<div>
+  <ui5-input
+    forceselection="false"
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders MinCharacters story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Prefilled story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value="Bulgaria"
+    value-state="None"
+  >
+    <ui5-suggestion-item
+      additional-text-state="None"
+      data-id="BG"
+      text="Bulgaria"
+      type="Active"
+      ui5-suggestion-item=""
+    />
+  </ui5-input>
+</div>
+`;
+
+exports[`Renders PrefilledWithValueOnly story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value="BG"
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders RenderSuggestion story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-input
+    show-suggestions="true"
+    type="Text"
+    ui5-input=""
+    value=""
+    value-state="None"
+  />
+</div>
+`;

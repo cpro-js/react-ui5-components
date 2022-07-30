@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react";
 
 import { Button, ButtonProps } from "./Button";
 
@@ -77,7 +77,7 @@ ExternalForm.args = {
   ],
 };
 
-export default {
+const meta: Meta = {
   title: "Form/Component/Button",
   component: Button,
   argTypes: {
@@ -86,3 +86,5 @@ export default {
     },
   },
 };
+
+export default meta;

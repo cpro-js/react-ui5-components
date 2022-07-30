@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders Checked story 1`] = `
+<div>
+  <ui5-checkbox
+    checked="true"
+    ui5-checkbox=""
+    value-state="None"
+  >
+    <input
+      checked=""
+      name="test"
+      readonly=""
+      type="hidden"
+      value="on"
+    />
+  </ui5-checkbox>
+</div>
+`;
+
+exports[`Renders Disabled story 1`] = `
+<div>
+  <ui5-checkbox
+    disabled="true"
+    ui5-checkbox=""
+    value-state="None"
+  >
+    <input
+      disabled=""
+      name="test"
+      readonly=""
+      type="hidden"
+      value="on"
+    />
+  </ui5-checkbox>
+</div>
+`;
+
+exports[`Renders DisabledAndChecked story 1`] = `
+<div>
+  <ui5-checkbox
+    checked="true"
+    disabled="true"
+    ui5-checkbox=""
+    value-state="None"
+  >
+    <input
+      checked=""
+      disabled=""
+      name="test"
+      readonly=""
+      type="hidden"
+      value="on"
+    />
+  </ui5-checkbox>
+</div>
+`;
+
+exports[`Renders HtmlForm story 1`] = `
+<div>
+  <form>
+    <ui5-checkbox
+      ui5-checkbox=""
+      value-state="None"
+    >
+      <input
+        disabled=""
+        name="test"
+        readonly=""
+        type="hidden"
+        value="on"
+      />
+    </ui5-checkbox>
+    <button>
+      Submit
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Renders HtmlFormWithValue story 1`] = `
+<div>
+  <form>
+    <ui5-checkbox
+      ui5-checkbox=""
+      value-state="None"
+    >
+      <input
+        disabled=""
+        name="test"
+        readonly=""
+        type="hidden"
+        value="my-value"
+      />
+    </ui5-checkbox>
+    <button>
+      Submit
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Renders Indeterminate story 1`] = `
+<div>
+  <ui5-checkbox
+    checked="true"
+    indeterminate="true"
+    ui5-checkbox=""
+    value-state="None"
+  >
+    <input
+      checked=""
+      name="test"
+      readonly=""
+      type="hidden"
+      value="on"
+    />
+  </ui5-checkbox>
+</div>
+`;
+
+exports[`Renders Standard story 1`] = `
+<div>
+  <ui5-checkbox
+    ui5-checkbox=""
+    value-state="None"
+  >
+    <input
+      disabled=""
+      name="test"
+      readonly=""
+      type="hidden"
+      value="on"
+    />
+  </ui5-checkbox>
+</div>
+`;
