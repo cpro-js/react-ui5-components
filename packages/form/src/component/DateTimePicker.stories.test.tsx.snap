@@ -28,7 +28,7 @@ exports[`Renders ISODateTimeMaxDateToday story 1`] = `
 <div>
   <ui5-datetime-picker
     class="fixWidth-0-2-1"
-    max-date="Jan 2, 2022, 2:30:36 PM"
+    max-date="Jan 2, 2022, 1:30:36 PM"
     ui5-datetime-picker=""
     value=""
     value-state="None"
@@ -40,7 +40,7 @@ exports[`Renders ISODateTimeMinDateToday story 1`] = `
 <div>
   <ui5-datetime-picker
     class="fixWidth-0-2-1"
-    min-date="Jan 2, 2022, 2:30:36 PM"
+    min-date="Jan 2, 2022, 1:30:36 PM"
     ui5-datetime-picker=""
     value=""
     value-state="None"
@@ -53,7 +53,7 @@ exports[`Renders ISODateTimePrefilled story 1`] = `
   <ui5-datetime-picker
     class="fixWidth-0-2-1"
     ui5-datetime-picker=""
-    value="Jan 2, 2022, 2:30:36 PM"
+    value="Jan 2, 2022, 1:30:36 PM"
     value-state="None"
   />
 </div>
@@ -74,7 +74,7 @@ exports[`Renders MaxDateToday story 1`] = `
 <div>
   <ui5-datetime-picker
     class="fixWidth-0-2-1"
-    max-date="Jan 2, 2022, 2:30:36 PM"
+    max-date="Jan 2, 2022, 1:30:36 PM"
     ui5-datetime-picker=""
     value=""
     value-state="None"
@@ -86,7 +86,7 @@ exports[`Renders MinDateToday story 1`] = `
 <div>
   <ui5-datetime-picker
     class="fixWidth-0-2-1"
-    min-date="Jan 2, 2022, 2:30:36 PM"
+    min-date="Jan 2, 2022, 1:30:36 PM"
     ui5-datetime-picker=""
     value=""
     value-state="None"
@@ -99,7 +99,7 @@ exports[`Renders Prefilled story 1`] = `
   <ui5-datetime-picker
     class="fixWidth-0-2-1"
     ui5-datetime-picker=""
-    value="Jan 2, 2022, 2:30:36 PM"
+    value="Jan 2, 2022, 1:30:36 PM"
     value-state="None"
   />
 </div>
