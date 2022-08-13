@@ -2,7 +2,6 @@ import * as React from "react";
 import { CSSProperties, ReactNode } from "react";
 
 import { FormChangeHandler } from "../field/types";
-import { FormListener } from "./FormListener";
 import { FormProvider } from "./FormProvider";
 import { UseFormControllerProps, useFormController } from "./useFormController";
 
@@ -24,6 +23,7 @@ export function FormController<FormValues extends {}>(
   const form = useFormController<FormValues>({
     initialValues,
     onSubmit,
+    onChange,
   });
 
   const { handleSubmit, handleReset } = form;
@@ -36,10 +36,7 @@ export function FormController<FormValues extends {}>(
       className={className}
       style={style}
     >
-      <FormProvider {...form}>
-        {onChange != null && <FormListener onChange={onChange} />}
-        {children}
-      </FormProvider>
+      <FormProvider {...form}>{children}</FormProvider>
     </form>
   );
 }

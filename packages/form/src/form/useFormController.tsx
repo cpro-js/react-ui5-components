@@ -9,21 +9,25 @@ import {
 import { DefaultValues } from "react-hook-form/dist/types/form";
 
 import {
+  ChangedField,
   FormActionClearForm,
   FormActionResetForm,
   FormActionSetErrors,
   FormActionSetValues,
   FormActionSubmitForm,
   FormActions,
+  FormChangeHandler,
   FormSubmitHandler,
   PartialFormValues,
 } from "../field/types";
+import { useLatestRef } from "../hook/useLatestRef";
 
 const noop = () => undefined;
 
 export interface UseFormControllerProps<FormValues extends {}> {
   initialValues?: PartialFormValues<FormValues>;
   onSubmit: FormSubmitHandler<FormValues>;
+  onChange?: FormChangeHandler<FormValues>;
 }
 
 export interface UseFormControllerReturn<FormValues extends {}> {
@@ -43,12 +47,17 @@ export interface UseFormControllerReturn<FormValues extends {}> {
 export function useFormController<FormValues extends {}>(
   props: UseFormControllerProps<FormValues>
 ): UseFormControllerReturn<FormValues> {
-  const { initialValues, onSubmit } = props;
+  const { initialValues, onSubmit, onChange } = props;
 
   // store initial values & deep clone initial values to bypass mutations
   const initialValuesRef = useRef<typeof initialValues>(
     initialValues != null ? klona(initialValues) : undefined
   );
+
+  // Remember the latest callback.
+  const changeCallbackRef = useLatestRef<
+    FormChangeHandler<FormValues> | undefined
+  >(onChange);
 
   const form = useForm<FormValues>({
     defaultValues: initialValuesRef.current as DefaultValues<FormValues>,
@@ -58,9 +67,10 @@ export function useFormController<FormValues extends {}>(
     shouldUnregister: false,
   });
 
-  const { handleSubmit, reset, trigger, setValue, setError, setFocus } = form;
+  const { handleSubmit, reset, trigger, setValue, setError, setFocus, watch } =
+    form;
 
-  const actions = useRef<FormActions<FormValues>>({
+  const actionsRef = useRef<FormActions<FormValues>>({
     setErrors: noop,
     setValues: noop,
     reset: noop,
@@ -122,7 +132,7 @@ export function useFormController<FormValues extends {}>(
 
       if (valid) {
         // call submit
-        return onSubmit(data as FormValues, actions.current);
+        return onSubmit(data as FormValues, actionsRef.current);
       }
     },
     [trigger, onSubmit]
@@ -135,7 +145,7 @@ export function useFormController<FormValues extends {}>(
 
   useEffect(() => {
     // refresh action ref if any of our methods changes
-    actions.current = {
+    actionsRef.current = {
       setErrors: setErrors,
       setValues: setValues,
       reset: resetForm,
@@ -143,6 +153,22 @@ export function useFormController<FormValues extends {}>(
       submit: submitForm,
     };
   }, [setErrors, setValues, resetForm, clearForm, submitForm]);
+
+  // Set up the watcher
+  useEffect(() => {
+    const subscription = watch((values, { name }) => {
+      changeCallbackRef.current &&
+        changeCallbackRef.current(
+          values as PartialFormValues<FormValues>,
+          actionsRef.current,
+          { name } as ChangedField<FormValues>
+        );
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
 
   return {
     context: form,
