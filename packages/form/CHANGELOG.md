@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.1](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.27.0...@cpro-js/react-ui5-webcomponents-form@0.27.1) (2022-08-17)
+
+### Bug Fixes
+
+- **react-ui5-webcomponents-form:** ensure onChange is triggered correctly by select ([#62](https://github.com/cpro-js/react-ui5-components/issues/62)) ([d912bd1](https://github.com/cpro-js/react-ui5-components/commit/d912bd1acfc5f2789309a6b47c1e785f2bb616dc))
+
 # 0.27.0 (2022-07-06)
 
 ### Bug Fixes
