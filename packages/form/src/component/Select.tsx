@@ -127,9 +127,19 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
     const handleChange = useCallback(
       (event: Ui5CustomEvent<ComboBoxDomRef>) => {
         if (onChange != null) {
-          const item = (
-            Array.from(event.target.childNodes) as Array<HTMLElement>
-          ).find((item) => (item as HTMLOptionElement).selected);
+          // determine selected item
+          const item =
+            // first attempt: prefer item which matches our text and is selected -> best one
+            (
+              Array.from(event.target.childNodes) as Array<HTMLOptionElement>
+            ).find(
+              (item) => item.text === event.target.value && item.selected
+            ) ??
+            // nothing found -> selected property might be incorrect or delayed
+            // fallback: just find an item with the same text
+            (
+              Array.from(event.target.childNodes) as Array<HTMLOptionElement>
+            ).find((item) => item.text === event.target.value);
 
           const index = item?.dataset.index;
           const selectedItem = index == null ? undefined : items[Number(index)];
