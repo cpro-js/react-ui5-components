@@ -1,7 +1,7 @@
 import { Story } from "@storybook/react";
 import { composeStories } from "@storybook/testing-react";
 
-import { renderWithDefine } from "../../test/util/render";
+import { renderWithDefine } from "../test/render";
 import * as stories from "./MultiSelect.stories";
 
 const testCases = Object.values(composeStories(stories)).map(

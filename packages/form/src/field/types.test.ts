@@ -1,4 +1,4 @@
-import { PartialFormValues } from "../../src/field/types";
+import { PartialFormValues } from "./types";
 
 describe("PartialFormValues", () => {
   test("marks object attributes as optional", () => {

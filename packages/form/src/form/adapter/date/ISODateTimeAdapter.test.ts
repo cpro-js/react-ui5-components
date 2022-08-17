@@ -1,13 +1,13 @@
-import { ISO8601DateAdapter } from "../../../src/form/adapter/date/ISO8601DateAdapter";
+import { ISODateTimeAdapter } from "./ISODateTimeAdapter";
 
 const values: Array<{ formattedValue: string; parsedValue: Date | null }> = [
   {
-    formattedValue: "2011-01-01",
-    parsedValue: new Date(2011, 1 - 1, 1),
+    formattedValue: "2010-12-31T23:00:00.000Z",
+    parsedValue: new Date("2010-12-31T23:00:00.000Z"),
   },
   {
     formattedValue: "2021-10-31",
-    parsedValue: new Date(2021, 10 - 1, 31),
+    parsedValue: null,
   },
   {
     formattedValue: "2021/10/31",
@@ -31,7 +31,7 @@ const values: Array<{ formattedValue: string; parsedValue: Date | null }> = [
 describe(".parse(...)", () => {
   values.forEach(({ formattedValue, parsedValue }) => {
     test(`parses '${formattedValue}'`, () => {
-      const date = ISO8601DateAdapter.parse(formattedValue);
+      const date = ISODateTimeAdapter.parse(formattedValue);
 
       expect(date).toStrictEqual(parsedValue);
     });
@@ -46,7 +46,7 @@ describe(".format(...)", () => {
     )
     .forEach(({ formattedValue, parsedValue }) => {
       test(`formats '${formattedValue}'`, () => {
-        const date = ISO8601DateAdapter.format(parsedValue);
+        const date = ISODateTimeAdapter.format(parsedValue);
 
         expect(date).toStrictEqual(formattedValue);
       });

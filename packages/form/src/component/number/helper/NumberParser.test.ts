@@ -1,4 +1,4 @@
-import { NumberParser } from "../../../src/component/number/helper/NumberParser";
+import { NumberParser } from "./NumberParser";
 
 describe("NumberParser Test", () => {
   const PARSER_EN = new NumberParser("en");

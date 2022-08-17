@@ -1,37 +1,28 @@
-import { ISODateTimeAdapter } from "../../../src/form/adapter/date/ISODateTimeAdapter";
+import { IdentityDateAdapter } from "./IdentityDateAdapter";
 
-const values: Array<{ formattedValue: string; parsedValue: Date | null }> = [
+const values: Array<{ formattedValue: any; parsedValue: any }> = [
   {
-    formattedValue: "2010-12-31T23:00:00.000Z",
-    parsedValue: new Date("2010-12-31T23:00:00.000Z"),
+    formattedValue: new Date(2021, 10 - 1, 31),
+    parsedValue: new Date(2021, 10 - 1, 31),
   },
   {
     formattedValue: "2021-10-31",
-    parsedValue: null,
+    parsedValue: "2021-10-31",
   },
   {
     formattedValue: "2021/10/31",
-    parsedValue: null,
+    parsedValue: "2021/10/31",
   },
   {
-    formattedValue: "2021/13/31",
-    parsedValue: null,
-  },
-  {
-    formattedValue: "",
-    parsedValue: null,
-  },
-  {
-    // @ts-expect-error
     formattedValue: 1,
-    parsedValue: null,
+    parsedValue: 1,
   },
 ];
 
 describe(".parse(...)", () => {
   values.forEach(({ formattedValue, parsedValue }) => {
     test(`parses '${formattedValue}'`, () => {
-      const date = ISODateTimeAdapter.parse(formattedValue);
+      const date = IdentityDateAdapter.parse(formattedValue);
 
       expect(date).toStrictEqual(parsedValue);
     });
@@ -46,7 +37,7 @@ describe(".format(...)", () => {
     )
     .forEach(({ formattedValue, parsedValue }) => {
       test(`formats '${formattedValue}'`, () => {
-        const date = ISODateTimeAdapter.format(parsedValue);
+        const date = IdentityDateAdapter.format(parsedValue);
 
         expect(date).toStrictEqual(formattedValue);
       });
