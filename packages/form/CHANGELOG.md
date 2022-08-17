@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.2](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.27.1...@cpro-js/react-ui5-webcomponents-form@0.27.2) (2022-08-17)
+
+### Bug Fixes
+
+- **react-ui5-webcomponents-form:** fix missing type definitions ([a6e163d](https://github.com/cpro-js/react-ui5-components/commit/a6e163db569a1fa60cee96758de7cd37123d6d41))
+
 ## [0.27.1](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.27.0...@cpro-js/react-ui5-webcomponents-form@0.27.1) (2022-08-17)
 
 ### Bug Fixes
