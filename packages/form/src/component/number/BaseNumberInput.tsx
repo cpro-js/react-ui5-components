@@ -96,6 +96,11 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
   const lastValueRef = useRef(value);
   const [message, setMessage] = useState<NumberWarningMessage>();
   const [inputState, setInputState] = useState(false);
+
+  // store input ref for internal usage
+  const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
+  useImperativeHandle(forwardedRef, () => inputRef.current);
+
   const inputConfig = useMemo(() => {
     const result: Intl.NumberFormatOptions = getDefinedNumberFormatOptions(
       props,
@@ -358,6 +363,10 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
             // set the current value to the changed value
             currentValueRef.current = originalValue;
           }
+
+          // fire onInput event after any changed value
+          // @ts-ignore
+          inputRef.current.fireEvent(inputRef.current.EVENT_INPUT);
         }
       }
 
@@ -471,9 +480,6 @@ export const BaseNumberInput: FC<BaseNumberInputProps> = forwardRef<
     ? currentValueRef.current || ""
     : formatForDisplay(parseValue(currentValueRef.current));
 
-  // store input ref for internal usage
-  const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
-  useImperativeHandle(forwardedRef, () => inputRef.current);
   // apply workaround to fix onChange event
   useOnChangeWorkaround(inputRef, formattedValue);
 

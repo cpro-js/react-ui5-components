@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import { Meta, Story } from "@storybook/react";
 
 import { NumberInput, NumberInputProps } from "./NumberInput";
@@ -135,4 +136,12 @@ InputIntegersOnly.storyName =
 InputIntegersOnly.args = {
   ...Prefilled.args,
   maximumFractionDigits: 0,
+};
+
+export const InputOnInput = Template.bind({});
+InputOnInput.storyName = "Input Events: onInput triggers on replaced values";
+InputOnInput.args = {
+  ...Standard.args,
+  maximumValue: 2,
+  onInput: (event) => action("onInput")(event.target.value),
 };
