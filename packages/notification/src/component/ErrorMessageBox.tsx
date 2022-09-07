@@ -1,6 +1,6 @@
 import { I18nService, useInjection } from "@cpro-js/react-core";
-import { MessageBox, MessageBoxTypes } from "@ui5/webcomponents-react";
-import { FC, useCallback, useState } from "react";
+import { Link, MessageBox, MessageBoxTypes } from "@ui5/webcomponents-react";
+import { FC, SyntheticEvent, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { UserErrorModel } from "../NotificationModel";
@@ -22,6 +22,14 @@ export const ErrorMessageBox: FC<ErrorMessageBoxProps> = ({ error }) => {
 
     setOpen(false);
   }, [error]);
+  const handleExpandDetails = useCallback(
+    (event: SyntheticEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setExpandDetails(!expandDetails);
+    },
+    [expandDetails, setExpandDetails]
+  );
 
   return createPortal(
     <MessageBox
@@ -34,12 +42,9 @@ export const ErrorMessageBox: FC<ErrorMessageBoxProps> = ({ error }) => {
 
       {error.details && (
         <div style={{ marginTop: "2rem" }}>
-          <a
-            href="javascript:;"
-            onClick={() => setExpandDetails(!expandDetails)}
-          >
+          <Link onClick={handleExpandDetails}>
             {translate("general.showDetails")}
-          </a>
+          </Link>
           {expandDetails && (
             <div style={{ marginTop: "2rem" }}>{error.details}</div>
           )}
