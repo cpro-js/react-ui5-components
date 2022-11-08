@@ -92,11 +92,12 @@ export function useFormController<FormValues extends {}>(
   );
 
   const setValues: FormActionSetValues<FormValues> = useCallback(
-    (values) => {
+    (values, options) => {
       values.forEach(({ name, value }) => {
         setValue(name, value, {
-          shouldValidate: false,
-          shouldDirty: false,
+          shouldValidate: options?.shouldValidate ?? false,
+          shouldDirty: options?.shouldDirty ?? false,
+          shouldTouch: options?.shouldTouch,
         });
       });
     },
