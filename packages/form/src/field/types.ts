@@ -82,7 +82,12 @@ export type FormActionSetErrors<FormValues> = (
  * @param values
  */
 export type FormActionSetValues<FormValues> = (
-  values: Array<{ name: FieldPath<FormValues>; value: any }>
+  values: Array<{ name: FieldPath<FormValues>; value: any }>,
+  options?: Partial<{
+    shouldValidate: boolean;
+    shouldDirty: boolean;
+    shouldTouch: boolean;
+  }>
 ) => void;
 
 /**
