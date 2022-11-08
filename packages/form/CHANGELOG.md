@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.28.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.27.3...@cpro-js/react-ui5-webcomponents-form@0.28.0) (2022-11-08)
+
+### Features
+
+- **react-ui5-webcomponents-form:** provide options for setValues ([#63](https://github.com/cpro-js/react-ui5-components/issues/63)) ([34b9e25](https://github.com/cpro-js/react-ui5-components/commit/34b9e258c4179a784c56a7578939d45419aa10fb))
+
 ## [0.27.3](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.27.2...@cpro-js/react-ui5-webcomponents-form@0.27.3) (2022-09-01)
 
 ### Bug Fixes
