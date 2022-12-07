@@ -6,13 +6,19 @@ import {
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import {
+  ClipboardEvent,
   KeyboardEvent,
   ReactElement,
   Ref,
   forwardRef,
   useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 
+import { handlePastedText } from "./common/PasteHandler";
 import { triggerSubmitOnEnter, useAllowAction } from "./util";
 
 export interface MultiSelectItem {
@@ -64,6 +70,15 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       ...otherProps
     } = props;
 
+    const internalRef = useRef<MultiComboBoxDomRef | null>(null);
+    // @ts-ignore
+    useImperativeHandle(forwardedRef, () => internalRef.current);
+
+    const [selectedValue, setSelectedValue] = useState<typeof value>(value);
+    useEffect(() => {
+      setSelectedValue(value);
+    }, [value]);
+
     const retrieveItemLabel = useCallback(
       (item: MultiSelectItem) => {
         if (itemLabel) {
@@ -106,6 +121,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
             .map((index) => retrieveItemValue(items[Number(index)]));
 
           onSelectionChange(event, values);
+          setSelectedValue(values);
         }
       },
       [items, onSelectionChange, retrieveItemValue]
@@ -150,6 +166,56 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       [onKeyPress]
     );
 
+    const onPaste = useCallback(
+      (event: ClipboardEvent<HTMLElement>) => {
+        const textInput = event.clipboardData.getData("text/plain");
+        const texts = handlePastedText(textInput);
+        const pickedTexts: Array<string> = [];
+
+        if (texts.length) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          if (!items?.length) {
+            return;
+          }
+          const selected = texts
+            .map((t) =>
+              items.find((item) => {
+                const result = t === String(item.value) || t === item.label;
+                if (result) {
+                  pickedTexts.push(t);
+                }
+                return result;
+              })
+            )
+            .filter((item): item is MultiSelectItem => !!item)
+            .map((item) => String(item.value))
+            .filter(
+              (itemValue) =>
+                !selectedValue || !selectedValue.includes(itemValue)
+            );
+
+          if (selected.length) {
+            setSelectedValue([
+              ...(selectedValue ? selectedValue : []),
+              ...selected,
+            ]);
+          }
+
+          const filteredText = texts.filter((t) => !pickedTexts.includes(t));
+          setTimeout(
+            () =>
+              // @ts-ignore
+              (event.target.shadowRoot.activeElement.value =
+                filteredText.join(" ")),
+            50
+          );
+        }
+      },
+      [items, setSelectedValue, selectedValue]
+    );
+
     // NOTE: onChange is bound to input instead of items, that's why can't use it
     return (
       <>
@@ -164,6 +230,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           onOpenChange={handleOpenChange}
           onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}
+          onPaste={onPaste}
         >
           {items.map((item, index) => (
             // index is the most unique value, value could be non-unique when providing numbers and strings (react keys are strings)
@@ -172,7 +239,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
               text={retrieveItemLabel(item) as string}
               data-index={index}
               selected={
-                Array.isArray(value) && value.indexOf(item.value) !== -1
+                Array.isArray(selectedValue) &&
+                selectedValue.includes(item.value)
               }
             />
           ))}
