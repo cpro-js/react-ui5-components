@@ -14,11 +14,11 @@ import {
 } from "@ui5/webcomponents-react";
 import { debounce } from "@ui5/webcomponents-react-base";
 import {
+  ClipboardEvent,
   Component,
   FocusEvent,
   KeyboardEvent,
   RefObject,
-  SyntheticEvent,
   createRef,
 } from "react";
 
@@ -34,17 +34,13 @@ import {
   DEFAULT_LABEL_PROP,
   DEFAULT_VALUE_PROP,
 } from "./common/CommonSelection";
+import { handlePastedText } from "./common/PasteHandler";
 
 // UI5 Event Types
 type TokenDeleteEvent = Ui5CustomEvent<
   MultiInputDomRef,
   { token: HTMLElement }
 >;
-
-interface FocusOutEvent<T = Element> extends SyntheticEvent<T, FocusEvent> {
-  relatedTarget: EventTarget | null;
-  target: EventTarget & T;
-}
 
 /**
  * The complete set of properties as union (last won wins => our new defined props always win)
@@ -117,7 +113,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
 
   focus = () => {
     if (this.inputRef.current != null) {
-      this.inputRef.current.focus();
+      this.inputRef.current.focus().then();
     }
   };
 
@@ -150,7 +146,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
 
     if (onSearch) {
-      onSearch(this.searchTerm).then((data) => {});
+      onSearch(this.searchTerm).then(() => {});
     }
   }, DEBOUNCE_RATE);
 
@@ -263,12 +259,9 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
 
     // allow for token navigation via arrow left / right keys
     if (isTagFocussed && (isKeyLeft || isKeyRight)) {
-      const id = focusedElement.dataset.id;
       const selected = tokens.indexOf(focusedElement);
 
       if (selected > -1) {
-        // console.log("focused: ", id, selected);
-
         const newIndex = isKeyLeft ? selected - 1 : selected + 1;
         if (newIndex < 0 || newIndex >= tokens.length) {
           // TODO: UI5 MultiInput doesn't handle the focusevent as it should be => no searching possibles
@@ -276,7 +269,6 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
           // multiInput.focus()
           // elementToFocus = multiInput;
         } else {
-          // console.log("focussing token ", newIndex);
           elementToFocus = tokens[newIndex];
         }
       }
@@ -286,12 +278,53 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     if (!isTagFocussed && (isBackSpace || isKeyLeft || isKeyRight)) {
       const index = isKeyRight ? 0 : tokens.length - 1;
       elementToFocus = tokens[index];
-      // console.log("focussing token: ", index);
     }
 
     if (elementToFocus !== null) {
       event.preventDefault();
       elementToFocus.focus();
+    }
+  };
+
+  onPaste = async (event: ClipboardEvent<HTMLElement>) => {
+    const textInput = event.clipboardData.getData("text/plain");
+    const texts = handlePastedText(textInput);
+
+    if (texts.length) {
+      // must come first
+      event.preventDefault();
+      event.stopPropagation();
+
+      const { values } = this.state;
+
+      const selectedItems = (
+        await Promise.all(
+          texts
+            .filter((t) => t !== undefined && t !== null && t !== "")
+            .map(async (st) => {
+              const suggestions = await this.props.onSearch(st);
+              return suggestions.find(
+                (s) =>
+                  this.retrieveItemValue(s) === st ||
+                  this.retrieveItemLabel(s) === st
+              );
+            })
+        )
+      )
+        .filter(
+          (selectedItem: T | undefined): selectedItem is T =>
+            !!selectedItem &&
+            !values.includes(this.retrieveItemValue(selectedItem))
+        )
+        .reduce<Record<string, T>>((collector, selectedItem) => {
+          collector[this.retrieveItemValue(selectedItem)] = selectedItem;
+          return collector;
+        }, {});
+
+      this.setState({
+        values: [...values, ...Object.keys(selectedItems)],
+        selectedItems: { ...this.state.selectedItems, ...selectedItems },
+      });
     }
   };
 
@@ -367,8 +400,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         : {};
 
       const value = props.value || this.retrieveItemValue(suggestion);
-      const label = props.text || this.retrieveItemLabel(suggestion);
-      const text = label;
+      const text = props.text || this.retrieveItemLabel(suggestion);
 
       return (
         <SuggestionItem {...props} key={value} data-id={value} text={text} />
@@ -402,6 +434,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         onSuggestionItemSelect={this.onSelect}
         onBlur={this.onBlur}
         onKeyDown={this.onKeyDown}
+        onPaste={this.onPaste}
       >
         {this.renderSuggestions()}
       </MultiInput>
