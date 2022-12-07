@@ -287,6 +287,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   };
 
   onPaste = async (event: ClipboardEvent<HTMLElement>) => {
+    const { onAdd, onChange, onSelectionChange } = this.props;
     const textInput = event.clipboardData.getData("text/plain");
     const texts = handlePastedText(textInput);
 
@@ -321,10 +322,28 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
           return collector;
         }, {});
 
+      const finalValues = [...values, ...Object.keys(selectedItems)];
+      const finalSelectedItems = {
+        ...this.state.selectedItems,
+        ...selectedItems,
+      };
       this.setState({
-        values: [...values, ...Object.keys(selectedItems)],
-        selectedItems: { ...this.state.selectedItems, ...selectedItems },
+        values: finalValues,
+        selectedItems: finalSelectedItems,
       });
+
+      if (onAdd) {
+        Object.values(finalSelectedItems).forEach((fsi) => onAdd(fsi));
+      }
+      if (onChange) {
+        onChange(
+          event as unknown as Ui5CustomEvent<MultiInputDomRef>,
+          finalValues
+        );
+      }
+      if (onSelectionChange) {
+        onSelectionChange(finalValues, Object.values(selectedItems));
+      }
     }
   };
 

@@ -197,10 +197,20 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
             );
 
           if (selected.length) {
-            setSelectedValue([
+            const selectedValues = [
               ...(selectedValue ? selectedValue : []),
               ...selected,
-            ]);
+            ];
+            setSelectedValue(selectedValues);
+            if (onSelectionChange) {
+              onSelectionChange(
+                event as unknown as Ui5CustomEvent<
+                  MultiComboBoxDomRef,
+                  { items: Array<HTMLElement> }
+                >,
+                selectedValues
+              );
+            }
           }
 
           const filteredText = texts.filter((t) => !pickedTexts.includes(t));
