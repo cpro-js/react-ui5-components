@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.1](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.28.0...@cpro-js/react-ui5-webcomponents-form@0.28.1) (2022-12-07)
+
+### Bug Fixes
+
+- **react-ui5-webcomponents-form:** handling of pasted values for multi components ([#64](https://github.com/cpro-js/react-ui5-components/issues/64)) ([97134f2](https://github.com/cpro-js/react-ui5-components/commit/97134f2c6412a5f4b396c45f79030de5e77180fd))
+
 # [0.28.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.27.3...@cpro-js/react-ui5-webcomponents-form@0.28.0) (2022-11-08)
 
 ### Features
