@@ -7,14 +7,16 @@ import { NotificationStore } from "./NotificationStore";
 export class NotificationService {
   constructor(private store: NotificationStore) {}
 
-  public showError = (message: string, details?: Error | ErrorDetail) => {
-    this.store.appendError({
-      message,
-      details: details instanceof Error ? details.message : details,
-    });
+  public showError = (
+    message: string,
+    details?: Error | ErrorDetail,
+    callback?: () => void
+  ) => {
+    const detailMessage = details instanceof Error ? details.message : details;
+    this.store.appendError({ message, details: detailMessage }, callback);
   };
 
-  public showSuccess = (successMessage: string) => {
-    this.store.appendSuccessMessage(successMessage);
+  public showSuccess = (successMessage: string, callback?: () => void) => {
+    this.store.appendSuccessMessage(successMessage, callback);
   };
 }

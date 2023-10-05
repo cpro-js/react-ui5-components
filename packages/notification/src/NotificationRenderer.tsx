@@ -1,8 +1,9 @@
 import { observer, useInjection } from "@cpro-js/react-core";
-import { FC } from "react";
+import { FC, ReactElement, ReactNode } from "react";
 
 import { ErrorMessageBox } from "./component/ErrorMessageBox";
 import { SuccessMessageToast } from "./component/SuccessMessageToast";
+import { UserErrorModel } from "./NotificationModel";
 import { NotificationStore } from "./NotificationStore";
 
 export interface NotificationRendererProps {
@@ -11,17 +12,41 @@ export interface NotificationRendererProps {
    * Duration in milliseconds (default: 3000ms = 3sec).
    */
   successNotiDuration?: number;
+  /**
+   * Render your own success message.
+   * Call the finishAction when you're done showing the message.
+   *
+   * @param message
+   * @param duration
+   * @param finishAction
+   */
+  renderSuccess?: (
+    message: string,
+    duration: number,
+    finishAction: () => void
+  ) => ReactElement;
+  /**
+   * Add your own renderer for error messages.
+   * Call the finishAction when you're done showing the message.
+   *
+   * @param error containing the error message and maybe some more details
+   * @param finishAction
+   */
+  renderError?: (
+    error: UserErrorModel,
+    finishAction: () => void
+  ) => ReactElement;
 }
 
 const DEFAULT_DURATION = 3000;
 
 export const NotificationRenderer: FC<NotificationRendererProps> = observer(
   (props) => {
-    const { successNotiDuration } = props;
+    const { successNotiDuration, renderSuccess, renderError } = props;
     const notiStore = useInjection(NotificationStore);
 
-    const error = notiStore.getNextError();
-    const successMessages = notiStore.getSuccessMessages();
+    const [error, errorCallback] = notiStore.getNextError();
+    const [successMessage, successCallback] = notiStore.getNextSuccessMessage();
     const successDuration =
       typeof successNotiDuration === "number"
         ? successNotiDuration
@@ -29,15 +54,22 @@ export const NotificationRenderer: FC<NotificationRendererProps> = observer(
 
     return (
       <>
-        {successMessages.length > 0 && (
+        {successMessage && (
           <SuccessMessageToast
-            successMessages={successMessages}
+            message={successMessage}
             duration={successDuration}
+            renderSuccess={renderSuccess}
+            callback={successCallback}
           />
         )}
 
         {error && (
-          <ErrorMessageBox key={error.message + Date.now()} error={error} />
+          <ErrorMessageBox
+            key={error.message + Date.now()}
+            error={error}
+            renderError={renderError}
+            callback={errorCallback}
+          />
         )}
       </>
     );
