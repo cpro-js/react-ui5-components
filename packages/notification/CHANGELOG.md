@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification@0.2.0...@cpro-js/react-ui5-notification@0.2.1) (2023-10-06)
+
+### Bug Fixes
+
+- **react-ui5-notification:** toast not correctly effecting ([#69](https://github.com/cpro-js/react-ui5-components/issues/69)) ([9814e7e](https://github.com/cpro-js/react-ui5-components/commit/9814e7e3614ea95ff406c1dc087faab38fd55786))
+
 # [0.2.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification@0.1.4...@cpro-js/react-ui5-notification@0.2.0) (2023-10-05)
 
 ### Features
