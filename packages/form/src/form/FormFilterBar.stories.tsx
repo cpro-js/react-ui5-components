@@ -38,12 +38,9 @@ const Template: Story<FormControllerProps<FormData>> = (args) => {
   return (
     <FormController<FormData> {...{ initialValues, onSubmit, onChange }}>
       <FormFilterBar
-        showFilterConfiguration
-        showGo
         showGoOnFB
-        showClearButton
         showClearOnFB
-        showRestoreButton
+        showResetButton
         showRestoreOnFB
         search={
           <TextInputField

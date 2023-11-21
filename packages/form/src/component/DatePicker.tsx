@@ -64,7 +64,7 @@ export interface DatePickerProps<TDate extends Date | string | number = string>
   ) => void;
 }
 
-export const DatePicker: FC<DatePickerProps<string>> = forwardRef<
+export const DatePicker = forwardRef<
   DatePickerDomRef | undefined,
   DatePickerProps
 >(

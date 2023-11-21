@@ -23,7 +23,7 @@ const createTemplate = function <T>(): Story<
     const { submittedValues, handleSubmit } = useFormViewer<T>({
       onSubmit: onSubmit,
     });
-    const fieldRef = useRef<FormFieldElement>();
+    const fieldRef = useRef<FormFieldElement>(null);
 
     return (
       <FormController {...{ initialValues, onSubmit: handleSubmit }}>

@@ -19,7 +19,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = forwardRef<
 
     onFiltersDialogOpen,
     onFiltersDialogClose,
-    onFiltersDialogClear,
     onFiltersDialogCancel,
     onFiltersDialogSave,
     onGo,
@@ -96,19 +95,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = forwardRef<
     [onFiltersDialogClose]
   );
 
-  const handleFiltersDialogClear = useCallback<
-    NonNullable<typeof onFiltersDialogClear>
-  >(
-    (...args) => {
-      clearValues();
-
-      if (onFiltersDialogClear != null) {
-        onFiltersDialogClear(...args);
-      }
-    },
-    [onFiltersDialogClear, clearValues]
-  );
-
   const handleFiltersDialogCancel = useCallback<
     NonNullable<typeof onFiltersDialogCancel>
   >(
@@ -179,7 +165,6 @@ export const FormFilterBar: FC<FormFilterBarProps> = forwardRef<
       {...others}
       onFiltersDialogOpen={handleFiltersDialogOpen}
       onFiltersDialogClose={handleFiltersDialogClose}
-      onFiltersDialogClear={handleFiltersDialogClear}
       onFiltersDialogCancel={handleFiltersDialogCancel}
       onFiltersDialogSave={handleFiltersDialogSave}
       onGo={handleGo}

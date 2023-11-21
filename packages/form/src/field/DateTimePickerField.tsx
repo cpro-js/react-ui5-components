@@ -1,6 +1,6 @@
 import "../form/formSupport";
 
-import { ValueState } from "@ui5/webcomponents-react";
+import { DateTimePickerDomRef, ValueState } from "@ui5/webcomponents-react";
 import {
   FC,
   forwardRef,
@@ -44,7 +44,7 @@ export type DateTimePickerFieldProps = Omit<
     name: string;
   };
 
-export const DateTimePickerField: FC<DateTimePickerFieldProps> = forwardRef<
+export const DateTimePickerField = forwardRef<
   FormFieldElement,
   DateTimePickerFieldProps
 >(({ name, required, minDate, maxDate, ...props }, forwardedRef) => {
@@ -103,7 +103,7 @@ export const DateTimePickerField: FC<DateTimePickerFieldProps> = forwardRef<
   });
 
   // store input ref for intenral usage
-  const internalRef = useRef<HTMLInputElement>();
+  const internalRef = useRef<DateTimePickerDomRef>(null);
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {
