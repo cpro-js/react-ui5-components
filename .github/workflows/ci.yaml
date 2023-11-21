@@ -14,7 +14,7 @@ jobs:
       fail-fast: true
       matrix:
         node: [14]
-        script: ["typecheck", "build", "test:ci"]
+        script: ["typecheck", "build", "build-storybook", "test:ci"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
