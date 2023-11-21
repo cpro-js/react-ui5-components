@@ -18,7 +18,8 @@
     "build-storybook": "build-storybook",
     "prepublish": "rimraf dist && microbundle --tsconfig tsconfig.build.json --no-compress --format cjs,modern --jsx 'React.createElement' --jsxImportSource react --globals react/jsx-runtime=jsx",
     "storybook": "start-storybook -p 6006",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "typecheck": "tsc --noEmit"
   },
   "files": [
     "*.md",
