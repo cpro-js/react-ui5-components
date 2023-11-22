@@ -368,8 +368,7 @@ export const BaseNumberInput = forwardRef<InputDomRef, BaseNumberInputProps>(
             }
 
             // fire onInput event after any changed value
-            // @ts-ignore
-            inputRef.current.fireEvent(inputRef.current.EVENT_INPUT);
+            inputRef.current.fireEvent("input");
           }
         }
 
