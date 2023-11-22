@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormViewer, useFormViewer } from "./FormViewer";
@@ -8,7 +8,7 @@ interface FormData {
   text?: string;
 }
 
-const Template: Story<FormControllerProps<FormData> & HiddenFieldProps> = (
+const Template: StoryFn<FormControllerProps<FormData> & HiddenFieldProps> = (
   args
 ) => {
   const { initialValues, onSubmit, ...props } = args;

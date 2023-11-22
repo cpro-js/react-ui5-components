@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import { SelectItem } from "../component/Select";
@@ -24,7 +24,7 @@ interface FormData {
   item?: string | number;
 }
 
-const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
+const Template: StoryFn<FormControllerProps<FormData> & SelectFieldProps> = (
   args
 ) => {
   const { initialValues, onSubmit, ...props } = args;
@@ -42,22 +42,20 @@ const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
   );
 };
 
-const I18nTemplate: Story<FormControllerProps<FormData> & SelectFieldProps> = (
-  args,
-  context
-) => {
-  return (
-    <FormI18nProvider
-      getValidationErrorMessage={({ name }, error) => {
-        return `Field '${name}' has Error '${
-          error.type
-        }'. Original error message: ${error.message || "---"}`;
-      }}
-    >
-      {Template(args, context)}
-    </FormI18nProvider>
-  );
-};
+const I18nTemplate: StoryFn<FormControllerProps<FormData> & SelectFieldProps> =
+  (args, context) => {
+    return (
+      <FormI18nProvider
+        getValidationErrorMessage={({ name }, error) => {
+          return `Field '${name}' has Error '${
+            error.type
+          }'. Original error message: ${error.message || "---"}`;
+        }}
+      >
+        {Template(args, context)}
+      </FormI18nProvider>
+    );
+  };
 
 export const Empty = Template.bind({});
 Empty.args = {};
@@ -101,7 +99,7 @@ ValidationTranslationRequired.args = {
   ...ValidationRequired.args,
 };
 
-const TemplateAlt: Story<
+const TemplateAlt: StoryFn<
   FormControllerProps<FormData> & SelectFieldProps<SelectItemAlt>
 > = (args, context) => {
   const { initialValues, onSubmit, ...props } = args;

@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import { COUNTRIES } from "../../component/autocomplete/AutoComplete-storyData";
@@ -16,7 +16,7 @@ interface FormData {
   item?: string | number;
 }
 
-const Template: Story<
+const Template: StoryFn<
   FormControllerProps<FormData> &
     CreatableSelectFieldProps<DefaultAutoCompleteOption>
 > = (args, context) => {
@@ -35,7 +35,7 @@ const Template: Story<
   );
 };
 
-const I18nTemplate: Story<
+const I18nTemplate: StoryFn<
   FormControllerProps<FormData> &
     CreatableSelectFieldProps<DefaultAutoCompleteOption>
 > = (args, context) => {

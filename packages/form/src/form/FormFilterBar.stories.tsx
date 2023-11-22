@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-icons/dist/search.js";
 
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { FilterGroupItem, Icon } from "@ui5/webcomponents-react";
 
 import { SelectItem } from "../component/Select";
@@ -32,7 +32,7 @@ interface FormData {
   dish?: Array<string>;
 }
 
-const Template: Story<FormControllerProps<FormData>> = (args) => {
+const Template: StoryFn<FormControllerProps<FormData>> = (args) => {
   const { initialValues, onSubmit, onChange } = args;
 
   return (

@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 
 import { CurrencyInput } from "../CurrencyInput";
 import { NumberInput } from "../NumberInput";
@@ -12,7 +12,7 @@ export default {
   component: NumberContextProvider,
 };
 
-const Template: Story<NumberContextProviderProps> = (args) => {
+const Template: StoryFn<NumberContextProviderProps> = (args) => {
   const value = 1000555.482;
 
   return (
@@ -40,7 +40,7 @@ Standard.args = { locale: "en", currency: "USD", useGrouping: true };
 export const Locale_DE = Template.bind({});
 Locale_DE.args = { locale: "de", currency: "EUR", useGrouping: true };
 
-export const Nested: Story<NumberContextProviderProps> = (args) => {
+export const Nested: StoryFn<NumberContextProviderProps> = (args) => {
   const value = 1000555.482;
 
   return (

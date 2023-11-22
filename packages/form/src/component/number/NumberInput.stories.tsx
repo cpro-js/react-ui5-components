@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { NumberInput, NumberInputProps } from "./NumberInput";
 
@@ -9,7 +9,7 @@ const meta: Meta = {
 };
 export default meta;
 
-const Template: Story<NumberInputProps> = (args) => {
+const Template: StoryFn<NumberInputProps> = (args) => {
   return <NumberInput {...args} />;
 };
 

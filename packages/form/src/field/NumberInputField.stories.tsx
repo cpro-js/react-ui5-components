@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
@@ -11,25 +11,24 @@ interface FormData {
   theNumber?: number;
 }
 
-const Template: Story<FormControllerProps<FormData> & NumberInputFieldProps> = (
-  args
-) => {
-  const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<FormControllerProps<FormData> & NumberInputFieldProps> =
+  (args) => {
+    const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
-    onSubmit: onSubmit,
-  });
-  const fieldRef = useRef<FormFieldElement>(null);
+    const { submittedValues, handleSubmit } = useFormViewer({
+      onSubmit: onSubmit,
+    });
+    const fieldRef = useRef<FormFieldElement>(null);
 
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <NumberInputField {...props} ref={fieldRef} name={"theNumber"} />
-      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-    </FormController>
-  );
-};
+    return (
+      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+        <NumberInputField {...props} ref={fieldRef} name={"theNumber"} />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+      </FormController>
+    );
+  };
 
-const I18nTemplate: Story<
+const I18nTemplate: StoryFn<
   FormControllerProps<FormData> & NumberInputFieldProps
 > = (args, context) => {
   return (

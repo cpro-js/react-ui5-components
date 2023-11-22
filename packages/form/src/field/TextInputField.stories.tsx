@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
@@ -11,7 +11,7 @@ interface FormData {
   text?: string;
 }
 
-const Template: Story<FormControllerProps<FormData> & TextInputFieldProps> = (
+const Template: StoryFn<FormControllerProps<FormData> & TextInputFieldProps> = (
   args
 ) => {
   const { initialValues, onSubmit, ...props } = args;
@@ -29,20 +29,21 @@ const Template: Story<FormControllerProps<FormData> & TextInputFieldProps> = (
   );
 };
 
-const I18nTemplate: Story<FormControllerProps<FormData> & TextInputFieldProps> =
-  (args, context) => {
-    return (
-      <FormI18nProvider
-        getValidationErrorMessage={({ name }, error) => {
-          return `Field '${name}' has Error '${
-            error.type
-          }'. Original error message: ${error.message || "---"}`;
-        }}
-      >
-        {Template(args, context)}
-      </FormI18nProvider>
-    );
-  };
+const I18nTemplate: StoryFn<
+  FormControllerProps<FormData> & TextInputFieldProps
+> = (args, context) => {
+  return (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) => {
+        return `Field '${name}' has Error '${
+          error.type
+        }'. Original error message: ${error.message || "---"}`;
+      }}
+    >
+      {Template(args, context)}
+    </FormI18nProvider>
+  );
+};
 
 export const Empty = Template.bind({});
 Empty.args = {};
