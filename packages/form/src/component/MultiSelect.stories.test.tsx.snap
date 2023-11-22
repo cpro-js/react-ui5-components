@@ -4,6 +4,7 @@ exports[`Renders Empty story 1`] = `
 <div>
   <ui5-multi-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-multi-combobox=""
     value-state="None"
   />
@@ -14,6 +15,7 @@ exports[`Renders Standard story 1`] = `
 <div>
   <ui5-multi-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-multi-combobox=""
     value-state="None"
   >
@@ -50,6 +52,7 @@ exports[`Renders WithItemLabel story 1`] = `
 <div>
   <ui5-multi-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-multi-combobox=""
     value-state="None"
   >
@@ -86,6 +89,7 @@ exports[`Renders WithItemValue story 1`] = `
 <div>
   <ui5-multi-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-multi-combobox=""
     value-state="None"
   >
@@ -122,6 +126,8 @@ exports[`Renders WithMultiValue story 1`] = `
 <div>
   <ui5-multi-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
+    tokenizer-available=""
     ui5-multi-combobox=""
     value-state="None"
   >
@@ -161,6 +167,8 @@ exports[`Renders WithValue story 1`] = `
 <div>
   <ui5-multi-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
+    tokenizer-available=""
     ui5-multi-combobox=""
     value-state="None"
   >
@@ -198,6 +206,8 @@ exports[`Renders WithValueNumber story 1`] = `
 <div>
   <ui5-multi-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
+    tokenizer-available=""
     ui5-multi-combobox=""
     value-state="None"
   >
@@ -235,6 +245,8 @@ exports[`Renders WithValueString story 1`] = `
 <div>
   <ui5-multi-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
+    tokenizer-available=""
     ui5-multi-combobox=""
     value-state="None"
   >
