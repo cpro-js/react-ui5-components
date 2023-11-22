@@ -1,8 +1,8 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { Checkbox, CheckboxProps } from "./Checkbox";
 
-const Template: Story<CheckboxProps & { form?: boolean }> = ({
+const Template: StoryFn<CheckboxProps & { form?: boolean }> = ({
   form,
   ...args
 }) => {
