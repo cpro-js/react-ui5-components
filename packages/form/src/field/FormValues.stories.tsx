@@ -31,12 +31,21 @@ Standard.args = {
   onSubmit: async (...args) => {
     console.log("submit", ...args);
     action("submit")(...args);
+  },
+  render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
+};
+
+export const UpdateValuesOnSubmit = Standard.bind({});
+UpdateValuesOnSubmit.args = {
+  ...Standard.args,
+  onSubmit: async (...args) => {
+    console.log("submit", ...args);
+    action("submit")(...args);
 
     const [values, actions] = args;
 
     actions.setValues([{ name: "text", value: "1" }]);
   },
-  render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
 };
 
 export default {
