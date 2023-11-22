@@ -117,10 +117,10 @@ const TemplateAlt: Story<
 };
 
 export const WithItemLabel = TemplateAlt.bind({});
-WithItemLabel.args = { ...Standard.args, itemLabel: "alt" };
+WithItemLabel.args = { ...Standard.args, items, itemLabel: "alt" };
 
 export const WithItemValue = TemplateAlt.bind({});
-WithItemValue.args = { ...Standard.args, itemValue: "alt" };
+WithItemValue.args = { ...Standard.args, items, itemValue: "alt" };
 
 export default {
   title: "Form/Field/SelectField",

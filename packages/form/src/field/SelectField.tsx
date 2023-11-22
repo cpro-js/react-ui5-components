@@ -16,8 +16,8 @@ import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
-export type SelectFieldProps<T = SelectItem> = Omit<
-  SelectProps<T>,
+export type SelectFieldProps<T = SelectItem, V = string | number> = Omit<
+  SelectProps<T, V>,
   "name" | "value" | "onChange" | "onSelectionChange" | "onBlur"
 > &
   Pick<FormFieldValidation, "required"> & {
@@ -78,6 +78,6 @@ export const SelectField = forwardRef<FormFieldElement, SelectFieldProps>(
       />
     );
   }
-) as <T = SelectItem>(
-  p: SelectFieldProps<T> & { ref?: Ref<FormFieldElement | undefined> }
+) as <T = SelectItem, V = string | number>(
+  p: SelectFieldProps<T, V> & { ref?: Ref<FormFieldElement | undefined> }
 ) => ReactElement;

@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 
 import { Select, SelectItem, SelectProps } from "./Select";
 
@@ -14,7 +14,7 @@ const items: Array<SelectItemAlt> = [
   { value: "4", label: "Test 4", alt: "Test 4 Alt" },
 ];
 
-const Template: Story<SelectProps> = (args) => {
+const Template: StoryFn<SelectProps> = (args) => {
   return <Select {...args} />;
 };
 
@@ -38,15 +38,15 @@ WithValueNumber.args = { ...Standard.args, value: 1 };
 export const WithValueString = Template.bind({});
 WithValueString.args = { ...Standard.args, value: "1" };
 
-const TemplateAlt: Story<SelectProps<SelectItemAlt>> = (args) => {
+const TemplateAlt: StoryFn<SelectProps<SelectItemAlt>> = (args) => {
   return <Select<SelectItemAlt> {...args} />;
 };
 
 export const WithItemLabel = TemplateAlt.bind({});
-WithItemLabel.args = { ...Standard.args, itemLabel: "alt" };
+WithItemLabel.args = { ...Standard.args, items, itemLabel: "alt" };
 
 export const WithItemValue = TemplateAlt.bind({});
-WithItemValue.args = { ...Standard.args, itemValue: "alt" };
+WithItemValue.args = { ...Standard.args, items, itemValue: "alt" };
 
 export default {
   title: "Form/Component/Select",

@@ -20,7 +20,7 @@ export interface SelectItem {
   label: string;
 }
 
-export interface SelectProps<T = SelectItem>
+export interface SelectProps<T = SelectItem, V = string | number>
   extends Omit<
     ComboBoxPropTypes,
     | "name"
@@ -31,10 +31,10 @@ export interface SelectProps<T = SelectItem>
     | "onChange"
   > {
   name?: string;
-  value?: string | number;
-  items?: Array<SelectItem>;
+  value?: V;
+  items?: Array<T>;
   addEmptyOption?: boolean;
-  itemValue?: keyof T | ((value: T) => string);
+  itemValue?: keyof T | ((value: T) => V);
   itemLabel?: keyof T | ((value: T) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
@@ -43,12 +43,9 @@ export interface SelectProps<T = SelectItem>
         item: HTMLElement;
       }
     >,
-    value?: string | number
+    value?: V
   ) => void;
-  onChange?: (
-    event: Ui5CustomEvent<ComboBoxDomRef>,
-    value?: string | number
-  ) => void;
+  onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: V) => void;
 }
 
 const DEFAULT_LABEL_PROP = "label";
