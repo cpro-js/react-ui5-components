@@ -225,13 +225,11 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           );
 
           const filteredText = texts.filter((t) => !pickedTexts.includes(t));
-          setTimeout(
-            () =>
-              // @ts-ignore
-              (event.target.shadowRoot.activeElement.value =
-                filteredText.join(" ")),
-            50
-          );
+          setTimeout(() => {
+            // @ts-ignore
+            el.shadowRoot.activeElement.value = filteredText.join(" ");
+            el.value = filteredText.join(" ");
+          }, 50);
         }
       },
       [
