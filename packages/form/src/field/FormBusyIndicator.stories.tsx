@@ -30,7 +30,7 @@ const Template: Story<FormControllerProps<FormData> & FormBusyIndicatorProps> =
 export const Standard = Template.bind({});
 Standard.args = {
   onSubmit: async (...args) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     action("submit")(...args);
   },
 };
@@ -39,7 +39,7 @@ export const ForcedBusyInactive = Template.bind({});
 ForcedBusyInactive.args = {
   busy: false,
   onSubmit: async (...args) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     action("submit")(...args);
   },
 };
