@@ -24,4 +24,12 @@ WithIcon.args = {
 export default {
   title: "Form/Component/TextInput",
   component: TextInput,
+  argTypes: {
+    onKeyPress: {
+      action: "onKeyPress",
+    },
+    onChange: {
+      action: "onChange",
+    },
+  },
 };
