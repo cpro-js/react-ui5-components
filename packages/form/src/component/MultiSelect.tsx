@@ -27,7 +27,7 @@ export interface MultiSelectItem {
   label: string;
 }
 
-export interface MultiSelectProps<T = MultiSelectItem>
+export interface MultiSelectProps<T = MultiSelectItem, V = string | number>
   extends Omit<
     MultiComboBoxPropTypes,
     | "name"
@@ -38,7 +38,7 @@ export interface MultiSelectProps<T = MultiSelectItem>
     | "onChange"
   > {
   name?: string;
-  value?: Array<string | number>;
+  value?: Array<V>;
   items?: Array<T>;
   itemValue?: keyof T | ((value: T) => string);
   itemLabel?: keyof T | ((value: T) => string);
@@ -47,7 +47,7 @@ export interface MultiSelectProps<T = MultiSelectItem>
       MultiComboBoxDomRef,
       MultiComboBoxSelectionChangeEventDetail
     >,
-    value: Array<string | number>
+    value: Array<V>
   ) => void;
 }
 
