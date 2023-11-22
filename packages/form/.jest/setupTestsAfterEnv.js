@@ -5,12 +5,12 @@
 import "@testing-library/jest-dom/extend-expect";
 import "@ui5/webcomponents-react/jestSetup.js";
 
-import { setGlobalConfig } from "@storybook/testing-react";
+import { setProjectAnnotations } from "@storybook/testing-react";
 import ResizeObserverPolyfill from "resize-observer-polyfill";
 
-import * as globalStorybookConfig from "../.storybook/preview"; // path of your preview.js file
+import globalStorybookConfig from "../.storybook/preview";
 
-setGlobalConfig(globalStorybookConfig);
+setProjectAnnotations(globalStorybookConfig);
 
 window.ResizeObserver = ResizeObserverPolyfill;
 

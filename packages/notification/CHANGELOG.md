@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification@0.2.0...@cpro-js/react-ui5-notification@0.2.1) (2023-10-06)
+
+### Bug Fixes
+
+- **react-ui5-notification:** toast not correctly effecting ([#69](https://github.com/cpro-js/react-ui5-components/issues/69)) ([9814e7e](https://github.com/cpro-js/react-ui5-components/commit/9814e7e3614ea95ff406c1dc087faab38fd55786))
+
+# [0.2.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification@0.1.4...@cpro-js/react-ui5-notification@0.2.0) (2023-10-05)
+
+### Features
+
+- **react-ui5-notification:** callbacks & custom renderer ([#68](https://github.com/cpro-js/react-ui5-components/issues/68)) ([9c28904](https://github.com/cpro-js/react-ui5-components/commit/9c28904b131a0a0cb90c0aaa5d2ed2f9367e1601))
+
+## [0.1.4](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification@0.1.3...@cpro-js/react-ui5-notification@0.1.4) (2022-12-07)
+
+### Bug Fixes
+
+- **react-ui5-webcomponents-form:** handling of pasted values for multi components ([#64](https://github.com/cpro-js/react-ui5-components/issues/64)) ([97134f2](https://github.com/cpro-js/react-ui5-components/commit/97134f2c6412a5f4b396c45f79030de5e77180fd))
+
 ## [0.1.3](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification@0.1.2...@cpro-js/react-ui5-notification@0.1.3) (2022-11-29)
 
 **Note:** Version bump only for package @cpro-js/react-ui5-notification

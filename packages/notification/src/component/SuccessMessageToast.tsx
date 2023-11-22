@@ -1,30 +1,44 @@
 import { observer, useInjection } from "@cpro-js/react-core";
 import { Toast, ToastDomRef, ToastPlacement } from "@ui5/webcomponents-react";
-import { FC, useEffect, useRef } from "react";
+import { FC, ReactElement, useCallback, useEffect, useRef } from "react";
 
 import { NotificationStore } from "../NotificationStore";
 
 export interface SuccessMessageToastProps {
-  successMessages: Array<string>;
+  message: string;
   duration: number;
+  renderSuccess?: (
+    message: string,
+    duration: number,
+    finishAction: () => void
+  ) => ReactElement;
+  callback?: () => void;
 }
 
 export const SuccessMessageToast: FC<SuccessMessageToastProps> = observer(
   (props) => {
-    const { successMessages, duration } = props;
+    const { message, duration, renderSuccess, callback } = props;
     const notiStore = useInjection(NotificationStore);
 
     const ref = useRef<ToastDomRef>(null);
 
-    const successMessage = successMessages[0];
+    const onFinish = useCallback(() => {
+      notiStore.removeFromSuccessMessages(message);
+      if (callback) {
+        callback();
+      }
+    }, [message, callback]);
 
     useEffect(() => {
-      ref?.current?.show();
+      if (!renderSuccess) {
+        ref?.current?.show();
+        setTimeout(() => onFinish, duration);
+      }
+    }, [duration, renderSuccess, onFinish]);
 
-      setTimeout(() => {
-        notiStore.removeFromSuccessMessages(successMessage);
-      }, duration);
-    }, [ref, successMessage]);
+    if (renderSuccess) {
+      return renderSuccess(message, duration, onFinish);
+    }
 
     return (
       <Toast
@@ -32,7 +46,7 @@ export const SuccessMessageToast: FC<SuccessMessageToastProps> = observer(
         placement={ToastPlacement.BottomCenter}
         ref={ref}
       >
-        {successMessage}
+        {message}
       </Toast>
     );
   }
