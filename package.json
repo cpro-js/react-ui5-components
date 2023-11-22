@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "yarn workspaces foreach -pt run build",
-    "build-storybook": "yarn workspaces foreach -pt run build-storybook",
+    "build-storybook": "yarn workspaces foreach -t run build-storybook",
     "postinstall": "is-ci || husky install",
     "postversion": "lerna publish from-git",
     "release": "env-cmd -f .env.local --no-override lerna version",
@@ -39,7 +39,7 @@
   "lint-staged": {
     "*": "prettier --ignore-unknown --write"
   },
-  "packageManager": "yarn@3.0.1",
+  "packageManager": "yarn@3.6.4",
   "workspaces": [
     "packages/*"
   ]
