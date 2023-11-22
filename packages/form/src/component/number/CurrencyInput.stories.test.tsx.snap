@@ -5,7 +5,7 @@ exports[`Renders AlignLeft story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: left;"
+    style="text-align: left; --_ui5-v1-19-1-input-icons-count: 1;"
     type="Text"
     ui5-input=""
     value="123456.79"
@@ -25,7 +25,7 @@ exports[`Renders Prefilled story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: right;"
+    style="text-align: right; --_ui5-v1-19-1-input-icons-count: 1;"
     type="Text"
     ui5-input=""
     value="123456.79"
@@ -45,7 +45,7 @@ exports[`Renders PrefilledWithZeros story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: right;"
+    style="text-align: right; --_ui5-v1-19-1-input-icons-count: 1;"
     type="Text"
     ui5-input=""
     value="500.00"
@@ -65,7 +65,7 @@ exports[`Renders Standard story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: right;"
+    style="text-align: right; --_ui5-v1-19-1-input-icons-count: 1;"
     type="Text"
     ui5-input=""
     value=""
@@ -85,7 +85,7 @@ exports[`Renders WithGrouping story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: right;"
+    style="text-align: right; --_ui5-v1-19-1-input-icons-count: 1;"
     type="Text"
     ui5-input=""
     value="123,456.79"
@@ -105,7 +105,7 @@ exports[`Renders WithIcon story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: right;"
+    style="text-align: right; --_ui5-v1-19-1-input-icons-count: 1;"
     type="Text"
     ui5-input=""
     value="123456.79"
@@ -125,7 +125,7 @@ exports[`Renders WithLocaleDe story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: right;"
+    style="text-align: right; --_ui5-v1-19-1-input-icons-count: 1;"
     type="Text"
     ui5-input=""
     value="123.456,79"
@@ -145,7 +145,7 @@ exports[`Renders WithLocalePl story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: right;"
+    style="text-align: right; --_ui5-v1-19-1-input-icons-count: 1;"
     type="Text"
     ui5-input=""
     value="123 456,79"
@@ -165,7 +165,7 @@ exports[`Renders WithoutCurrency story 1`] = `
   <ui5-input
     inputmode="decimal"
     maxlength="18"
-    style="text-align: right;"
+    style="text-align: right; --_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value="123456.79"

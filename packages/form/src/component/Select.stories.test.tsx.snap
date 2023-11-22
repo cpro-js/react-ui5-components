@@ -4,6 +4,7 @@ exports[`Renders Empty story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value=""
     value-state="None"
@@ -15,6 +16,7 @@ exports[`Renders Standard story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value=""
     value-state="None"
@@ -52,6 +54,7 @@ exports[`Renders WithEmptyOption story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value=""
     value-state="None"
@@ -93,6 +96,7 @@ exports[`Renders WithItemLabel story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value=""
     value-state="None"
@@ -130,6 +134,7 @@ exports[`Renders WithItemValue story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value=""
     value-state="None"
@@ -167,6 +172,7 @@ exports[`Renders WithValue story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value="Test 2"
     value-state="None"
@@ -183,6 +189,7 @@ exports[`Renders WithValue story 1`] = `
     />
     <ui5-cb-item
       data-index="2"
+      selected=""
       text="Test 2"
       ui5-cb-item=""
     />
@@ -204,12 +211,14 @@ exports[`Renders WithValueNumber story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value="Test 1 Number"
     value-state="None"
   >
     <ui5-cb-item
       data-index="0"
+      selected=""
       text="Test 1 Number"
       ui5-cb-item=""
     />
@@ -241,6 +250,7 @@ exports[`Renders WithValueString story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value="Test 1 String"
     value-state="None"
@@ -252,6 +262,7 @@ exports[`Renders WithValueString story 1`] = `
     />
     <ui5-cb-item
       data-index="1"
+      selected=""
       text="Test 1 String"
       ui5-cb-item=""
     />
