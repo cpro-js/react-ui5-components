@@ -182,7 +182,9 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           const selected = texts
             .map((t) =>
               items.find((item) => {
-                const result = t === String(item.value) || t === item.label;
+                const result =
+                  t === String(retrieveItemValue(item)) ||
+                  t === retrieveItemLabel(item);
                 if (result) {
                   pickedTexts.push(t);
                 }
@@ -190,7 +192,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
               })
             )
             .filter((item): item is MultiSelectItem => !!item)
-            .map((item) => String(item.value))
+            .map((item) => retrieveItemValue(item))
             .filter(
               (itemValue) =>
                 !selectedValue || !selectedValue.includes(itemValue)
@@ -223,8 +225,16 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           );
         }
       },
-      [items, setSelectedValue, selectedValue]
+      [
+        items,
+        setSelectedValue,
+        selectedValue,
+        retrieveItemValue,
+        retrieveItemLabel,
+      ]
     );
+
+    console.log(value, selectedValue);
 
     // NOTE: onChange is bound to input instead of items, that's why can't use it
     return (
@@ -250,7 +260,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
               data-index={index}
               selected={
                 Array.isArray(selectedValue) &&
-                selectedValue.includes(item.value)
+                selectedValue.includes(retrieveItemValue(item))
               }
             />
           ))}
