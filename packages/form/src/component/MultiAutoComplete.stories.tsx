@@ -1,7 +1,7 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
 import { action } from "@storybook/addon-actions";
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
 
 import {
@@ -11,7 +11,7 @@ import {
 import { MultiAutoComplete, MultiAutoCompleteProps } from "./MultiAutoComplete";
 import { DefaultAutoCompletOption } from "./MultiAutoCompleteModel";
 
-const Template: Story<MultiAutoCompleteProps<DefaultAutoCompletOption>> = (
+const Template: StoryFn<MultiAutoCompleteProps<DefaultAutoCompletOption>> = (
   props
 ) => {
   const onSelect = (values: Array<string>) => {
