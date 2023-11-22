@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 
 import { TextAreaProps } from "./TextArea";
 import { TextArea } from "./TextArea";
@@ -17,7 +17,7 @@ export default {
   },
 };
 
-const Template: Story<TextAreaProps> = (args) => <TextArea {...args} />;
+const Template: StoryFn<TextAreaProps> = (args) => <TextArea {...args} />;
 
 export const Standard = Template.bind({});
 Standard.args = {
