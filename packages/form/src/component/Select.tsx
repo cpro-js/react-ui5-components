@@ -15,19 +15,6 @@ import {
 
 import { triggerSubmitOnEnter } from "./util";
 
-const findLabel = (
-  items: Array<SelectItem>,
-  value?: string | number
-): string => {
-  if (value) {
-    const itemByIndex = items.find((item) => item.value === value);
-    if (itemByIndex) {
-      return itemByIndex.label;
-    }
-  }
-  return "";
-};
-
 export interface SelectItem {
   value: string | number;
   label: string;
@@ -176,7 +163,12 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       [onKeyPress]
     );
 
-    const text = findLabel(items, value);
+    const selectedItem = items.find(
+      (item) => retrieveItemValue(item) === value
+    );
+    const text = String(
+      selectedItem != null ? retrieveItemLabel(selectedItem) ?? "" : ""
+    );
 
     return (
       <>
