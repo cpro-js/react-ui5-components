@@ -152,7 +152,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
 
   private onInput = (event: Ui5CustomEvent<MultiInputDomRef>) => {
     const { minCharsForSearch } = this.props;
-    const currentValue = (event.currentTarget as MultiInputPropTypes).value;
+    const currentValue = event.target.value;
     this.searchTerm = currentValue ? currentValue.trim() : "";
     const hasMinChars = this.searchTerm.length >= (minCharsForSearch || 1);
 

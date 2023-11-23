@@ -137,8 +137,7 @@ export const DateTimePicker = forwardRef<
           return;
         }
         if (onChange != null) {
-          const value: Date | undefined | null = (event.target as any)
-            .dateValue;
+          const value: Date | undefined | null = event.target.dateValue;
           const formattedValue = event.detail.value;
 
           const normalizedValue =

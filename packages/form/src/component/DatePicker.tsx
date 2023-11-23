@@ -102,7 +102,7 @@ export const DatePicker = forwardRef<
         ref.current = undefined;
         return;
       }
-      ref.current = ui5DatePicker as any;
+      ref.current = ui5DatePicker;
 
       setIsRefSet(true);
     }, []);
@@ -130,8 +130,7 @@ export const DatePicker = forwardRef<
           return;
         }
         if (onChange != null) {
-          const value: Date | undefined | null = (event.target as any)
-            .dateValue;
+          const value: Date | undefined | null = event.target.dateValue;
           const formattedValue = event.detail.value;
 
           const normalizedValue =
