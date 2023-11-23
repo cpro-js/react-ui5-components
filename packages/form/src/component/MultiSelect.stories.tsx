@@ -38,15 +38,20 @@ WithValueString.args = { ...Standard.args, value: ["1"] };
 export const WithMultiValue = Template.bind({});
 WithMultiValue.args = { ...Standard.args, value: [1, "1", "2"] };
 
-const TemplateAlt: StoryFn<MultiSelectProps<MultiSelectItemAlt>> = (args) => {
-  return <MultiSelect<MultiSelectItemAlt> {...args} />;
+const TemplateAlt: StoryFn<MultiSelectProps<MultiSelectItemAlt, string>> = (
+  args
+) => {
+  return <MultiSelect<MultiSelectItemAlt, string> {...args} />;
 };
 
-export const WithItemLabel = TemplateAlt.bind({});
-WithItemLabel.args = { ...Standard.args, items: items, itemLabel: "alt" };
-
-export const WithItemValue = TemplateAlt.bind({});
-WithItemValue.args = { ...Standard.args, items: items, itemValue: "alt" };
+export const CustomItemModel = TemplateAlt.bind({});
+CustomItemModel.args = {
+  ...Standard.args,
+  items,
+  value: undefined,
+  itemLabel: "alt",
+  itemValue: "label",
+};
 
 const meta: Meta = {
   title: "Form/Component/MultiSelect",

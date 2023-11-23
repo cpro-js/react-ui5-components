@@ -21,10 +21,10 @@ import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
 export type MultiSelectFieldProps<
-  T = MultiSelectItem,
-  V = string | number
+  Item = MultiSelectItem,
+  Value = string | number
 > = Omit<
-  MultiSelectProps<T, V>,
+  MultiSelectProps<Item, Value>,
   "name" | "value" | "onSelectionChange" | "onBlur"
 > &
   Pick<FormFieldValidation, "required"> & {
@@ -94,6 +94,8 @@ export const MultiSelectField = forwardRef<
       required={required}
     />
   );
-}) as <T = MultiSelectItem, V = string | number>(
-  p: MultiSelectFieldProps<T, V> & { ref?: Ref<FormFieldElement | undefined> }
+}) as <Item = MultiSelectItem, Value = string | number>(
+  p: MultiSelectFieldProps<Item, Value> & {
+    ref?: Ref<FormFieldElement | undefined>;
+  }
 ) => ReactElement;

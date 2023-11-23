@@ -100,25 +100,34 @@ ValidationTranslationRequired.args = {
 };
 
 const TemplateAlt: StoryFn<
-  FormControllerProps<FormData> & SelectFieldProps<SelectItemAlt>
-> = (args, context) => {
+  FormControllerProps<FormData> & SelectFieldProps<SelectItemAlt, string>
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
+
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldElement>();
+
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <SelectField<SelectItemAlt> {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <SelectField<SelectItemAlt, string>
+        {...props}
+        ref={fieldRef}
+        name="item"
+      />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };
 
-export const WithItemLabel = TemplateAlt.bind({});
-WithItemLabel.args = { ...Standard.args, items, itemLabel: "alt" };
-
-export const WithItemValue = TemplateAlt.bind({});
-WithItemValue.args = { ...Standard.args, items, itemValue: "alt" };
+export const CustomItemModel = TemplateAlt.bind({});
+CustomItemModel.args = {
+  ...Standard.args,
+  items,
+  itemLabel: "alt",
+  itemValue: "label",
+};
 
 export default {
   title: "Form/Field/SelectField",

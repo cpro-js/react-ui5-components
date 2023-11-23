@@ -27,8 +27,10 @@ export interface MultiSelectItem {
   label: string;
 }
 
-export interface MultiSelectProps<T = MultiSelectItem, V = string | number>
-  extends Omit<
+export interface MultiSelectProps<
+  Item = MultiSelectItem,
+  Value = string | number
+> extends Omit<
     MultiComboBoxPropTypes,
     | "name"
     | "value"
@@ -38,16 +40,16 @@ export interface MultiSelectProps<T = MultiSelectItem, V = string | number>
     | "onChange"
   > {
   name?: string;
-  value?: Array<V>;
-  items?: Array<T>;
-  itemValue?: keyof T | ((value: T) => string);
-  itemLabel?: keyof T | ((value: T) => string);
+  value?: Array<Value>;
+  items?: Array<Item>;
+  itemValue?: keyof Item | ((value: Item) => string);
+  itemLabel?: keyof Item | ((value: Item) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
       MultiComboBoxDomRef,
       MultiComboBoxSelectionChangeEventDetail
     >,
-    value: Array<V>
+    value: Array<Value>
   ) => void;
 }
 
@@ -269,6 +271,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       </>
     );
   }
-) as <T = MultiSelectItem>(
-  p: MultiSelectProps<T> & { ref?: Ref<MultiComboBoxDomRef | undefined> }
+) as <Item = MultiSelectItem, Value = string | number>(
+  p: MultiSelectProps<Item, Value> & {
+    ref?: Ref<MultiComboBoxDomRef | undefined>;
+  }
 ) => ReactElement;

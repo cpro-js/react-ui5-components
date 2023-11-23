@@ -38,15 +38,18 @@ WithValueNumber.args = { ...Standard.args, value: 1 };
 export const WithValueString = Template.bind({});
 WithValueString.args = { ...Standard.args, value: "1" };
 
-const TemplateAlt: StoryFn<SelectProps<SelectItemAlt>> = (args) => {
-  return <Select<SelectItemAlt> {...args} />;
+const TemplateAlt: StoryFn<SelectProps<SelectItemAlt, string>> = (args) => {
+  return <Select<SelectItemAlt, string> {...args} />;
 };
 
-export const WithItemLabel = TemplateAlt.bind({});
-WithItemLabel.args = { ...Standard.args, items, itemLabel: "alt" };
-
-export const WithItemValue = TemplateAlt.bind({});
-WithItemValue.args = { ...Standard.args, items, itemValue: "alt" };
+export const CustomItemModel = TemplateAlt.bind({});
+CustomItemModel.args = {
+  ...Standard.args,
+  items,
+  value: undefined,
+  itemLabel: "alt",
+  itemValue: "label",
+};
 
 export default {
   title: "Form/Component/Select",
