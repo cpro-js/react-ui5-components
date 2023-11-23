@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.28.2...@cpro-js/react-ui5-webcomponents-form@1.0.0) (2023-11-23)
+
+### Features
+
+- **react-ui5-webcomponents-form:** upgrade webcomponents to v1 ([#65](https://github.com/cpro-js/react-ui5-components/issues/65)) ([30c2513](https://github.com/cpro-js/react-ui5-components/commit/30c251398d4264eb4162957124020dff31f43560))
+
+### BREAKING CHANGES
+
+- **react-ui5-webcomponents-form:** minimum required version of @ui5/webcomponents-react is 1.22.2
+
 ## [0.28.2](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.28.1...@cpro-js/react-ui5-webcomponents-form@0.28.2) (2022-12-07)
 
 ### Bug Fixes
