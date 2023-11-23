@@ -9,6 +9,7 @@ import { MultiComboBoxSelectionChangeEventDetail } from "@ui5/webcomponents/dist
 import {
   ClipboardEvent,
   KeyboardEvent,
+  MutableRefObject,
   ReactElement,
   Ref,
   forwardRef,
@@ -71,8 +72,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       ...otherProps
     } = props;
 
-    const internalRef = useRef<MultiComboBoxDomRef | null>(null);
-    // @ts-ignore
+    const internalRef =
+      useRef<MultiComboBoxDomRef>() as MutableRefObject<MultiComboBoxDomRef>;
     useImperativeHandle(forwardedRef, () => internalRef.current);
 
     const [selectedValue, setSelectedValue] = useState<typeof value>(value);
@@ -248,7 +249,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       <>
         <MultiComboBox
           {...otherProps}
-          ref={forwardedRef}
+          ref={internalRef}
           onSelectionChange={handleSelectionChange}
           onOpenChange={handleOpenChange}
           onKeyDown={handleKeyDown}
