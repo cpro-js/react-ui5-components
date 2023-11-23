@@ -1,8 +1,11 @@
-import { Meta, Story } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { Checkbox, CheckboxProps } from "./Checkbox";
 
-const Template: Story<CheckboxProps & { form?: boolean }> = ({
+const DEFAULT_NAME = "test";
+
+const Template: StoryFn<CheckboxProps & { form?: boolean }> = ({
   form,
   ...args
 }) => {
@@ -11,7 +14,14 @@ const Template: Story<CheckboxProps & { form?: boolean }> = ({
   }
 
   return (
-    <form>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget).get(DEFAULT_NAME);
+        const toLog = `Submitted value for key [${DEFAULT_NAME}]: ${data}`;
+        action("onSubmit")(toLog);
+      }}
+    >
       <Checkbox {...args} />
       <button>Submit</button>
     </form>
@@ -20,7 +30,7 @@ const Template: Story<CheckboxProps & { form?: boolean }> = ({
 
 export const Standard = Template.bind({});
 Standard.args = {
-  name: "test",
+  name: DEFAULT_NAME,
 };
 
 export const Checked = Template.bind({});

@@ -5,7 +5,8 @@ exports[`Renders CustomLabelFunction story 1`] = `
   <ui5-multi-input
     initialsuggestions="[object Object],[object Object],[object Object]"
     show-suggestions="true"
-    style="width: 50%;"
+    style="width: 50%; --_ui5-v1-19-1-input-icons-count: 0;"
+    tokenizer-available=""
     type="Text"
     ui5-multi-input=""
     value-state="None"
@@ -58,7 +59,8 @@ exports[`Renders CustomLabelProp story 1`] = `
   <ui5-multi-input
     initialsuggestions="[object Object],[object Object],[object Object]"
     show-suggestions="true"
-    style="width: 50%;"
+    style="width: 50%; --_ui5-v1-19-1-input-icons-count: 0;"
+    tokenizer-available=""
     type="Text"
     ui5-multi-input=""
     value-state="None"
@@ -111,7 +113,8 @@ exports[`Renders CustomValueFunction story 1`] = `
   <ui5-multi-input
     initialsuggestions="[object Object],[object Object],[object Object]"
     show-suggestions="true"
-    style="width: 50%;"
+    style="width: 50%; --_ui5-v1-19-1-input-icons-count: 0;"
+    tokenizer-available=""
     type="Text"
     ui5-multi-input=""
     value-state="None"
@@ -164,7 +167,8 @@ exports[`Renders CustomValueProp story 1`] = `
   <ui5-multi-input
     initialsuggestions="[object Object],[object Object],[object Object]"
     show-suggestions="true"
-    style="width: 50%;"
+    style="width: 50%; --_ui5-v1-19-1-input-icons-count: 0;"
+    tokenizer-available=""
     type="Text"
     ui5-multi-input=""
     value-state="None"
@@ -217,7 +221,8 @@ exports[`Renders Prefilled story 1`] = `
   <ui5-multi-input
     initialsuggestions="[object Object],[object Object],[object Object]"
     show-suggestions="true"
-    style="width: 50%;"
+    style="width: 50%; --_ui5-v1-19-1-input-icons-count: 0;"
+    tokenizer-available=""
     type="Text"
     ui5-multi-input=""
     value-state="None"
@@ -269,7 +274,7 @@ exports[`Renders RenderSuggestion story 1`] = `
 <div>
   <ui5-multi-input
     show-suggestions="true"
-    style="width: 50%;"
+    style="width: 50%; --_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-multi-input=""
     value-state="None"
@@ -282,7 +287,8 @@ exports[`Renders RenderValue story 1`] = `
   <ui5-multi-input
     initialsuggestions="[object Object],[object Object],[object Object]"
     show-suggestions="true"
-    style="width: 50%;"
+    style="width: 50%; --_ui5-v1-19-1-input-icons-count: 0;"
+    tokenizer-available=""
     type="Text"
     ui5-multi-input=""
     value-state="None"
@@ -334,7 +340,7 @@ exports[`Renders Standard story 1`] = `
 <div>
   <ui5-multi-input
     show-suggestions="true"
-    style="width: 50%;"
+    style="width: 50%; --_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-multi-input=""
     value-state="None"

@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormStatus, FormStatusProps } from "./FormStatus";
@@ -9,7 +9,7 @@ interface FormData {
   text?: string;
 }
 
-const Template: Story<FormControllerProps<FormData> & FormStatusProps> = (
+const Template: StoryFn<FormControllerProps<FormData> & FormStatusProps> = (
   args
 ) => {
   const { initialValues, onSubmit } = args;
@@ -29,7 +29,7 @@ const Template: Story<FormControllerProps<FormData> & FormStatusProps> = (
 export const Standard = Template.bind({});
 Standard.args = {
   onSubmit: async (...args) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     action("submit")(...args);
   },
   render: (state) => (

@@ -4,6 +4,7 @@ exports[`Renders CustomLabelFunction story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value="ISO code: BG => Bulgaria"
@@ -24,6 +25,7 @@ exports[`Renders CustomLabelProp story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value="Bülgäria"
@@ -44,6 +46,7 @@ exports[`Renders CustomValueFunction story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value="BG"
@@ -64,6 +67,7 @@ exports[`Renders CustomValueProp story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value="BG"
@@ -84,6 +88,7 @@ exports[`Renders MinCharacters story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value=""
@@ -96,6 +101,7 @@ exports[`Renders Prefilled story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value="Bulgaria"
@@ -116,6 +122,7 @@ exports[`Renders PrefilledWithValueOnly story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value="BG"
@@ -128,6 +135,7 @@ exports[`Renders RenderSuggestion story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value=""
@@ -140,6 +148,7 @@ exports[`Renders Standard story 1`] = `
 <div>
   <ui5-input
     show-suggestions="true"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
     type="Text"
     ui5-input=""
     value=""

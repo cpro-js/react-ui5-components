@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-icons/dist/search.js";
 
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useCallback } from "react";
 
 import { Button } from "../component/Button";
@@ -14,7 +14,7 @@ interface FormData {
   value2: string;
 }
 
-const TemplateFormActions: Story<UseFormControllerProps<FormData>> = (
+const TemplateFormActions: StoryFn<UseFormControllerProps<FormData>> = (
   props
 ) => {
   const { onSubmit, initialValues } = props;

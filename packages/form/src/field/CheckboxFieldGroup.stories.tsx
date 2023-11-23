@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { CheckboxField } from "./CheckboxField";
@@ -12,25 +12,26 @@ interface FormData {
   value?: Array<string>;
 }
 
-const Template: Story<FormControllerProps<FormData> & CheckboxFieldGroupProps> =
-  (args) => {
-    const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<
+  FormControllerProps<FormData> & CheckboxFieldGroupProps
+> = (args) => {
+  const { initialValues, onSubmit, ...props } = args;
 
-    const { submittedValues, handleSubmit } = useFormViewer({
-      onSubmit: onSubmit,
-    });
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
 
-    return (
-      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <CheckboxFieldGroup {...props} name="value">
-          <CheckboxField value="cake" text={"Cake"} />
-          <CheckboxField value="waffles" text={"Waffles"} />
-          <CheckboxField value="burger" text={"Burger"} />
-        </CheckboxFieldGroup>
-        <FormViewer submittedValues={submittedValues} />
-      </FormController>
-    );
-  };
+  return (
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <CheckboxFieldGroup {...props} name="value">
+        <CheckboxField value="cake" text={"Cake"} />
+        <CheckboxField value="waffles" text={"Waffles"} />
+        <CheckboxField value="burger" text={"Burger"} />
+      </CheckboxFieldGroup>
+      <FormViewer submittedValues={submittedValues} />
+    </FormController>
+  );
+};
 
 export const Empty = Template.bind({});
 Empty.args = {};

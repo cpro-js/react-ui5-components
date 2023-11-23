@@ -1,11 +1,11 @@
 import "@ui5/webcomponents-icons/dist/value-help.js";
 
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { Icon } from "@ui5/webcomponents-react";
 
 import { TextInput, TextInputProps } from "./TextInput";
 
-const Template: Story<TextInputProps> = (args) => {
+const Template: StoryFn<TextInputProps> = (args) => {
   return <TextInput {...args} />;
 };
 
@@ -24,4 +24,12 @@ WithIcon.args = {
 export default {
   title: "Form/Component/TextInput",
   component: TextInput,
+  argTypes: {
+    onKeyPress: {
+      action: "onKeyPress",
+    },
+    onChange: {
+      action: "onChange",
+    },
+  },
 };

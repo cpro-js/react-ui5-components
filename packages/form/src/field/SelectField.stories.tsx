@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import { SelectItem } from "../component/Select";
@@ -24,7 +24,7 @@ interface FormData {
   item?: string | number;
 }
 
-const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
+const Template: StoryFn<FormControllerProps<FormData> & SelectFieldProps> = (
   args
 ) => {
   const { initialValues, onSubmit, ...props } = args;
@@ -42,22 +42,20 @@ const Template: Story<FormControllerProps<FormData> & SelectFieldProps> = (
   );
 };
 
-const I18nTemplate: Story<FormControllerProps<FormData> & SelectFieldProps> = (
-  args,
-  context
-) => {
-  return (
-    <FormI18nProvider
-      getValidationErrorMessage={({ name }, error) => {
-        return `Field '${name}' has Error '${
-          error.type
-        }'. Original error message: ${error.message || "---"}`;
-      }}
-    >
-      {Template(args, context)}
-    </FormI18nProvider>
-  );
-};
+const I18nTemplate: StoryFn<FormControllerProps<FormData> & SelectFieldProps> =
+  (args, context) => {
+    return (
+      <FormI18nProvider
+        getValidationErrorMessage={({ name }, error) => {
+          return `Field '${name}' has Error '${
+            error.type
+          }'. Original error message: ${error.message || "---"}`;
+        }}
+      >
+        {Template(args, context)}
+      </FormI18nProvider>
+    );
+  };
 
 export const Empty = Template.bind({});
 Empty.args = {};
@@ -101,26 +99,35 @@ ValidationTranslationRequired.args = {
   ...ValidationRequired.args,
 };
 
-const TemplateAlt: Story<
-  FormControllerProps<FormData> & SelectFieldProps<SelectItemAlt>
-> = (args, context) => {
+const TemplateAlt: StoryFn<
+  FormControllerProps<FormData> & SelectFieldProps<SelectItemAlt, string>
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
+
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldElement>();
+
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <SelectField<SelectItemAlt> {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <SelectField<SelectItemAlt, string>
+        {...props}
+        ref={fieldRef}
+        name="item"
+      />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };
 
-export const WithItemLabel = TemplateAlt.bind({});
-WithItemLabel.args = { ...Standard.args, itemLabel: "alt" };
-
-export const WithItemValue = TemplateAlt.bind({});
-WithItemValue.args = { ...Standard.args, itemValue: "alt" };
+export const CustomItemModel = TemplateAlt.bind({});
+CustomItemModel.args = {
+  ...Standard.args,
+  items,
+  itemLabel: "alt",
+  itemValue: "label",
+};
 
 export default {
   title: "Form/Field/SelectField",

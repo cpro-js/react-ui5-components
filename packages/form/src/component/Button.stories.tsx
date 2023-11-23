@@ -1,9 +1,9 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { Button, ButtonProps } from "./Button";
 
-const Template: Story<{ buttons: Array<ButtonProps> }> = ({ buttons }) => {
+const Template: StoryFn<{ buttons: Array<ButtonProps> }> = ({ buttons }) => {
   return (
     <form
       onSubmit={(e) => {
@@ -36,7 +36,7 @@ ParentForm.args = {
   ],
 };
 
-const TemplateExternalForm: Story<{ buttons: Array<ButtonProps> }> = ({
+const TemplateExternalForm: StoryFn<{ buttons: Array<ButtonProps> }> = ({
   buttons,
 }) => {
   return (

@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
@@ -14,7 +14,7 @@ interface FormDataBoolean {
   value?: boolean;
 }
 
-const createTemplate = function <T>(): Story<
+const createTemplate = function <T>(): StoryFn<
   FormControllerProps<T> & CheckboxFieldProps
 > {
   return (args) => {
@@ -23,7 +23,7 @@ const createTemplate = function <T>(): Story<
     const { submittedValues, handleSubmit } = useFormViewer<T>({
       onSubmit: onSubmit,
     });
-    const fieldRef = useRef<FormFieldElement>();
+    const fieldRef = useRef<FormFieldElement>(null);
 
     return (
       <FormController {...{ initialValues, onSubmit: handleSubmit }}>

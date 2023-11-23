@@ -117,7 +117,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   };
 
-  search = debounce((searchTerm: string, hasMinChars: boolean) => {
+  private search = debounce((searchTerm: string, hasMinChars: boolean) => {
     const { selectedItems } = this.state;
     const { onSearch } = this.props;
 
@@ -150,9 +150,9 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   }, DEBOUNCE_RATE);
 
-  onInput = (event: Ui5CustomEvent<MultiInputDomRef>) => {
+  private onInput = (event: Ui5CustomEvent<MultiInputDomRef>) => {
     const { minCharsForSearch } = this.props;
-    const currentValue = (event.currentTarget as MultiInputPropTypes).value;
+    const currentValue = event.target.value;
     this.searchTerm = currentValue ? currentValue.trim() : "";
     const hasMinChars = this.searchTerm.length >= (minCharsForSearch || 1);
 
@@ -164,7 +164,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     this.search(this.searchTerm, hasMinChars);
   };
 
-  onSelect = (
+  private onSelect = (
     event: Ui5CustomEvent<MultiInputDomRef, { item: HTMLElement }>
   ) => {
     const { onAdd, onChange, onSelectionChange } = this.props;
@@ -199,11 +199,11 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     });
   };
 
-  onBlur = (event: FocusEvent<HTMLInputElement>) => {
+  private onBlur = (event: FocusEvent<HTMLInputElement>) => {
     event.target.value = "";
   };
 
-  findItemFromSuggestions = (value?: string) => {
+  private findItemFromSuggestions = (value?: string) => {
     if (value) {
       return this.state.suggestions.find(
         (suggestion) => this.retrieveItemValue(suggestion) === value
@@ -211,7 +211,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   };
 
-  onDelete = (event: TokenDeleteEvent) => {
+  private onDelete = (event: TokenDeleteEvent) => {
     const { onRemove, onChange, onSelectionChange } = this.props;
     const { values, selectedItems } = this.state;
     const id = event.detail.token.dataset.id;
@@ -238,7 +238,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     this.setState({ values: newValues, selectedItems: newItems });
   };
 
-  onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  private onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     const multiInput = event.currentTarget;
 
     const val = multiInput.value;
@@ -286,7 +286,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   };
 
-  onPaste = async (event: ClipboardEvent<HTMLElement>) => {
+  private onPaste = async (event: ClipboardEvent<HTMLElement>) => {
     const { onAdd, onChange, onSelectionChange } = this.props;
     const textInput = event.clipboardData.getData("text/plain");
     const texts = handlePastedText(textInput);
@@ -347,7 +347,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   };
 
-  retrieveItemLabel = (value: T) => {
+  private retrieveItemLabel = (value: T) => {
     const { itemLabel } = this.props;
     if (itemLabel) {
       if (typeof itemLabel === "string") {
@@ -362,7 +362,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     return value[DEFAULT_LABEL_PROP] || "---";
   };
 
-  retrieveItemValue = (value: T) => {
+  private retrieveItemValue = (value: T) => {
     const { itemValue } = this.props;
 
     if (itemValue) {
@@ -378,7 +378,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     return value[DEFAULT_VALUE_PROP];
   };
 
-  renderTokens = () => {
+  private renderTokens = () => {
     const { renderValue } = this.props;
     const { values, selectedItems } = this.state;
     const rendered = values.map((selected) => {
@@ -409,7 +409,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     return <>{rendered}</>;
   };
 
-  renderSuggestions = () => {
+  private renderSuggestions = () => {
     const { suggestionProps } = this.props;
     const { suggestions } = this.state;
 

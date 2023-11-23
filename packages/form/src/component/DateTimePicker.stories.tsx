@@ -1,11 +1,11 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
 import { FormAdapter } from "../form/FormAdapter";
 import { DateTimePicker, DateTimePickerProps } from "./DateTimePicker";
 
-const Template: Story<DateTimePickerProps> = (args) => {
+const Template: StoryFn<DateTimePickerProps> = (args) => {
   return <DateTimePicker {...args} />;
 };
 
@@ -28,7 +28,7 @@ MinDateToday.args = { ...Standard.args, minDate: new Date() };
 export const MaxDateToday = Template.bind({});
 MaxDateToday.args = { ...Standard.args, maxDate: new Date() };
 
-const ISODateTimeTemplate: Story<DateTimePickerProps> = (args) => {
+const ISODateTimeTemplate: StoryFn<DateTimePickerProps> = (args) => {
   return (
     <FormAdapter dateTime={ISODateTimeAdapter}>
       <DateTimePicker {...args} />

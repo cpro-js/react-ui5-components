@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
@@ -14,7 +14,7 @@ interface FormData {
   date?: string;
 }
 
-const Template: Story<
+const Template: StoryFn<
   FormControllerProps<FormData> & DateTimePickerFieldProps
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
@@ -22,7 +22,7 @@ const Template: Story<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>();
+  const fieldRef = useRef<FormFieldElement>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -32,7 +32,7 @@ const Template: Story<
   );
 };
 
-const I18nTemplate: Story<
+const I18nTemplate: StoryFn<
   FormControllerProps<FormData> & DateTimePickerFieldProps
 > = (args, context) => {
   return (

@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 
 import { TextInputField } from "../field/TextInputField";
 import { FormController, FormControllerProps } from "./FormController";
@@ -9,7 +9,7 @@ interface FormData {
   text?: string;
 }
 
-const Template: Story<
+const Template: StoryFn<
   FormControllerProps<FormData> & FormListenerProps<FormData>
 > = (args) => {
   const { initialValues, onSubmit } = args;

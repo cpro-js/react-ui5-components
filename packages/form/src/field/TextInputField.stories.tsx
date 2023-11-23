@@ -1,8 +1,6 @@
-import { Story } from "@storybook/react";
-import { Title, Toolbar } from "@ui5/webcomponents-react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
-import { Button } from "../component/Button";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
@@ -13,7 +11,7 @@ interface FormData {
   text?: string;
 }
 
-const Template: Story<FormControllerProps<FormData> & TextInputFieldProps> = (
+const Template: StoryFn<FormControllerProps<FormData> & TextInputFieldProps> = (
   args
 ) => {
   const { initialValues, onSubmit, ...props } = args;
@@ -21,7 +19,7 @@ const Template: Story<FormControllerProps<FormData> & TextInputFieldProps> = (
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>();
+  const fieldRef = useRef<FormFieldElement>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -31,20 +29,21 @@ const Template: Story<FormControllerProps<FormData> & TextInputFieldProps> = (
   );
 };
 
-const I18nTemplate: Story<FormControllerProps<FormData> & TextInputFieldProps> =
-  (args, context) => {
-    return (
-      <FormI18nProvider
-        getValidationErrorMessage={({ name }, error) => {
-          return `Field '${name}' has Error '${
-            error.type
-          }'. Original error message: ${error.message || "---"}`;
-        }}
-      >
-        {Template(args, context)}
-      </FormI18nProvider>
-    );
-  };
+const I18nTemplate: StoryFn<
+  FormControllerProps<FormData> & TextInputFieldProps
+> = (args, context) => {
+  return (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) => {
+        return `Field '${name}' has Error '${
+          error.type
+        }'. Original error message: ${error.message || "---"}`;
+      }}
+    >
+      {Template(args, context)}
+    </FormI18nProvider>
+  );
+};
 
 export const Empty = Template.bind({});
 Empty.args = {};

@@ -14,12 +14,12 @@ export interface NumberInputProps
     NumberDisplayConfig,
     NumberInputConfig {}
 
-export const NumberInput: FC<NumberInputProps> = forwardRef<
-  InputDomRef,
-  NumberInputProps
->((props, forwardedRef) => {
-  // extract currency specific fields from context
-  const { currency, showCurrency, ...contextProps } = useContext(NumberContext);
+export const NumberInput = forwardRef<InputDomRef, NumberInputProps>(
+  (props, forwardedRef) => {
+    // extract currency specific fields from context
+    const { currency, showCurrency, ...contextProps } =
+      useContext(NumberContext);
 
-  return <BaseNumberInput {...contextProps} {...props} ref={forwardedRef} />;
-});
+    return <BaseNumberInput {...contextProps} {...props} ref={forwardedRef} />;
+  }
+);

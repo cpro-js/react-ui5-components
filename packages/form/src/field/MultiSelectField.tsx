@@ -20,8 +20,11 @@ import { useI18nValidationError } from "../i18n/FormI18n";
 import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
 
-export type MultiSelectFieldProps<T = MultiSelectItem> = Omit<
-  MultiSelectProps<T>,
+export type MultiSelectFieldProps<
+  Item = MultiSelectItem,
+  Value = string | number
+> = Omit<
+  MultiSelectProps<Item, Value>,
   "name" | "value" | "onSelectionChange" | "onBlur"
 > &
   Pick<FormFieldValidation, "required"> & {
@@ -91,6 +94,8 @@ export const MultiSelectField = forwardRef<
       required={required}
     />
   );
-}) as <T = MultiSelectItem>(
-  p: MultiSelectFieldProps<T> & { ref?: Ref<FormFieldElement | undefined> }
+}) as <Item = MultiSelectItem, Value = string | number>(
+  p: MultiSelectFieldProps<Item, Value> & {
+    ref?: Ref<FormFieldElement | undefined>;
+  }
 ) => ReactElement;

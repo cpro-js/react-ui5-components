@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { ValueState } from "@ui5/webcomponents-react";
 
 import { COUNTRIES, SEARCH_COUNTRIES } from "./AutoComplete-storyData";
@@ -10,7 +10,7 @@ import {
 } from "./CreatableAutoComplete";
 import { DefaultAutoCompleteOption } from "./internal/CoreAutocomplete";
 
-const Template: Story<CreatableAutoCompleteProps<DefaultAutoCompleteOption>> =
+const Template: StoryFn<CreatableAutoCompleteProps<DefaultAutoCompleteOption>> =
   ({ ...props }) => {
     return <CreatableAutoComplete {...props} />;
   };

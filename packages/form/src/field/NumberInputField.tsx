@@ -1,6 +1,6 @@
 import "../form/formSupport";
 
-import { ValueState } from "@ui5/webcomponents-react";
+import { InputDomRef, ValueState } from "@ui5/webcomponents-react";
 import {
   FC,
   forwardRef,
@@ -25,7 +25,7 @@ export type NumberInputFieldProps = Omit<
     name: string;
   };
 
-export const NumberInputField: FC<NumberInputFieldProps> = forwardRef<
+export const NumberInputField = forwardRef<
   FormFieldElement,
   CurrencyInputFieldProps
 >(({ name, required, min, max, ...props }, forwardedRef) => {
@@ -44,7 +44,7 @@ export const NumberInputField: FC<NumberInputFieldProps> = forwardRef<
   const { clearErrors } = useFormContext();
 
   // store input ref for intenral usage
-  const internalRef = useRef<HTMLInputElement>();
+  const internalRef = useRef<InputDomRef>(null);
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {

@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormValues, FormValuesProps } from "./FormValues";
@@ -9,7 +9,7 @@ interface FormData {
   text?: string;
 }
 
-const Template: Story<
+const Template: StoryFn<
   FormControllerProps<FormData> & FormValuesProps<FormData>
 > = (args) => {
   const { initialValues, onSubmit } = args;
@@ -31,12 +31,21 @@ Standard.args = {
   onSubmit: async (...args) => {
     console.log("submit", ...args);
     action("submit")(...args);
+  },
+  render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
+};
+
+export const UpdateValuesOnSubmit = Standard.bind({});
+UpdateValuesOnSubmit.args = {
+  ...Standard.args,
+  onSubmit: async (...args) => {
+    console.log("submit", ...args);
+    action("submit")(...args);
 
     const [values, actions] = args;
 
     actions.setValues([{ name: "text", value: "1" }]);
   },
-  render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
 };
 
 export default {

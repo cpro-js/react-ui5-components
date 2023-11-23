@@ -37,84 +37,83 @@ export type CheckboxFieldProps = Omit<
     boolean?: boolean;
   };
 
-export const CheckboxField: FC<CheckboxFieldProps> = forwardRef<
-  FormFieldElement,
-  CheckboxFieldProps
->(({ name, value = "on", boolean, required, ...props }, forwardedRef) => {
-  const { setValue, getValues } = useFormContext<any>(); // retrieve all hook methods
-  const checkboxGroupProps = useContext(CheckboxFieldGroupContext);
-  const isMultiValue = checkboxGroupProps != null;
-  const checkboxName =
-    name != null
-      ? name
-      : checkboxGroupProps?.name != null
-      ? checkboxGroupProps.name
-      : MISSING_NAME;
-  const checkboxRequired =
-    required != null ? required : checkboxGroupProps?.required;
+export const CheckboxField = forwardRef<FormFieldElement, CheckboxFieldProps>(
+  ({ name, value = "on", boolean, required, ...props }, forwardedRef) => {
+    const { setValue, getValues } = useFormContext<any>(); // retrieve all hook methods
+    const checkboxGroupProps = useContext(CheckboxFieldGroupContext);
+    const isMultiValue = checkboxGroupProps != null;
+    const checkboxName =
+      name != null
+        ? name
+        : checkboxGroupProps?.name != null
+        ? checkboxGroupProps.name
+        : MISSING_NAME;
+    const checkboxRequired =
+      required != null ? required : checkboxGroupProps?.required;
 
-  const rules: Partial<FormFieldValidation> = useMemo(
-    () => ({
-      required: checkboxRequired,
-    }),
-    [checkboxRequired]
-  );
+    const rules: Partial<FormFieldValidation> = useMemo(
+      () => ({
+        required: checkboxRequired,
+      }),
+      [checkboxRequired]
+    );
 
-  const { field, fieldState } = useController({
-    name: checkboxName,
-    rules,
-  });
+    const { field, fieldState } = useController({
+      name: checkboxName,
+      rules,
+    });
 
-  // store input ref for intenral usage
-  const internalRef = useRef<CheckBoxDomRef>();
-  // forward outer ref to custom element
-  useImperativeHandle(forwardedRef, () => ({
-    focus() {
-      if (internalRef.current != null) {
-        internalRef.current.focus();
-      }
-    },
-  }));
-  // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => internalRef.current);
-
-  const checked = isMultiValue
-    ? !Array.isArray(field.value)
-      ? false
-      : (field.value as Array<string>).indexOf(value) !== -1
-    : boolean
-    ? field.value
-    : field.value === value;
-
-  return (
-    <Checkbox
-      {...checkboxGroupProps}
-      {...props}
-      ref={internalRef}
-      name={field.name}
-      value={value}
-      checked={checked}
-      onChange={(event: ChangeEvent<HTMLInputElement>) => {
-        let updatedValue: any = event.target.checked
-          ? event.target.value
-          : undefined;
-        if (isMultiValue) {
-          const actualValues = getValues(field.name);
-          updatedValue = (Array.isArray(actualValues) ? actualValues : [])
-            .filter((v) => event.target.value !== v)
-            .concat(event.target.checked ? [event.target.value] : []);
-        } else if (boolean) {
-          updatedValue = event.target.checked;
+    // store input ref for intenral usage
+    const internalRef = useRef<CheckBoxDomRef>(null);
+    // forward outer ref to custom element
+    useImperativeHandle(forwardedRef, () => ({
+      focus() {
+        if (internalRef.current != null) {
+          internalRef.current.focus();
         }
-        // call field onChange listener to update values and trigger validations if necessary
-        field.onChange(updatedValue);
-        //  ensure that the value is is internally set correctly (onChange does something weird while persisting values)
-        setValue(field.name, updatedValue);
-      }}
-      valueState={
-        hasError(fieldState.error) ? ValueState.Error : ValueState.None
-      }
-      onBlur={field.onBlur}
-    />
-  );
-});
+      },
+    }));
+    // forward field ref to stored internal input ref
+    useImperativeHandle(field.ref, () => internalRef.current);
+
+    const checked = isMultiValue
+      ? !Array.isArray(field.value)
+        ? false
+        : (field.value as Array<string>).indexOf(value) !== -1
+      : boolean
+      ? field.value
+      : field.value === value;
+
+    return (
+      <Checkbox
+        {...checkboxGroupProps}
+        {...props}
+        ref={internalRef}
+        name={field.name}
+        value={value}
+        checked={checked}
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          let updatedValue: any = event.target.checked
+            ? event.target.value
+            : undefined;
+          if (isMultiValue) {
+            const actualValues = getValues(field.name);
+            updatedValue = (Array.isArray(actualValues) ? actualValues : [])
+              .filter((v) => event.target.value !== v)
+              .concat(event.target.checked ? [event.target.value] : []);
+          } else if (boolean) {
+            updatedValue = event.target.checked;
+          }
+          // call field onChange listener to update values and trigger validations if necessary
+          field.onChange(updatedValue);
+          //  ensure that the value is is internally set correctly (onChange does something weird while persisting values)
+          setValue(field.name, updatedValue);
+        }}
+        valueState={
+          hasError(fieldState.error) ? ValueState.Error : ValueState.None
+        }
+        onBlur={field.onBlur}
+      />
+    );
+  }
+);

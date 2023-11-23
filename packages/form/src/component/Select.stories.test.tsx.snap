@@ -1,9 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Renders CustomItemModel story 1`] = `
+<div>
+  <ui5-combobox
+    filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
+    ui5-combobox=""
+    value=""
+    value-state="None"
+  >
+    <ui5-cb-item
+      data-index="0"
+      text="Test 1 Number Alt"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      data-index="1"
+      text="Test 1 String Alt"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      data-index="2"
+      text="Test 2 Alt"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      data-index="3"
+      text="Test 3 Alt"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      data-index="4"
+      text="Test 4 Alt"
+      ui5-cb-item=""
+    />
+  </ui5-combobox>
+</div>
+`;
+
 exports[`Renders Empty story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value=""
     value-state="None"
@@ -15,6 +54,7 @@ exports[`Renders Standard story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value=""
     value-state="None"
@@ -52,6 +92,7 @@ exports[`Renders WithEmptyOption story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value=""
     value-state="None"
@@ -89,84 +130,11 @@ exports[`Renders WithEmptyOption story 1`] = `
 </div>
 `;
 
-exports[`Renders WithItemLabel story 1`] = `
-<div>
-  <ui5-combobox
-    filter="StartsWithPerTerm"
-    ui5-combobox=""
-    value=""
-    value-state="None"
-  >
-    <ui5-cb-item
-      data-index="0"
-      text="Test 1 Number Alt"
-      ui5-cb-item=""
-    />
-    <ui5-cb-item
-      data-index="1"
-      text="Test 1 String Alt"
-      ui5-cb-item=""
-    />
-    <ui5-cb-item
-      data-index="2"
-      text="Test 2 Alt"
-      ui5-cb-item=""
-    />
-    <ui5-cb-item
-      data-index="3"
-      text="Test 3 Alt"
-      ui5-cb-item=""
-    />
-    <ui5-cb-item
-      data-index="4"
-      text="Test 4 Alt"
-      ui5-cb-item=""
-    />
-  </ui5-combobox>
-</div>
-`;
-
-exports[`Renders WithItemValue story 1`] = `
-<div>
-  <ui5-combobox
-    filter="StartsWithPerTerm"
-    ui5-combobox=""
-    value=""
-    value-state="None"
-  >
-    <ui5-cb-item
-      data-index="0"
-      text="Test 1 Number"
-      ui5-cb-item=""
-    />
-    <ui5-cb-item
-      data-index="1"
-      text="Test 1 String"
-      ui5-cb-item=""
-    />
-    <ui5-cb-item
-      data-index="2"
-      text="Test 2"
-      ui5-cb-item=""
-    />
-    <ui5-cb-item
-      data-index="3"
-      text="Test 3"
-      ui5-cb-item=""
-    />
-    <ui5-cb-item
-      data-index="4"
-      text="Test 4"
-      ui5-cb-item=""
-    />
-  </ui5-combobox>
-</div>
-`;
-
 exports[`Renders WithValue story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value="Test 2"
     value-state="None"
@@ -183,6 +151,7 @@ exports[`Renders WithValue story 1`] = `
     />
     <ui5-cb-item
       data-index="2"
+      selected=""
       text="Test 2"
       ui5-cb-item=""
     />
@@ -204,12 +173,14 @@ exports[`Renders WithValueNumber story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value="Test 1 Number"
     value-state="None"
   >
     <ui5-cb-item
       data-index="0"
+      selected=""
       text="Test 1 Number"
       ui5-cb-item=""
     />
@@ -241,6 +212,7 @@ exports[`Renders WithValueString story 1`] = `
 <div>
   <ui5-combobox
     filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
     ui5-combobox=""
     value="Test 1 String"
     value-state="None"
@@ -252,6 +224,7 @@ exports[`Renders WithValueString story 1`] = `
     />
     <ui5-cb-item
       data-index="1"
+      selected=""
       text="Test 1 String"
       ui5-cb-item=""
     />

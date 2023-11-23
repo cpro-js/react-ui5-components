@@ -7,7 +7,7 @@ import { FC, MouseEvent, useCallback } from "react";
 
 import { triggerReset, triggerSubmit } from "./util";
 
-export interface ButtonProps extends Omit<ButtonPropTypes, "submits"> {
+export interface ButtonProps extends Omit<ButtonPropTypes, "submits" | "type"> {
   form?: string;
   type?: "button" | "submit" | "reset";
 }

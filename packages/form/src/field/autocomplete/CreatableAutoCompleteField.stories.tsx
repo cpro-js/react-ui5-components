@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import {
@@ -19,7 +19,7 @@ interface FormData {
   item?: string | number;
 }
 
-const Template: Story<
+const Template: StoryFn<
   FormControllerProps<FormData> &
     CreatableAutoCompleteFieldProps<DefaultAutoCompleteOption>
 > = (args, context) => {
@@ -38,7 +38,7 @@ const Template: Story<
   );
 };
 
-const I18nTemplate: Story<
+const I18nTemplate: StoryFn<
   FormControllerProps<FormData> &
     CreatableAutoCompleteFieldProps<DefaultAutoCompleteOption>
 > = (args, context) => {

@@ -1,9 +1,9 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { COUNTRIES } from "./AutoComplete-storyData";
 import { CreatableSelect, CreatableSelectProps } from "./CreatableSelect";
 
-const Template: Story<CreatableSelectProps> = ({ ...props }) => {
+const Template: StoryFn<CreatableSelectProps> = ({ ...props }) => {
   return <CreatableSelect {...props} />;
 };
 

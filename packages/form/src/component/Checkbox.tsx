@@ -6,8 +6,6 @@ import {
 } from "@ui5/webcomponents-react";
 import {
   ChangeEvent,
-  FC,
-  RefObject,
   forwardRef,
   useCallback,
   useEffect,
@@ -30,10 +28,7 @@ export interface CheckboxProps extends Omit<CheckBoxPropTypes, "onChange"> {
 /**
  * Checkbox wrapper to transform the UI5 checkbox into a HTML compliant checkbox
  */
-export const Checkbox: FC<CheckboxProps> = forwardRef<
-  CheckBoxDomRef,
-  CheckboxProps
->(
+export const Checkbox = forwardRef<CheckBoxDomRef, CheckboxProps>(
   (
     { name, value = "on", checked, disabled, onChange, ...props },
     forwardedRef

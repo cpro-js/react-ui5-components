@@ -5,9 +5,11 @@ import {
   MultiComboBoxPropTypes,
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
+import { MultiComboBoxSelectionChangeEventDetail } from "@ui5/webcomponents/dist/MultiComboBox";
 import {
   ClipboardEvent,
   KeyboardEvent,
+  MutableRefObject,
   ReactElement,
   Ref,
   forwardRef,
@@ -26,8 +28,10 @@ export interface MultiSelectItem {
   label: string;
 }
 
-export interface MultiSelectProps<T = MultiSelectItem>
-  extends Omit<
+export interface MultiSelectProps<
+  Item = MultiSelectItem,
+  Value = string | number
+> extends Omit<
     MultiComboBoxPropTypes,
     | "name"
     | "value"
@@ -37,18 +41,16 @@ export interface MultiSelectProps<T = MultiSelectItem>
     | "onChange"
   > {
   name?: string;
-  value?: Array<string | number>;
-  items?: Array<MultiSelectItem>;
-  itemValue?: keyof T | ((value: T) => string);
-  itemLabel?: keyof T | ((value: T) => string);
+  value?: Array<Value>;
+  items?: Array<Item>;
+  itemValue?: keyof Item | ((value: Item) => string);
+  itemLabel?: keyof Item | ((value: Item) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
       MultiComboBoxDomRef,
-      {
-        items: Array<HTMLElement>;
-      }
+      MultiComboBoxSelectionChangeEventDetail
     >,
-    value: Array<string | number>
+    value: Array<Value>
   ) => void;
 }
 
@@ -70,8 +72,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       ...otherProps
     } = props;
 
-    const internalRef = useRef<MultiComboBoxDomRef | null>(null);
-    // @ts-ignore
+    const internalRef =
+      useRef<MultiComboBoxDomRef>() as MutableRefObject<MultiComboBoxDomRef>;
     useImperativeHandle(forwardedRef, () => internalRef.current);
 
     const [selectedValue, setSelectedValue] = useState<typeof value>(value);
@@ -111,7 +113,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       (
         event: Ui5CustomEvent<
           MultiComboBoxDomRef,
-          { items: Array<HTMLElement> }
+          MultiComboBoxSelectionChangeEventDetail
         >
       ) => {
         if (onSelectionChange != null) {
@@ -167,7 +169,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
     );
 
     const onPaste = useCallback(
-      (event: ClipboardEvent<HTMLElement>) => {
+      (event: ClipboardEvent<MultiComboBoxDomRef>) => {
+        const el = event.currentTarget;
         const textInput = event.clipboardData.getData("text/plain");
         const texts = handlePastedText(textInput);
         const pickedTexts: Array<string> = [];
@@ -179,51 +182,66 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           if (!items?.length) {
             return;
           }
-          const selected = texts
-            .map((t) =>
-              items.find((item) => {
-                const result = t === String(item.value) || t === item.label;
-                if (result) {
-                  pickedTexts.push(t);
-                }
-                return result;
-              })
-            )
-            .filter((item): item is MultiSelectItem => !!item)
-            .map((item) => String(item.value))
-            .filter(
-              (itemValue) =>
-                !selectedValue || !selectedValue.includes(itemValue)
-            );
 
-          if (selected.length) {
-            const selectedValues = [
-              ...(selectedValue ? selectedValue : []),
-              ...selected,
-            ];
-            setSelectedValue(selectedValues);
-            if (onSelectionChange) {
-              onSelectionChange(
-                event as unknown as Ui5CustomEvent<
-                  MultiComboBoxDomRef,
-                  { items: Array<HTMLElement> }
-                >,
-                selectedValues
-              );
-            }
+          const results = texts
+            .map((t) => ({
+              text: t,
+              item: items.find(
+                (item, index) =>
+                  t === String(retrieveItemValue(item)) ||
+                  t === retrieveItemLabel(item)
+              ),
+            }))
+            .filter((res) => res.item != null)
+            .filter(
+              (res) =>
+                !selectedValue ||
+                !selectedValue.includes(
+                  retrieveItemValue(res.item as MultiSelectItem)
+                )
+            );
+          const pickedTexts = results.map((res) => res.text);
+          const newValuesToSelect = results.map((res) =>
+            retrieveItemValue(res.item as MultiSelectItem)
+          );
+
+          if (newValuesToSelect.length === 0) {
+            return;
           }
 
-          const filteredText = texts.filter((t) => !pickedTexts.includes(t));
-          setTimeout(
-            () =>
-              // @ts-ignore
-              (event.target.shadowRoot.activeElement.value =
-                filteredText.join(" ")),
-            50
+          const allValues = [
+            ...(selectedValue ? selectedValue : []),
+            ...newValuesToSelect,
+          ];
+          const domItems = allValues
+            .map((value) =>
+              items.findIndex((item) => value === retrieveItemValue(item))
+            )
+            .map((index) => (el as any).items[index])
+            .filter((index) => index != null);
+
+          el.fireEvent<MultiComboBoxSelectionChangeEventDetail>(
+            "selection-change",
+            {
+              items: domItems,
+            }
           );
+
+          const filteredText = texts.filter((t) => !pickedTexts.includes(t));
+          setTimeout(() => {
+            // @ts-ignore
+            el.shadowRoot.activeElement.value = filteredText.join(" ");
+            el.value = filteredText.join(" ");
+          }, 50);
         }
       },
-      [items, setSelectedValue, selectedValue]
+      [
+        items,
+        setSelectedValue,
+        selectedValue,
+        retrieveItemValue,
+        retrieveItemLabel,
+      ]
     );
 
     // NOTE: onChange is bound to input instead of items, that's why can't use it
@@ -231,12 +249,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       <>
         <MultiComboBox
           {...otherProps}
-          ref={forwardedRef}
-          onSelectionChange={
-            handleSelectionChange as (
-              event: Ui5CustomEvent<MultiComboBoxDomRef, { items: unknown[] }>
-            ) => void
-          }
+          ref={internalRef}
+          onSelectionChange={handleSelectionChange}
           onOpenChange={handleOpenChange}
           onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}
@@ -250,7 +264,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
               data-index={index}
               selected={
                 Array.isArray(selectedValue) &&
-                selectedValue.includes(item.value)
+                selectedValue.includes(retrieveItemValue(item))
               }
             />
           ))}
@@ -258,6 +272,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       </>
     );
   }
-) as <T = MultiSelectItem>(
-  p: MultiSelectProps<T> & { ref?: Ref<MultiComboBoxDomRef | undefined> }
+) as <Item = MultiSelectItem, Value = string | number>(
+  p: MultiSelectProps<Item, Value> & {
+    ref?: Ref<MultiComboBoxDomRef | undefined>;
+  }
 ) => ReactElement;

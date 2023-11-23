@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import {
   FlexBox,
   FlexBoxDirection,
@@ -47,7 +47,7 @@ interface ExtraData {
   initialCountriesSuggestions?: typeof COUNTRIES;
 }
 
-const Template: Story<FormControllerProps<FormData> & ExtraData> = (args) => {
+const Template: StoryFn<FormControllerProps<FormData> & ExtraData> = (args) => {
   const {
     initialValues,
     onSubmit,

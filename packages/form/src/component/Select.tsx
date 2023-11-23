@@ -15,25 +15,12 @@ import {
 
 import { triggerSubmitOnEnter } from "./util";
 
-const findLabel = (
-  items: Array<SelectItem>,
-  value?: string | number
-): string => {
-  if (value) {
-    const itemByIndex = items.find((item) => item.value === value);
-    if (itemByIndex) {
-      return itemByIndex.label;
-    }
-  }
-  return "";
-};
-
 export interface SelectItem {
   value: string | number;
   label: string;
 }
 
-export interface SelectProps<T = SelectItem>
+export interface SelectProps<Item = SelectItem, Value = string | number>
   extends Omit<
     ComboBoxPropTypes,
     | "name"
@@ -44,11 +31,11 @@ export interface SelectProps<T = SelectItem>
     | "onChange"
   > {
   name?: string;
-  value?: string | number;
-  items?: Array<SelectItem>;
+  value?: Value;
+  items?: Array<Item>;
   addEmptyOption?: boolean;
-  itemValue?: keyof T | ((value: T) => string);
-  itemLabel?: keyof T | ((value: T) => string);
+  itemValue?: keyof Item | ((value: Item) => Value);
+  itemLabel?: keyof Item | ((value: Item) => string);
   onSelectionChange?: (
     event: Ui5CustomEvent<
       ComboBoxDomRef,
@@ -56,12 +43,9 @@ export interface SelectProps<T = SelectItem>
         item: HTMLElement;
       }
     >,
-    value?: string | number
+    value?: Value
   ) => void;
-  onChange?: (
-    event: Ui5CustomEvent<ComboBoxDomRef>,
-    value?: string | number
-  ) => void;
+  onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
 }
 
 const DEFAULT_LABEL_PROP = "label";
@@ -176,7 +160,12 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       [onKeyPress]
     );
 
-    const text = findLabel(items, value);
+    const selectedItem = items.find(
+      (item) => retrieveItemValue(item) === value
+    );
+    const text = String(
+      selectedItem != null ? retrieveItemLabel(selectedItem) ?? "" : ""
+    );
 
     return (
       <>
@@ -202,6 +191,6 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       </>
     );
   }
-) as <T = SelectItem>(
-  p: SelectProps<T> & { ref?: Ref<ComboBoxDomRef | undefined> }
+) as <Item = SelectItem, Value = string | number>(
+  p: SelectProps<Item, Value> & { ref?: Ref<ComboBoxDomRef | undefined> }
 ) => ReactElement;

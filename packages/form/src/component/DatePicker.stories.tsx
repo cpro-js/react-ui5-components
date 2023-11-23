@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { ThemeProvider } from "@ui5/webcomponents-react";
 
 import { ISO8601DateAdapter } from "../form/adapter/date/ISO8601DateAdapter";
@@ -8,7 +8,7 @@ import { FormAdapter } from "../form/FormAdapter";
 import { toISO8601DateString } from "../util/date";
 import { DatePicker, DatePickerProps } from "./DatePicker";
 
-const Template: Story<DatePickerProps> = (args) => {
+const Template: StoryFn<DatePickerProps> = (args) => {
   return (
     <ThemeProvider>
       <DatePicker {...args} />
@@ -39,7 +39,7 @@ MinDateToday.args = { ...Standard.args, minDate: new Date() };
 export const MaxDateToday = Template.bind({});
 MaxDateToday.args = { ...Standard.args, maxDate: new Date() };
 
-const ISO8601DateTemplate: Story<DatePickerProps> = (args) => {
+const ISO8601DateTemplate: StoryFn<DatePickerProps> = (args) => {
   return (
     <ThemeProvider>
       <FormAdapter date={ISO8601DateAdapter}>
@@ -90,7 +90,7 @@ ISO8601DateMaxDateToday.args = {
 };
 ISO8601DateMaxDateToday.argTypes = { ...ISO8601DateStandard.argTypes };
 
-const ISODateTimeTemplate: Story<DatePickerProps> = (args) => {
+const ISODateTimeTemplate: StoryFn<DatePickerProps> = (args) => {
   return (
     <FormAdapter date={ISODateTimeAdapter}>
       <DatePicker {...args} />

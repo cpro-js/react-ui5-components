@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { CurrencyInput, CurrencyInputProps } from "./CurrencyInput";
 
@@ -8,7 +8,7 @@ const meta: Meta = {
 };
 export default meta;
 
-const Template: Story<CurrencyInputProps> = (args) => {
+const Template: StoryFn<CurrencyInputProps> = (args) => {
   return <CurrencyInput {...args} />;
 };
 

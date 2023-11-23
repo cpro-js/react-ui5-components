@@ -1,7 +1,7 @@
 import "../form/formSupport";
 
 import { InputDomRef, ValueState } from "@ui5/webcomponents-react";
-import { FC, forwardRef, useImperativeHandle, useMemo, useRef } from "react";
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { useController } from "react-hook-form";
 
 import { TextInput, TextInputProps } from "../component/TextInput";
@@ -17,71 +17,70 @@ export type TextInputFieldProps = Omit<
     name: string;
   };
 
-export const TextInputField: FC<TextInputFieldProps> = forwardRef<
-  FormFieldElement,
-  TextInputFieldProps
->(({ name, required, minLength, maxLength, ...props }, forwardedRef) => {
-  const rules: Partial<FormFieldValidation> = useMemo(
-    () => ({
-      required,
-      minLength,
-      maxLength,
-    }),
-    [required, minLength, maxLength]
-  );
+export const TextInputField = forwardRef<FormFieldElement, TextInputFieldProps>(
+  ({ name, required, minLength, maxLength, ...props }, forwardedRef) => {
+    const rules: Partial<FormFieldValidation> = useMemo(
+      () => ({
+        required,
+        minLength,
+        maxLength,
+      }),
+      [required, minLength, maxLength]
+    );
 
-  const getValidationErrorMessage = useI18nValidationError(name, rules);
+    const getValidationErrorMessage = useI18nValidationError(name, rules);
 
-  const { field, fieldState } = useController({
-    name: name,
-    rules,
-  });
+    const { field, fieldState } = useController({
+      name: name,
+      rules,
+    });
 
-  // store input ref for intenral usage
-  const inputRef = useRef<InputDomRef>();
-  // forward outer ref to custom element
-  useImperativeHandle(forwardedRef, () => ({
-    focus() {
-      if (inputRef.current != null) {
-        inputRef.current.focus();
-      }
-    },
-  }));
-  // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => inputRef.current);
+    // store input ref for intenral usage
+    const inputRef = useRef<InputDomRef>(null);
+    // forward outer ref to custom element
+    useImperativeHandle(forwardedRef, () => ({
+      focus() {
+        if (inputRef.current != null) {
+          inputRef.current.focus();
+        }
+      },
+    }));
+    // forward field ref to stored internal input ref
+    useImperativeHandle(field.ref, () => inputRef.current);
 
-  // use empty string to reset value, undefined will be ignored by web component
-  const value = field.value === undefined ? "" : field.value;
+    // use empty string to reset value, undefined will be ignored by web component
+    const value = field.value === undefined ? "" : field.value;
 
-  // get error message (Note: undefined fallbacks to default message of ui5 component)
-  const errorMessage = hasError(fieldState.error)
-    ? getValidationErrorMessage(fieldState.error, field.value)
-    : undefined;
+    // get error message (Note: undefined fallbacks to default message of ui5 component)
+    const errorMessage = hasError(fieldState.error)
+      ? getValidationErrorMessage(fieldState.error, field.value)
+      : undefined;
 
-  return (
-    <TextInput
-      {...props}
-      ref={inputRef}
-      name={field.name}
-      value={value}
-      onChange={field.onChange}
-      onBlur={field.onBlur}
-      valueState={
-        hasError(fieldState.error) ? ValueState.Error : ValueState.None
-      }
-      valueStateMessage={
-        errorMessage != null && (
-          <div slot="valueStateMessage">{errorMessage}</div>
-        )
-      }
-      required={required}
-      maxlength={
-        maxLength != null
-          ? typeof maxLength === "number"
-            ? maxLength
-            : maxLength.value
-          : undefined
-      }
-    />
-  );
-});
+    return (
+      <TextInput
+        {...props}
+        ref={inputRef}
+        name={field.name}
+        value={value}
+        onChange={field.onChange}
+        onBlur={field.onBlur}
+        valueState={
+          hasError(fieldState.error) ? ValueState.Error : ValueState.None
+        }
+        valueStateMessage={
+          errorMessage != null && (
+            <div slot="valueStateMessage">{errorMessage}</div>
+          )
+        }
+        required={required}
+        maxlength={
+          maxLength != null
+            ? typeof maxLength === "number"
+              ? maxLength
+              : maxLength.value
+            : undefined
+        }
+      />
+    );
+  }
+);

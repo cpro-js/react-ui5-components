@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import {
@@ -16,24 +16,25 @@ interface FormData {
   items?: Array<string>;
 }
 
-const Template: Story<FormControllerProps<FormData> & MultiAutoCompleteProps> =
-  (args) => {
-    const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<
+  FormControllerProps<FormData> & MultiAutoCompleteProps
+> = (args) => {
+  const { initialValues, onSubmit, ...props } = args;
 
-    const { submittedValues, handleSubmit } = useFormViewer({
-      onSubmit: onSubmit,
-    });
-    const fieldRef = useRef<FormFieldElement>();
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldElement>();
 
-    return (
-      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <MultiAutoCompleteField {...props} ref={fieldRef} name={"items"} />
-        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-      </FormController>
-    );
-  };
+  return (
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <MultiAutoCompleteField {...props} ref={fieldRef} name={"items"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+    </FormController>
+  );
+};
 
-const I18nTemplate: Story<
+const I18nTemplate: StoryFn<
   FormControllerProps<FormData> & MultiAutoCompleteProps
 > = (args, context) => {
   return (

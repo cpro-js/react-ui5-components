@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
 import { MultiSelectItem } from "../component/MultiSelect";
@@ -6,6 +6,7 @@ import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
+import { SelectItemAlt } from "./SelectField.stories";
 import { FormFieldElement } from "./types";
 
 export interface MultiSelectItemAlt extends MultiSelectItem {
@@ -24,25 +25,24 @@ interface FormData {
   item?: Array<string | number>;
 }
 
-const Template: Story<FormControllerProps<FormData> & MultiSelectFieldProps> = (
-  args
-) => {
-  const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<FormControllerProps<FormData> & MultiSelectFieldProps> =
+  (args) => {
+    const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
-    onSubmit: onSubmit,
-  });
-  const fieldRef = useRef<FormFieldElement>();
+    const { submittedValues, handleSubmit } = useFormViewer({
+      onSubmit: onSubmit,
+    });
+    const fieldRef = useRef<FormFieldElement>();
 
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <MultiSelectField {...props} ref={fieldRef} name={"item"} />
-      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-    </FormController>
-  );
-};
+    return (
+      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+        <MultiSelectField {...props} ref={fieldRef} name={"item"} />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+      </FormController>
+    );
+  };
 
-const I18nTemplate: Story<
+const I18nTemplate: StoryFn<
   FormControllerProps<FormData> & MultiSelectFieldProps
 > = (args, context) => {
   return (
@@ -97,26 +97,36 @@ ValidationTranslationRequired.args = {
   ...ValidationRequired.args,
 };
 
-const TemplateAlt: Story<
-  FormControllerProps<FormData> & MultiSelectFieldProps<MultiSelectItemAlt>
-> = (args, context) => {
+const TemplateAlt: StoryFn<
+  FormControllerProps<FormData> &
+    MultiSelectFieldProps<MultiSelectItemAlt, string>
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
+
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldElement>();
+
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <MultiSelectField<MultiSelectItemAlt> {...props} name="item" />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <MultiSelectField<SelectItemAlt, string>
+        {...props}
+        ref={fieldRef}
+        name="item"
+      />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };
 
-export const WithItemLabel = TemplateAlt.bind({});
-WithItemLabel.args = { ...Standard.args, itemLabel: "alt" };
-
-export const WithItemValue = TemplateAlt.bind({});
-WithItemValue.args = { ...Standard.args, itemValue: "alt" };
+export const CustomItemModel = TemplateAlt.bind({});
+CustomItemModel.args = {
+  ...Standard.args,
+  items,
+  itemLabel: "alt",
+  itemValue: "label",
+};
 
 export default {
   title: "Form/Field/MultiSelectField",
