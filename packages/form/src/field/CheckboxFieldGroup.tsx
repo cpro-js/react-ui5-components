@@ -17,7 +17,7 @@ export interface ForwardedCheckboxFieldProps
 export interface CheckboxFieldGroupProps extends ForwardedCheckboxFieldProps {}
 
 export const CheckboxFieldGroup: FC<CheckboxFieldGroupProps> = forwardRef(
-  ({ children, ...props }) => {
+  ({ children, ...props }, _ref) => {
     return (
       <CheckboxFieldGroupContext.Provider value={props}>
         {children}
