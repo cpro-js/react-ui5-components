@@ -1,0 +1,1 @@
+{"version":3,"file":"formSupport-Tri1jE22.js","sources":["../../src/form/formSupport.ts"],"sourcesContent":["// @ts-ignore\nimport FormSupport from \"@ui5/webcomponents/dist/features/InputElementsFormSupport.js\";\nFormSupport.triggerFormSubmit = () => undefined;\n"],"names":["FormSupport"],"mappings":"2DAEAA,EAAY,kBAAoB,IAAA"}

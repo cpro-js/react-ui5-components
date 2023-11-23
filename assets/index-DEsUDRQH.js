@@ -1,0 +1,2 @@
+import{I as t}from"./Input-jvkg1AKt.js";import{w as a}from"./withWebComponent-uMO5mAaX.js";import{V as s}from"./ValueState-Qqn7Ekme.js";const e=a("ui5-input",["accessibleName","accessibleNameRef","maxlength","name","placeholder","type","value","valueState"],["disabled","noTypeahead","readonly","required","showClearIcon","showSuggestions"],["icon","valueStateMessage"],["change","input","suggestion-item-preview","suggestion-item-select"]);e.displayName="Input";e.defaultProps={type:t.Text,valueState:s.None};export{e as I};
+//# sourceMappingURL=index-DEsUDRQH.js.map

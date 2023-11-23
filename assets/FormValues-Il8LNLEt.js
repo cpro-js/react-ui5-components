@@ -1,0 +1,2 @@
+import{c as t}from"./useFormController-QYTj16FN.js";function r(e){const a=t({});return e.render(a)}try{r.displayName="FormValues",r.__docgenInfo={description:"",displayName:"FormValues",props:{render:{defaultValue:null,description:"",name:"render",required:!0,type:{name:"(values: UnpackNestedValue<DeepPartial<T>>) => Element | null"}}}}}catch{}export{r as F};
+//# sourceMappingURL=FormValues-Il8LNLEt.js.map
