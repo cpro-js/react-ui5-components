@@ -6,8 +6,6 @@ import {
 } from "@ui5/webcomponents-react";
 import {
   ChangeEvent,
-  FC,
-  RefObject,
   forwardRef,
   useCallback,
   useEffect,
