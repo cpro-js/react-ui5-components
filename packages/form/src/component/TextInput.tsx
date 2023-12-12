@@ -16,6 +16,10 @@ import { triggerSubmitOnEnter, useOnChangeWorkaround } from "./util";
 
 export interface TextInputProps extends InputPropTypes {}
 
+/** `TextInput` as a wrapper of
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-input--docs" target="_blank">UI5 Input</a>
+ * adding a custom `SubmitOnEnter` eventhandler, which triggers when pressing enter.
+ */
 export const TextInput = forwardRef<InputDomRef, TextInputProps>(
   ({ value, onKeyPress, ...props }, forwardedRef) => {
     const handleKeyPress = useCallback(

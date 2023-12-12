@@ -26,7 +26,9 @@ export interface CheckboxProps extends Omit<CheckBoxPropTypes, "onChange"> {
 }
 
 /**
- * Checkbox wrapper to transform the UI5 checkbox into a HTML compliant checkbox
+ * `Checkbox` wrapper to transform the
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-checkbox--docs" target="_blank">UI5 Checkbox</a>
+ * into a HTML compliant checkbox
  */
 export const Checkbox = forwardRef<CheckBoxDomRef, CheckboxProps>(
   (

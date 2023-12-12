@@ -34,9 +34,13 @@ export type CheckboxFieldProps = Omit<
      * Name is optional within CheckboxFieldGroup
      */
     name?: string;
+    /**
+     * Optional parameter. If set to true, checkbox will using boolean instead of value.
+     */
     boolean?: boolean;
   };
 
+/** `CheckboxField` as wrapper of `Checkbox` to be used in a form*/
 export const CheckboxField = forwardRef<FormFieldElement, CheckboxFieldProps>(
   ({ name, value = "on", boolean, required, ...props }, forwardedRef) => {
     const { setValue, getValues } = useFormContext<any>(); // retrieve all hook methods
