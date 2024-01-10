@@ -12,18 +12,19 @@
   },
   "homepage": "http://cpro-js.github.io/react-ui5-components",
   "main": "./dist/index.js",
-  "module": "./dist/index.modern.js",
+  "module": "./dist/index.mjs",
   "scripts": {
-    "build": "rimraf dist && microbundle --tsconfig tsconfig.build.json --no-compress --format cjs,modern --jsx 'React.createElement' --jsxImportSource react --globals react/jsx-runtime=jsx",
+    "build": "tsc && vite build",
     "build-storybook": "storybook build --quiet",
-    "prepublish": "rimraf dist && microbundle --tsconfig tsconfig.build.json --no-compress --format cjs,modern --jsx 'React.createElement' --jsxImportSource react --globals react/jsx-runtime=jsx",
+    "prepublish": "tsc && vite build",
     "storybook": "storybook dev -p 6006",
     "test": "jest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "files": [
     "*.md",
-    "dist"
+    "dist",
+    "src"
   ],
   "peerDependencies": {
     "@cpro-js/react-core": "<1.0.0",
@@ -56,10 +57,10 @@
     "@ui5/webcomponents": "^1.19.1",
     "@ui5/webcomponents-fiori": "^1.19.1",
     "@ui5/webcomponents-react": "^1.22.2",
+    "@vitejs/plugin-react": "^4.2.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
-    "microbundle": "^0.13.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-jss": "^10.9.0",
@@ -67,7 +68,8 @@
     "rimraf": "^3.0.2",
     "storybook": "7.5.3",
     "typescript": "^4.4.2",
-    "vite": "^5.0.2"
+    "vite": "^5.0.11",
+    "vite-plugin-dts": "^3.7.0"
   },
   "types": "./dist/index.d.ts",
   "source": "./src/index.ts"
