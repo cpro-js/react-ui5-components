@@ -33,6 +33,8 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-decorators": "^7.23.7",
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-react": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
@@ -58,6 +60,7 @@
     "@ui5/webcomponents-fiori": "^1.19.1",
     "@ui5/webcomponents-react": "^1.22.2",
     "@vitejs/plugin-react": "^4.2.1",
+    "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
