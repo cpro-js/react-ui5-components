@@ -14,7 +14,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --config vite.config-build.ts",
     "build-storybook": "storybook build --quiet",
     "prepublish": "tsc && vite build",
     "storybook": "storybook dev -p 6006",

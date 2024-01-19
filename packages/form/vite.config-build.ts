@@ -4,6 +4,10 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
+/**
+ * Vite config for library build only
+ * Note: we need to name this file differently from default vite.config.ts, otherwise storybook would pick this up
+ */
 export default defineConfig({
   build: {
     emptyOutDir: true,
