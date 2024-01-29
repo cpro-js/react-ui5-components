@@ -1,1 +1,0 @@
-{"version":3,"file":"util-OqSjx520.js","sources":["../../src/field/util.ts"],"sourcesContent":["import { FormFieldValidationError } from \"./types\";\n\nexport const hasError = (\n  error?: FormFieldValidationError\n): error is FormFieldValidationError => error != null;\n"],"names":["hasError","error"],"mappings":"AAEa,MAAAA,EACXC,GACsCA,GAAS"}
