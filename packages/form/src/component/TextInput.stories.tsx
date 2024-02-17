@@ -12,6 +12,11 @@ const Template: StoryFn<TextInputProps> = (args) => {
 export const Standard = Template.bind({});
 Standard.args = {};
 
+export const InputModeNone = Template.bind({});
+InputModeNone.args = {
+  inputMode: "none",
+};
+
 export const Prefilled = Template.bind({});
 Prefilled.args = { ...Standard.args, value: "test" };
 

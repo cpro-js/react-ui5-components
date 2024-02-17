@@ -3,11 +3,11 @@ import "../form/formSupport";
 import { Input } from "@ui5/webcomponents-react";
 import { InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import {
-  FC,
   KeyboardEvent,
   MutableRefObject,
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useRef,
 } from "react";
@@ -36,9 +36,25 @@ export const TextInput = forwardRef<InputDomRef, TextInputProps>(
     // apply workaround to fix onChange event
     useOnChangeWorkaround(inputRef, value);
 
+    const { inputMode } = props;
+
+    useEffect(() => {
+      const input = inputRef.current?.shadowRoot?.querySelector("input") as
+        | HTMLInputElement
+        | undefined;
+      if (input) {
+        if (inputMode) {
+          input.setAttribute("inputmode", inputMode);
+        } else {
+          input.removeAttribute("inputmode");
+        }
+      }
+    }, [inputMode]);
+
     return (
       <Input
         {...props}
+        inputMode={inputMode}
         ref={inputRef}
         onKeyPress={handleKeyPress}
         value={value}

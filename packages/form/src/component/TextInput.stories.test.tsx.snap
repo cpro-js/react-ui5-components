@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Renders InputModeNone story 1`] = `
+<div>
+  <ui5-input
+    inputmode="none"
+    style="--_ui5-v1-19-1-input-icons-count: 0;"
+    type="Text"
+    ui5-input=""
+    value-state="None"
+  />
+</div>
+`;
+
 exports[`Renders Prefilled story 1`] = `
 <div>
   <ui5-input
