@@ -1,4 +1,4 @@
-import { EventType, FieldPath } from "react-hook-form";
+import { FieldPath } from "react-hook-form";
 import { UnpackNestedValue } from "react-hook-form/dist/types/form";
 
 export type DeepPartial<T> = T extends Array<infer U>
@@ -106,7 +106,7 @@ export interface FormActions<FormValues> {
    * @param errors
    * @param config
    */
-  setErrors: FormActionSetErrors<FormValues>;
+  readonly setErrors: FormActionSetErrors<FormValues>;
 
   /**
    * Set new form values for fields.
@@ -114,20 +114,33 @@ export interface FormActions<FormValues> {
    *
    * @param values
    */
-  setValues: FormActionSetValues<FormValues>;
+  readonly setValues: FormActionSetValues<FormValues>;
 
   /**
    * Reset form to it's initial state.
    */
-  reset: FormActionResetForm<FormValues>;
+  readonly reset: FormActionResetForm<FormValues>;
 
   /**
    * Clear all form fields.
    */
-  clear: FormActionClearForm<FormValues>;
+  readonly clear: FormActionClearForm<FormValues>;
 
   /**
    * Submit form
    */
-  submit: FormActionSubmitForm<FormValues>;
+  readonly submit: FormActionSubmitForm<FormValues>;
+}
+
+export type FormRef<FormValues> = (
+  | {
+      readonly isValid: true;
+      readonly values: FormValues;
+    }
+  | {
+      readonly isValid: boolean;
+      readonly values: PartialFormValues<FormValues>;
+    }
+) & FormActions<FormValues> & {
+  readonly validate: () => Promise<boolean>;
 }

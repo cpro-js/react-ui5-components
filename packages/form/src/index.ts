@@ -113,6 +113,7 @@ export type {
   FormSubmitHandler,
   FormChangeHandler,
   ChangedField,
+  FormRef,
 } from "./field/types";
 
 export { useFormController } from "./form/useFormController";

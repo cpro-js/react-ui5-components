@@ -1,6 +1,13 @@
 import { klona } from "klona/json";
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import {
+  Ref,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 import {
   SubmitHandler as HookFormSubmitHandler,
   UseFormReturn,
@@ -17,6 +24,7 @@ import {
   FormActionSubmitForm,
   FormActions,
   FormChangeHandler,
+  FormRef,
   FormSubmitHandler,
   PartialFormValues,
 } from "../field/types";
@@ -28,6 +36,7 @@ export interface UseFormControllerProps<FormValues extends {}> {
   initialValues?: PartialFormValues<FormValues>;
   onSubmit: FormSubmitHandler<FormValues>;
   onChange?: FormChangeHandler<FormValues>;
+  ref?: Ref<FormRef<FormValues>>;
 }
 
 export interface UseFormControllerReturn<FormValues extends {}> {
@@ -47,7 +56,7 @@ export interface UseFormControllerReturn<FormValues extends {}> {
 export function useFormController<FormValues extends {}>(
   props: UseFormControllerProps<FormValues>
 ): UseFormControllerReturn<FormValues> {
-  const { initialValues, onSubmit, onChange } = props;
+  const { initialValues, onSubmit, onChange, ref } = props;
 
   // store initial values & deep clone initial values to bypass mutations
   const initialValuesRef = useRef<typeof initialValues>(
@@ -67,8 +76,23 @@ export function useFormController<FormValues extends {}>(
     shouldUnregister: false,
   });
 
-  const { handleSubmit, reset, trigger, setValue, setError, setFocus, watch } =
-    form;
+  const {
+    handleSubmit,
+    reset,
+    trigger,
+    setValue,
+    setError,
+    setFocus,
+    watch,
+    getValues,
+    formState,
+  } = form;
+
+  const { isValid } = formState;
+
+  const isValidRef = useLatestRef(isValid);
+  const getValuesRef = useLatestRef(getValues);
+  const validateRef = useLatestRef(trigger);
 
   const actionsRef = useRef<FormActions<FormValues>>({
     setErrors: noop,
@@ -169,6 +193,38 @@ export function useFormController<FormValues extends {}>(
       subscription.unsubscribe();
     };
   }, [watch]);
+
+  // set up the ref
+  useImperativeHandle(
+    ref,
+    () => ({
+      get isValid() {
+        return isValidRef.current;
+      },
+      get values() {
+        return getValuesRef.current() as unknown as PartialFormValues<FormValues>;
+      },
+      get setErrors() {
+        return actionsRef.current.setErrors;
+      },
+      get setValues() {
+        return actionsRef.current.setValues;
+      },
+      get reset() {
+        return actionsRef.current.reset;
+      },
+      get clear() {
+        return actionsRef.current.clear;
+      },
+      get submit() {
+        return actionsRef.current.submit;
+      },
+      get validate() {
+        return validateRef.current;
+      },
+    }),
+    []
+  );
 
   return {
     context: form,
