@@ -20,6 +20,9 @@ export interface CurrencyInputProps
   showCurrency?: boolean;
 }
 
+/** `CurrencyInput` as a wrapper around
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-basenumberinput--docs" target="_blank">UI5 BaseNumberInput</a>
+ */
 export const CurrencyInput = forwardRef<InputDomRef, CurrencyInputProps>(
   (props, forwardedRef) => {
     const {

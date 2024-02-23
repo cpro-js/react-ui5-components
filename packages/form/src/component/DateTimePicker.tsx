@@ -56,9 +56,13 @@ export interface DateTimePickerProps<
     DateTimePickerPropTypes,
     "value" | "minDate" | "maxDate" | "onChange"
   > {
+  /** Value of date-time input-field */
   value?: Date | TDate;
+  /** Earliest date to be selected */
   minDate?: Date | TDate;
+  /** Latest date to be selected */
   maxDate?: Date | TDate;
+  /** Custom Ui5 Event Handler that fires after value changes */
   onChange?: (
     event: Ui5CustomEvent<
       DateTimePickerDomRef,
@@ -68,6 +72,10 @@ export interface DateTimePickerProps<
   ) => void;
 }
 
+/** `DateTimePicker` as a Wrapper of
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-datetimepicker--docs" target="_blank">Ui5 DateTime Picker</a>
+ * adding additional functionalities and handling specific to date picking.
+ */
 export const DateTimePicker = forwardRef<
   DateTimePickerDomRef | undefined,
   DateTimePickerProps

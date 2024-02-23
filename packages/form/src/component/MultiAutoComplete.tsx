@@ -82,6 +82,8 @@ const KEY_RIGHT = "ArrowRight";
 
 const TAG_NAME_TOKEN = "UI5-TOKEN";
 
+/** `MultiAutoComplete` is a custom form that gives the user AutoComplete options after every key press and for multipile entries.
+ */
 export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   searchTerm: string = "";
   searching: boolean = false;
