@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@1.0.0...@cpro-js/react-ui5-webcomponents-form@1.0.1) (2024-01-19)
+
+**Note:** Version bump only for package @cpro-js/react-ui5-webcomponents-form
+
 # [1.0.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@0.28.2...@cpro-js/react-ui5-webcomponents-form@1.0.0) (2023-11-23)
 
 ### Features

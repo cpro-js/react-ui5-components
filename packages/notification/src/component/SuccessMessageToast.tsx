@@ -32,7 +32,7 @@ export const SuccessMessageToast: FC<SuccessMessageToastProps> = observer(
     useEffect(() => {
       if (!renderSuccess) {
         ref?.current?.show();
-        setTimeout(() => onFinish, duration);
+        setTimeout(onFinish, duration);
       }
     }, [duration, renderSuccess, onFinish]);
 
