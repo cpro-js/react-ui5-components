@@ -1,6 +1,5 @@
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryFn } from "@storybook/react";
-import { ThemeProvider } from "@ui5/webcomponents-react";
 
 import { ISO8601DateAdapter } from "../form/adapter/date/ISO8601DateAdapter";
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
@@ -9,11 +8,7 @@ import { toISO8601DateString } from "../util/date";
 import { DatePicker, DatePickerProps } from "./DatePicker";
 
 const Template: StoryFn<DatePickerProps> = (args) => {
-  return (
-    <ThemeProvider>
-      <DatePicker {...args} />
-    </ThemeProvider>
-  );
+  return <DatePicker {...args} />;
 };
 
 export const Standard = Template.bind({});
@@ -33,19 +28,23 @@ ShortFormat.args = { ...Prefilled.args, formatPattern: "short" };
 export const CustomFormat = Template.bind({});
 CustomFormat.args = { ...Prefilled.args, formatPattern: "dd.MM.yyyy" };
 
+/**
+ *  Only the current date or any date in the future can be selected.
+ **/
 export const MinDateToday = Template.bind({});
 MinDateToday.args = { ...Standard.args, minDate: new Date() };
 
+/**
+ *  Only the current date or previous dates can be selected.
+ **/
 export const MaxDateToday = Template.bind({});
 MaxDateToday.args = { ...Standard.args, maxDate: new Date() };
 
 const ISO8601DateTemplate: StoryFn<DatePickerProps> = (args) => {
   return (
-    <ThemeProvider>
-      <FormAdapter date={ISO8601DateAdapter}>
-        <DatePicker {...args} />
-      </FormAdapter>
-    </ThemeProvider>
+    <FormAdapter date={ISO8601DateAdapter}>
+      <DatePicker {...args} />
+    </FormAdapter>
   );
 };
 
