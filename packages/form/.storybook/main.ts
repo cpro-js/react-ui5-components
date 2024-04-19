@@ -18,8 +18,8 @@ const config: StorybookConfig = {
     autodocs: true,
   },
   core: {
-    disableTelemetry: true, // 👈 Disables telemetry
-    builder: "@storybook/builder-vite",
+    // 👈 Disables telemetry
+    disableTelemetry: true,
   },
 };
 
