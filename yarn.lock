@@ -2837,6 +2837,7 @@ __metadata:
     "@storybook/addon-links": "npm:^8.0.8"
     "@storybook/react": "npm:^8.0.8"
     "@storybook/react-vite": "npm:^8.0.8"
+    "@storybook/testing-react": "npm:^2.0.0"
     "@swc/core": "npm:^1.2.218"
     "@swc/jest": "npm:^0.2.22"
     "@testing-library/jest-dom": "npm:^5.16.4"
@@ -2887,6 +2888,7 @@ __metadata:
     "@storybook/addon-links": "npm:^8.0.8"
     "@storybook/react": "npm:^8.0.8"
     "@storybook/react-vite": "npm:^8.0.8"
+    "@storybook/testing-react": "npm:^2.0.0"
     "@swc/core": "npm:^1.2.218"
     "@swc/jest": "npm:^0.2.22"
     "@testing-library/jest-dom": "npm:^5.16.4"
@@ -5552,6 +5554,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/csf@npm:^0.1.0":
+  version: 0.1.4
+  resolution: "@storybook/csf@npm:0.1.4"
+  dependencies:
+    type-fest: "npm:^2.19.0"
+  checksum: 10c0/a988e37d5dd3e6fcd44c16b08f4778b1bf1f4b46491d1331afac9366852208b64214425331f1496c3666fd284ad42c14ef8b5f678ade94fe82534d1e631c4ae8
+  languageName: node
+  linkType: hard
+
 "@storybook/csf@npm:^0.1.2":
   version: 0.1.2
   resolution: "@storybook/csf@npm:0.1.2"
@@ -5758,6 +5769,21 @@ __metadata:
     fs-extra: "npm:^11.1.0"
     read-pkg-up: "npm:^7.0.1"
   checksum: 10c0/ca75fce31d4731f1029e6e5aee4143c5d76d3b57705b3ef7e67be0cac80384b38df907a0f36d629c01879ca189f9811ff986f982fec9758fe8a5533b87db831c
+  languageName: node
+  linkType: hard
+
+"@storybook/testing-react@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@storybook/testing-react@npm:2.0.0"
+  dependencies:
+    "@storybook/csf": "npm:^0.1.0"
+  peerDependencies:
+    "@storybook/client-logger": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
+    "@storybook/preview-api": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
+    "@storybook/react": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
+    "@storybook/types": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/ed0eb4fb8d2329863d68f233fb943a89703fe3e4c09ba271adb97c390ac511e2f3d809323452006ea95108ef1a1fc48e01cb188175835d938892bb0d68a038fc
   languageName: node
   linkType: hard
 
