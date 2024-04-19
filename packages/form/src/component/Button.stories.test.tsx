@@ -1,5 +1,5 @@
 import { StoryFn } from "@storybook/react";
-import { composeStories } from "@storybook/testing-react";
+import { composeStories } from "@storybook/react";
 
 import { renderWithDefine } from "../test/render";
 import * as stories from "./Button.stories";
