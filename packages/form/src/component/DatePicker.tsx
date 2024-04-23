@@ -50,22 +50,19 @@ interface SapCoreDateFormat {
   formatToUiString: (date: Date) => string;
 }
 
-export interface DatePickerProps<TDate extends Date | string | number = string>
-  extends Omit<
+export interface DatePickerProps<
+  TDate extends Date | string | number = string
+> /** Optional property, defines type of button */ extends Omit<
     DatePickerPropTypes,
     "value" | "minDate" | "maxDate" | "onChange"
   > {
-  /**
-   * Value of date-time input-field
-   **/
+  /** Value of date-time input-field */
   value?: Date | TDate;
   /** Earliest date to be selected */
   minDate?: Date | TDate;
   /** Latest date to be selected */
   maxDate?: Date | TDate;
-  /**
-   * Custom UI5 Event Handler that fires after value changes
-   **/
+  /** Custom UI5 Event Handler that fires after value changes */
   onChange?: (
     event: Ui5CustomEvent<DatePickerDomRef, { valid: boolean; value: string }>,
     value: TDate | null
@@ -73,9 +70,13 @@ export interface DatePickerProps<TDate extends Date | string | number = string>
 }
 
 /**
- * `DatePicker` as a Wrapper of
- * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-datepicker--docs" target="_blank">UI5 Date Picker</a> handling specific to date picking.
- * Now the date value doesn't need to be formatted before passing it into the value prop.
+ *`DatePicker` as a Wrapper of
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-datepicker--docs" target="_blank">UI5 DatePicker</a> designed to simplify the handling of date values
+ * by minimizing the need for additional date manipulation. <br/>
+ * Now it is no longer neccessary to format the date before passing it as a `value` to the DatePicker. <br/>
+ * Dates can be retained in the format as received from the server. The Datepicker automatically
+ *  manages the formatting of these dates, ensurring for a more seamless integration.
+ * <img src="/DatePicker.png">
  */
 export const DatePicker = forwardRef<
   DatePickerDomRef | undefined,
