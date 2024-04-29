@@ -149,3 +149,5 @@ export {
   NumberContext,
 } from "./component/number/context/NumberContext";
 export type { NumberContextProviderProps } from "./component/number/context/NumberContext";
+export { WarningMessageTypes } from "./component/number/helper/NumberWarningMessage";
+export type { GetNumberWarningMessage } from "./component/number/helper/NumberWarningMessage";
