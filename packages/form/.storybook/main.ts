@@ -22,6 +22,14 @@ const config: StorybookConfig = {
     // 👈 Disables telemetry
     disableTelemetry: true,
   },
+
+  typescript: {
+    reactDocgen: "react-docgen-typescript",
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      propFilter: (prop) => true,
+    },
+  },
 };
 
 export default config;
