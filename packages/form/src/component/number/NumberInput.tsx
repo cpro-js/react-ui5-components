@@ -14,6 +14,9 @@ export interface NumberInputProps
     NumberDisplayConfig,
     NumberInputConfig {}
 
+/** `NumberInput` as a wrapper for
+ *  <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-input--docs" target="_blank">Ui5 Input</a>
+ *  modified to only accept numbers */
 export const NumberInput = forwardRef<InputDomRef, NumberInputProps>(
   (props, forwardedRef) => {
     // extract currency specific fields from context

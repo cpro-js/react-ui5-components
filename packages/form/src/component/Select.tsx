@@ -30,12 +30,21 @@ export interface SelectProps<Item = SelectItem, Value = string | number>
     | "onSelectionChange"
     | "onChange"
   > {
+  /** Name of the component */
   name?: string;
+  /** Defines the value of the component.
+   * The property is updated upon selecting.
+   */
   value?: Value;
+  /** Defines the items that can be selected in the component */
   items?: Array<Item>;
+  /** Determines whether an empty option should be added. */
   addEmptyOption?: boolean;
+  /** Defines how to extract the value from each Item */
   itemValue?: keyof Item | ((value: Item) => Value);
+  /** Defines how to extract the label from each Item */
   itemLabel?: keyof Item | ((value: Item) => string);
+  /** Event handler triggered when selecting an Item in the dropdown menu*/
   onSelectionChange?: (
     event: Ui5CustomEvent<
       ComboBoxDomRef,
@@ -45,12 +54,17 @@ export interface SelectProps<Item = SelectItem, Value = string | number>
     >,
     value?: Value
   ) => void;
+  /** Event handler triggered when Item in component changes */
   onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
 }
 
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
 
+/** `Select` as a wrapper for
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-combobox--docs" target="_blank">UI5 ComboBox</a>
+ *  providing additional functionality for creating a select/dropdown component.
+ */
 export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
   (props, forwardedRef) => {
     const {
