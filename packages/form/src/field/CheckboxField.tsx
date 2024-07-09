@@ -12,7 +12,7 @@ import {
 } from "react";
 import { useController, useFormContext } from "react-hook-form";
 
-import { Checkbox, CheckboxProps } from "../component/Checkbox";
+import { CheckBoxProps, Checkbox } from "../component/Checkbox";
 import { CheckboxFieldGroupContext } from "./CheckboxFieldGroup";
 import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
@@ -20,7 +20,7 @@ import { hasError } from "./util";
 export const MISSING_NAME = "CHECKBOX_NAME_IS_MISSING";
 
 export type CheckboxFieldProps = Omit<
-  CheckboxProps,
+  CheckBoxProps,
   | "name"
   | "checked"
   | "defaultChecked"
