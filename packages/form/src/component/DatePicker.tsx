@@ -118,8 +118,7 @@ export type DatePickerProps<TDate extends Date | string | number = string> =
  *  manages the formatting of these dates, ensurring for a more seamless integration.
  *
  * ```tsx
- * //ISO 8601 String
- * <FormAdapter date={IdentityDateAdapter}>
+ * //ISO8601 String
       <DatePicker
         value={"2024-04-30T09:52:17Z"}
         onChange={(
@@ -137,7 +136,6 @@ export type DatePickerProps<TDate extends Date | string | number = string> =
           }
         }}
       />
-    </FormAdapter>
  * ```
  *
  *  ```tsx
