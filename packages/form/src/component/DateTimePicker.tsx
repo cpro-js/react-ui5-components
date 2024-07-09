@@ -9,6 +9,7 @@ import {
 import clsx from "clsx";
 import {
   FC,
+  HTMLAttributes,
   KeyboardEvent,
   forwardRef,
   useCallback,
@@ -50,27 +51,57 @@ const convertToDate = (
   return value == null ? null : value instanceof Date ? value : parse(value);
 };
 
-export interface DateTimePickerProps<
-  TDate extends Date | string | number = string
-> extends Omit<
-    DateTimePickerPropTypes,
-    "value" | "minDate" | "maxDate" | "onChange"
-  > {
-  /** Value of date-time input-field */
-  value?: Date | TDate;
-  /** Earliest date to be selected */
-  minDate?: Date | TDate;
-  /** Latest date to be selected */
-  maxDate?: Date | TDate;
-  /** Custom Ui5 Event Handler that fires after value changes */
-  onChange?: (
-    event: Ui5CustomEvent<
-      DateTimePickerDomRef,
-      { valid: boolean; value: string }
-    >,
-    value: TDate | null
-  ) => void;
-}
+// pick only those props which we do care about
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyUp"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
+export type DateTimePickerProps<TDate extends Date | string | number = string> =
+  SharedHtmlProps &
+    Pick<
+      DateTimePickerPropTypes,
+      | "disabled"
+      | "formatPattern"
+      | "hideWeekNumbers"
+      | "name"
+      | "onInput"
+      | "onKeyPress"
+      | "placeholder"
+      | "required"
+      | "readonly"
+      | "valueState"
+      | "valueStateMessage"
+    > & {
+      /** Value of date-time input-field */
+      value?: Date | TDate;
+      /** Earliest date to be selected */
+      minDate?: Date | TDate;
+      /** Latest date to be selected */
+      maxDate?: Date | TDate;
+      /** Custom UI5 Event Handler that fires after value changes */
+      onChange?: (
+        event: Ui5CustomEvent<
+          DateTimePickerDomRef,
+          { valid: boolean; value: string }
+        >,
+        value: TDate | null
+      ) => void;
+    };
 
 /** `DateTimePicker` as a Wrapper of
  * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-datetimepicker--docs" target="_blank">Ui5 DateTime Picker</a>
