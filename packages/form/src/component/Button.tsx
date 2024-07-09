@@ -3,11 +3,46 @@ import {
   ButtonPropTypes,
   Button as UI5Button,
 } from "@ui5/webcomponents-react";
-import { FC, MouseEvent, useCallback } from "react";
+import { FC, HTMLAttributes, MouseEvent, useCallback } from "react";
 
 import { triggerReset, triggerSubmit } from "./util";
 
-export interface ButtonProps extends Omit<ButtonPropTypes, "submits" | "type"> {
+//pick only props we need
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "title"
+  | "onBlur"
+  | "onFocus"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
+export type ButtonProps = SharedHtmlProps &
+  Pick<
+    ButtonPropTypes,
+    | "onClick"
+    | "design"
+    | "disabled"
+    | "icon"
+    | "iconEnd"
+    | "tooltip"
+    | "accessibleName"
+    | "accessibleNameRef"
+  > & {
+    /** Optional property, use when refering to an external form by ID */
+    form?: string;
+    /** Optional property, defines type of button */
+    type?: "button" | "submit" | "reset";
+  };
+
+export interface ButtonPropsTest
+  extends Omit<ButtonPropTypes, "submits" | "type"> {
   /** Optional property, use when refering to an external form by ID */
   form?: string;
   /** Optional property, defines type of button */
