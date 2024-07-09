@@ -6,6 +6,7 @@ import {
 } from "@ui5/webcomponents-react";
 import {
   ChangeEvent,
+  HTMLAttributes,
   forwardRef,
   useCallback,
   useEffect,
@@ -13,7 +14,50 @@ import {
   useState,
 } from "react";
 
-export interface CheckboxProps extends Omit<CheckBoxPropTypes, "onChange"> {
+// pick only those props which we do care about
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "title"
+  | "onBlur"
+  | "onFocus"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+  | "color"
+  | "hidden"
+  | "defaultChecked"
+>;
+
+export type CheckBoxProps = SharedHtmlProps &
+  Pick<
+    CheckBoxPropTypes,
+    | "checked"
+    | "disabled"
+    | "indeterminate"
+    | "name"
+    | "readonly"
+    | "required"
+    | "text"
+    | "valueState"
+    | "wrappingType"
+  > & {
+    /**
+     * The value of the component. The DOM API casts this to a string. The browser uses "on" as the default value.
+     */
+    value?: string;
+    /**
+     * HTML checkbox compliant event handler (except that the input type is hidden instead of checkbox)
+     * @param event
+     */
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  };
+
+export interface CheckboxProp extends Omit<CheckBoxProps, "onChange"> {
   /**
    * The value of the component. The DOM API casts this to a string. The browser uses "on" as the default value.
    */
@@ -30,7 +74,7 @@ export interface CheckboxProps extends Omit<CheckBoxPropTypes, "onChange"> {
  * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-checkbox--docs" target="_blank">UI5 Checkbox</a>
  * into a HTML compliant checkbox
  */
-export const Checkbox = forwardRef<CheckBoxDomRef, CheckboxProps>(
+export const Checkbox = forwardRef<CheckBoxDomRef, CheckBoxProps>(
   (
     { name, value = "on", checked, disabled, onChange, ...props },
     forwardedRef
