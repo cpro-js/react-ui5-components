@@ -8,6 +8,7 @@ import {
 import { MultiComboBoxSelectionChangeEventDetail } from "@ui5/webcomponents/dist/MultiComboBox";
 import {
   ClipboardEvent,
+  HTMLAttributes,
   KeyboardEvent,
   MutableRefObject,
   ReactElement,
@@ -28,7 +29,69 @@ export interface MultiSelectItem {
   label: string;
 }
 
-export interface MultiSelectProps<
+// pick only those props which we do care about
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyUp"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
+export type MultiSelectProps<
+  Item = MultiSelectItem,
+  Value = string | number
+> = SharedHtmlProps &
+  Pick<
+    MultiComboBoxPropTypes,
+    | "onChange"
+    | "icon"
+    | "onInput"
+    | "onOpenChange"
+    | "valueStateMessage"
+    | "allowCustomValues"
+    | "disabled"
+    | "filter"
+    | "noTypeahead"
+    | "placeholder"
+    | "readonly"
+    | "required"
+    | "valueState"
+    | "onKeyPress"
+  > & {
+    name?: string;
+    /** Defines the value of the component.
+     * The property is updated upon selecting.
+     */
+    value?: Array<Value>;
+    /** Defines the items that can be selected in the component */
+    items?: Array<Item>;
+    /** Defines how to extract the value from each Item */
+    itemValue?: keyof Item | ((value: Item) => string);
+    /** Defines how to extract the label from each Item */
+    itemLabel?: keyof Item | ((value: Item) => string);
+    /** Event handler triggered when selecting an Item */
+    onSelectionChange?: (
+      event: Ui5CustomEvent<
+        MultiComboBoxDomRef,
+        MultiComboBoxSelectionChangeEventDetail
+      >,
+      value: Array<Value>
+    ) => void;
+  };
+
+/* export interface MultiSelectPropss<
   Item = MultiSelectItem,
   Value = string | number
 > extends Omit<
@@ -44,22 +107,22 @@ export interface MultiSelectProps<
   /** Defines the value of the component.
    * The property is updated upon selecting.
    */
-  value?: Array<Value>;
-  /** Defines the items that can be selected in the component */
-  items?: Array<Item>;
-  /** Defines how to extract the value from each Item */
-  itemValue?: keyof Item | ((value: Item) => string);
-  /** Defines how to extract the label from each Item */
-  itemLabel?: keyof Item | ((value: Item) => string);
-  /** Event handler triggered when selecting an Item */
-  onSelectionChange?: (
-    event: Ui5CustomEvent<
-      MultiComboBoxDomRef,
-      MultiComboBoxSelectionChangeEventDetail
-    >,
-    value: Array<Value>
-  ) => void;
-}
+//value?: Array<Value>;
+/** Defines the items that can be selected in the component */
+//items?: Array<Item>;
+/** Defines how to extract the value from each Item */
+//itemValue?: keyof Item | ((value: Item) => string);
+/** Defines how to extract the label from each Item */
+//itemLabel?: keyof Item | ((value: Item) => string);
+/** Event handler triggered when selecting an Item */
+//onSelectionChange?: (
+// event: Ui5CustomEvent<
+// MultiComboBoxDomRef,
+// MultiComboBoxSelectionChangeEventDetail
+//>,
+// value: Array<Value>
+//) => void;
+//}
 
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
