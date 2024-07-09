@@ -6,6 +6,7 @@ import {
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import {
+  HTMLAttributes,
   KeyboardEvent,
   ReactElement,
   Ref,
@@ -20,6 +21,73 @@ export interface SelectItem {
   label: string;
 }
 
+// pick only those props which we do care about
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyUp"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
+export type SelectProps<
+  Item = SelectItem,
+  Value = string | number
+> = SharedHtmlProps &
+  Pick<
+    ComboBoxPropTypes,
+    | "icon"
+    | "onInput"
+    | "valueStateMessage"
+    | "disabled"
+    | "filter"
+    | "loading"
+    | "noTypeahead"
+    | "placeholder"
+    | "readonly"
+    | "required"
+    | "valueState"
+    | "onKeyPress"
+  > & {
+    /** Name of the component */
+    name?: string;
+    /** Defines the value of the component.
+     * The property is updated upon selecting.
+     */
+    value?: Value;
+    /** Defines the items that can be selected in the component */
+    items?: Array<Item>;
+    /** Determines whether an empty option should be added. */
+    addEmptyOption?: boolean;
+    /** Defines how to extract the value from each Item */
+    itemValue?: keyof Item | ((value: Item) => Value);
+    /** Defines how to extract the label from each Item */
+    itemLabel?: keyof Item | ((value: Item) => string);
+    /** Event handler triggered when selecting an Item in the dropdown menu*/
+    onSelectionChange?: (
+      event: Ui5CustomEvent<
+        ComboBoxDomRef,
+        {
+          item: HTMLElement;
+        }
+      >,
+      value?: Value
+    ) => void;
+    /** Event handler triggered when Item in component changes */
+    onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
+  };
+/* 
 export interface SelectProps<Item = SelectItem, Value = string | number>
   extends Omit<
     ComboBoxPropTypes,
@@ -31,32 +99,32 @@ export interface SelectProps<Item = SelectItem, Value = string | number>
     | "onChange"
   > {
   /** Name of the component */
-  name?: string;
-  /** Defines the value of the component.
-   * The property is updated upon selecting.
-   */
-  value?: Value;
-  /** Defines the items that can be selected in the component */
-  items?: Array<Item>;
-  /** Determines whether an empty option should be added. */
-  addEmptyOption?: boolean;
-  /** Defines how to extract the value from each Item */
-  itemValue?: keyof Item | ((value: Item) => Value);
-  /** Defines how to extract the label from each Item */
-  itemLabel?: keyof Item | ((value: Item) => string);
-  /** Event handler triggered when selecting an Item in the dropdown menu*/
-  onSelectionChange?: (
-    event: Ui5CustomEvent<
-      ComboBoxDomRef,
-      {
-        item: HTMLElement;
-      }
-    >,
-    value?: Value
-  ) => void;
-  /** Event handler triggered when Item in component changes */
-  onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
-}
+//name?: string;
+/** Defines the value of the component.
+ * The property is updated upon selecting.
+ */
+//value?: Value;
+/** Defines the items that can be selected in the component */
+//items?: Array<Item>;
+/** Determines whether an empty option should be added. */
+//addEmptyOption?: boolean;
+/** Defines how to extract the value from each Item */
+//itemValue?: keyof Item | ((value: Item) => Value);
+/** Defines how to extract the label from each Item */
+//itemLabel?: keyof Item | ((value: Item) => string);
+/** Event handler triggered when selecting an Item in the dropdown menu*/
+//onSelectionChange?: (
+// event: Ui5CustomEvent<
+// ComboBoxDomRef,
+//{
+//  item: HTMLElement;
+//}
+// >,
+//value?: Value
+//) => void;
+/** Event handler triggered when Item in component changes */
+//onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
+//} */
 
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
