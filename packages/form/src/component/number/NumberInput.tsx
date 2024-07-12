@@ -51,6 +51,7 @@ export type NumberInputProps = SharedHtmlProps &
     | "required"
     | "showClearIcon"
     | "valueState"
+    | "onInput"
   >;
 
 /** `NumberInput` as a wrapper for
