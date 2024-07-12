@@ -1,9 +1,6 @@
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 
-import {
-  DatePicker as UI5DatePicker,
-  ValueState,
-} from "@ui5/webcomponents-react";
+import { DatePicker as UI5DatePicker } from "@ui5/webcomponents-react";
 import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
   DatePickerDomRef,
@@ -11,7 +8,6 @@ import {
 } from "@ui5/webcomponents-react";
 import clsx from "clsx";
 import {
-  FC,
   HTMLAttributes,
   KeyboardEvent,
   ReactElement,

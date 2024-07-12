@@ -31,6 +31,7 @@ type SharedHtmlProps = Pick<
   | "color"
   | "hidden"
   | "defaultChecked"
+  | "children"
 >;
 
 export type CheckBoxProps = SharedHtmlProps &
