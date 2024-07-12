@@ -1,5 +1,5 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { forwardRef, useContext } from "react";
+import { HTMLAttributes, forwardRef, useContext } from "react";
 
 import { BaseNumberInput } from "./BaseNumberInput";
 import { NumberContext } from "./context/NumberContext";
@@ -9,16 +9,36 @@ import type {
   NumberInputConfig,
 } from "./NumberModel";
 
-export interface CurrencyInputProps
-  extends CommonNumberInputProps,
-    NumberDisplayConfig,
-    NumberInputConfig {
-  /**
-   * Three letter ISO code of currency, e.g. EUR or USD
-   */
-  currency?: string;
-  showCurrency?: boolean;
-}
+// pick only those props which we do care about
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyUp"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
+export type CurrencyInputProps = SharedHtmlProps &
+  NumberDisplayConfig &
+  NumberInputConfig &
+  CommonNumberInputProps & {
+    /**
+     * Three letter ISO code of currency, e.g. EUR or USD
+     */
+    currency?: string;
+    showCurrency?: boolean;
+  };
 
 /** `CurrencyInput` as a wrapper around
  * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-basenumberinput--docs" target="_blank">UI5 BaseNumberInput</a>
