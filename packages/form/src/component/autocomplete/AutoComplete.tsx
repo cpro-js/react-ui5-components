@@ -18,7 +18,7 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-// pick only those props which we do care about
+// Define the SharedHtmlProps including a custom type for onKeyUp
 type SharedHtmlProps = Pick<
   HTMLAttributes<HTMLElement>,
   | "style"
@@ -26,7 +26,6 @@ type SharedHtmlProps = Pick<
   | "id"
   | "placeholder"
   | "title"
-  | "onKeyUp"
   | "onKeyDown"
   | "onBlur"
   | "onFocus"
@@ -40,13 +39,9 @@ type SharedHtmlProps = Pick<
 
 export type AutoCompleteProps<TModel = DefaultAutoCompleteOption> =
   SharedHtmlProps &
-    /* Omit<
-      CoreAutocompleteProps<TModel>,
-      UseAsyncManagedPropKeys | UseItemModelManagedPropKeys | "inputValue"
-    > &  */
     Omit<
       Pick<
-        CoreAutocompleteProps,
+        CoreAutocompleteProps<TModel>,
         | "name"
         | "value"
         | "itemProps"
@@ -66,7 +61,7 @@ export type AutoCompleteProps<TModel = DefaultAutoCompleteOption> =
         | "showClearIcon"
         | "valueState"
       >,
-      UseAsyncManagedPropKeys | UseItemModelManagedPropKeys | "inputValue"
+      "inputValue" | UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
     > &
     UseAsyncAdditionalProps<TModel> &
     UseItemAdditionalProps<TModel>;
