@@ -1,5 +1,5 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { ReactElement, Ref, forwardRef } from "react";
+import { HTMLAttributes, ReactElement, Ref, forwardRef } from "react";
 
 import {
   UseAsyncAdditionalProps,
@@ -18,12 +18,58 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type AutoCompleteProps<TModel = DefaultAutoCompleteOption> = Omit<
-  CoreAutocompleteProps<TModel>,
-  UseAsyncManagedPropKeys | UseItemModelManagedPropKeys | "inputValue"
-> &
-  UseAsyncAdditionalProps<TModel> &
-  UseItemAdditionalProps<TModel>;
+// pick only those props which we do care about
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyUp"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
+export type AutoCompleteProps<TModel = DefaultAutoCompleteOption> =
+  SharedHtmlProps &
+    /* Omit<
+      CoreAutocompleteProps<TModel>,
+      UseAsyncManagedPropKeys | UseItemModelManagedPropKeys | "inputValue"
+    > &  */
+    Omit<
+      Pick<
+        CoreAutocompleteProps,
+        | "name"
+        | "value"
+        | "itemProps"
+        | "onInputChange"
+        | "onValueChange"
+        | "forceSelection"
+        | "icon"
+        | "valueStateMessage"
+        | "onSuggestionItemPreview"
+        | "onSuggestionItemSelect"
+        | "disabled"
+        | "maxlength"
+        | "noTypeahead"
+        | "placeholder"
+        | "readonly"
+        | "required"
+        | "showClearIcon"
+        | "valueState"
+      >,
+      UseAsyncManagedPropKeys | UseItemModelManagedPropKeys | "inputValue"
+    > &
+    UseAsyncAdditionalProps<TModel> &
+    UseItemAdditionalProps<TModel>;
 
 export const AutoComplete = forwardRef<InputDomRef, AutoCompleteProps>(
   (props, forwardedRef) => {
