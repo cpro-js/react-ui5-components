@@ -29,10 +29,30 @@ type SharedHtmlProps = Pick<
   | "onMouseMove"
 >;
 
-export type CurrencyInputProps = SharedHtmlProps &
+export type CurrencyInputPropsTest = SharedHtmlProps &
   NumberDisplayConfig &
   NumberInputConfig &
-  CommonNumberInputProps & {
+  Pick<
+    CommonNumberInputProps,
+    | "value"
+    | "onChange"
+    | "onValue"
+    | "onKeyUp"
+    | "locale"
+    | "showNumberWarningMessages"
+    | "getNumberWarningMessage"
+    | "children"
+    | "icon"
+    | "valueStateMessage"
+    | "disabled"
+    | "name"
+    | "noTypeahead"
+    | "placeholder"
+    | "readonly"
+    | "required"
+    | "showClearIcon"
+    | "valueState"
+  > & {
     /**
      * Three letter ISO code of currency, e.g. EUR or USD
      */
@@ -43,7 +63,7 @@ export type CurrencyInputProps = SharedHtmlProps &
 /** `CurrencyInput` as a wrapper around
  * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-basenumberinput--docs" target="_blank">UI5 BaseNumberInput</a>
  */
-export const CurrencyInput = forwardRef<InputDomRef, CurrencyInputProps>(
+export const CurrencyInput = forwardRef<InputDomRef, CurrencyInputPropsTest>(
   (props, forwardedRef) => {
     const {
       currency: explicitCurrency,
