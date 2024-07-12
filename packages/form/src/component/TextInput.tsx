@@ -4,6 +4,7 @@ import { Input } from "@ui5/webcomponents-react";
 import { InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import {
   FC,
+  HTMLAttributes,
   KeyboardEvent,
   MutableRefObject,
   forwardRef,
@@ -14,7 +15,48 @@ import {
 
 import { triggerSubmitOnEnter, useOnChangeWorkaround } from "./util";
 
-export interface TextInputProps extends InputPropTypes {}
+// pick only those props which we do care about
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+  | "onKeyPress"
+>;
+
+export type TextInputProps = SharedHtmlProps &
+  Pick<
+    InputPropTypes,
+    | "children"
+    | "icon"
+    | "valueStateMessage"
+    | "onChange"
+    | "onInput"
+    | "onSuggestionItemPreview"
+    | "onSuggestionItemSelect"
+    | "disabled"
+    | "maxlength"
+    | "name"
+    | "noTypeahead"
+    | "placeholder"
+    | "required"
+    | "readonly"
+    | "showClearIcon"
+    | "showSuggestions"
+    | "type"
+    | "value"
+    | "valueState"
+  >;
 
 /** `TextInput` as a wrapper of
  * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-input--docs" target="_blank">UI5 Input</a>
