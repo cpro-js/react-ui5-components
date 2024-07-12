@@ -1,5 +1,5 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { ReactElement, Ref, forwardRef } from "react";
+import { HTMLAttributes, ReactElement, Ref, forwardRef } from "react";
 
 import {
   UseCreatableAdditionalProps,
@@ -17,12 +17,55 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type CreatableSelectProps<TModel = DefaultAutoCompleteOption> = Omit<
-  CoreAutocompleteProps<TModel>,
-  UseItemModelManagedPropKeys | "inputValue"
-> &
-  UseItemAdditionalProps<TModel> &
-  UseCreatableAdditionalProps<TModel>;
+// Define the SharedHtmlProps including a custom type for onKeyUp
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
+export type CreatableSelectProps<TModel = DefaultAutoCompleteOption> =
+  SharedHtmlProps &
+    Omit<
+      Pick<
+        CoreAutocompleteProps<TModel>,
+        | "name"
+        | "value"
+        | "itemProps"
+        | "items"
+        | "filterItem"
+        | "onInputChange"
+        | "onValueChange"
+        | "forceSelection"
+        | "icon"
+        | "valueStateMessage"
+        | "onSuggestionItemPreview"
+        | "onSuggestionItemSelect"
+        | "disabled"
+        | "maxlength"
+        | "noTypeahead"
+        | "placeholder"
+        | "readonly"
+        | "required"
+        | "showClearIcon"
+        | "valueState"
+      >,
+      "inputValue" | UseItemModelManagedPropKeys
+    > &
+    UseItemAdditionalProps<TModel> &
+    UseCreatableAdditionalProps<TModel>;
 
 export const CreatableSelect = forwardRef<InputDomRef, CreatableSelectProps>(
   (props, forwardedRef) => {
