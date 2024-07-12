@@ -12,8 +12,6 @@ type SharedHtmlProps = Pick<
   | "id"
   | "placeholder"
   | "title"
-  | "onKeyUp"
-  | "onKeyDown"
   | "onBlur"
   | "onFocus"
   | "onPaste"
