@@ -1,5 +1,5 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { ReactElement, Ref, forwardRef } from "react";
+import { HTMLAttributes, ReactElement, Ref, forwardRef } from "react";
 
 import {
   UseAsyncAdditionalProps,
@@ -22,11 +22,51 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
+// Define the SharedHtmlProps including a custom type for onKeyUp
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
 export type CreatableAutoCompleteProps<TModel = DefaultAutoCompleteOption> =
-  Omit<
-    CoreAutocompleteProps<TModel>,
-    UseAsyncManagedPropKeys | UseItemModelManagedPropKeys | "inputValue"
-  > &
+  SharedHtmlProps &
+    Omit<
+      Pick<
+        CoreAutocompleteProps<TModel>,
+        | "name"
+        | "value"
+        | "itemProps"
+        | "onInputChange"
+        | "onValueChange"
+        | "forceSelection"
+        | "icon"
+        | "valueStateMessage"
+        | "onSuggestionItemPreview"
+        | "onSuggestionItemSelect"
+        | "disabled"
+        | "maxlength"
+        | "noTypeahead"
+        | "placeholder"
+        | "readonly"
+        | "required"
+        | "showClearIcon"
+        | "valueState"
+      >,
+      "inputValue" | UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
+    > &
     UseAsyncAdditionalProps<TModel> &
     UseItemAdditionalProps<TModel> &
     UseCreatableAdditionalProps<TModel>;
