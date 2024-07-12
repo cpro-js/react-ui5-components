@@ -1,5 +1,5 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { FC, forwardRef, useContext } from "react";
+import { FC, HTMLAttributes, forwardRef, useContext } from "react";
 
 import { BaseNumberInput } from "./BaseNumberInput";
 import { NumberContext } from "./context/NumberContext";
@@ -9,10 +9,49 @@ import type {
   NumberInputConfig,
 } from "./NumberModel";
 
-export interface NumberInputProps
-  extends CommonNumberInputProps,
-    NumberDisplayConfig,
-    NumberInputConfig {}
+// pick only those props which we do care about
+type SharedHtmlProps = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;
+
+export type NumberInputProps = SharedHtmlProps &
+  NumberDisplayConfig &
+  NumberInputConfig &
+  Pick<
+    CommonNumberInputProps,
+    | "value"
+    | "onChange"
+    | "onValue"
+    | "onKeyUp"
+    | "locale"
+    | "showNumberWarningMessages"
+    | "getNumberWarningMessage"
+    | "children"
+    | "icon"
+    | "valueStateMessage"
+    | "disabled"
+    | "name"
+    | "noTypeahead"
+    | "placeholder"
+    | "readonly"
+    | "required"
+    | "showClearIcon"
+    | "valueState"
+  >;
 
 /** `NumberInput` as a wrapper for
  *  <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-input--docs" target="_blank">Ui5 Input</a>
