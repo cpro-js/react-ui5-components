@@ -22,6 +22,10 @@ import {
 } from "react";
 
 import { handlePastedText } from "./common/PasteHandler";
+import {
+  SharedHtmlProps,
+  SharedHtmlPropsWithKeyInput,
+} from "./SharedHtmlProps";
 import { triggerSubmitOnEnter, useAllowAction } from "./util";
 
 export interface MultiSelectItem {
@@ -29,30 +33,10 @@ export interface MultiSelectItem {
   label: string;
 }
 
-// pick only those props which we do care about
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "title"
-  | "onKeyUp"
-  | "onKeyDown"
-  | "onBlur"
-  | "onFocus"
-  | "onPaste"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
->;
-
 export type MultiSelectProps<
   Item = MultiSelectItem,
   Value = string | number
-> = SharedHtmlProps &
+> = SharedHtmlPropsWithKeyInput &
   Pick<
     MultiComboBoxPropTypes,
     | "onChange"

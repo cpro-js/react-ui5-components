@@ -14,6 +14,7 @@ import {
   useCallback,
 } from "react";
 
+import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter } from "./util";
 
 export interface SelectItem {
@@ -21,30 +22,10 @@ export interface SelectItem {
   label: string;
 }
 
-// pick only those props which we do care about
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "title"
-  | "onKeyUp"
-  | "onKeyDown"
-  | "onBlur"
-  | "onFocus"
-  | "onPaste"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
->;
-
 export type SelectProps<
   Item = SelectItem,
   Value = string | number
-> = SharedHtmlProps &
+> = SharedHtmlPropsWithKeyInput &
   Pick<
     ComboBoxPropTypes,
     | "icon"

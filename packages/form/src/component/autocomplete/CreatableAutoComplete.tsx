@@ -1,6 +1,7 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
 import { HTMLAttributes, ReactElement, Ref, forwardRef } from "react";
 
+import { SharedHtmlPropsWithKeyInput } from "../SharedHtmlProps";
 import {
   UseAsyncAdditionalProps,
   UseAsyncManagedPropKeys,
@@ -22,27 +23,8 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-// Define the SharedHtmlProps including a custom type for onKeyUp
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "title"
-  | "onKeyDown"
-  | "onBlur"
-  | "onFocus"
-  | "onPaste"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
->;
-
 export type CreatableAutoCompleteProps<TModel = DefaultAutoCompleteOption> =
-  SharedHtmlProps &
+  SharedHtmlPropsWithKeyInput &
     Omit<
       Pick<
         CoreAutocompleteProps<TModel>,

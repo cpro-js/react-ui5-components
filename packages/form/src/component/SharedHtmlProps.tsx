@@ -15,3 +15,23 @@ export type SharedHtmlProps = Pick<
   | "onMouseLeave"
   | "onMouseMove"
 >;
+
+// pick only those props which we do care about
+export type SharedHtmlPropsWithKeyInput = Pick<
+  HTMLAttributes<HTMLElement>,
+  | "style"
+  | "className"
+  | "id"
+  | "placeholder"
+  | "title"
+  | "onKeyUp"
+  | "onKeyDown"
+  | "onBlur"
+  | "onFocus"
+  | "onPaste"
+  | "onMouseOver"
+  | "onMouseOut"
+  | "onMouseEnter"
+  | "onMouseLeave"
+  | "onMouseMove"
+>;

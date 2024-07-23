@@ -1,6 +1,7 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
 import { FC, HTMLAttributes, forwardRef, useContext } from "react";
 
+import { SharedHtmlPropsWithKeyInput } from "../SharedHtmlProps";
 import { BaseNumberInput } from "./BaseNumberInput";
 import { NumberContext } from "./context/NumberContext";
 import type {
@@ -9,26 +10,7 @@ import type {
   NumberInputConfig,
 } from "./NumberModel";
 
-// pick only those props which we do care about
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "title"
-  | "onKeyDown"
-  | "onBlur"
-  | "onFocus"
-  | "onPaste"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
->;
-
-export type NumberInputProps = SharedHtmlProps &
+export type NumberInputProps = SharedHtmlPropsWithKeyInput &
   NumberDisplayConfig &
   NumberInputConfig &
   Pick<

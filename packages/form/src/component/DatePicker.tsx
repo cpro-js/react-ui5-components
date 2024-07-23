@@ -24,7 +24,7 @@ import { createUseStyles } from "react-jss";
 
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
-import { SharedHtmlProps } from "./SharedHtmlProps";
+import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter } from "./util";
 
 const useStyles = createUseStyles({
@@ -53,16 +53,9 @@ interface SapCoreDateFormat {
   formatToUiString: (date: Date) => string;
 }
 
-// pick only those props which we do care about
-type DatePickerHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  "onKeyUp" | "onKeyDown" | "onPaste"
->;
-
 // finally: union of the wanted props with our own props
 export type DatePickerProps<TDate extends Date | string | number = string> =
-  SharedHtmlProps &
-    DatePickerHtmlProps &
+  SharedHtmlPropsWithKeyInput &
     Pick<
       DatePickerPropTypes,
       | "disabled"

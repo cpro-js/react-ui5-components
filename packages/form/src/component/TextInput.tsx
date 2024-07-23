@@ -13,28 +13,14 @@ import {
   useRef,
 } from "react";
 
+import { SharedHtmlProps } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter, useOnChangeWorkaround } from "./util";
 
 // pick only those props which we do care about
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "title"
-  | "onBlur"
-  | "onFocus"
-  | "onPaste"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
-  | "onKeyPress"
->;
+type TextInputHtmlProps = Pick<HTMLAttributes<HTMLElement>, "onKeyPress">;
 
 export type TextInputProps = SharedHtmlProps &
+  TextInputHtmlProps &
   Pick<
     InputPropTypes,
     | "children"

@@ -36,6 +36,7 @@ import {
   DEFAULT_VALUE_PROP,
 } from "./common/CommonSelection";
 import { handlePastedText } from "./common/PasteHandler";
+import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 
 // UI5 Event Types
 type TokenDeleteEvent = Ui5CustomEvent<
@@ -43,31 +44,11 @@ type TokenDeleteEvent = Ui5CustomEvent<
   { token: HTMLElement }
 >;
 
-// pick only those props which we do care about
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "title"
-  | "onKeyUp"
-  | "onKeyDown"
-  | "onBlur"
-  | "onFocus"
-  | "onPaste"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
->;
-
 /**
  * The complete set of properties as union (last won wins => our new defined props always win)
  */
 export type MultiAutoCompleteProps<T = DefaultAutoCompleteOption> =
-  SharedHtmlProps &
+  SharedHtmlPropsWithKeyInput &
     CustomMultiInputProps<T> & {
       /**
        * The list of selected options.

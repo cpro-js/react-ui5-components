@@ -8,8 +8,6 @@ import {
 } from "@ui5/webcomponents-react";
 import clsx from "clsx";
 import {
-  FC,
-  HTMLAttributes,
   KeyboardEvent,
   forwardRef,
   useCallback,
@@ -23,6 +21,7 @@ import { createUseStyles } from "react-jss";
 
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
+import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter } from "./util";
 
 const useStyles = createUseStyles({
@@ -51,28 +50,8 @@ const convertToDate = (
   return value == null ? null : value instanceof Date ? value : parse(value);
 };
 
-// pick only those props which we do care about
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "title"
-  | "onKeyUp"
-  | "onKeyDown"
-  | "onBlur"
-  | "onFocus"
-  | "onPaste"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
->;
-
 export type DateTimePickerProps<TDate extends Date | string | number = string> =
-  SharedHtmlProps &
+  SharedHtmlPropsWithKeyInput &
     Pick<
       DateTimePickerPropTypes,
       | "disabled"

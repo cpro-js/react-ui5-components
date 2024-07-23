@@ -4,23 +4,7 @@ import { TextArea as UI5TextArea } from "@ui5/webcomponents-react";
 import { TextAreaDomRef, TextAreaPropTypes } from "@ui5/webcomponents-react";
 import { HTMLAttributes, forwardRef } from "react";
 
-// pick only those props which we do care about
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "placeholder"
-  | "title"
-  | "onBlur"
-  | "onFocus"
-  | "onPaste"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
->;
+import { SharedHtmlProps } from "./SharedHtmlProps";
 
 export type TextAreaProps = SharedHtmlProps &
   Pick<
