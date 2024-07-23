@@ -21,7 +21,7 @@ export type ButtonProps = SharedHtmlProps &
     | "accessibleNameRef"
     | "children"
   > & {
-    /** Optional property, use when refering to an external form by ID */
+    /** use when refering to an external form by ID */
     form?: string;
     /** Optional property, defines type of button */
     type?: "button" | "submit" | "reset";

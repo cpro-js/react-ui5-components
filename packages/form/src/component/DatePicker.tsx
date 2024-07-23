@@ -70,13 +70,13 @@ export type DatePickerProps<TDate extends Date | string | number = string> =
       | "valueState"
       | "valueStateMessage"
     > & {
-      /** Value of date-time input-field */
+      /** Value of date-time input field */
       value?: Date | TDate;
-      /** Earliest date to be selected */
+      /** Disables all dates before this date */
       minDate?: Date | TDate;
-      /** Latest date to be selected */
+      /** Disables all dates after this date */
       maxDate?: Date | TDate;
-      /** Custom UI5 Event Handler that fires after value changes */
+      /** Custom UI5 event handler that fires when the field loses focus. */
       onChange?: (
         event: Ui5CustomEvent<
           DatePickerDomRef,
