@@ -5,23 +5,8 @@ import {
 } from "@ui5/webcomponents-react";
 import { FC, HTMLAttributes, MouseEvent, useCallback } from "react";
 
+import { SharedHtmlProps } from "./SharedHtmlProps";
 import { triggerReset, triggerSubmit } from "./util";
-
-//pick only props we need
-type SharedHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "title"
-  | "onBlur"
-  | "onFocus"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
->;
 
 export type ButtonProps = SharedHtmlProps &
   Pick<

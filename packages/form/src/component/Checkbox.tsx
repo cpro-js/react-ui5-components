@@ -14,27 +14,15 @@ import {
   useState,
 } from "react";
 
-// pick only those props which we do care about
-type SharedHtmlProps = Pick<
+import { SharedHtmlProps } from "./SharedHtmlProps";
+
+type CheckBoxHtmlProps = Pick<
   HTMLAttributes<HTMLElement>,
-  | "style"
-  | "className"
-  | "id"
-  | "title"
-  | "onBlur"
-  | "onFocus"
-  | "onMouseOver"
-  | "onMouseOut"
-  | "onMouseEnter"
-  | "onMouseLeave"
-  | "onMouseMove"
-  | "color"
-  | "hidden"
-  | "defaultChecked"
-  | "children"
+  "defaultChecked" | "children"
 >;
 
 export type CheckBoxProps = SharedHtmlProps &
+  CheckBoxHtmlProps &
   Pick<
     CheckBoxPropTypes,
     | "checked"
