@@ -17,6 +17,7 @@ import {
   ClipboardEvent,
   Component,
   FocusEvent,
+  HTMLAttributes,
   KeyboardEvent,
   RefObject,
   createRef,
@@ -35,6 +36,7 @@ import {
   DEFAULT_VALUE_PROP,
 } from "./common/CommonSelection";
 import { handlePastedText } from "./common/PasteHandler";
+import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 
 // UI5 Event Types
 type TokenDeleteEvent = Ui5CustomEvent<
@@ -46,35 +48,36 @@ type TokenDeleteEvent = Ui5CustomEvent<
  * The complete set of properties as union (last won wins => our new defined props always win)
  */
 export type MultiAutoCompleteProps<T = DefaultAutoCompleteOption> =
-  CustomMultiInputProps<T> & {
-    /**
-     * The list of selected options.
-     *
-     * Also provide fitting intialSuggestionItems when using controlled state to show labels instead of plain values.
-     */
-    values: Array<string>;
+  SharedHtmlPropsWithKeyInput &
+    CustomMultiInputProps<T> & {
+      /**
+       * The list of selected options.
+       *
+       * Also provide fitting intialSuggestionItems when using controlled state to show labels instead of plain values.
+       */
+      values: Array<string>;
 
-    /**
-     * Main method to get notified about changes to values, i.e. deletion or addition of values.
-     * Consumer always gets the complete list of values.
-     *
-     * @param values the list of selected values
-     * @param suggestionValues the list of the complete items
-     */
-    onSelectionChange?: (
-      values: Array<string>,
-      suggestionValues?: AutoCompleteOptions<T>
-    ) => void;
+      /**
+       * Main method to get notified about changes to values, i.e. deletion or addition of values.
+       * Consumer always gets the complete list of values.
+       *
+       * @param values the list of selected values
+       * @param suggestionValues the list of the complete items
+       */
+      onSelectionChange?: (
+        values: Array<string>,
+        suggestionValues?: AutoCompleteOptions<T>
+      ) => void;
 
-    onAdd?: (value: T) => void;
+      onAdd?: (value: T) => void;
 
-    onRemove?: (value: T) => void;
+      onRemove?: (value: T) => void;
 
-    onChange?: (
-      event: Ui5CustomEvent<MultiInputDomRef>,
-      values: Array<string>
-    ) => void;
-  };
+      onChange?: (
+        event: Ui5CustomEvent<MultiInputDomRef>,
+        values: Array<string>
+      ) => void;
+    };
 
 const KEY_BACKSPACE = "Backspace";
 const KEY_LEFT = "ArrowLeft";
@@ -82,6 +85,8 @@ const KEY_RIGHT = "ArrowRight";
 
 const TAG_NAME_TOKEN = "UI5-TOKEN";
 
+/** `MultiAutoComplete` is a custom form that gives the user AutoComplete options after every key press and for multipile entries.
+ */
 export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   searchTerm: string = "";
   searching: boolean = false;

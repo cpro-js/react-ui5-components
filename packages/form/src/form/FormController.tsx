@@ -8,10 +8,12 @@ import { UseFormControllerProps, useFormController } from "./useFormController";
 
 export interface FormControllerProps<FormValues extends {}>
   extends UseFormControllerProps<FormValues> {
+  /** id of form */
   id?: string;
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
+  /** custom event handler that triggers when any value of the form is changed  */
   onChange?: FormChangeHandler<FormValues>;
 }
 

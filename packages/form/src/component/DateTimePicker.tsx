@@ -8,7 +8,6 @@ import {
 } from "@ui5/webcomponents-react";
 import clsx from "clsx";
 import {
-  FC,
   KeyboardEvent,
   forwardRef,
   useCallback,
@@ -22,6 +21,7 @@ import { createUseStyles } from "react-jss";
 
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
+import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter } from "./util";
 
 const useStyles = createUseStyles({
@@ -50,24 +50,42 @@ const convertToDate = (
   return value == null ? null : value instanceof Date ? value : parse(value);
 };
 
-export interface DateTimePickerProps<
-  TDate extends Date | string | number = string
-> extends Omit<
-    DateTimePickerPropTypes,
-    "value" | "minDate" | "maxDate" | "onChange"
-  > {
-  value?: Date | TDate;
-  minDate?: Date | TDate;
-  maxDate?: Date | TDate;
-  onChange?: (
-    event: Ui5CustomEvent<
-      DateTimePickerDomRef,
-      { valid: boolean; value: string }
-    >,
-    value: TDate | null
-  ) => void;
-}
+export type DateTimePickerProps<TDate extends Date | string | number = string> =
+  SharedHtmlPropsWithKeyInput &
+    Pick<
+      DateTimePickerPropTypes,
+      | "disabled"
+      | "formatPattern"
+      | "hideWeekNumbers"
+      | "name"
+      | "onInput"
+      | "onKeyPress"
+      | "placeholder"
+      | "required"
+      | "readonly"
+      | "valueState"
+      | "valueStateMessage"
+    > & {
+      /** Value of date-time input-field */
+      value?: Date | TDate;
+      /** Earliest date to be selected */
+      minDate?: Date | TDate;
+      /** Latest date to be selected */
+      maxDate?: Date | TDate;
+      /** Custom UI5 Event Handler that fires after value changes */
+      onChange?: (
+        event: Ui5CustomEvent<
+          DateTimePickerDomRef,
+          { valid: boolean; value: string }
+        >,
+        value: TDate | null
+      ) => void;
+    };
 
+/** `DateTimePicker` as a Wrapper of
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-datetimepicker--docs" target="_blank">Ui5 DateTime Picker</a>
+ * adding additional functionalities and handling specific to date picking.
+ */
 export const DateTimePicker = forwardRef<
   DateTimePickerDomRef | undefined,
   DateTimePickerProps

@@ -12,7 +12,7 @@ import {
 } from "react";
 import { useController, useFormContext } from "react-hook-form";
 
-import { Checkbox, CheckboxProps } from "../component/Checkbox";
+import { CheckBoxProps, Checkbox } from "../component/Checkbox";
 import { CheckboxFieldGroupContext } from "./CheckboxFieldGroup";
 import { FormFieldElement, FormFieldValidation } from "./types";
 import { hasError } from "./util";
@@ -20,7 +20,7 @@ import { hasError } from "./util";
 export const MISSING_NAME = "CHECKBOX_NAME_IS_MISSING";
 
 export type CheckboxFieldProps = Omit<
-  CheckboxProps,
+  CheckBoxProps,
   | "name"
   | "checked"
   | "defaultChecked"
@@ -34,9 +34,13 @@ export type CheckboxFieldProps = Omit<
      * Name is optional within CheckboxFieldGroup
      */
     name?: string;
+    /**
+     * Optional parameter. If set to true, checkbox will using boolean instead of value.
+     */
     boolean?: boolean;
   };
 
+/** `CheckboxField` as wrapper of `Checkbox` to be used in a form*/
 export const CheckboxField = forwardRef<FormFieldElement, CheckboxFieldProps>(
   ({ name, value = "on", boolean, required, ...props }, forwardedRef) => {
     const { setValue, getValues } = useFormContext<any>(); // retrieve all hook methods

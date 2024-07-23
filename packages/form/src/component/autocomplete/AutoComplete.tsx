@@ -1,6 +1,7 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { ReactElement, Ref, forwardRef } from "react";
+import { HTMLAttributes, ReactElement, Ref, forwardRef } from "react";
 
+import { SharedHtmlPropsWithKeyInput } from "../SharedHtmlProps";
 import {
   UseAsyncAdditionalProps,
   UseAsyncManagedPropKeys,
@@ -18,12 +19,34 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type AutoCompleteProps<TModel = DefaultAutoCompleteOption> = Omit<
-  CoreAutocompleteProps<TModel>,
-  UseAsyncManagedPropKeys | UseItemModelManagedPropKeys | "inputValue"
-> &
-  UseAsyncAdditionalProps<TModel> &
-  UseItemAdditionalProps<TModel>;
+export type AutoCompleteProps<TModel = DefaultAutoCompleteOption> =
+  SharedHtmlPropsWithKeyInput &
+    Omit<
+      Pick<
+        CoreAutocompleteProps<TModel>,
+        | "name"
+        | "value"
+        | "itemProps"
+        | "onInputChange"
+        | "onValueChange"
+        | "forceSelection"
+        | "icon"
+        | "valueStateMessage"
+        | "onSuggestionItemPreview"
+        | "onSuggestionItemSelect"
+        | "disabled"
+        | "maxlength"
+        | "noTypeahead"
+        | "placeholder"
+        | "readonly"
+        | "required"
+        | "showClearIcon"
+        | "valueState"
+      >,
+      "inputValue" | UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
+    > &
+    UseAsyncAdditionalProps<TModel> &
+    UseItemAdditionalProps<TModel>;
 
 export const AutoComplete = forwardRef<InputDomRef, AutoCompleteProps>(
   (props, forwardedRef) => {

@@ -1,11 +1,11 @@
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryFn } from "@storybook/react";
 
-import { Checkbox, CheckboxProps } from "./Checkbox";
+import { CheckBoxProps, Checkbox } from "./Checkbox";
 
 const DEFAULT_NAME = "test";
 
-const Template: StoryFn<CheckboxProps & { form?: boolean }> = ({
+const Template: StoryFn<CheckBoxProps & { form?: boolean }> = ({
   form,
   ...args
 }) => {

@@ -1,6 +1,7 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { ReactElement, Ref, forwardRef } from "react";
+import { HTMLAttributes, ReactElement, Ref, forwardRef } from "react";
 
+import { SharedHtmlPropsWithKeyInput } from "../SharedHtmlProps";
 import {
   UseCreatableAdditionalProps,
   useCreatable,
@@ -17,12 +18,36 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type CreatableSelectProps<TModel = DefaultAutoCompleteOption> = Omit<
-  CoreAutocompleteProps<TModel>,
-  UseItemModelManagedPropKeys | "inputValue"
-> &
-  UseItemAdditionalProps<TModel> &
-  UseCreatableAdditionalProps<TModel>;
+export type CreatableSelectProps<TModel = DefaultAutoCompleteOption> =
+  SharedHtmlPropsWithKeyInput &
+    Omit<
+      Pick<
+        CoreAutocompleteProps<TModel>,
+        | "name"
+        | "value"
+        | "itemProps"
+        | "items"
+        | "filterItem"
+        | "onInputChange"
+        | "onValueChange"
+        | "forceSelection"
+        | "icon"
+        | "valueStateMessage"
+        | "onSuggestionItemPreview"
+        | "onSuggestionItemSelect"
+        | "disabled"
+        | "maxlength"
+        | "noTypeahead"
+        | "placeholder"
+        | "readonly"
+        | "required"
+        | "showClearIcon"
+        | "valueState"
+      >,
+      "inputValue" | UseItemModelManagedPropKeys
+    > &
+    UseItemAdditionalProps<TModel> &
+    UseCreatableAdditionalProps<TModel>;
 
 export const CreatableSelect = forwardRef<InputDomRef, CreatableSelectProps>(
   (props, forwardedRef) => {

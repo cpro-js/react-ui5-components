@@ -8,6 +8,7 @@ import {
 import { MultiComboBoxSelectionChangeEventDetail } from "@ui5/webcomponents/dist/MultiComboBox";
 import {
   ClipboardEvent,
+  HTMLAttributes,
   KeyboardEvent,
   MutableRefObject,
   ReactElement,
@@ -21,6 +22,10 @@ import {
 } from "react";
 
 import { handlePastedText } from "./common/PasteHandler";
+import {
+  SharedHtmlProps,
+  SharedHtmlPropsWithKeyInput,
+} from "./SharedHtmlProps";
 import { triggerSubmitOnEnter, useAllowAction } from "./util";
 
 export interface MultiSelectItem {
@@ -28,7 +33,49 @@ export interface MultiSelectItem {
   label: string;
 }
 
-export interface MultiSelectProps<
+export type MultiSelectProps<
+  Item = MultiSelectItem,
+  Value = string | number
+> = SharedHtmlPropsWithKeyInput &
+  Pick<
+    MultiComboBoxPropTypes,
+    | "onChange"
+    | "icon"
+    | "onInput"
+    | "onOpenChange"
+    | "valueStateMessage"
+    | "allowCustomValues"
+    | "disabled"
+    | "filter"
+    | "noTypeahead"
+    | "placeholder"
+    | "readonly"
+    | "required"
+    | "valueState"
+    | "onKeyPress"
+  > & {
+    name?: string;
+    /** Defines the value of the component.
+     * The property is updated upon selecting.
+     */
+    value?: Array<Value>;
+    /** Defines the items that can be selected in the component */
+    items?: Array<Item>;
+    /** Defines how to extract the value from each Item */
+    itemValue?: keyof Item | ((value: Item) => string);
+    /** Defines how to extract the label from each Item */
+    itemLabel?: keyof Item | ((value: Item) => string);
+    /** Event handler triggered when selecting an Item */
+    onSelectionChange?: (
+      event: Ui5CustomEvent<
+        MultiComboBoxDomRef,
+        MultiComboBoxSelectionChangeEventDetail
+      >,
+      value: Array<Value>
+    ) => void;
+  };
+
+/* export interface MultiSelectPropss<
   Item = MultiSelectItem,
   Value = string | number
 > extends Omit<
@@ -41,22 +88,33 @@ export interface MultiSelectProps<
     | "onChange"
   > {
   name?: string;
-  value?: Array<Value>;
-  items?: Array<Item>;
-  itemValue?: keyof Item | ((value: Item) => string);
-  itemLabel?: keyof Item | ((value: Item) => string);
-  onSelectionChange?: (
-    event: Ui5CustomEvent<
-      MultiComboBoxDomRef,
-      MultiComboBoxSelectionChangeEventDetail
-    >,
-    value: Array<Value>
-  ) => void;
-}
+  /** Defines the value of the component.
+   * The property is updated upon selecting.
+   */
+//value?: Array<Value>;
+/** Defines the items that can be selected in the component */
+//items?: Array<Item>;
+/** Defines how to extract the value from each Item */
+//itemValue?: keyof Item | ((value: Item) => string);
+/** Defines how to extract the label from each Item */
+//itemLabel?: keyof Item | ((value: Item) => string);
+/** Event handler triggered when selecting an Item */
+//onSelectionChange?: (
+// event: Ui5CustomEvent<
+// MultiComboBoxDomRef,
+// MultiComboBoxSelectionChangeEventDetail
+//>,
+// value: Array<Value>
+//) => void;
+//}
 
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
 
+/** `MultiSelect` as a wrapper of
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-multicombobox--docs" target="_blank">UI5 MultiComboBox</a> adding
+ * additional functionality and customization for handling multiple selections.
+ */
 export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
   (props, forwardedRef) => {
     const {

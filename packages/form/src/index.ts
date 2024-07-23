@@ -3,7 +3,7 @@ export { Button } from "./component/Button";
 export type { ButtonProps } from "./component/Button";
 
 export { Checkbox } from "./component/Checkbox";
-export type { CheckboxProps } from "./component/Checkbox";
+export type { CheckBoxProps } from "./component/Checkbox";
 
 export { DatePicker } from "./component/DatePicker";
 export type { DatePickerProps } from "./component/DatePicker";

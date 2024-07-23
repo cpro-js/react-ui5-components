@@ -4,6 +4,7 @@ import { Input } from "@ui5/webcomponents-react";
 import { InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import {
   FC,
+  HTMLAttributes,
   KeyboardEvent,
   MutableRefObject,
   forwardRef,
@@ -12,10 +13,41 @@ import {
   useRef,
 } from "react";
 
+import { SharedHtmlProps } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter, useOnChangeWorkaround } from "./util";
 
-export interface TextInputProps extends InputPropTypes {}
+// pick only those props which we do care about
+type TextInputHtmlProps = Pick<HTMLAttributes<HTMLElement>, "onKeyPress">;
 
+export type TextInputProps = SharedHtmlProps &
+  TextInputHtmlProps &
+  Pick<
+    InputPropTypes,
+    | "children"
+    | "icon"
+    | "valueStateMessage"
+    | "onChange"
+    | "onInput"
+    | "onSuggestionItemPreview"
+    | "onSuggestionItemSelect"
+    | "disabled"
+    | "maxlength"
+    | "name"
+    | "noTypeahead"
+    | "placeholder"
+    | "required"
+    | "readonly"
+    | "showClearIcon"
+    | "showSuggestions"
+    | "type"
+    | "value"
+    | "valueState"
+  >;
+
+/** `TextInput` as a wrapper of
+ * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-input--docs" target="_blank">UI5 Input</a>
+ * adding a custom `SubmitOnEnter` eventhandler, which triggers when pressing enter.
+ */
 export const TextInput = forwardRef<InputDomRef, TextInputProps>(
   ({ value, onKeyPress, ...props }, forwardedRef) => {
     const handleKeyPress = useCallback(
