@@ -54,7 +54,7 @@ interface SapCoreDateFormat {
 }
 
 // finally: union of the wanted props with our own props
-export type DatePickerProps<TDate extends Date | string | number = string> =
+export type DatePickerProps<TDate extends Date | string = string> =
   SharedHtmlPropsWithKeyInput &
     Pick<
       DatePickerPropTypes,
@@ -256,7 +256,7 @@ export const DatePicker = forwardRef<
       onKeyPress={handleKeyPress}
     />
   );
-}) as <TDate extends Date | string | number = string>(
+}) as <TDate extends Date | string = string>(
   p: DatePickerProps<TDate> & {
     ref?: Ref<DatePickerDomRef | undefined>;
   }
