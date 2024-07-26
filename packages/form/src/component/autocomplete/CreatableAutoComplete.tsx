@@ -23,35 +23,36 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type CreatableAutoCompleteProps<TModel = DefaultAutoCompleteOption> =
-  SharedHtmlPropsWithKeyInput &
-    Omit<
-      Pick<
-        CoreAutocompleteProps<TModel>,
-        | "name"
-        | "value"
-        | "itemProps"
-        | "onInputChange"
-        | "onValueChange"
-        | "forceSelection"
-        | "icon"
-        | "valueStateMessage"
-        | "onSuggestionItemPreview"
-        | "onSuggestionItemSelect"
-        | "disabled"
-        | "maxlength"
-        | "noTypeahead"
-        | "placeholder"
-        | "readonly"
-        | "required"
-        | "showClearIcon"
-        | "valueState"
-      >,
-      "inputValue" | UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
-    > &
-    UseAsyncAdditionalProps<TModel> &
-    UseItemAdditionalProps<TModel> &
-    UseCreatableAdditionalProps<TModel>;
+export type CreatableAutoCompleteProps<
+  TModel extends {} = DefaultAutoCompleteOption
+> = SharedHtmlPropsWithKeyInput &
+  Omit<
+    Pick<
+      CoreAutocompleteProps<TModel>,
+      | "name"
+      | "value"
+      | "itemProps"
+      | "onInputChange"
+      | "onValueChange"
+      | "forceSelection"
+      | "icon"
+      | "valueStateMessage"
+      | "onSuggestionItemPreview"
+      | "onSuggestionItemSelect"
+      | "disabled"
+      | "maxlength"
+      | "noTypeahead"
+      | "placeholder"
+      | "readonly"
+      | "required"
+      | "showClearIcon"
+      | "valueState"
+    >,
+    "inputValue" | UseAsyncManagedPropKeys | UseItemModelManagedPropKeys
+  > &
+  UseAsyncAdditionalProps<TModel> &
+  UseItemAdditionalProps<TModel> &
+  UseCreatableAdditionalProps<TModel>;
 
 export const CreatableAutoComplete = forwardRef<
   InputDomRef,
@@ -73,7 +74,7 @@ export const CreatableAutoComplete = forwardRef<
   >(stateProps);
 
   return <CoreAutocomplete ref={forwardedRef} {...creatableProps} />;
-}) as <T = DefaultAutoCompleteOption>(
+}) as <T extends {} = DefaultAutoCompleteOption>(
   p: CreatableAutoCompleteProps<T> & {
     ref?: Ref<HTMLInputElement | undefined>;
   }
