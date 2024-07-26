@@ -50,7 +50,7 @@ const convertToDate = (
   return value == null ? null : value instanceof Date ? value : parse(value);
 };
 
-export type DateTimePickerProps<TDate extends Date | string | number = string> =
+export type DateTimePickerProps<TDate extends Date | string = string> =
   SharedHtmlPropsWithKeyInput &
     Pick<
       DateTimePickerPropTypes,
