@@ -19,7 +19,7 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type AutoCompleteProps<TModel = DefaultAutoCompleteOption> =
+export type AutoCompleteProps<TModel extends {} = DefaultAutoCompleteOption> =
   SharedHtmlPropsWithKeyInput &
     Omit<
       Pick<
@@ -66,6 +66,6 @@ export const AutoComplete = forwardRef<InputDomRef, AutoCompleteProps>(
 
     return <CoreAutocomplete ref={forwardedRef} {...stateProps} />;
   }
-) as <T = DefaultAutoCompleteOption>(
+) as <T extends {} = DefaultAutoCompleteOption>(
   p: AutoCompleteProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
 ) => ReactElement;

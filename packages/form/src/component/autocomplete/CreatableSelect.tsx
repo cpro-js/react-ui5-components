@@ -18,36 +18,37 @@ import {
   DefaultAutoCompleteOption,
 } from "./internal/CoreAutocomplete";
 
-export type CreatableSelectProps<TModel = DefaultAutoCompleteOption> =
-  SharedHtmlPropsWithKeyInput &
-    Omit<
-      Pick<
-        CoreAutocompleteProps<TModel>,
-        | "name"
-        | "value"
-        | "itemProps"
-        | "items"
-        | "filterItem"
-        | "onInputChange"
-        | "onValueChange"
-        | "forceSelection"
-        | "icon"
-        | "valueStateMessage"
-        | "onSuggestionItemPreview"
-        | "onSuggestionItemSelect"
-        | "disabled"
-        | "maxlength"
-        | "noTypeahead"
-        | "placeholder"
-        | "readonly"
-        | "required"
-        | "showClearIcon"
-        | "valueState"
-      >,
-      "inputValue" | UseItemModelManagedPropKeys
-    > &
-    UseItemAdditionalProps<TModel> &
-    UseCreatableAdditionalProps<TModel>;
+export type CreatableSelectProps<
+  TModel extends {} = DefaultAutoCompleteOption
+> = SharedHtmlPropsWithKeyInput &
+  Omit<
+    Pick<
+      CoreAutocompleteProps<TModel>,
+      | "name"
+      | "value"
+      | "itemProps"
+      | "items"
+      | "filterItem"
+      | "onInputChange"
+      | "onValueChange"
+      | "forceSelection"
+      | "icon"
+      | "valueStateMessage"
+      | "onSuggestionItemPreview"
+      | "onSuggestionItemSelect"
+      | "disabled"
+      | "maxlength"
+      | "noTypeahead"
+      | "placeholder"
+      | "readonly"
+      | "required"
+      | "showClearIcon"
+      | "valueState"
+    >,
+    "inputValue" | UseItemModelManagedPropKeys
+  > &
+  UseItemAdditionalProps<TModel> &
+  UseCreatableAdditionalProps<TModel>;
 
 export const CreatableSelect = forwardRef<InputDomRef, CreatableSelectProps>(
   (props, forwardedRef) => {
@@ -66,6 +67,6 @@ export const CreatableSelect = forwardRef<InputDomRef, CreatableSelectProps>(
 
     return <CoreAutocomplete ref={forwardedRef} {...creatableProps} />;
   }
-) as <T = DefaultAutoCompleteOption>(
+) as <T extends {} = DefaultAutoCompleteOption>(
   p: CreatableSelectProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
 ) => ReactElement;
