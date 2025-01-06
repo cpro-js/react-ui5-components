@@ -13,6 +13,7 @@
   "homepage": "http://cpro-js.github.io/react-ui5-components",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
+  "type": "module",
   "scripts": {
     "build": "tsc && vite build --config vite.config-build.ts",
     "build-storybook": "storybook build --quiet",
@@ -28,7 +29,7 @@
   ],
   "peerDependencies": {
     "@cpro-js/react-core": "<1.0.0",
-    "@ui5/webcomponents-react": "^1.22.2",
+    "@ui5/webcomponents-react": "^2.5.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
@@ -54,9 +55,9 @@
     "@types/jest": "^28.1.6",
     "@types/react": "^18.0.10",
     "@types/react-dom": "^18.0.5",
-    "@ui5/webcomponents": "^1.19.1",
-    "@ui5/webcomponents-fiori": "^1.19.1",
-    "@ui5/webcomponents-react": "^1.22.2",
+    "@ui5/webcomponents": "^2.5.1",
+    "@ui5/webcomponents-fiori": "^2.5.1",
+    "@ui5/webcomponents-react": "^2.5.0",
     "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "identity-obj-proxy": "^3.0.0",
@@ -68,7 +69,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "rimraf": "^3.0.2",
     "storybook": "^8.0.8",
-    "typescript": "^4.4.2",
+    "typescript": "^5.7.2",
     "vite": "^5.0.11",
     "vite-plugin-dts": "^3.7.0"
   },
