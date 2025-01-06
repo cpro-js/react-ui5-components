@@ -1,7 +1,8 @@
 import "../form/formSupport";
 
-import { TextAreaDomRef, ValueState } from "@ui5/webcomponents-react";
-import { FC, forwardRef, useImperativeHandle, useMemo, useRef } from "react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
+import { TextAreaDomRef } from "@ui5/webcomponents-react";
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { useController } from "react-hook-form";
 
 import { TextArea, TextAreaProps } from "../component/TextArea";
@@ -65,7 +66,7 @@ export const TextAreaField = forwardRef<FormFieldElement, TextAreaFieldProps>(
         onChange={field.onChange}
         onBlur={field.onBlur}
         valueState={
-          hasError(fieldState.error) ? ValueState.Error : ValueState.None
+          hasError(fieldState.error) ? ValueState.Negative : ValueState.None
         }
         valueStateMessage={
           errorMessage != null && (

@@ -27,7 +27,7 @@ const Template: StoryFn<
   const fieldRef = useRef<FormFieldElement>();
 
   return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+    <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
       <MultiAutoCompleteField {...props} ref={fieldRef} name={"items"} />
       <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>

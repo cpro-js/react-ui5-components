@@ -56,9 +56,9 @@ export function FormViewer<T>({
       </Toolbar>
       <div style={{ marginTop: "10px" }}>
         {submittedValues == null ? (
-          <Text> No submitted data yet!</Text>
+          <Text>No submitted data yet!</Text>
         ) : (
-          <Text renderWhitespace>
+          <Text style={{ whiteSpace: "pre" }}>
             {JSON.stringify(submittedValues, null, 2)}{" "}
           </Text>
         )}

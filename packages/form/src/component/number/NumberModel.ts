@@ -17,8 +17,7 @@ export interface CommonNumberInputProps
     | "value"
     | "maxlength"
     | "showSuggestions"
-    | "onSuggestionItemPreview"
-    | "onSuggestionItemSelect"
+    | "onSelectionChange"
     | "onChange"
     | "onKeyUp"
   > {

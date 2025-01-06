@@ -22,7 +22,7 @@ const Template: StoryFn<
   });
 
   return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+    <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
       <CheckboxFieldGroup {...props} name="value">
         <CheckboxField value="cake" text={"Cake"} />
         <CheckboxField value="waffles" text={"Waffles"} />

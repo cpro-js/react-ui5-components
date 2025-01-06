@@ -2,7 +2,6 @@ import "@ui5/webcomponents-icons/dist/add.js";
 
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryFn } from "@storybook/react";
-import { ValueState } from "@ui5/webcomponents-react";
 
 import {
   COUNTRIES,

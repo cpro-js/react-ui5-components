@@ -1,6 +1,7 @@
 import "../form/formSupport";
 
-import { InputDomRef, ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
+import { InputDomRef } from "@ui5/webcomponents-react";
 import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { useController } from "react-hook-form";
 
@@ -65,7 +66,7 @@ export const TextInputField = forwardRef<FormFieldElement, TextInputFieldProps>(
         onChange={field.onChange}
         onBlur={field.onBlur}
         valueState={
-          hasError(fieldState.error) ? ValueState.Error : ValueState.None
+          hasError(fieldState.error) ? ValueState.Negative : ValueState.None
         }
         valueStateMessage={
           errorMessage != null && (

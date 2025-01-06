@@ -1,6 +1,7 @@
 import "../form/formSupport";
 
-import { ComboBoxDomRef, ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
+import { ComboBoxDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
@@ -57,7 +58,6 @@ export const SelectField = forwardRef<FormFieldElement, SelectFieldProps>(
     const errorMessage = hasError(fieldState.error)
       ? getValidationErrorMessage(fieldState.error, field.value)
       : undefined;
-
     return (
       <Select
         {...props}
@@ -66,7 +66,7 @@ export const SelectField = forwardRef<FormFieldElement, SelectFieldProps>(
         value={field.value}
         onChange={(_, value) => field.onChange(value)}
         valueState={
-          hasError(fieldState.error) ? ValueState.Error : ValueState.None
+          hasError(fieldState.error) ? ValueState.Negative : ValueState.None
         }
         valueStateMessage={
           errorMessage != null && (

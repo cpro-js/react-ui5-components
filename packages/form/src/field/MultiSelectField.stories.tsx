@@ -35,7 +35,7 @@ const Template: StoryFn<FormControllerProps<FormData> & MultiSelectFieldProps> =
     const fieldRef = useRef<FormFieldElement>();
 
     return (
-      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
         <MultiSelectField {...props} ref={fieldRef} name={"item"} />
         <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
       </FormController>
@@ -109,7 +109,7 @@ const TemplateAlt: StoryFn<
   const fieldRef = useRef<FormFieldElement>();
 
   return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+    <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
       <MultiSelectField<SelectItemAlt, string>
         {...props}
         ref={fieldRef}

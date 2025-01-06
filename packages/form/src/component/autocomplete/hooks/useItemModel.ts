@@ -44,7 +44,7 @@ export type UseItemModelProps<TItemModel, TAdditionalProps> = Omit<
 > &
   UseItemAdditionalProps<TItemModel>;
 
-export type UseItemModelReturn<TItemModel, TAdditionalProps> = Omit<
+export type UseItemModelReturn<TItemModel extends {}, TAdditionalProps> = Omit<
   TAdditionalProps,
   UseItemAdditionalPropKeys
 > &
@@ -52,7 +52,10 @@ export type UseItemModelReturn<TItemModel, TAdditionalProps> = Omit<
     Pick<CoreAutocompleteProps<TItemModel>, UseItemModelManagedPropKeys>
   >;
 
-export const useItemModel = <TItemModel, TAdditionalProps extends {}>(
+export const useItemModel = <
+  TItemModel extends {},
+  TAdditionalProps extends {}
+>(
   props: UseItemModelProps<TItemModel, TAdditionalProps>
 ): UseItemModelReturn<TItemModel, TAdditionalProps> => {
   const { itemValue, itemLabel, ...otherProps } = props;

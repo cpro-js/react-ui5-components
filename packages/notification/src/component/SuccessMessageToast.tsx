@@ -1,5 +1,6 @@
 import { observer, useInjection } from "@cpro-js/react-core";
-import { Toast, ToastDomRef, ToastPlacement } from "@ui5/webcomponents-react";
+import { Toast, ToastDomRef } from "@ui5/webcomponents-react";
+import ToastPlacement from "@ui5/webcomponents/dist/types/ToastPlacement";
 import { FC, ReactElement, useCallback, useEffect, useRef } from "react";
 
 import { NotificationStore } from "../NotificationStore";
@@ -20,8 +21,6 @@ export const SuccessMessageToast: FC<SuccessMessageToastProps> = observer(
     const { message, duration, renderSuccess, callback } = props;
     const notiStore = useInjection(NotificationStore);
 
-    const ref = useRef<ToastDomRef>(null);
-
     const onFinish = useCallback(() => {
       notiStore.removeFromSuccessMessages(message);
       if (callback) {
@@ -31,7 +30,6 @@ export const SuccessMessageToast: FC<SuccessMessageToastProps> = observer(
 
     useEffect(() => {
       if (!renderSuccess) {
-        ref?.current?.show();
         setTimeout(onFinish, duration);
       }
     }, [duration, renderSuccess, onFinish]);
@@ -42,9 +40,9 @@ export const SuccessMessageToast: FC<SuccessMessageToastProps> = observer(
 
     return (
       <Toast
-        duration={duration}
+        open={true}
         placement={ToastPlacement.BottomCenter}
-        ref={ref}
+        duration={duration}
       >
         {message}
       </Toast>

@@ -1,6 +1,7 @@
 import "../form/formSupport";
 
-import { InputDomRef, ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
+import { InputDomRef } from "@ui5/webcomponents-react";
 import {
   FC,
   forwardRef,
@@ -81,7 +82,7 @@ export const NumberInputField = forwardRef<
       onBlur={field.onBlur}
       required={required}
       valueState={
-        hasError(fieldState.error) ? ValueState.Error : ValueState.None
+        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
       }
       valueStateMessage={
         errorMessage != null && (

@@ -3,9 +3,9 @@ import {
   Link,
   LinkDomRef,
   MessageBox,
-  MessageBoxTypes,
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
+import { MessageBoxType } from "@ui5/webcomponents-react/dist/enums";
 import { FC, ReactElement, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -55,7 +55,7 @@ export const ErrorMessageBox: FC<ErrorMessageBoxProps> = (props) => {
     <MessageBox
       open={open}
       actions={["Close"]}
-      type={MessageBoxTypes.Error}
+      type={MessageBoxType.Error}
       onClose={handleClose}
     >
       {error.message}

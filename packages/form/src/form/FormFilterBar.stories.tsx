@@ -50,24 +50,24 @@ const Template: StoryFn<FormControllerProps<FormData>> = (args) => {
           />
         }
       >
-        <FilterGroupItem label="Input">
+        <FilterGroupItem filterKey="input1" label="Input">
           <TextInputField name="input1" required />
         </FilterGroupItem>
-        <FilterGroupItem label="Input2">
+        <FilterGroupItem filterKey="input1" label="Input2">
           <TextInputField name="input2" required />
         </FilterGroupItem>
-        <FilterGroupItem label="Date">
+        <FilterGroupItem filterKey="date" label="Date">
           <DatePickerField name="date" />
         </FilterGroupItem>
-        <FilterGroupItem label="Select">
+        <FilterGroupItem filterKey="select" label="Select">
           <SelectField name="select" items={items} />
         </FilterGroupItem>
 
-        <FilterGroupItem label="MultiSelect">
+        <FilterGroupItem filterKey="multiSelect" label="MultiSelect">
           <MultiSelectField name="multiSelect" items={items} />
         </FilterGroupItem>
 
-        <FilterGroupItem label="Checkboxes">
+        <FilterGroupItem filterKey="dish" label="Checkboxes">
           <CheckboxFieldGroup name="dish">
             <CheckboxField value="cake" text={"Cake"} />
             <CheckboxField value="waffles" text={"Waffles"} />
@@ -87,7 +87,7 @@ Standard.args = {};
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
-  initialValues: { input1: "test1", input2: "test2", date: "" },
+  initialValues: { input1: "test1", input2: "test2", date: undefined },
 };
 
 export default {

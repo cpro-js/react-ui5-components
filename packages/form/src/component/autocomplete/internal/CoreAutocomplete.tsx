@@ -193,7 +193,7 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
 
     const handleInput = useCallback(
       (event: Ui5CustomEvent<InputDomRef>) => {
-        const currentValue = (event.currentTarget as HTMLInputElement).value;
+        const currentValue = (event.currentTarget as InputDomRef).value;
 
         if (onInputChange != null) {
           onInputChange(currentValue, event);

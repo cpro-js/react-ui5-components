@@ -3,7 +3,7 @@ import { NumberFormatter } from "./NumberFormatter";
 export const getCurrencyConfig = (
   toMerge: Intl.NumberFormatOptions = {},
   currency: string
-) => ({
+): Intl.NumberFormatOptions => ({
   ...toMerge,
   currency,
   currencyDisplay: "code",

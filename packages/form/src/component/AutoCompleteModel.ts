@@ -98,11 +98,7 @@ export type CustomMultiInputProps<T> = CustomInputProps<T> &
   Partial<
     Omit<
       ExcludedTypes<MultiInputPropTypes, HTMLAttributes<HTMLElement>>,
-      | "tokens"
-      | "value"
-      | "showSuggestions"
-      | "onTokenDelete"
-      | "onSuggestionItemSelect"
+      "tokens" | "value" | "showSuggestions" | "onTokenDelete"
     >
   >;
 

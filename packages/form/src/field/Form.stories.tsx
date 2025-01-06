@@ -6,6 +6,7 @@ import {
   FlexBoxJustifyContent,
   Form,
   FormItem,
+  Label,
   Text,
   Toolbar,
   ToolbarSpacer,
@@ -61,20 +62,20 @@ const Template: StoryFn<FormControllerProps<FormData> & ExtraData> = (args) => {
     <>
       <FormController<FormData> {...{ initialValues, onSubmit, onChange, id }}>
         <HiddenField name="id" />
-        <Form as="div">
-          <FormItem label="Text">
+        <Form>
+          <FormItem labelContent={<Label>Text</Label>}>
             <Text> Test</Text>
           </FormItem>
-          <FormItem label="Input">
+          <FormItem labelContent={<Label>Input</Label>}>
             <TextInputField name="input1" />
           </FormItem>
-          <FormItem label="Input2">
+          <FormItem labelContent={<Label>Input2</Label>}>
             <TextInputField name="input2" />
           </FormItem>
-          <FormItem label="Date">
+          <FormItem labelContent={<Label>Date</Label>}>
             <DatePickerField name="date" />
           </FormItem>
-          <FormItem label="Checkboxes">
+          <FormItem labelContent={<Label>Checkboxes</Label>}>
             <FlexBox
               direction={FlexBoxDirection.Column}
               justifyContent={FlexBoxJustifyContent.Start}
@@ -98,27 +99,29 @@ const Template: StoryFn<FormControllerProps<FormData> & ExtraData> = (args) => {
               </CheckboxFieldGroup>
             </FlexBox>
           </FormItem>
-          <FormItem label="Current Country">
+          <FormItem labelContent={<Label>Current Country</Label>}>
             <AutoCompleteField
               name="country"
               loadItems={SEARCH_COUNTRIES}
               initialItems={initialCurrentCountrySuggestions}
             />
           </FormItem>
-          <FormItem label="Text Area">
+          <FormItem labelContent={<Label>Text Area</Label>}>
             <TextAreaField name="textarea" />
           </FormItem>
-          <FormItem label="Number Input">
+          <FormItem labelContent={<Label>Number Input</Label>}>
             <NumberInputField name="numberinput" />
           </FormItem>
-          <FormItem label="Visitied Countries">
+          <FormItem labelContent={<Label>Visitied Countries</Label>}>
             <MultiAutoCompleteField
               name="countries"
               onSearch={SEARCH_COUNTRIES}
               initialSuggestions={initialCountriesSuggestions}
             />
           </FormItem>
-          <FormItem label="Hierarchical Checkboxes (via name)">
+          <FormItem
+            labelContent={<Label>Hierarchical Checkboxes (via name)</Label>}
+          >
             <CheckboxField name="root.selected" boolean />
             <CheckboxField name="root.test.selected" boolean />
           </FormItem>

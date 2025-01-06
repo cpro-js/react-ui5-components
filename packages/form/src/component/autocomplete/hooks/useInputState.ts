@@ -5,7 +5,7 @@ import { useLatestRef } from "../../../hook/useLatestRef";
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
 export const useInputState = <
-  TModel,
+  TModel extends {},
   TAdditionalProps extends CoreAutocompleteProps<TModel>
 >(
   props: TAdditionalProps

@@ -1,6 +1,6 @@
 import "../form/formSupport";
 
-import { ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import {
   MutableRefObject,
   ReactElement,
@@ -77,7 +77,7 @@ export const MultiAutoCompleteField = forwardRef<
       values={field.value}
       onChange={(_, value) => field.onChange(value)}
       valueState={
-        hasError(fieldState.error) ? ValueState.Error : ValueState.None
+        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
       }
       valueStateMessage={
         errorMessage != null && (

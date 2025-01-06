@@ -31,7 +31,7 @@ export function useFormListener<FormValues extends {}>(
   useEffect(() => {
     const subscription = watch((values, { name }) => {
       changeCallbackRef.current(
-        values as PartialFormValues<FormValues>,
+        values as unknown as PartialFormValues<FormValues>,
         actionsRef.current,
         { name } as ChangedField<FormValues>
       );
