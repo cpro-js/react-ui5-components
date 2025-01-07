@@ -32,8 +32,6 @@ export type AutoCompleteProps<TModel extends {} = DefaultAutoCompleteOption> =
         | "forceSelection"
         | "icon"
         | "valueStateMessage"
-        | "onSuggestionItemPreview"
-        | "onSuggestionItemSelect"
         | "disabled"
         | "maxlength"
         | "noTypeahead"

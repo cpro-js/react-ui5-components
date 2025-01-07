@@ -37,8 +37,6 @@ export type CreatableAutoCompleteProps<
       | "forceSelection"
       | "icon"
       | "valueStateMessage"
-      | "onSuggestionItemPreview"
-      | "onSuggestionItemSelect"
       | "disabled"
       | "maxlength"
       | "noTypeahead"

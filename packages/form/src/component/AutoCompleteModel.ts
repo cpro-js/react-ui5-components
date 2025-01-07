@@ -98,7 +98,12 @@ export type CustomMultiInputProps<T> = CustomInputProps<T> &
   Partial<
     Omit<
       ExcludedTypes<MultiInputPropTypes, HTMLAttributes<HTMLElement>>,
-      "tokens" | "value" | "showSuggestions" | "onTokenDelete"
+      | "tokens"
+      | "value"
+      | "showSuggestions"
+      | "onTokenDelete"
+      | "onSelectionChange"
+      | "onSelect"
     >
   >;
 
@@ -115,16 +120,10 @@ export type DefaultAutoCompleteOption = { label: string; value: string };
  * Reduced prop set of the UI5 component <code>SuggestionItem</code>.
  * Prop <code>value</code> has been added.
  */
+// TODO renderItem
 export type CustomSuggestionProps = { value: string } & Pick<
   SuggestionItemPropTypes,
-  | "description"
-  | "icon"
-  | "iconEnd"
-  | "image"
-  | "additionalText"
-  | "additionalTextState"
-  | "text"
-  | "type"
+  "additionalText" | "text"
 >;
 
 /**
@@ -133,14 +132,8 @@ export type CustomSuggestionProps = { value: string } & Pick<
  * Reduced prop set of the UI5 Component <code>Token</code>.
  * Prop <code>value</code> has been added.
  */
+// TODO renderItem
 export type CustomTokenProps = { value: string } & Pick<
   TokenPropTypes,
-  | "text"
-  | "className"
-  | "id"
-  | "style"
-  | "closeIcon"
-  | "readonly"
-  | "selected"
-  | "onSelect"
+  "text" | "className" | "id" | "style" | "closeIcon" | "selected" | "onSelect"
 >;

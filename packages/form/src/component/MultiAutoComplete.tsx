@@ -13,6 +13,7 @@ import {
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import { debounce } from "@ui5/webcomponents-react-base";
+import { MultiInputTokenDeleteEventDetail } from "@ui5/webcomponents/dist/MultiInput";
 import {
   ClipboardEvent,
   Component,
@@ -216,13 +217,18 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   };
 
-  private onDelete = (event: TokenDeleteEvent) => {
+  private onDelete = (
+    event: Ui5CustomEvent<MultiInputDomRef, MultiInputTokenDeleteEventDetail>
+  ) => {
     const { onRemove, onChange, onSelectionChange } = this.props;
     const { values, selectedItems } = this.state;
-    const id = event.detail.token.dataset.id;
+    // Note: only one token is deleted at a time
+    const [id] = event.detail.tokens
+      .map((token) => token.dataset.id)
+      .filter((token): token is string => token != null);
 
     // nothing to do
-    if (!id) {
+    if (id.length === 0) {
       return;
     }
 
@@ -318,7 +324,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         )
       )
         .filter(
-          (selectedItem: T | undefined): selectedItem is T =>
+          (selectedItem: T | undefined): selectedItem is Awaited<T> =>
             !!selectedItem &&
             !values.includes(this.retrieveItemValue(selectedItem))
         )
