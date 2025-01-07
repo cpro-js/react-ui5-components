@@ -1,5 +1,3 @@
-import "../form/formSupport";
-
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import { ComboBoxDomRef } from "@ui5/webcomponents-react";
 import {

@@ -1,5 +1,3 @@
-import "../form/formSupport";
-
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import { TextAreaDomRef } from "@ui5/webcomponents-react";
 import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";

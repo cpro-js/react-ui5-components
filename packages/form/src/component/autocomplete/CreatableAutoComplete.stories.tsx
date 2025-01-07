@@ -1,7 +1,7 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
 import { Meta, StoryFn } from "@storybook/react";
-import { ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
 import { COUNTRIES, SEARCH_COUNTRIES } from "./AutoComplete-storyData";
 import {
@@ -61,9 +61,9 @@ RenderSuggestion.args = {
     // @ts-ignore
     description: country.withUmlaut as string,
     icon: "add",
-    // iconEnd: "info",
+    // endIcon: "info",
     info: "Infozzz",
-    infoState: ValueState.Success,
+    infoState: ValueState.Positive,
   }),
 };
 

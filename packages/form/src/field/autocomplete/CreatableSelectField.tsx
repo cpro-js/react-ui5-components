@@ -1,6 +1,4 @@
-import "../../form/formSupport";
-
-import { ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import {
   ReactElement,
   Ref,
@@ -20,7 +18,9 @@ import { useI18nValidationError } from "../../i18n/FormI18n";
 import { FormFieldElement, FormFieldValidation } from "../types";
 import { hasError } from "../util";
 
-export type CreatableSelectFieldProps<T = DefaultAutoCompleteOption> = Omit<
+export type CreatableSelectFieldProps<
+  T extends {} = DefaultAutoCompleteOption
+> = Omit<
   CreatableSelectProps<T>,
   "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
 > &
@@ -72,7 +72,7 @@ export const CreatableSelectField = forwardRef<
       value={field.value}
       onValueChange={field.onChange}
       valueState={
-        hasError(fieldState.error) ? ValueState.Error : ValueState.None
+        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
       }
       valueStateMessage={
         errorMessage != null && (
@@ -83,7 +83,7 @@ export const CreatableSelectField = forwardRef<
       required={required}
     />
   );
-}) as <T = DefaultAutoCompleteOption>(
+}) as <T extends {} = DefaultAutoCompleteOption>(
   p: CreatableSelectFieldProps<T> & {
     ref?: Ref<FormFieldElement | undefined>;
   }

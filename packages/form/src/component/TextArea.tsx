@@ -1,5 +1,3 @@
-import "../form/formSupport";
-
 import { TextArea as UI5TextArea } from "@ui5/webcomponents-react";
 import { TextAreaDomRef, TextAreaPropTypes } from "@ui5/webcomponents-react";
 import { forwardRef } from "react";

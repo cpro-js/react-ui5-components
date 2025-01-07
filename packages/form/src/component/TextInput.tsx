@@ -1,5 +1,3 @@
-import "../form/formSupport";
-
 import { Input } from "@ui5/webcomponents-react";
 import { InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import {
