@@ -10,6 +10,10 @@ import {
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import {
+  IInputSuggestionItem,
+  InputSelectionChangeEventDetail,
+} from "@ui5/webcomponents/dist/Input";
+import {
   KeyboardEvent,
   MutableRefObject,
   forwardRef,
@@ -21,7 +25,7 @@ import {
 
 import { useLatestRef } from "../../../hook/useLatestRef";
 import type { DefaultAutoCompleteOption } from "../../AutoCompleteModel";
-import { triggerSubmitOnEnter, useOnChangeWorkaround } from "../../util";
+import { triggerSubmitOnEnter } from "../../util";
 import { startsWithPerTerm } from "./filter";
 
 export type { DefaultAutoCompleteOption };
@@ -142,6 +146,7 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
 
     const valueRef = useLatestRef<string | undefined>(value);
     const suggestionRef = useLatestRef<Array<DefaultAutoCompleteOption>>(items);
+    const itemRef = useRef<IInputSuggestionItem | null>(null);
 
     const customItemFilter: (
       inputValue: string,
@@ -169,27 +174,46 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
       [inputValue, items, customItemFilter]
     );
 
-    const handleSuggestionItemSelect = useCallback(
-      (event: Ui5CustomEvent<InputDomRef, { item: HTMLElement }>) => {
-        if (onValueChange == null) {
-          return;
-        }
+    const handleSelectionChange = useCallback(
+      (event: Ui5CustomEvent<InputDomRef, InputSelectionChangeEventDetail>) => {
+        // we need to store last selected item see migration guide: https://sap.github.io/ui5-webcomponents/docs/migration-guides/to-version-2/#ui5-input
+        itemRef.current = event.detail.item;
+      },
+      []
+    );
 
-        const element = event.detail.item as HTMLElement & {
-          text: string;
-        };
-        if (element?.dataset?.id != null) {
-          const itemValue = element?.dataset?.id;
-          const item = suggestionRef.current.find(
-            (item) => getItemValue(item) === itemValue
-          );
-          if (item) {
-            onValueChange(itemValue, item);
+    const handleChange = useCallback(
+      (event: Ui5CustomEvent<InputDomRef>) => {
+        if (onValueChange != null) {
+          const itemValue = itemRef.current?.dataset.id;
+
+          if (itemValue == null) {
+            // no item was selected -> remove value
+            onValueChange(undefined, undefined);
+          } else {
+            const item = suggestionRef.current.find(
+              (item) => getItemValue(item) === itemValue
+            );
+
+            if (item) {
+              onValueChange(item.value, item);
+            }
           }
         }
       },
       [onValueChange, getItemValue]
     );
+
+    const resetSuggenstionItem = useCallback(() => {
+      // reset last selected item
+      itemRef.current = null;
+
+      // workaround: ensure trigger of selection change event
+      // @ts-ignore
+      inputRef.current.previousValue = "";
+      // @ts-ignore
+      inputRef.current.valueBeforeItemSelection = "";
+    }, []);
 
     const handleInput = useCallback(
       (event: Ui5CustomEvent<InputDomRef>) => {
@@ -203,6 +227,7 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
           const item = suggestionRef.current.find(
             (item) => getItemLabel(item) === currentValue
           );
+
           if (!item && valueRef.current != null) {
             onValueChange(undefined, undefined);
           }
@@ -225,8 +250,6 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
     // store input ref for internal usage
     const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
     useImperativeHandle(forwardedRef, () => inputRef.current);
-    // apply workaround to fix onChange event
-    useOnChangeWorkaround(inputRef, value);
 
     return (
       <Input
@@ -235,7 +258,9 @@ export const CoreAutocomplete = forwardRef<InputDomRef, CoreAutocompleteProps>(
         ref={inputRef}
         showSuggestions={true}
         onInput={handleInput}
-        onSuggestionItemSelect={handleSuggestionItemSelect}
+        onChange={handleChange}
+        onOpen={resetSuggenstionItem}
+        onSelectionChange={handleSelectionChange}
         onKeyPress={handleKeyPress}
       >
         {filteredItems.map((item) => {
