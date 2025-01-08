@@ -13,7 +13,6 @@
   "homepage": "http://cpro-js.github.io/react-ui5-components",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "type": "module",
   "scripts": {
     "build": "tsc && vite build --config vite.config-build.ts",
     "build-storybook": "storybook build --quiet",
