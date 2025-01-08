@@ -11,7 +11,7 @@ import { useEffect } from "react";
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    actions: { argTypesRegex: "^on(?!(Mouse|Key))[A-Z]+" }, // match all onEvents except starting with onMouse
     controls: {
       matchers: {
         color: /(background|color)$/i,
