@@ -7,12 +7,15 @@ import "@ui5/webcomponents/dist/features/InputSuggestions.js";
 import {
   MultiInput,
   MultiInputDomRef,
-  MultiInputPropTypes,
   SuggestionItem,
   Token,
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import { debounce } from "@ui5/webcomponents-react-base";
+import {
+  IInputSuggestionItem,
+  InputSelectionChangeEventDetail,
+} from "@ui5/webcomponents/dist/Input";
 import { MultiInputTokenDeleteEventDetail } from "@ui5/webcomponents/dist/MultiInput";
 import {
   ClipboardEvent,
@@ -20,6 +23,7 @@ import {
   FocusEvent,
   HTMLAttributes,
   KeyboardEvent,
+  MutableRefObject,
   RefObject,
   createRef,
 } from "react";
@@ -93,6 +97,10 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   searching: boolean = false;
 
   private inputRef: RefObject<MultiInputDomRef> = createRef();
+  /**
+   * we need to store last selected item see migration guide: https://sap.github.io/ui5-webcomponents/docs/migration-guides/to-version-2/#ui5-input
+   */
+  private lastSelectedInputSuggestion: IInputSuggestionItem | null = null;
 
   state = {
     values: this.props.values || [],
@@ -170,16 +178,35 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     this.search(this.searchTerm, hasMinChars);
   };
 
-  private onSelect = (
-    event: Ui5CustomEvent<MultiInputDomRef, { item: HTMLElement }>
+  private onOpen = () => {
+    // reset last selected item
+    this.lastSelectedInputSuggestion = null;
+    // workaround: ensure trigger of selection change event
+    // @ts-ignore
+    this.inputRef.current.previousValue = "";
+    // @ts-ignore
+    this.inputRef.current.valueBeforeItemSelection = "";
+  };
+
+  private onSelectionChange = (
+    event: Ui5CustomEvent<MultiInputDomRef, InputSelectionChangeEventDetail>
   ) => {
+    this.lastSelectedInputSuggestion = event.detail.item;
+  };
+
+  private onChange = (event: Ui5CustomEvent<MultiInputDomRef>) => {
     const { onAdd, onChange, onSelectionChange } = this.props;
     const { values } = this.state;
-    const id = event.detail.item.dataset.id;
-    const toAdd = this.findItemFromSuggestions(id);
+    const id = this.lastSelectedInputSuggestion?.dataset.id;
 
+    if (!id) {
+      // no selection
+      return;
+    }
+
+    const toAdd = this.findItemFromSuggestions(id);
     // nothing to do
-    if (!id || !toAdd) {
+    if (!toAdd) {
       return;
     }
 
@@ -461,7 +488,9 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         tokens={this.renderTokens()}
         onTokenDelete={this.onDelete}
         onInput={this.onInput}
-        onSuggestionItemSelect={this.onSelect}
+        onOpen={this.onOpen}
+        onChange={this.onChange}
+        onSelectionChange={this.onSelectionChange}
         onBlur={this.onBlur}
         onKeyDown={this.onKeyDown}
         onPaste={this.onPaste}
