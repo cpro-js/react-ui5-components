@@ -1,8 +1,8 @@
-# @cpro-js/react-ui5-notification
+# Notification Service
 
-Provides a service to add new success or error messages (NotificationService)
-and a simple renderer component (NotificationRenderer),
-which takes care of rendering the appropriate user interfaces.
+Provides a `NotificationService` to programmatically add new success or error messages
+and a simple renderer component (`NotificationRenderer`),
+which takes care of rendering these messages.
 
 Success messages are rendered as
 [Toast Messages](https://sap.github.io/ui5-webcomponents-react/?path=/story/modals-popovers-toast--default-story).
@@ -20,16 +20,7 @@ $ yarn add @cpro-js/react-ui5-notification
 
 ## Usage
 
-First add the `NotificationRenderer` to your app.
-
-```tsx
-import { NotificationRenderer } from "@cpro-js/react-ui5-notification";
-
-// add the Renderer to your App.tsx, beside the AppRouter
-  <AppRouter />
-  <NotificationRenderer />
-//...
-```
+First add the `NotificationRenderer` to your app so that it always gets rendered.
 
 Use the `NotificationService` to show error or success messages.
 Inject the service as usual:
@@ -54,3 +45,14 @@ export const SomeScreen: FC<{}> = () => {
   // ....
 }
 ```
+
+## Testing
+
+For testing any development of this package:
+
+1. `yarn build`
+2. `npm link`
+3. open a sample app
+4. `npm link @cpro-js/react-ui5-notification`
+5. start & test the sample app
+6. `npm unlink @cpro-js/react-ui5-notification`
