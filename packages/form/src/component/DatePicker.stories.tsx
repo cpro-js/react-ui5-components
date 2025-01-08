@@ -26,7 +26,7 @@ export const ShortFormat = Template.bind({});
 ShortFormat.args = { ...Prefilled.args, formatPattern: "short" };
 
 export const CustomFormat = Template.bind({});
-CustomFormat.args = { ...Prefilled.args, formatPattern: "dd.MM.yyyy" };
+CustomFormat.args = { ...Prefilled.args, formatPattern: "dd---MM---yyyy" };
 
 /**
  *  Only the current date or any date in the future can be selected.
@@ -64,7 +64,7 @@ ISO8601DateStandard.argTypes = {
 export const ISO8601DateCustomFormat = ISO8601DateTemplate.bind({});
 ISO8601DateCustomFormat.args = {
   ...ISO8601DateStandard.args,
-  formatPattern: "dd.MM.yyyy",
+  formatPattern: "dd__MM__yyyy",
 };
 ISO8601DateCustomFormat.argTypes = { ...ISO8601DateStandard.argTypes };
 

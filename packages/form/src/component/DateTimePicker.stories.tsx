@@ -17,7 +17,10 @@ Standard.args = {
   },
 };
 export const CustomFormat = Template.bind({});
-CustomFormat.args = { ...Standard.args, formatPattern: "dd.MM.yyyy, HH:mm:ss" };
+CustomFormat.args = {
+  ...Standard.args,
+  formatPattern: "dd_MM_yyyy 'um' HH:mm",
+};
 
 export const Prefilled = Template.bind({});
 Prefilled.args = { ...Standard.args, value: new Date() };
@@ -54,7 +57,7 @@ ISODateTimeStandard.argTypes = {
 export const ISODateTimeCustomFormat = ISODateTimeTemplate.bind({});
 ISODateTimeCustomFormat.args = {
   ...ISODateTimeStandard.args,
-  formatPattern: "dd.MM.yyyy, HH:mm:ss",
+  formatPattern: "dd_MM_yyyy 'ab' HH:mm:ss",
 };
 ISODateTimeCustomFormat.argTypes = { ...ISODateTimeStandard.argTypes };
 
