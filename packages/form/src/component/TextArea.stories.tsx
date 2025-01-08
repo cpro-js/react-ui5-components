@@ -1,4 +1,5 @@
 import { StoryFn } from "@storybook/react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
 import { TextAreaProps } from "./TextArea";
 import { TextArea } from "./TextArea";
@@ -11,7 +12,7 @@ export default {
       action: "onKeyPress",
     },
     valueState: {
-      options: ["None", "Warning", "Error", "Success", "Information"],
+      options: Object.values(ValueState),
       control: { type: "radio" },
     },
   },
@@ -23,11 +24,11 @@ export const Standard = Template.bind({});
 Standard.args = {
   maxlength: 100,
   required: false,
-  valueState: "None",
+  valueState: ValueState.None,
 };
 
 export const Prefilled = Template.bind({});
 Prefilled.args = {
   value: "Prefilled Text",
-  valueState: "None",
+  valueState: ValueState.None,
 };

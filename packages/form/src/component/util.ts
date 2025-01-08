@@ -89,25 +89,3 @@ export const useAllowAction = (
 
   return [allowActionRef, setAllowAction];
 };
-
-export const useOnChangeWorkaround = (
-  inputRef: RefObject<InputDomRef>,
-  value: string | undefined
-) => {
-  useEffect(() => {
-    if (inputRef.current == null) {
-      return;
-    }
-
-    // workaround: change event is not triggered in the following case
-    //  1. user sets value to "1234"
-    //  2. input gets updated after onChange via render prop to "1"
-    //  3. user sets value to "1234"
-    // => no change will be triggered
-    // @ts-ignore
-    if (inputRef.current._changeFiredValue !== value) {
-      // @ts-ignore
-      inputRef.current._changeFiredValue = null;
-    }
-  }, [value, inputRef]);
-};

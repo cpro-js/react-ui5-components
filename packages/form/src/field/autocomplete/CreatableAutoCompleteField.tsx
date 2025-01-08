@@ -1,6 +1,4 @@
-import "../../form/formSupport";
-
-import { ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import {
   ReactElement,
   Ref,
@@ -20,14 +18,15 @@ import { useI18nValidationError } from "../../i18n/FormI18n";
 import { FormFieldElement, FormFieldValidation } from "../types";
 import { hasError } from "../util";
 
-export type CreatableAutoCompleteFieldProps<T = DefaultAutoCompleteOption> =
-  Omit<
-    CreatableAutoCompleteProps<T>,
-    "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
-  > &
-    Pick<FormFieldValidation, "required"> & {
-      name: string;
-    };
+export type CreatableAutoCompleteFieldProps<
+  T extends {} = DefaultAutoCompleteOption
+> = Omit<
+  CreatableAutoCompleteProps<T>,
+  "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
+> &
+  Pick<FormFieldValidation, "required"> & {
+    name: string;
+  };
 
 export const CreatableAutoCompleteField = forwardRef<
   FormFieldElement,
@@ -73,7 +72,7 @@ export const CreatableAutoCompleteField = forwardRef<
       value={field.value}
       onValueChange={field.onChange}
       valueState={
-        hasError(fieldState.error) ? ValueState.Error : ValueState.None
+        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
       }
       valueStateMessage={
         errorMessage != null && (
@@ -84,7 +83,7 @@ export const CreatableAutoCompleteField = forwardRef<
       required={required}
     />
   );
-}) as <T = DefaultAutoCompleteOption>(
+}) as <T extends {} = DefaultAutoCompleteOption>(
   p: CreatableAutoCompleteFieldProps<T> & {
     ref?: Ref<FormFieldElement | undefined>;
   }

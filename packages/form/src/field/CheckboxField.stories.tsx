@@ -14,7 +14,7 @@ interface FormDataBoolean {
   value?: boolean;
 }
 
-const createTemplate = function <T>(): StoryFn<
+const createTemplate = function <T extends {}>(): StoryFn<
   FormControllerProps<T> & CheckboxFieldProps
 > {
   return (args) => {
@@ -26,7 +26,7 @@ const createTemplate = function <T>(): StoryFn<
     const fieldRef = useRef<FormFieldElement>(null);
 
     return (
-      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <FormController<T> {...{ initialValues, onSubmit: handleSubmit }}>
         <CheckboxField {...props} ref={fieldRef} name={"value"} />
         <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
       </FormController>

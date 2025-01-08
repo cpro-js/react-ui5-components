@@ -1,7 +1,7 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
 import { Meta, StoryFn } from "@storybook/react";
-import { ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
 import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
 import {
@@ -53,18 +53,6 @@ CustomValueFunction.args = {
   ...Prefilled.args,
   value: COUNTRIES[1].value,
   itemValue: (country) => `${country.label} (${country.value})`,
-};
-
-export const RenderSuggestion = Template.bind({});
-RenderSuggestion.args = {
-  ...Standard.args,
-  itemProps: (country) => ({
-    text: country.label,
-    description: country.withUmlaut as string,
-    icon: "add",
-    info: "Infozzz",
-    infoState: ValueState.Success,
-  }),
 };
 
 const meta: Meta = {

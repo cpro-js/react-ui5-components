@@ -26,7 +26,6 @@ export type CreatableSelectProps<
       CoreAutocompleteProps<TModel>,
       | "name"
       | "value"
-      | "itemProps"
       | "items"
       | "filterItem"
       | "onInputChange"
@@ -34,8 +33,7 @@ export type CreatableSelectProps<
       | "forceSelection"
       | "icon"
       | "valueStateMessage"
-      | "onSuggestionItemPreview"
-      | "onSuggestionItemSelect"
+      | "onSelectionChange"
       | "disabled"
       | "maxlength"
       | "noTypeahead"

@@ -1,6 +1,5 @@
-import "../form/formSupport";
-
-import { MultiComboBoxDomRef, ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
+import { MultiComboBoxDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
@@ -77,7 +76,7 @@ export const MultiSelectField = forwardRef<
         field.onChange(value);
       }}
       valueState={
-        hasError(fieldState.error) ? ValueState.Error : ValueState.None
+        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
       }
       valueStateMessage={
         errorMessage != null && (

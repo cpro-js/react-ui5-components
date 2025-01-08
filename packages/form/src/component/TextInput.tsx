@@ -1,5 +1,3 @@
-import "../form/formSupport";
-
 import { Input } from "@ui5/webcomponents-react";
 import { InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import {
@@ -14,7 +12,7 @@ import {
 } from "react";
 
 import { SharedHtmlProps } from "./SharedHtmlProps";
-import { triggerSubmitOnEnter, useOnChangeWorkaround } from "./util";
+import { triggerSubmitOnEnter } from "./util";
 
 // pick only those props which we do care about
 type TextInputHtmlProps = Pick<HTMLAttributes<HTMLElement>, "onKeyPress">;
@@ -27,9 +25,8 @@ export type TextInputProps = SharedHtmlProps &
     | "icon"
     | "valueStateMessage"
     | "onChange"
+    | "onSelectionChange"
     | "onInput"
-    | "onSuggestionItemPreview"
-    | "onSuggestionItemSelect"
     | "disabled"
     | "maxlength"
     | "name"
@@ -65,8 +62,6 @@ export const TextInput = forwardRef<InputDomRef, TextInputProps>(
     // store input ref for internal usage
     const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
     useImperativeHandle(forwardedRef, () => inputRef.current);
-    // apply workaround to fix onChange event
-    useOnChangeWorkaround(inputRef, value);
 
     return (
       <Input

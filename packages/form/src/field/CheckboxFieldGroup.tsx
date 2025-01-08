@@ -1,5 +1,3 @@
-import "../form/formSupport";
-
 import { FC, createContext, forwardRef } from "react";
 
 import { CheckboxFieldProps } from "./CheckboxField";

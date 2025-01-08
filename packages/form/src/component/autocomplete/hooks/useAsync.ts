@@ -59,7 +59,7 @@ export type UseAsyncPropsReturn<
   Required<Pick<CoreAutocompleteProps<TItemModel>, UseAsyncManagedPropKeys>>;
 
 export const useAsync = <
-  TItemModel,
+  TItemModel extends {},
   TAdditionalProps extends Pick<
     CoreAutocompleteProps<TItemModel>,
     UseAsyncUsedPropKeys

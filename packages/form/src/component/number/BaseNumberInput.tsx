@@ -1,13 +1,8 @@
-import {
-  Input,
-  InputDomRef,
-  InputType,
-  Ui5CustomEvent,
-  ValueState,
-} from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
+import { Input, InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
+import InputType from "@ui5/webcomponents/dist/types/InputType";
 import {
   ClipboardEvent,
-  FC,
   KeyboardEvent,
   MutableRefObject,
   forwardRef,
@@ -18,7 +13,7 @@ import {
   useState,
 } from "react";
 
-import { triggerSubmitOnEnter, useOnChangeWorkaround } from "../util";
+import { triggerSubmitOnEnter } from "../util";
 import {
   getCurrencyConfig,
   getCurrencyFormatter,
@@ -468,7 +463,10 @@ export const BaseNumberInput = forwardRef<InputDomRef, BaseNumberInputProps>(
 
     // handle warnings
     const showWarning = showNumberWarningMessages && message;
-    const msgType = showWarning ? ValueState.Warning : valueState;
+    const msgType = showWarning
+      ? ValueState.Critical
+      : valueState ?? ValueState.None;
+
     const msg = !showWarning ? (
       valueStateMessage
     ) : (
@@ -481,9 +479,6 @@ export const BaseNumberInput = forwardRef<InputDomRef, BaseNumberInputProps>(
     const formattedValue = inputState
       ? currentValueRef.current || ""
       : formatForDisplay(parseValue(currentValueRef.current));
-
-    // apply workaround to fix onChange event
-    useOnChangeWorkaround(inputRef, formattedValue);
 
     return (
       <Input

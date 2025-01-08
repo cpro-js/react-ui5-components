@@ -1,8 +1,6 @@
-import "../form/formSupport";
-
 import { TextArea as UI5TextArea } from "@ui5/webcomponents-react";
 import { TextAreaDomRef, TextAreaPropTypes } from "@ui5/webcomponents-react";
-import { HTMLAttributes, forwardRef } from "react";
+import { forwardRef } from "react";
 
 import { SharedHtmlProps } from "./SharedHtmlProps";
 
@@ -14,7 +12,7 @@ export type TextAreaProps = SharedHtmlProps &
     | "onInput"
     | "disabled"
     | "growing"
-    | "growingMaxLines"
+    | "growingMaxRows"
     | "maxlength"
     | "name"
     | "placeholder"

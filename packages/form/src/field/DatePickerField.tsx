@@ -1,8 +1,6 @@
-import "../form/formSupport";
-
-import { DatePickerDomRef, ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
+import { DatePickerDomRef } from "@ui5/webcomponents-react";
 import {
-  FC,
   forwardRef,
   useContext,
   useImperativeHandle,
@@ -129,7 +127,7 @@ export const DatePickerField = forwardRef<
         field.onChange(value != null ? value : undefined)
       }
       valueState={
-        hasError(fieldState.error) ? ValueState.Error : ValueState.None
+        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
       }
       valueStateMessage={
         errorMessage != null && (

@@ -7,17 +7,20 @@ import "@ui5/webcomponents/dist/features/InputSuggestions.js";
 import {
   MultiInput,
   MultiInputDomRef,
-  MultiInputPropTypes,
   SuggestionItem,
   Token,
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import { debounce } from "@ui5/webcomponents-react-base";
 import {
+  IInputSuggestionItem,
+  InputSelectionChangeEventDetail,
+} from "@ui5/webcomponents/dist/Input";
+import { MultiInputTokenDeleteEventDetail } from "@ui5/webcomponents/dist/MultiInput";
+import {
   ClipboardEvent,
   Component,
   FocusEvent,
-  HTMLAttributes,
   KeyboardEvent,
   RefObject,
   createRef,
@@ -26,7 +29,6 @@ import {
 import {
   AutoCompleteOptions,
   CustomMultiInputProps,
-  CustomSuggestionProps,
   CustomTokenProps,
   DefaultAutoCompleteOption,
 } from "./AutoCompleteModel";
@@ -92,6 +94,10 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   searching: boolean = false;
 
   private inputRef: RefObject<MultiInputDomRef> = createRef();
+  /**
+   * we need to store last selected item see migration guide: https://sap.github.io/ui5-webcomponents/docs/migration-guides/to-version-2/#ui5-input
+   */
+  private lastSelectedInputSuggestion: IInputSuggestionItem | null = null;
 
   state = {
     values: this.props.values || [],
@@ -169,16 +175,35 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     this.search(this.searchTerm, hasMinChars);
   };
 
-  private onSelect = (
-    event: Ui5CustomEvent<MultiInputDomRef, { item: HTMLElement }>
+  private onOpen = () => {
+    // reset last selected item
+    this.lastSelectedInputSuggestion = null;
+    // workaround: ensure trigger of selection change event
+    // @ts-ignore
+    this.inputRef.current.previousValue = "";
+    // @ts-ignore
+    this.inputRef.current.valueBeforeItemSelection = "";
+  };
+
+  private onSelectionChange = (
+    event: Ui5CustomEvent<MultiInputDomRef, InputSelectionChangeEventDetail>
   ) => {
+    this.lastSelectedInputSuggestion = event.detail.item;
+  };
+
+  private onChange = (event: Ui5CustomEvent<MultiInputDomRef>) => {
     const { onAdd, onChange, onSelectionChange } = this.props;
     const { values } = this.state;
-    const id = event.detail.item.dataset.id;
-    const toAdd = this.findItemFromSuggestions(id);
+    const id = this.lastSelectedInputSuggestion?.dataset.id;
 
+    if (!id) {
+      // no selection
+      return;
+    }
+
+    const toAdd = this.findItemFromSuggestions(id);
     // nothing to do
-    if (!id || !toAdd) {
+    if (!toAdd) {
       return;
     }
 
@@ -216,13 +241,18 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     }
   };
 
-  private onDelete = (event: TokenDeleteEvent) => {
+  private onDelete = (
+    event: Ui5CustomEvent<MultiInputDomRef, MultiInputTokenDeleteEventDetail>
+  ) => {
     const { onRemove, onChange, onSelectionChange } = this.props;
     const { values, selectedItems } = this.state;
-    const id = event.detail.token.dataset.id;
+    // Note: only one token is deleted at a time
+    const [id] = event.detail.tokens
+      .map((token) => token.dataset.id)
+      .filter((token): token is string => token != null);
 
     // nothing to do
-    if (!id) {
+    if (id.length === 0) {
       return;
     }
 
@@ -318,7 +348,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         )
       )
         .filter(
-          (selectedItem: T | undefined): selectedItem is T =>
+          (selectedItem: T | undefined): selectedItem is Awaited<T> =>
             !!selectedItem &&
             !values.includes(this.retrieveItemValue(selectedItem))
         )
@@ -415,20 +445,13 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   };
 
   private renderSuggestions = () => {
-    const { suggestionProps } = this.props;
     const { suggestions } = this.state;
 
     return suggestions.map((suggestion: T) => {
-      const props: Partial<CustomSuggestionProps> = suggestionProps
-        ? suggestionProps(suggestion)
-        : {};
+      const value = this.retrieveItemValue(suggestion);
+      const text = this.retrieveItemLabel(suggestion);
 
-      const value = props.value || this.retrieveItemValue(suggestion);
-      const text = props.text || this.retrieveItemLabel(suggestion);
-
-      return (
-        <SuggestionItem {...props} key={value} data-id={value} text={text} />
-      );
+      return <SuggestionItem key={value} data-id={value} text={text} />;
     });
   };
 
@@ -442,7 +465,6 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
       onSelectionChange,
       onAdd,
       onRemove,
-      suggestionProps,
       renderValue,
       ...originalProps
     } = this.props;
@@ -455,7 +477,9 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
         tokens={this.renderTokens()}
         onTokenDelete={this.onDelete}
         onInput={this.onInput}
-        onSuggestionItemSelect={this.onSelect}
+        onOpen={this.onOpen}
+        onChange={this.onChange}
+        onSelectionChange={this.onSelectionChange}
         onBlur={this.onBlur}
         onKeyDown={this.onKeyDown}
         onPaste={this.onPaste}

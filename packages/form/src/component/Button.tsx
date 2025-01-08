@@ -15,7 +15,7 @@ export type ButtonProps = SharedHtmlProps &
     | "design"
     | "disabled"
     | "icon"
-    | "iconEnd"
+    | "endIcon"
     | "tooltip"
     | "accessibleName"
     | "accessibleNameRef"

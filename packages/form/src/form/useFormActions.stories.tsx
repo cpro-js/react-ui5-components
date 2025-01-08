@@ -18,11 +18,12 @@ const TemplateFormActions: StoryFn<UseFormControllerProps<FormData>> = (
   props
 ) => {
   const { onSubmit, initialValues } = props;
-  const { submittedValues, handleSubmit: onFormViewerSubmit } = useFormViewer({
-    onSubmit: onSubmit,
-  });
+  const { submittedValues, handleSubmit: onFormViewerSubmit } =
+    useFormViewer<FormData>({
+      onSubmit: onSubmit,
+    });
 
-  const form = useFormController({
+  const form = useFormController<FormData>({
     onSubmit: onFormViewerSubmit,
     initialValues: initialValues,
   });
@@ -44,7 +45,7 @@ const TemplateFormActions: StoryFn<UseFormControllerProps<FormData>> = (
 
   return (
     <form onSubmit={handleSubmit} onReset={handleReset}>
-      <FormProvider {...form}>
+      <FormProvider<FormData> {...form}>
         <div>
           <Button type={"button"} onClick={updateValues}>
             Set Values
@@ -52,7 +53,7 @@ const TemplateFormActions: StoryFn<UseFormControllerProps<FormData>> = (
         </div>
         <TextInputField name={"value1"} />
         <TextInputField name={"value2"} />s
-        <FormViewer submittedValues={submittedValues} />
+        <FormViewer<FormData> submittedValues={submittedValues} />
       </FormProvider>
     </form>
   );

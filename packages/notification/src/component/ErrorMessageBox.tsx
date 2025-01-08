@@ -3,7 +3,6 @@ import {
   Link,
   LinkDomRef,
   MessageBox,
-  MessageBoxTypes,
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import { FC, ReactElement, useCallback, useState } from "react";
@@ -55,7 +54,7 @@ export const ErrorMessageBox: FC<ErrorMessageBoxProps> = (props) => {
     <MessageBox
       open={open}
       actions={["Close"]}
-      type={MessageBoxTypes.Error}
+      type={"Error"}
       onClose={handleClose}
     >
       {error.message}

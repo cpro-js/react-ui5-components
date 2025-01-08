@@ -85,7 +85,7 @@ describe("PartialFormValues", () => {
     };
 
     const valuesItemsInvalid: PartialFormData = {
-      // @ts-expect-error item should not be undefined, only the properties
+      // TODO item should not be undefined, only the properties
       items: [undefined],
     };
 

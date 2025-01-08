@@ -42,9 +42,10 @@ export type MultiSelectProps<
     | "onChange"
     | "icon"
     | "onInput"
-    | "onOpenChange"
+    | "onOpen"
+    | "onClose"
     | "valueStateMessage"
-    | "allowCustomValues"
+    | "noValidation"
     | "disabled"
     | "filter"
     | "noTypeahead"
@@ -121,7 +122,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       name,
       items = [],
       onSelectionChange,
-      onOpenChange,
+      onOpen,
+      onClose,
       onKeyDown,
       onKeyPress,
       value,
@@ -200,15 +202,26 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
     );
 
     const [allowSubmitOnEnter, setAllowSubmitOnEnter] = useAllowAction(true);
-    const handleOpenChange = useCallback(
-      (event: Ui5CustomEvent<MultiComboBoxDomRef & { open: boolean }>) => {
-        setAllowSubmitOnEnter(!event.target.open);
+    const handleOnOpen = useCallback(
+      (event: Ui5CustomEvent<MultiComboBoxDomRef>) => {
+        setAllowSubmitOnEnter(false);
 
-        if (onOpenChange != null) {
-          onOpenChange(event);
+        if (onOpen != null) {
+          onOpen(event);
         }
       },
-      [setAllowSubmitOnEnter, onOpenChange]
+      [setAllowSubmitOnEnter, onOpen]
+    );
+
+    const handleOnClose = useCallback(
+      (event: Ui5CustomEvent<MultiComboBoxDomRef>) => {
+        setAllowSubmitOnEnter(true);
+
+        if (onClose != null) {
+          onClose(event);
+        }
+      },
+      [setAllowSubmitOnEnter, onClose]
     );
 
     const handleKeyPress = useCallback(
@@ -309,7 +322,8 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           {...otherProps}
           ref={internalRef}
           onSelectionChange={handleSelectionChange}
-          onOpenChange={handleOpenChange}
+          onOpen={handleOnOpen}
+          onClose={handleOnClose}
           onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}
           onPaste={onPaste}

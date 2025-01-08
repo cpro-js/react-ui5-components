@@ -73,11 +73,6 @@ export type CustomInputProps<T> = Pick<
    */
   onSearch: (searchTerm: string) => Promise<AutoCompleteOptions<T>>;
 
-  /**
-   * Render <code>SuggestionItem</code>s from UI5.
-   */
-  suggestionProps?: (value: T) => Partial<CustomSuggestionProps>;
-
   initialSuggestions?: Array<T>;
 
   /**
@@ -102,7 +97,8 @@ export type CustomMultiInputProps<T> = CustomInputProps<T> &
       | "value"
       | "showSuggestions"
       | "onTokenDelete"
-      | "onSuggestionItemSelect"
+      | "onSelectionChange"
+      | "onSelect"
     >
   >;
 
@@ -114,24 +110,6 @@ export type AutoCompleteOptions<T = DefaultAutoCompleteOption> = Array<T>;
 export type DefaultAutoCompleteOption = { label: string; value: string };
 
 /**
- * Props of SuggestionItem which renders one suggestion option for the AutoComplete.
- *
- * Reduced prop set of the UI5 component <code>SuggestionItem</code>.
- * Prop <code>value</code> has been added.
- */
-export type CustomSuggestionProps = { value: string } & Pick<
-  SuggestionItemPropTypes,
-  | "description"
-  | "icon"
-  | "iconEnd"
-  | "image"
-  | "additionalText"
-  | "additionalTextState"
-  | "text"
-  | "type"
->;
-
-/**
  * Props of Token which renders one value (selected option) for the MultiAutoComplete.
  *
  * Reduced prop set of the UI5 Component <code>Token</code>.
@@ -139,12 +117,5 @@ export type CustomSuggestionProps = { value: string } & Pick<
  */
 export type CustomTokenProps = { value: string } & Pick<
   TokenPropTypes,
-  | "text"
-  | "className"
-  | "id"
-  | "style"
-  | "closeIcon"
-  | "readonly"
-  | "selected"
-  | "onSelect"
+  "text" | "className" | "id" | "style" | "closeIcon" | "selected" | "onSelect"
 >;

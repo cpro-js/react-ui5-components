@@ -39,7 +39,7 @@ const defaultGetNewItem = <T = DefaultAutoCompleteOption>(
 export const defaultFormatCreateLabel = (inputValue: string) =>
   `Create "${inputValue}"`;
 
-type UsedAutocompleteProps<TItemModel> = Pick<
+type UsedAutocompleteProps<TItemModel extends {}> = Pick<
   CoreAutocompleteProps<TItemModel>,
   | "value"
   | "inputValue"
@@ -75,7 +75,7 @@ export interface UseCreatableAdditionalProps<TItemModel> {
 type UseCreatableAdditionalPropKeys = keyof UseCreatableAdditionalProps<{}>;
 
 export type UseCreatableProps<
-  TItemModel,
+  TItemModel extends {},
   TAdditionalProps extends UsedAutocompleteProps<TItemModel>
 > = TAdditionalProps & UseCreatableAdditionalProps<TItemModel>;
 
@@ -85,7 +85,7 @@ export type UseCreatablePropsReturn<
 > = Omit<TAdditionalProps, UseCreatableAdditionalPropKeys>;
 
 export const useCreatable = <
-  TItemModel,
+  TItemModel extends {},
   TAdditionalProps extends UsedAutocompleteProps<TItemModel>
 >(
   props: UseCreatableProps<TItemModel, TAdditionalProps>
@@ -142,7 +142,7 @@ export const useCreatable = <
         getItemLabel(newItemRef.current) === inputValue
       ) {
         // new item was selected and placed into text field --> we need to replace create label with the original user value
-        const element = event.currentTarget as HTMLInputElement;
+        const element = event.currentTarget as InputDomRef;
         inputValueCorrected = getItemValue(newItemRef.current);
         element.value = inputValueCorrected;
       }

@@ -19,24 +19,6 @@ export type ExcludedTypes<T, U> = {
 };
 
 /**
- * Props of SuggestionItem which renders one suggestion option for the AutoComplete.
- *
- * Reduced prop set of the UI5 component <code>SuggestionItem</code>.
- * Prop <code>value</code> has been added.
- */
-export type CustomSuggestionProps = { value: string } & Pick<
-  SuggestionItemPropTypes,
-  | "description"
-  | "icon"
-  | "iconEnd"
-  | "image"
-  | "additionalText"
-  | "additionalTextState"
-  | "text"
-  | "type"
->;
-
-/**
  * Props of Token which renders one value (selected option) for the AutoComplete.
  *
  * Reduced prop set of the UI5 Component <code>Token</code>.
@@ -44,14 +26,7 @@ export type CustomSuggestionProps = { value: string } & Pick<
  */
 export type CustomTokenProps = { value: string } & Pick<
   TokenPropTypes,
-  | "text"
-  | "className"
-  | "id"
-  | "style"
-  | "closeIcon"
-  | "readonly"
-  | "selected"
-  | "onSelect"
+  "text" | "className" | "id" | "style" | "closeIcon" | "selected" | "onSelect"
 >;
 
 export type CustomInputProps = Pick<

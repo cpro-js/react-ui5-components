@@ -1,15 +1,4 @@
-import { EventType, FieldPath } from "react-hook-form";
-import { UnpackNestedValue } from "react-hook-form/dist/types/form";
-
-export type DeepPartial<T> = T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends { [key in keyof T]: T[key] }
-  ? {
-      [K in keyof T]?: DeepPartial<T[K]>;
-    }
-  : T;
+import { DeepPartial, FieldPath, UnpackNestedValue } from "react-hook-form";
 
 export type PartialFormValues<FormValues extends {}> = UnpackNestedValue<
   DeepPartial<FormValues>
@@ -20,7 +9,7 @@ export type FormSubmitHandler<FormValues extends {}> = (
   actions: FormActions<FormValues>
 ) => void | Promise<void>;
 
-export type ChangedField<FormValues> = {
+export type ChangedField<FormValues extends {}> = {
   name: FieldPath<FormValues>;
 };
 
@@ -70,7 +59,7 @@ export type FormActionErrors<FormValues> = { [P in keyof FormValues]?: string };
  * @param errors
  * @param config
  */
-export type FormActionSetErrors<FormValues> = (
+export type FormActionSetErrors<FormValues extends {}> = (
   errors: Array<{ name: FieldPath<FormValues>; message: string }>,
   config?: { shouldFocus?: boolean }
 ) => void;
@@ -81,7 +70,7 @@ export type FormActionSetErrors<FormValues> = (
  *
  * @param values
  */
-export type FormActionSetValues<FormValues> = (
+export type FormActionSetValues<FormValues extends {}> = (
   values: Array<{ name: FieldPath<FormValues>; value: any }>,
   options?: Partial<{
     shouldValidate: boolean;
@@ -105,7 +94,7 @@ export type FormActionClearForm<FormValues> = () => void;
  */
 export type FormActionSubmitForm<FormValues> = () => void;
 
-export interface FormActions<FormValues> {
+export interface FormActions<FormValues extends {}> {
   /**
    * Set error messages for specific fields.
    * @param errors

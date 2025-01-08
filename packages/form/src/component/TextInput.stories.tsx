@@ -18,7 +18,7 @@ Prefilled.args = { ...Standard.args, value: "test" };
 export const WithIcon = Template.bind({});
 WithIcon.args = {
   ...Standard.args,
-  icon: <Icon name="value-help" interactive onClick={console.log} />,
+  icon: <Icon name="value-help" mode="Interactive" onClick={console.log} />,
 };
 
 export default {

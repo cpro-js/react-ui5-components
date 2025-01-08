@@ -1,6 +1,5 @@
-import "../form/formSupport";
-
-import { CheckBoxDomRef, ValueState } from "@ui5/webcomponents-react";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
+import { CheckBoxDomRef } from "@ui5/webcomponents-react";
 import {
   ChangeEvent,
   FC,
@@ -114,7 +113,7 @@ export const CheckboxField = forwardRef<FormFieldElement, CheckboxFieldProps>(
           setValue(field.name, updatedValue);
         }}
         valueState={
-          hasError(fieldState.error) ? ValueState.Error : ValueState.None
+          hasError(fieldState.error) ? ValueState.Negative : ValueState.None
         }
         onBlur={field.onBlur}
       />
