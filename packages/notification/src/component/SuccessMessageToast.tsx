@@ -1,7 +1,6 @@
 import { observer, useInjection } from "@cpro-js/react-core";
-import { Toast, ToastDomRef } from "@ui5/webcomponents-react";
-import ToastPlacement from "@ui5/webcomponents/dist/types/ToastPlacement";
-import { FC, ReactElement, useCallback, useEffect, useRef } from "react";
+import { Toast } from "@ui5/webcomponents-react";
+import { FC, ReactElement, useCallback, useEffect } from "react";
 
 import { NotificationStore } from "../NotificationStore";
 
@@ -39,11 +38,7 @@ export const SuccessMessageToast: FC<SuccessMessageToastProps> = observer(
     }
 
     return (
-      <Toast
-        open={true}
-        placement={ToastPlacement.BottomCenter}
-        duration={duration}
-      >
+      <Toast open={true} placement="BottomCenter" duration={duration}>
         {message}
       </Toast>
     );
