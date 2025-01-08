@@ -56,20 +56,6 @@ CustomValueFunction.args = {
   itemValue: (country) => `VALUE_${country.label.toUpperCase()}`,
 };
 
-export const RenderSuggestion = Template.bind({});
-RenderSuggestion.args = {
-  ...Standard.args,
-  suggestionProps: (country) => ({
-    text: country.label,
-    // @ts-ignore
-    description: country.withUmlaut as string,
-    icon: "add",
-    // iconEnd: "info",
-    info: "Infozzz",
-    infoState: ValueState.Positive,
-  }),
-};
-
 export const RenderValue = Template.bind({});
 RenderValue.args = {
   ...Prefilled.args,

@@ -31,7 +31,6 @@ export type CreatableAutoCompleteProps<
       CoreAutocompleteProps<TModel>,
       | "name"
       | "value"
-      | "itemProps"
       | "onInputChange"
       | "onValueChange"
       | "forceSelection"

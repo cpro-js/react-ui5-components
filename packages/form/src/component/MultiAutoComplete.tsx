@@ -21,9 +21,7 @@ import {
   ClipboardEvent,
   Component,
   FocusEvent,
-  HTMLAttributes,
   KeyboardEvent,
-  MutableRefObject,
   RefObject,
   createRef,
 } from "react";
@@ -31,7 +29,6 @@ import {
 import {
   AutoCompleteOptions,
   CustomMultiInputProps,
-  CustomSuggestionProps,
   CustomTokenProps,
   DefaultAutoCompleteOption,
 } from "./AutoCompleteModel";
@@ -448,20 +445,13 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   };
 
   private renderSuggestions = () => {
-    const { suggestionProps } = this.props;
     const { suggestions } = this.state;
 
     return suggestions.map((suggestion: T) => {
-      const props: Partial<CustomSuggestionProps> = suggestionProps
-        ? suggestionProps(suggestion)
-        : {};
+      const value = this.retrieveItemValue(suggestion);
+      const text = this.retrieveItemLabel(suggestion);
 
-      const value = props.value || this.retrieveItemValue(suggestion);
-      const text = props.text || this.retrieveItemLabel(suggestion);
-
-      return (
-        <SuggestionItem {...props} key={value} data-id={value} text={text} />
-      );
+      return <SuggestionItem key={value} data-id={value} text={text} />;
     });
   };
 
@@ -475,7 +465,6 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
       onSelectionChange,
       onAdd,
       onRemove,
-      suggestionProps,
       renderValue,
       ...originalProps
     } = this.props;

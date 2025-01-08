@@ -26,7 +26,6 @@ export type CreatableSelectProps<
       CoreAutocompleteProps<TModel>,
       | "name"
       | "value"
-      | "itemProps"
       | "items"
       | "filterItem"
       | "onInputChange"

@@ -55,18 +55,6 @@ CustomValueFunction.args = {
   itemValue: (country) => `${country.label} (${country.value})`,
 };
 
-export const RenderSuggestion = Template.bind({});
-RenderSuggestion.args = {
-  ...Standard.args,
-  itemProps: (country) => ({
-    text: country.label,
-    description: country.withUmlaut as string,
-    icon: "add",
-    info: "Infozzz",
-    infoState: ValueState.Positive,
-  }),
-};
-
 const meta: Meta = {
   title: "form/component/AutoComplete/AutoComplete",
   component: AutoComplete,

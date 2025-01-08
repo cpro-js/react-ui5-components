@@ -53,19 +53,19 @@ CustomValueFunction.args = {
   itemValue: (country) => `${country.label} (${country.value})`,
 };
 
-export const RenderSuggestion = Template.bind({});
-RenderSuggestion.args = {
-  ...Standard.args,
-  itemProps: (country) => ({
-    text: country.label,
-    // @ts-ignore
-    description: country.withUmlaut as string,
-    icon: "add",
-    // endIcon: "info",
-    info: "Infozzz",
-    infoState: ValueState.Positive,
-  }),
-};
+// export const RenderSuggestion = Template.bind({});
+// RenderSuggestion.args = {
+//   ...Standard.args,
+//   itemProps: (country) => ({
+//     text: country.label,
+//     // @ts-ignore
+//     description: country.withUmlaut as string,
+//     icon: "add",
+//     // endIcon: "info",
+//     info: "Infozzz",
+//     infoState: ValueState.Positive,
+//   }),
+// };
 
 const meta: Meta = {
   title: "form/component/AutoComplete/CreatableAutocomplete",

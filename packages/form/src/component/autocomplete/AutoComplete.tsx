@@ -26,7 +26,6 @@ export type AutoCompleteProps<TModel extends {} = DefaultAutoCompleteOption> =
         CoreAutocompleteProps<TModel>,
         | "name"
         | "value"
-        | "itemProps"
         | "onInputChange"
         | "onValueChange"
         | "forceSelection"
