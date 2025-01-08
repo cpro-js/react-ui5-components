@@ -8,8 +8,6 @@ import {
   FormItem,
   Label,
   Text,
-  Toolbar,
-  ToolbarSpacer,
 } from "@ui5/webcomponents-react";
 
 import {
@@ -126,11 +124,10 @@ const Template: StoryFn<FormControllerProps<FormData> & ExtraData> = (args) => {
             <CheckboxField name="root.test.selected" boolean />
           </FormItem>
           <FormItem>
-            <Toolbar>
-              <ToolbarSpacer />
+            <FlexBox alignItems="Baseline" justifyContent="Start">
               <Button type="submit">Inner submit button</Button>
               <Button type="reset">Inner reset button</Button>
-            </Toolbar>
+            </FlexBox>
           </FormItem>
         </Form>
       </FormController>

@@ -51,9 +51,7 @@ export function FormViewer<T>({
           </Button>
         )}
       </div>
-      <Toolbar>
-        <Title> Submitted Values </Title>
-      </Toolbar>
+      <Title> Submitted Values </Title>
       <div style={{ marginTop: "10px" }}>
         {submittedValues == null ? (
           <Text>No submitted data yet!</Text>
