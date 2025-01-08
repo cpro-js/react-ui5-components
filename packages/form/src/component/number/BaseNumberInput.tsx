@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 
-import { triggerSubmitOnEnter, useOnChangeWorkaround } from "../util";
+import { triggerSubmitOnEnter } from "../util";
 import {
   getCurrencyConfig,
   getCurrencyFormatter,
@@ -479,9 +479,6 @@ export const BaseNumberInput = forwardRef<InputDomRef, BaseNumberInputProps>(
     const formattedValue = inputState
       ? currentValueRef.current || ""
       : formatForDisplay(parseValue(currentValueRef.current));
-
-    // apply workaround to fix onChange event
-    useOnChangeWorkaround(inputRef, formattedValue);
 
     return (
       <Input

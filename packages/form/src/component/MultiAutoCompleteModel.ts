@@ -24,7 +24,6 @@ export type ExcludedTypes<T, U> = {
  * Reduced prop set of the UI5 Component <code>Token</code>.
  * Prop <code>value</code> has been added.
  */
-// TODO renderItem
 export type CustomTokenProps = { value: string } & Pick<
   TokenPropTypes,
   "text" | "className" | "id" | "style" | "closeIcon" | "selected" | "onSelect"

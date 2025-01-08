@@ -12,7 +12,7 @@ import {
 } from "react";
 
 import { SharedHtmlProps } from "./SharedHtmlProps";
-import { triggerSubmitOnEnter, useOnChangeWorkaround } from "./util";
+import { triggerSubmitOnEnter } from "./util";
 
 // pick only those props which we do care about
 type TextInputHtmlProps = Pick<HTMLAttributes<HTMLElement>, "onKeyPress">;
@@ -62,8 +62,6 @@ export const TextInput = forwardRef<InputDomRef, TextInputProps>(
     // store input ref for internal usage
     const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
     useImperativeHandle(forwardedRef, () => inputRef.current);
-    // apply workaround to fix onChange event
-    useOnChangeWorkaround(inputRef, value);
 
     return (
       <Input
