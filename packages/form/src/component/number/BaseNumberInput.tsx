@@ -463,7 +463,10 @@ export const BaseNumberInput = forwardRef<InputDomRef, BaseNumberInputProps>(
 
     // handle warnings
     const showWarning = showNumberWarningMessages && message;
-    const msgType = showWarning ? ValueState.Critical : valueState;
+    const msgType = showWarning
+      ? ValueState.Critical
+      : valueState ?? ValueState.None;
+
     const msg = !showWarning ? (
       valueStateMessage
     ) : (
