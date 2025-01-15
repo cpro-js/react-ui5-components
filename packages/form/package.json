@@ -18,7 +18,7 @@
     "build-storybook": "storybook build --quiet",
     "prepublish": "tsc && vite build --config vite.config-build.ts",
     "storybook": "storybook dev -p 6006",
-    "test": "jest",
+    "test": "jest --coverage",
     "typecheck": "tsc --noEmit"
   },
   "files": [
@@ -33,6 +33,7 @@
     "react-jss": "^10.9.0"
   },
   "dependencies": {
+    "@cpro-js/react-ui5-webcomponents-form": "^2.0.0",
     "@react-hook/debounce": "^4.0.0",
     "clsx": "^1.1.1",
     "klona": "^2.0.6",

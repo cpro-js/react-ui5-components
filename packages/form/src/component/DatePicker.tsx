@@ -32,7 +32,7 @@ const useStyles = createUseStyles({
   },
 });
 
-const convertToDate = (
+export const convertToDate = (
   value: Date | any,
   parse: (value: any) => Date | null
 ): Date | null => {
