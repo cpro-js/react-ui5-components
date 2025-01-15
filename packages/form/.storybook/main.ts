@@ -28,6 +28,7 @@ const config: StorybookConfig = {
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
       propFilter: (prop) => true,
+      shouldRemoveUndefinedFromOptional: true,
     },
   },
 };
