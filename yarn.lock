@@ -2871,7 +2871,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cpro-js/react-ui5-webcomponents-form@workspace:packages/form":
+"@cpro-js/react-ui5-webcomponents-form@npm:^2.0.0, @cpro-js/react-ui5-webcomponents-form@workspace:packages/form":
   version: 0.0.0-use.local
   resolution: "@cpro-js/react-ui5-webcomponents-form@workspace:packages/form"
   dependencies:
@@ -2880,6 +2880,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.23.3"
     "@babel/preset-react": "npm:^7.23.3"
     "@babel/preset-typescript": "npm:^7.23.3"
+    "@cpro-js/react-ui5-webcomponents-form": "npm:^2.0.0"
     "@react-hook/debounce": "npm:^4.0.0"
     "@storybook/addon-actions": "npm:^8.0.8"
     "@storybook/addon-docs": "npm:^8.0.8"
@@ -2901,6 +2902,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.2.1"
     babel-plugin-transform-typescript-metadata: "npm:^0.3.2"
     clsx: "npm:^1.1.1"
+    construct-style-sheets-polyfill: "npm:^3.1.0"
     identity-obj-proxy: "npm:^3.0.0"
     jest: "npm:^28.1.3"
     jest-environment-jsdom: "npm:^28.1.3"
@@ -8375,6 +8377,13 @@ __metadata:
   version: 1.1.0
   resolution: "console-control-strings@npm:1.1.0"
   checksum: 10c0/7ab51d30b52d461412cd467721bb82afe695da78fff8f29fe6f6b9cbaac9a2328e27a22a966014df9532100f6dd85370460be8130b9c677891ba36d96a343f50
+  languageName: node
+  linkType: hard
+
+"construct-style-sheets-polyfill@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "construct-style-sheets-polyfill@npm:3.1.0"
+  checksum: 10c0/12fb8f92690f90464b46f32f3b976782297919531a6e3dc623924ab18d29f9f76e7b536ab2269fed8ab73375c9e9b8953ef3dc1a36fb23c3c2643e2081b20658
   languageName: node
   linkType: hard
 
