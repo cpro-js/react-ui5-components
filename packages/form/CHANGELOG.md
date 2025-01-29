@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v1.0.2...@cpro-js/react-ui5-webcomponents-form-v1.0.3) (2025-01-29)
+
+
+### Bug Fixes
+
+* propagate keyDown events for DatePicker, DateTimePicker, MultiSelect & Select ([297650b](https://github.com/cpro-js/react-ui5-components/commit/297650b52c9c5fa8e36cda417dea0d19ff45ed84))
+
 ## [1.0.2](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@1.0.1...@cpro-js/react-ui5-webcomponents-form@1.0.2) (2024-04-29)
 
 ### Bug Fixes
