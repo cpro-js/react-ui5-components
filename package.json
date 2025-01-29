@@ -12,7 +12,6 @@
   "dependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
-    "@commitlint/config-lerna-scopes": "^13.1.0",
     "env-cmd": "^10.1.0",
     "husky": "^7.0.2",
     "import-sort-style-module": "^6.0.0",
