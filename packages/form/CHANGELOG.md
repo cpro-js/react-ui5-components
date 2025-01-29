@@ -13,6 +13,15 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - minimum required version of @ui5/webcomponents-react is 2.5.0
 
+## [2.0.1](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@2.0.0...@cpro-js/react-ui5-webcomponents-form-v2.0.1) (2025-01-29)
+
+
+### Bug Fixes
+
+* adding option in  reactDocgenTypescriptOptions so storybook can creat correct controls ([#88](https://github.com/cpro-js/react-ui5-components/issues/88)) ([1f7f088](https://github.com/cpro-js/react-ui5-components/commit/1f7f088e01792c0ea073c0474fa52c81be03018a))
+* propagate keyDown events for DatePicker, DateTimePicker, MultiSelect & Select ([b9fdddb](https://github.com/cpro-js/react-ui5-components/commit/b9fdddb3de19516dd05efda385ef027082f179ed))
+* remove jss dependency ([#91](https://github.com/cpro-js/react-ui5-components/issues/91)) ([4f388cf](https://github.com/cpro-js/react-ui5-components/commit/4f388cfdc3f88a285b31772c1af0597071570c3f))
+
 ## [1.0.2](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form@1.0.1...@cpro-js/react-ui5-webcomponents-form@1.0.2) (2024-04-29)
 
 ### Bug Fixes
