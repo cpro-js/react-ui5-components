@@ -4,7 +4,6 @@ import {
   DatePickerDomRef,
   DatePickerPropTypes,
 } from "@ui5/webcomponents-react";
-import clsx from "clsx";
 import {
   KeyboardEvent,
   ReactElement,
@@ -17,19 +16,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { createUseStyles } from "react-jss";
 
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
 import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter } from "./util";
-
-const useStyles = createUseStyles({
-  fixWidth: {
-    minWidth: "var(--_ui5_input_width)",
-    width: "var(--_ui5_input_width)",
-  },
-});
 
 const convertToDate = (
   value: Date | any,
@@ -149,7 +140,6 @@ export const DatePicker = forwardRef<
     onKeyPress,
     ...passThroughProps
   } = props;
-  const classes = useStyles();
   const ref = useRef<DatePickerDomRef>();
 
   // forward our internal ref as external
@@ -230,7 +220,7 @@ export const DatePicker = forwardRef<
   return (
     <UI5DatePicker
       {...passThroughProps}
-      className={clsx(className, classes.fixWidth)}
+      className={className}
       ref={setRef}
       value={finalValues.value}
       minDate={finalValues.minDate}
