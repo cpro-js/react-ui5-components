@@ -5,12 +5,9 @@
     "build": "yarn workspaces foreach -Apt run build",
     "build-storybook": "yarn workspaces foreach -At run build-storybook",
     "postinstall": "is-ci || husky install",
-    "postversion": "lerna publish from-git",
-    "release": "env-cmd -f .env.local --no-override lerna version",
     "test": "jest",
     "test:ci": "jest",
-    "typecheck": "yarn workspaces foreach -Apt run typecheck",
-    "version": "yarn install && git add yarn.lock"
+    "typecheck": "yarn workspaces foreach -Apt run typecheck"
   },
   "dependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -20,7 +17,6 @@
     "husky": "^7.0.2",
     "import-sort-style-module": "^6.0.0",
     "is-ci": "^3.0.0",
-    "lerna": "^4.0.0",
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
     "prettier-plugin-import-sort": "^0.0.7",

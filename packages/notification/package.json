@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsc && vite build --config vite.config-build.ts",
     "build-storybook": "storybook build --quiet",
-    "prepublish": "tsc && vite build --config vite.config-build.ts",
+    "prepack": "vite build --config vite.config-build.ts",
     "storybook": "storybook dev -p 6006",
     "test": "jest --passWithNoTests",
     "typecheck": "tsc --noEmit"
