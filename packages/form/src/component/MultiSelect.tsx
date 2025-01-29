@@ -8,7 +8,6 @@ import {
 import { MultiComboBoxSelectionChangeEventDetail } from "@ui5/webcomponents/dist/MultiComboBox";
 import {
   ClipboardEvent,
-  HTMLAttributes,
   KeyboardEvent,
   MutableRefObject,
   ReactElement,
@@ -75,39 +74,6 @@ export type MultiSelectProps<
     ) => void;
   };
 
-/* export interface MultiSelectPropss<
-  Item = MultiSelectItem,
-  Value = string | number
-> extends Omit<
-    MultiComboBoxPropTypes,
-    | "name"
-    | "value"
-    | "filterValue"
-    | "children"
-    | "onSelectionChange"
-    | "onChange"
-  > {
-  name?: string;
-  /** Defines the value of the component.
-   * The property is updated upon selecting.
-   */
-//value?: Array<Value>;
-/** Defines the items that can be selected in the component */
-//items?: Array<Item>;
-/** Defines how to extract the value from each Item */
-//itemValue?: keyof Item | ((value: Item) => string);
-/** Defines how to extract the label from each Item */
-//itemLabel?: keyof Item | ((value: Item) => string);
-/** Event handler triggered when selecting an Item */
-//onSelectionChange?: (
-// event: Ui5CustomEvent<
-// MultiComboBoxDomRef,
-// MultiComboBoxSelectionChangeEventDetail
-//>,
-// value: Array<Value>
-//) => void;
-//}
-
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
 
@@ -122,7 +88,6 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
       items = [],
       onSelectionChange,
       onOpenChange,
-      onKeyDown,
       onKeyPress,
       value,
       itemValue,
@@ -185,18 +150,6 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
         }
       },
       [items, onSelectionChange, retrieveItemValue]
-    );
-
-    const handleKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
-        // Fix: As long as the user is typing within the input ensure that no one else can catch these events
-        // Background: Storybook is catching these events and triggering their shortcuts
-        event.stopPropagation();
-        if (onKeyDown != null) {
-          onKeyDown(event);
-        }
-      },
-      [onKeyDown]
     );
 
     const [allowSubmitOnEnter, setAllowSubmitOnEnter] = useAllowAction(true);
@@ -310,7 +263,6 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
           ref={internalRef}
           onSelectionChange={handleSelectionChange}
           onOpenChange={handleOpenChange}
-          onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}
           onPaste={onPaste}
         >

@@ -8,7 +8,6 @@ import {
 } from "@ui5/webcomponents-react";
 import clsx from "clsx";
 import {
-  HTMLAttributes,
   KeyboardEvent,
   ReactElement,
   Ref,
@@ -96,46 +95,46 @@ export type DatePickerProps<TDate extends Date | string = string> =
  *
  * ```tsx
  * //ISO8601 String
-      <DatePicker
-        value={"2024-04-30T09:52:17Z"}
-        onChange={(
-          event: Ui5CustomEvent<
-            DatePickerDomRef,
-            { valid: boolean; value: string }
-          >,
-          value: string | null
-        ): void => {
-          if (event.detail.valid) {
-            console.log("Valid date from event:", event.detail.value);
-            console.log(typeof value);
-          } else {
-            console.error("Invalid date entered");
-          }
-        }}
-      />
+ <DatePicker
+ value={"2024-04-30T09:52:17Z"}
+ onChange={(
+ event: Ui5CustomEvent<
+ DatePickerDomRef,
+ { valid: boolean; value: string }
+ >,
+ value: string | null
+ ): void => {
+ if (event.detail.valid) {
+ console.log("Valid date from event:", event.detail.value);
+ console.log(typeof value);
+ } else {
+ console.error("Invalid date entered");
+ }
+ }}
+ />
  * ```
  *
  *  ```tsx
  * //Date Object
  * <FormAdapter date={IdentityDateAdapter}>
-      <DatePicker
-        value={new Date()}
-        onChange={(
-          event: Ui5CustomEvent<
-            DatePickerDomRef,
-            { valid: boolean; value: string }
-          >,
-          value: Date | null
-        ): void => {
-          if (event.detail.valid) {
-            console.log("Valid date from event:", event.detail.value);
-            console.log(typeof value);
-          } else {
-            console.error("Invalid date entered");
-          }
-        }}
-      />
-    </FormAdapter>
+ <DatePicker
+ value={new Date()}
+ onChange={(
+ event: Ui5CustomEvent<
+ DatePickerDomRef,
+ { valid: boolean; value: string }
+ >,
+ value: Date | null
+ ): void => {
+ if (event.detail.valid) {
+ console.log("Valid date from event:", event.detail.value);
+ console.log(typeof value);
+ } else {
+ console.error("Invalid date entered");
+ }
+ }}
+ />
+ </FormAdapter>
  * ```
  *  If you retrieve the value from the DatePicker, you will receive it in its original form, just as it was provided.
  */
@@ -149,7 +148,6 @@ export const DatePicker = forwardRef<
     minDate,
     maxDate,
     onChange,
-    onKeyDown,
     onKeyPress,
     ...passThroughProps
   } = props;
@@ -178,18 +176,6 @@ export const DatePicker = forwardRef<
 
     setIsRefSet(true);
   }, []);
-
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLElement>) => {
-      // Fix: As long as the user is typing within the input ensure that no one else can catch these events
-      // Background: Storybook is catching these events and triggering their shortcuts
-      event.stopPropagation();
-      if (onKeyDown != null) {
-        onKeyDown(event);
-      }
-    },
-    [onKeyDown]
-  );
 
   const handleChange = useCallback(
     (
@@ -252,7 +238,6 @@ export const DatePicker = forwardRef<
       minDate={finalValues.minDate}
       maxDate={finalValues.maxDate}
       onChange={handleChange}
-      onKeyDown={handleKeyDown}
       onKeyPress={handleKeyPress}
     />
   );

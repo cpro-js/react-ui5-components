@@ -6,7 +6,6 @@ import {
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import {
-  HTMLAttributes,
   KeyboardEvent,
   ReactElement,
   Ref,
@@ -68,44 +67,6 @@ export type SelectProps<
     /** Event handler triggered when Item in component changes */
     onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
   };
-/* 
-export interface SelectProps<Item = SelectItem, Value = string | number>
-  extends Omit<
-    ComboBoxPropTypes,
-    | "name"
-    | "value"
-    | "filterValue"
-    | "children"
-    | "onSelectionChange"
-    | "onChange"
-  > {
-  /** Name of the component */
-//name?: string;
-/** Defines the value of the component.
- * The property is updated upon selecting.
- */
-//value?: Value;
-/** Defines the items that can be selected in the component */
-//items?: Array<Item>;
-/** Determines whether an empty option should be added. */
-//addEmptyOption?: boolean;
-/** Defines how to extract the value from each Item */
-//itemValue?: keyof Item | ((value: Item) => Value);
-/** Defines how to extract the label from each Item */
-//itemLabel?: keyof Item | ((value: Item) => string);
-/** Event handler triggered when selecting an Item in the dropdown menu*/
-//onSelectionChange?: (
-// event: Ui5CustomEvent<
-// ComboBoxDomRef,
-//{
-//  item: HTMLElement;
-//}
-// >,
-//value?: Value
-//) => void;
-/** Event handler triggered when Item in component changes */
-//onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
-//} */
 
 const DEFAULT_LABEL_PROP = "label";
 const DEFAULT_VALUE_PROP = "value";
@@ -122,7 +83,6 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       addEmptyOption,
       onSelectionChange,
       onChange,
-      onKeyDown,
       onKeyPress,
       value,
       itemValue,
@@ -199,18 +159,6 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       [items, onChange, retrieveItemValue]
     );
 
-    const handleKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
-        // Fix: As long as the user is typing within the input ensure that no one else can catch these events
-        // Background: Storybook is catching these events and triggering their shortcuts
-        event.stopPropagation();
-        if (onKeyDown != null) {
-          onKeyDown(event);
-        }
-      },
-      [onKeyDown]
-    );
-
     const handleKeyPress = useCallback(
       (event: KeyboardEvent<HTMLElement>) => {
         // Workaround: Webcomponents catches enter -> need to submit manually
@@ -238,7 +186,6 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
           value={text}
           onSelectionChange={handleSelectionChange}
           onChange={handleChange}
-          onKeyDown={handleKeyDown}
           onKeyPress={handleKeyPress}
         >
           {addEmptyOption && <ComboBoxItem text="---" />}
