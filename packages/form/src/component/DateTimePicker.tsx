@@ -4,7 +4,6 @@ import {
   DateTimePickerDomRef,
   DateTimePickerPropTypes,
 } from "@ui5/webcomponents-react";
-import clsx from "clsx";
 import {
   KeyboardEvent,
   forwardRef,
@@ -15,19 +14,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { createUseStyles } from "react-jss";
 
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
 import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter } from "./util";
-
-const useStyles = createUseStyles({
-  fixWidth: {
-    minWidth: "var(--_ui5_input_width)",
-    width: "var(--_ui5_input_width)",
-  },
-});
 
 /**
  * Simplified interface for DateFormat
@@ -101,7 +92,6 @@ export const DateTimePicker = forwardRef<
     },
     forwardedRef
   ) => {
-    const classes = useStyles();
     const ref = useRef<DateTimePickerDomRef>();
 
     // forward our internal ref as external
@@ -189,7 +179,7 @@ export const DateTimePicker = forwardRef<
     return (
       <UI5DateTimePicker
         {...props}
-        className={clsx(className, classes.fixWidth)}
+        className={className}
         ref={setRef}
         value={finalValues.value}
         minDate={finalValues.minDate}

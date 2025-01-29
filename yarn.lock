@@ -2889,7 +2889,6 @@ __metadata:
     react: "npm:^18.1.0"
     react-dom: "npm:^18.1.0"
     react-hook-form: "npm:7.31.3"
-    react-jss: "npm:^10.9.0"
     resize-observer-polyfill: "npm:^1.5.1"
     rimraf: "npm:^3.0.2"
     storybook: "npm:^8.0.8"
@@ -2900,7 +2899,6 @@ __metadata:
     "@ui5/webcomponents": ^2.5.1
     "@ui5/webcomponents-react": ^2.5.0
     react: ^18.0.0
-    react-jss: ^10.9.0
   languageName: unknown
   linkType: soft
 
