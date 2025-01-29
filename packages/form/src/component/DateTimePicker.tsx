@@ -130,18 +130,6 @@ export const DateTimePicker = forwardRef<
       []
     );
 
-    const handleKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
-        // Fix: As long as the user is typing within the input ensure that no one else can catch these events
-        // Background: Storybook is catching these events and triggering their shortcuts
-        event.stopPropagation();
-        if (onKeyDown != null) {
-          onKeyDown(event);
-        }
-      },
-      [onKeyDown]
-    );
-
     const handleChange = useCallback(
       (
         event: Ui5CustomEvent<
@@ -207,7 +195,6 @@ export const DateTimePicker = forwardRef<
         minDate={finalValues.minDate}
         maxDate={finalValues.maxDate}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
         onKeyPress={handleKeyPress}
       />
     );
