@@ -124,7 +124,7 @@ const preview: Preview = {
       }, [contentDensity]);
 
       useEffect(() => {
-        document.querySelector("html")!.setAttribute("dir", direction);
+        document.querySelector("html")?.setAttribute("dir", direction);
         applyDirection();
       }, [direction]);
 
