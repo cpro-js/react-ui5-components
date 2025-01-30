@@ -2866,7 +2866,7 @@ __metadata:
     "@storybook/addon-docs": "npm:^8.5.2"
     "@storybook/addon-essentials": "npm:^8.5.2"
     "@storybook/addon-links": "npm:^8.5.2"
-    "@storybook/manager-api": "npm:8.5.2"
+    "@storybook/manager-api": "npm:^8.5.2"
     "@storybook/react": "npm:^8.5.2"
     "@storybook/react-vite": "npm:^8.5.2"
     "@swc/core": "npm:^1.2.218"
@@ -5051,7 +5051,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/manager-api@npm:8.5.2":
+"@storybook/manager-api@npm:8.5.2, @storybook/manager-api@npm:^8.5.2":
   version: 8.5.2
   resolution: "@storybook/manager-api@npm:8.5.2"
   peerDependencies:
