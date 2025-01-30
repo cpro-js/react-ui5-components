@@ -50,7 +50,7 @@ type TokenDeleteEvent = Ui5CustomEvent<
  * The complete set of properties as union (last won wins => our new defined props always win)
  */
 export type MultiAutoCompleteProps<T = DefaultAutoCompleteOption> =
-  SharedHtmlPropsWithKeyInput &
+  SharedHtmlPropsWithKeyInput<MultiInputDomRef> &
     CustomMultiInputProps<T> & {
       /**
        * The list of selected options.

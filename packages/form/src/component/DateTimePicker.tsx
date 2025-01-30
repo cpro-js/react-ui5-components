@@ -40,7 +40,7 @@ const convertToDate = (
 };
 
 export type DateTimePickerProps<TDate extends Date | string = string> =
-  SharedHtmlPropsWithKeyInput &
+  SharedHtmlPropsWithKeyInput<DateTimePickerDomRef> &
     Pick<
       DateTimePickerPropTypes,
       | "disabled"
@@ -48,7 +48,6 @@ export type DateTimePickerProps<TDate extends Date | string = string> =
       | "hideWeekNumbers"
       | "name"
       | "onInput"
-      | "onKeyPress"
       | "placeholder"
       | "required"
       | "readonly"
@@ -144,7 +143,7 @@ export const DateTimePicker = forwardRef<
     );
 
     const handleKeyPress = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
+      (event: KeyboardEvent<DateTimePickerDomRef>) => {
         // Workaround: Webcomponents catches enter -> need to submit manually
         // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
         triggerSubmitOnEnter(event);

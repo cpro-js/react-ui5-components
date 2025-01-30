@@ -10,7 +10,7 @@ import type {
   NumberInputConfig,
 } from "./NumberModel";
 
-export type NumberInputProps = SharedHtmlPropsWithKeyInput &
+export type NumberInputProps = SharedHtmlPropsWithKeyInput<InputDomRef> &
   NumberDisplayConfig &
   NumberInputConfig &
   Pick<

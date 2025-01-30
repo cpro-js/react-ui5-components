@@ -24,7 +24,7 @@ export interface SelectItem {
 export type SelectProps<
   Item = SelectItem,
   Value = string | number
-> = SharedHtmlPropsWithKeyInput &
+> = SharedHtmlPropsWithKeyInput<ComboBoxDomRef> &
   Pick<
     ComboBoxPropTypes,
     | "icon"
@@ -38,7 +38,6 @@ export type SelectProps<
     | "readonly"
     | "required"
     | "valueState"
-    | "onKeyPress"
   > & {
     /** Name of the component */
     name?: string;
@@ -160,7 +159,7 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
     );
 
     const handleKeyPress = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
+      (event: KeyboardEvent<ComboBoxDomRef>) => {
         // Workaround: Webcomponents catches enter -> need to submit manually
         // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
         triggerSubmitOnEnter(event);

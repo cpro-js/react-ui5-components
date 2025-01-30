@@ -35,7 +35,7 @@ export interface MultiSelectItem {
 export type MultiSelectProps<
   Item = MultiSelectItem,
   Value = string | number
-> = SharedHtmlPropsWithKeyInput &
+> = SharedHtmlPropsWithKeyInput<MultiComboBoxDomRef> &
   Pick<
     MultiComboBoxPropTypes,
     | "onChange"
@@ -52,7 +52,6 @@ export type MultiSelectProps<
     | "readonly"
     | "required"
     | "valueState"
-    | "onKeyPress"
   > & {
     name?: string;
     /** Defines the value of the component.
@@ -178,7 +177,7 @@ export const MultiSelect = forwardRef<MultiComboBoxDomRef, MultiSelectProps>(
     );
 
     const handleKeyPress = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
+      (event: KeyboardEvent<MultiComboBoxDomRef>) => {
         // Workaround: Webcomponents catches enter -> need to submit manually
         // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
         if (allowSubmitOnEnter.current) {
