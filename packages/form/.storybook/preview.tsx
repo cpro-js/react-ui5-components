@@ -21,6 +21,7 @@ const preview: Preview = {
     },
     backgrounds: { disable: true },
   },
+
   globalTypes: {
     theme: {
       title: "Theme",
@@ -99,6 +100,7 @@ const preview: Preview = {
       },
     },
   },
+
   decorators: [
     (Story, { globals }) => {
       const { theme, contentDensity, direction, language } = globals;
@@ -135,5 +137,7 @@ const preview: Preview = {
       );
     },
   ],
+
+  tags: ["autodocs"],
 };
 export default preview;
