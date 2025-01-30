@@ -83,47 +83,47 @@ export type DatePickerProps<TDate extends Date | string = string> =
  *  manages the formatting of these dates, ensurring for a more seamless integration.
  *
  * ```tsx
- * //ISO8601 String
- <DatePicker
- value={"2024-04-30T09:52:17Z"}
- onChange={(
- event: Ui5CustomEvent<
- DatePickerDomRef,
- { valid: boolean; value: string }
- >,
- value: string | null
- ): void => {
- if (event.detail.valid) {
- console.log("Valid date from event:", event.detail.value);
- console.log(typeof value);
- } else {
- console.error("Invalid date entered");
- }
- }}
- />
+ *  //ISO8601 String
+ *  <DatePicker
+ *    value={"2024-04-30T09:52:17Z"}
+ *    onChange={(
+ *      event: Ui5CustomEvent<
+ *        DatePickerDomRef,
+ *        { valid: boolean; value: string }
+ *      >,
+ *      value: string | null
+ *   ): void => {
+ *     if (event.detail.valid) {
+ *        console.log("Valid date from event:", event.detail.value);
+ *        console.log(typeof value);
+ *     } else {
+ *       console.error("Invalid date entered");
+ *     }
+ *    }}
+ *  />
  * ```
  *
  *  ```tsx
  * //Date Object
  * <FormAdapter date={IdentityDateAdapter}>
- <DatePicker
- value={new Date()}
- onChange={(
- event: Ui5CustomEvent<
- DatePickerDomRef,
- { valid: boolean; value: string }
- >,
- value: Date | null
- ): void => {
- if (event.detail.valid) {
- console.log("Valid date from event:", event.detail.value);
- console.log(typeof value);
- } else {
- console.error("Invalid date entered");
- }
- }}
- />
- </FormAdapter>
+ *  <DatePicker
+ *    value={new Date()}
+ *    onChange={(
+ *      event: Ui5CustomEvent<
+ *        DatePickerDomRef,
+ *        { valid: boolean; value: string }
+ *      >,
+ *      value: Date | null
+ *    ): void => {
+ *      if (event.detail.valid) {
+ *        console.log("Valid date from event:", event.detail.value);
+ *        console.log(typeof value);
+ *      } else {
+ *        console.error("Invalid date entered");
+ *      }
+ *     }}
+    />
+ * </FormAdapter>
  * ```
  *  If you retrieve the value from the DatePicker, you will receive it in its original form, just as it was provided.
  */

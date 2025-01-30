@@ -1,4 +1,4 @@
-import { StoryFn } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
 import { TextAreaProps } from "./TextArea";
@@ -8,17 +8,14 @@ export default {
   title: "Form/Component/TextArea",
   component: TextArea,
   argTypes: {
-    onKeyPress: {
-      action: "onKeyPress",
-    },
     valueState: {
       options: Object.values(ValueState),
       control: { type: "radio" },
     },
   },
-};
+} satisfies Meta<typeof TextArea>;
 
-const Template: StoryFn<TextAreaProps> = (args) => <TextArea {...args} />;
+const Template: StoryFn<typeof TextArea> = (args) => <TextArea {...args} />;
 
 export const Standard = Template.bind({});
 Standard.args = {

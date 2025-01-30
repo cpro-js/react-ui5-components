@@ -8,6 +8,7 @@ import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
 import applyDirection from "@ui5/webcomponents-base/dist/locale/applyDirection.js";
 import { ContentDensity, ThemeProvider } from "@ui5/webcomponents-react";
 import { useEffect } from "react";
+import React from "react";
 
 const preview: Preview = {
   parameters: {
@@ -20,6 +21,7 @@ const preview: Preview = {
     },
     backgrounds: { disable: true },
   },
+
   globalTypes: {
     theme: {
       title: "Theme",
@@ -98,13 +100,15 @@ const preview: Preview = {
       },
     },
   },
+
   decorators: [
     (Story, { globals }) => {
       const { theme, contentDensity, direction, language } = globals;
 
       useEffect(() => {
         if (language === "local") {
-          setLanguage(null);
+          //@ts-ignore
+          setLanguage(null); //says requires string but works correctly with null
         } else {
           setLanguage(language);
         }
@@ -119,7 +123,7 @@ const preview: Preview = {
       }, [contentDensity]);
 
       useEffect(() => {
-        document.querySelector("html").setAttribute("dir", direction);
+        document.querySelector("html")?.setAttribute("dir", direction);
         applyDirection();
       }, [direction]);
 
@@ -134,5 +138,7 @@ const preview: Preview = {
       );
     },
   ],
+
+  tags: ["autodocs"],
 };
 export default preview;
