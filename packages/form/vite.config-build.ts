@@ -17,9 +17,6 @@ export default defineConfig({
       entry: resolve(__dirname, "src/index.ts"),
       formats: ["es", "cjs"],
     },
-    rollupOptions: {
-      external: ["storybook/internal/preview/runtime"],
-    },
   },
   plugins: [
     react({
