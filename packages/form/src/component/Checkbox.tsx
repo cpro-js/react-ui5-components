@@ -6,7 +6,6 @@ import {
 } from "@ui5/webcomponents-react";
 import {
   ChangeEvent,
-  HTMLAttributes,
   forwardRef,
   useCallback,
   useEffect,
@@ -16,13 +15,7 @@ import {
 
 import { SharedHtmlProps } from "./SharedHtmlProps";
 
-type CheckBoxHtmlProps = Pick<
-  HTMLAttributes<HTMLElement>,
-  "defaultChecked" | "children"
->;
-
-export type CheckBoxProps = SharedHtmlProps &
-  CheckBoxHtmlProps &
+export type CheckBoxProps = SharedHtmlProps<CheckBoxDomRef> &
   Pick<
     CheckBoxPropTypes,
     | "checked"

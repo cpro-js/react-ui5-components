@@ -318,8 +318,8 @@ export const BaseNumberInput = forwardRef<InputDomRef, BaseNumberInputProps>(
      * Sets the current value, enables submit via enter and triggers events.
      */
     const onKeyUp = useCallback(
-      (event: KeyboardEvent<HTMLInputElement>) => {
-        const originalValue = event.currentTarget.value;
+      (event: KeyboardEvent<InputDomRef>) => {
+        const originalValue = event.currentTarget.value ?? "";
         const parsedValue = parser.parse(originalValue);
         const safeValue = parseValue(originalValue);
 

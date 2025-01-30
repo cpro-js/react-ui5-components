@@ -1,9 +1,7 @@
 import "../form/formSupport";
 
-import { Input } from "@ui5/webcomponents-react";
-import { InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
+import { Input, InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import {
-  FC,
   HTMLAttributes,
   KeyboardEvent,
   MutableRefObject,
@@ -13,13 +11,13 @@ import {
   useRef,
 } from "react";
 
-import { SharedHtmlProps } from "./SharedHtmlProps";
+import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
 import { triggerSubmitOnEnter, useOnChangeWorkaround } from "./util";
 
 // pick only those props which we do care about
 type TextInputHtmlProps = Pick<HTMLAttributes<HTMLElement>, "onKeyPress">;
 
-export type TextInputProps = SharedHtmlProps &
+export type TextInputProps = SharedHtmlPropsWithKeyInput<InputDomRef> &
   TextInputHtmlProps &
   Pick<
     InputPropTypes,

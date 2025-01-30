@@ -1,12 +1,15 @@
 import "../form/formSupport";
 
-import { TextArea as UI5TextArea } from "@ui5/webcomponents-react";
-import { TextAreaDomRef, TextAreaPropTypes } from "@ui5/webcomponents-react";
-import { HTMLAttributes, forwardRef } from "react";
+import {
+  TextAreaDomRef,
+  TextAreaPropTypes,
+  TextArea as UI5TextArea,
+} from "@ui5/webcomponents-react";
+import { forwardRef } from "react";
 
 import { SharedHtmlProps } from "./SharedHtmlProps";
 
-export type TextAreaProps = SharedHtmlProps &
+export type TextAreaProps = SharedHtmlProps<TextAreaDomRef> &
   Pick<
     TextAreaPropTypes,
     | "valueStateMessage"
