@@ -13,9 +13,9 @@ import {
   useState,
 } from "react";
 
-import { SharedHtmlProps } from "./SharedHtmlProps";
+import { GlobalHtmlElementProps } from "./GlobalHtmlElementProps";
 
-export type CheckBoxProps = SharedHtmlProps<CheckBoxDomRef> &
+export type CheckBoxProps = GlobalHtmlElementProps<CheckBoxDomRef> &
   Pick<
     CheckBoxPropTypes,
     | "checked"

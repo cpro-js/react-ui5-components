@@ -14,7 +14,7 @@ import {
   useCallback,
 } from "react";
 
-import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
+import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
 import { triggerSubmitOnEnter } from "./util";
 
 export interface SelectItem {
@@ -25,7 +25,7 @@ export interface SelectItem {
 export type SelectProps<
   Item = SelectItem,
   Value = string | number
-> = SharedHtmlPropsWithKeyInput<ComboBoxDomRef> &
+> = GlobalHtmlKeyInputElementProps<ComboBoxDomRef> &
   Pick<
     ComboBoxPropTypes,
     | "icon"

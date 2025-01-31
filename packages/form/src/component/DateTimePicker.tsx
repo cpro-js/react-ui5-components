@@ -21,7 +21,7 @@ import { createUseStyles } from "react-jss";
 
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
-import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
+import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
 import { triggerSubmitOnEnter } from "./util";
 
 const useStyles = createUseStyles({
@@ -51,7 +51,7 @@ const convertToDate = (
 };
 
 export type DateTimePickerProps<TDate extends Date | string = string> =
-  SharedHtmlPropsWithKeyInput<DateTimePickerDomRef> &
+  GlobalHtmlKeyInputElementProps<DateTimePickerDomRef> &
     Pick<
       DateTimePickerPropTypes,
       | "disabled"

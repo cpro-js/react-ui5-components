@@ -1,7 +1,7 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
 import { ReactElement, Ref, forwardRef } from "react";
 
-import { SharedHtmlPropsWithKeyInput } from "../SharedHtmlProps";
+import { GlobalHtmlKeyInputElementProps } from "../GlobalHtmlElementProps";
 import {
   UseAsyncAdditionalProps,
   UseAsyncManagedPropKeys,
@@ -20,7 +20,7 @@ import {
 } from "./internal/CoreAutocomplete";
 
 export type AutoCompleteProps<TModel extends {} = DefaultAutoCompleteOption> =
-  SharedHtmlPropsWithKeyInput<InputDomRef> &
+  GlobalHtmlKeyInputElementProps<InputDomRef> &
     Omit<
       Pick<
         CoreAutocompleteProps<TModel>,
