@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v1.0.4...@cpro-js/react-ui5-webcomponents-form-v1.1.0) (2025-01-31)
+
+
+### Features
+
+* additional text for Select ([#97](https://github.com/cpro-js/react-ui5-components/issues/97)) ([c56cd02](https://github.com/cpro-js/react-ui5-components/commit/c56cd027dad3eadd7f94f5633dd8e6ce342dd339))
+
 ## [1.0.4](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v1.0.3...@cpro-js/react-ui5-webcomponents-form-v1.0.4) (2025-01-31)
 
 
