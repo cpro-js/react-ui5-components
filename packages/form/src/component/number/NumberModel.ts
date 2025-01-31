@@ -43,7 +43,7 @@ export interface CommonNumberInputProps
    * Modified onKeyUp method, which also supplies the consumer with the parsed number value.
    */
   onKeyUp?: (
-    event: KeyboardEvent<HTMLInputElement>,
+    event: KeyboardEvent<InputDomRef>,
     value: number | undefined
   ) => void;
   /**

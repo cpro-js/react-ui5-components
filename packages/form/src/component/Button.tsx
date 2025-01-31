@@ -3,12 +3,12 @@ import {
   ButtonPropTypes,
   Button as UI5Button,
 } from "@ui5/webcomponents-react";
-import { FC, HTMLAttributes, MouseEvent, useCallback } from "react";
+import { FC, MouseEvent, useCallback } from "react";
 
-import { SharedHtmlProps } from "./SharedHtmlProps";
+import { GlobalHtmlElementProps } from "./GlobalHtmlElementProps";
 import { triggerReset, triggerSubmit } from "./util";
 
-export type ButtonProps = SharedHtmlProps &
+export type ButtonProps = GlobalHtmlElementProps<ButtonDomRef> &
   Pick<
     ButtonPropTypes,
     | "onClick"

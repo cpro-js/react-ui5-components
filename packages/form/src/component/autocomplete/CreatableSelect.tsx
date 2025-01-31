@@ -1,7 +1,7 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { HTMLAttributes, ReactElement, Ref, forwardRef } from "react";
+import { ReactElement, Ref, forwardRef } from "react";
 
-import { SharedHtmlPropsWithKeyInput } from "../SharedHtmlProps";
+import { GlobalHtmlKeyInputElementProps } from "../GlobalHtmlElementProps";
 import {
   UseCreatableAdditionalProps,
   useCreatable,
@@ -20,7 +20,7 @@ import {
 
 export type CreatableSelectProps<
   TModel extends {} = DefaultAutoCompleteOption
-> = SharedHtmlPropsWithKeyInput &
+> = GlobalHtmlKeyInputElementProps<InputDomRef> &
   Omit<
     Pick<
       CoreAutocompleteProps<TModel>,

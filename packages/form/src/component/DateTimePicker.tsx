@@ -21,7 +21,7 @@ import { createUseStyles } from "react-jss";
 
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
-import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
+import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
 import { triggerSubmitOnEnter } from "./util";
 
 const useStyles = createUseStyles({
@@ -51,7 +51,7 @@ const convertToDate = (
 };
 
 export type DateTimePickerProps<TDate extends Date | string = string> =
-  SharedHtmlPropsWithKeyInput &
+  GlobalHtmlKeyInputElementProps<DateTimePickerDomRef> &
     Pick<
       DateTimePickerPropTypes,
       | "disabled"
@@ -59,7 +59,6 @@ export type DateTimePickerProps<TDate extends Date | string = string> =
       | "hideWeekNumbers"
       | "name"
       | "onInput"
-      | "onKeyPress"
       | "placeholder"
       | "required"
       | "readonly"
@@ -156,7 +155,7 @@ export const DateTimePicker = forwardRef<
     );
 
     const handleKeyPress = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
+      (event: KeyboardEvent<DateTimePickerDomRef>) => {
         // Workaround: Webcomponents catches enter -> need to submit manually
         // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
         triggerSubmitOnEnter(event);
