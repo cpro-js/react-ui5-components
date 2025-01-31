@@ -1,10 +1,13 @@
-import { TextArea as UI5TextArea } from "@ui5/webcomponents-react";
-import { TextAreaDomRef, TextAreaPropTypes } from "@ui5/webcomponents-react";
+import {
+  TextAreaDomRef,
+  TextAreaPropTypes,
+  TextArea as UI5TextArea,
+} from "@ui5/webcomponents-react";
 import { forwardRef } from "react";
 
-import { SharedHtmlProps } from "./SharedHtmlProps";
+import { GlobalHtmlElementProps } from "./GlobalHtmlElementProps";
 
-export type TextAreaProps = SharedHtmlProps &
+export type TextAreaProps = GlobalHtmlElementProps<TextAreaDomRef> &
   Pick<
     TextAreaPropTypes,
     | "valueStateMessage"

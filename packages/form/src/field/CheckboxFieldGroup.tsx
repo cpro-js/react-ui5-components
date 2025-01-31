@@ -1,4 +1,4 @@
-import { FC, createContext, forwardRef } from "react";
+import { FC, ReactNode, createContext, forwardRef } from "react";
 
 import { CheckboxFieldProps } from "./CheckboxField";
 
@@ -10,7 +10,9 @@ export const CheckboxFieldGroupContext = createContext<
 >(undefined);
 
 export interface ForwardedCheckboxFieldProps
-  extends Omit<CheckboxFieldProps, "boolean" | "value" | "text"> {}
+  extends Omit<CheckboxFieldProps, "boolean" | "value" | "text"> {
+  children?: ReactNode;
+}
 
 export interface CheckboxFieldGroupProps extends ForwardedCheckboxFieldProps {}
 
