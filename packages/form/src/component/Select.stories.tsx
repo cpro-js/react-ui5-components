@@ -1,5 +1,6 @@
 import { StoryFn } from "@storybook/react";
 
+import { COUNTRIES, CountryItem } from "./autocomplete/AutoComplete-storyData";
 import { Select, SelectItem, SelectProps } from "./Select";
 
 export interface SelectItemAlt extends SelectItem {
@@ -49,6 +50,20 @@ CustomItemModel.args = {
   value: undefined,
   itemLabel: "alt",
   itemValue: "label",
+};
+
+const TemplateCountry: StoryFn<SelectProps<CountryItem, string>> = (args) => {
+  return <Select<CountryItem, string> {...args} />;
+};
+
+export const AdditionalText = TemplateCountry.bind({});
+AdditionalText.args = {
+  ...Standard.args,
+  items: COUNTRIES,
+  value: undefined,
+  itemLabel: "label",
+  itemValue: "value",
+  itemAdditionalText: "value",
 };
 
 export default {

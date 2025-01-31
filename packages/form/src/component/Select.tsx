@@ -54,6 +54,8 @@ export type SelectProps<
     itemValue?: keyof Item | ((value: Item) => Value);
     /** Defines how to extract the label from each Item */
     itemLabel?: keyof Item | ((value: Item) => string);
+    /** Render an additional text for each item */
+    itemAdditionalText?: keyof Item | ((value: Item) => string);
     /** Event handler triggered when selecting an Item in the dropdown menu*/
     onSelectionChange?: (
       event: Ui5CustomEvent<
@@ -67,9 +69,6 @@ export type SelectProps<
     /** Event handler triggered when Item in component changes */
     onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
   };
-
-const DEFAULT_LABEL_PROP = "label";
-const DEFAULT_VALUE_PROP = "value";
 
 /** `Select` as a wrapper for
  * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-combobox--docs" target="_blank">UI5 ComboBox</a>
@@ -85,37 +84,42 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       onChange,
       onKeyPress,
       value,
-      itemValue,
-      itemLabel,
+      itemValue = "value",
+      itemLabel = "label",
+      itemAdditionalText,
       ...otherProps
     } = props;
 
     const retrieveItemLabel = useCallback(
       (item: SelectItem) => {
-        if (itemLabel) {
-          if (typeof itemLabel === "string") {
-            return item[itemLabel];
-          } else if (typeof itemLabel === "function") {
-            return itemLabel(item);
-          }
+        if (typeof itemLabel === "function") {
+          return itemLabel(item);
         }
-        return item[DEFAULT_LABEL_PROP];
+        return item[itemLabel];
       },
       [itemLabel]
     );
 
     const retrieveItemValue = useCallback(
       (item: SelectItem) => {
-        if (itemValue) {
-          if (typeof itemValue === "string") {
-            return item[itemValue];
-          } else if (typeof itemValue === "function") {
-            return itemValue(item);
-          }
+        if (typeof itemValue === "function") {
+          return itemValue(item);
         }
-        return item[DEFAULT_VALUE_PROP];
+        return item[itemValue];
       },
       [itemValue]
+    );
+
+    const retrieveAdditionalText = useCallback(
+      (item: SelectItem) => {
+        if (typeof itemAdditionalText === "string") {
+          return item[itemAdditionalText];
+        } else if (typeof itemAdditionalText === "function") {
+          return itemAdditionalText(item);
+        }
+        return undefined;
+      },
+      [itemAdditionalText]
     );
 
     const handleSelectionChange = useCallback(
@@ -193,8 +197,11 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
             // index is the most unique value, value could be non-unique when providing numbers and strings (react keys are strings)
             <ComboBoxItem
               key={index}
-              text={retrieveItemLabel(item) as string}
               data-index={index}
+              text={retrieveItemLabel(item) as string | undefined}
+              additionalText={
+                retrieveAdditionalText(item) as string | undefined
+              }
             />
           ))}
         </ComboBox>

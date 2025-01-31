@@ -1,5 +1,90 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Renders AdditionalText story 1`] = `
+<div>
+  <ui5-combobox
+    filter="StartsWithPerTerm"
+    style="--_ui5-v1-19-1-input-icons-count: 1;"
+    ui5-combobox=""
+    value=""
+    value-state="None"
+  >
+    <ui5-cb-item
+      additional-text="AR"
+      data-index="0"
+      text="Argentina"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="BG"
+      data-index="1"
+      text="Bulgaria"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="GB"
+      data-index="2"
+      text="England"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="FI"
+      data-index="3"
+      text="Finland"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="DE"
+      data-index="4"
+      text="Germany"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="HU"
+      data-index="5"
+      text="Hungary"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="IT"
+      data-index="6"
+      text="Italy"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="LU"
+      data-index="7"
+      text="Luxembourg"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="MX"
+      data-index="8"
+      text="Mexico"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="PH"
+      data-index="9"
+      text="Philippines"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="SE"
+      data-index="10"
+      text="Sweden"
+      ui5-cb-item=""
+    />
+    <ui5-cb-item
+      additional-text="US"
+      data-index="11"
+      text="USA"
+      ui5-cb-item=""
+    />
+  </ui5-combobox>
+</div>
+`;
+
 exports[`Renders CustomItemModel story 1`] = `
 <div>
   <ui5-combobox
