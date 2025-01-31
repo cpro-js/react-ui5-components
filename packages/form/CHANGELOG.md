@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v1.0.3...@cpro-js/react-ui5-webcomponents-form-v1.0.4) (2025-01-31)
+
+
+### Bug Fixes
+
+* **types:** more stable definition of global HTML props ([#94](https://github.com/cpro-js/react-ui5-components/issues/94)) ([7ec66e4](https://github.com/cpro-js/react-ui5-components/commit/7ec66e46cb06dcd04437531fa51ee71f170bf4b9))
+
 ## [1.0.3](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v1.0.2...@cpro-js/react-ui5-webcomponents-form-v1.0.3) (2025-01-29)
 
 
