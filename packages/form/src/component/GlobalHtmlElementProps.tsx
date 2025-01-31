@@ -7,9 +7,10 @@ import {
 } from "react";
 
 /**
- * Common HTML props that every web component uses
+ * HTML element properties which apply globally,
+ * also for any WebComponent.
  */
-export interface SharedHtmlProps<T> {
+export interface GlobalHtmlElementProps<T> {
   style?: CSSProperties | undefined;
   className?: string | undefined;
   slot?: string | undefined;
@@ -25,9 +26,10 @@ export interface SharedHtmlProps<T> {
 }
 
 /**
- * Common HTML props that every input web component uses
+ * HTML element properties which apply to all input elements with key input.
  */
-export interface SharedHtmlPropsWithKeyInput<T> extends SharedHtmlProps<T> {
+export interface GlobalHtmlKeyInputElementProps<T>
+  extends GlobalHtmlElementProps<T> {
   onKeyDown?: KeyboardEventHandler<T> | undefined;
   /** @deprecated Use `onKeyUp` or `onKeyDown` instead */
   onKeyPress?: KeyboardEventHandler<T> | undefined;

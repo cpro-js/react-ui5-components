@@ -9,13 +9,13 @@ import {
   useRef,
 } from "react";
 
-import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
+import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
 import { triggerSubmitOnEnter } from "./util";
 
 // pick only those props which we do care about
 type TextInputHtmlProps = Pick<HTMLAttributes<HTMLElement>, "onKeyPress">;
 
-export type TextInputProps = SharedHtmlPropsWithKeyInput<InputDomRef> &
+export type TextInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
   TextInputHtmlProps &
   Pick<
     InputPropTypes,

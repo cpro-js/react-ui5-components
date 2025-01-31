@@ -1,7 +1,7 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
 import { FC, HTMLAttributes, forwardRef, useContext } from "react";
 
-import { SharedHtmlPropsWithKeyInput } from "../SharedHtmlProps";
+import { GlobalHtmlKeyInputElementProps } from "../GlobalHtmlElementProps";
 import { BaseNumberInput } from "./BaseNumberInput";
 import { NumberContext } from "./context/NumberContext";
 import type {
@@ -10,7 +10,7 @@ import type {
   NumberInputConfig,
 } from "./NumberModel";
 
-export type NumberInputProps = SharedHtmlPropsWithKeyInput<InputDomRef> &
+export type NumberInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
   NumberDisplayConfig &
   NumberInputConfig &
   Pick<

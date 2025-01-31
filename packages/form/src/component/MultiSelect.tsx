@@ -22,9 +22,9 @@ import {
 
 import { handlePastedText } from "./common/PasteHandler";
 import {
-  SharedHtmlProps,
-  SharedHtmlPropsWithKeyInput,
-} from "./SharedHtmlProps";
+  GlobalHtmlElementProps,
+  GlobalHtmlKeyInputElementProps,
+} from "./GlobalHtmlElementProps";
 import { triggerSubmitOnEnter, useAllowAction } from "./util";
 
 export interface MultiSelectItem {
@@ -35,7 +35,7 @@ export interface MultiSelectItem {
 export type MultiSelectProps<
   Item = MultiSelectItem,
   Value = string | number
-> = SharedHtmlPropsWithKeyInput<MultiComboBoxDomRef> &
+> = GlobalHtmlKeyInputElementProps<MultiComboBoxDomRef> &
   Pick<
     MultiComboBoxPropTypes,
     | "onChange"

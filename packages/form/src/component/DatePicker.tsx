@@ -19,7 +19,7 @@ import {
 
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
-import { SharedHtmlPropsWithKeyInput } from "./SharedHtmlProps";
+import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
 import { triggerSubmitOnEnter } from "./util";
 
 const convertToDate = (
@@ -43,7 +43,7 @@ interface SapCoreDateFormat {
 
 // finally: union of the wanted props with our own props
 export type DatePickerProps<TDate extends Date | string = string> =
-  SharedHtmlPropsWithKeyInput<DatePickerDomRef> &
+  GlobalHtmlKeyInputElementProps<DatePickerDomRef> &
     Pick<
       DatePickerPropTypes,
       | "disabled"
