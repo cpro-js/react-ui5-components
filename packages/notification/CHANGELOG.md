@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification-v2.0.1...@cpro-js/react-ui5-notification-v2.0.2) (2025-01-31)
+
+
+### Bug Fixes
+
+* **types:** more stable definition of global HTML props ([#93](https://github.com/cpro-js/react-ui5-components/issues/93)) ([c03885f](https://github.com/cpro-js/react-ui5-components/commit/c03885fe27449e42aff931963867e5616e0de8bd))
+
 ## [2.0.1](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification@2.0.0...@cpro-js/react-ui5-notification@2.0.1) (2025-01-08)
 
 **Note:** Version bump only for package @cpro-js/react-ui5-notification
