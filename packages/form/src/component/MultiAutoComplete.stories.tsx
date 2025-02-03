@@ -11,8 +11,8 @@ import {
 import { MultiAutoComplete, MultiAutoCompleteProps } from "./MultiAutoComplete";
 import { DefaultAutoCompletOption } from "./MultiAutoCompleteModel";
 
-const Template: StoryFn<MultiAutoCompleteProps<DefaultAutoCompletOption>> = (
-  props
+const Template: StoryFn<typeof MultiAutoComplete<DefaultAutoCompletOption>> = (
+  args
 ) => {
   const onSelect = (values: Array<string>) => {
     // setStoredValues(values);
@@ -21,7 +21,7 @@ const Template: StoryFn<MultiAutoCompleteProps<DefaultAutoCompletOption>> = (
 
   return (
     <MultiAutoComplete
-      {...props}
+      {...args}
       onSelectionChange={onSelect}
       style={{ width: "50%" }}
     />
@@ -70,9 +70,9 @@ RenderValue.args = {
   },
 };
 
-const meta: Meta = {
+const meta = {
   title: "Form/Component/MultiAutoComplete",
   component: MultiAutoComplete,
-};
+} satisfies Meta<typeof MultiAutoComplete>;
 
 export default meta;

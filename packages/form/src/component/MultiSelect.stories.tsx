@@ -2,7 +2,7 @@ import { Meta, StoryFn } from "@storybook/react";
 
 import { MultiSelect, MultiSelectItem, MultiSelectProps } from "./MultiSelect";
 
-const Template: StoryFn<MultiSelectProps> = (args) => {
+const Template: StoryFn<typeof MultiSelect> = (args) => {
   return <MultiSelect {...args} />;
 };
 
@@ -38,7 +38,7 @@ WithValueString.args = { ...Standard.args, value: ["1"] };
 export const WithMultiValue = Template.bind({});
 WithMultiValue.args = { ...Standard.args, value: [1, "1", "2"] };
 
-const TemplateAlt: StoryFn<MultiSelectProps<MultiSelectItemAlt, string>> = (
+const TemplateAlt: StoryFn<typeof MultiSelect<MultiSelectItemAlt, string>> = (
   args
 ) => {
   return <MultiSelect<MultiSelectItemAlt, string> {...args} />;
@@ -53,7 +53,7 @@ CustomItemModel.args = {
   itemValue: "label",
 };
 
-const meta: Meta = {
+const meta = {
   title: "Form/Component/MultiSelect",
   component: MultiSelect,
   argTypes: {
@@ -67,6 +67,6 @@ const meta: Meta = {
       action: "change",
     },
   },
-};
+} satisfies Meta<typeof MultiSelect>;
 
 export default meta;

@@ -3,17 +3,38 @@ import "@ui5/webcomponents-icons/dist/add.js";
 import { Meta, StoryFn } from "@storybook/react";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
-import { COUNTRIES, SEARCH_COUNTRIES } from "./AutoComplete-storyData";
+import {
+  COUNTRIES,
+  CountryItem,
+  SEARCH_COUNTRIES,
+} from "./AutoComplete-storyData";
 import {
   CreatableAutoComplete,
   CreatableAutoCompleteProps,
 } from "./CreatableAutoComplete";
 import { DefaultAutoCompleteOption } from "./internal/CoreAutocomplete";
 
-const Template: StoryFn<CreatableAutoCompleteProps<DefaultAutoCompleteOption>> =
-  ({ ...props }) => {
-    return <CreatableAutoComplete {...props} />;
-  };
+const meta = {
+  title: "form/component/AutoComplete/CreatableAutocomplete",
+  component: CreatableAutoComplete,
+  argTypes: {
+    onValueCreate: {
+      action: "onValueCreate",
+    },
+    onInputChange: {
+      action: "onInputChange",
+    },
+    onValueChange: {
+      action: "onValueChange",
+    },
+  },
+} satisfies Meta<typeof CreatableAutoComplete>;
+
+export default meta;
+
+const Template: StoryFn<typeof CreatableAutoComplete<CountryItem>> = (args) => {
+  return <CreatableAutoComplete {...args} />;
+};
 
 export const Standard = Template.bind({});
 Standard.args = { value: undefined, loadItems: SEARCH_COUNTRIES };
@@ -66,20 +87,3 @@ CustomValueFunction.args = {
 //     infoState: ValueState.Positive,
 //   }),
 // };
-
-const meta: Meta = {
-  title: "form/component/AutoComplete/CreatableAutocomplete",
-  component: CreatableAutoComplete,
-  argTypes: {
-    onValueCreate: {
-      action: "onValueCreate",
-    },
-    onInputChange: {
-      action: "onInputChange",
-    },
-    onValueChange: {
-      action: "onValueChange",
-    },
-  },
-};
-export default meta;

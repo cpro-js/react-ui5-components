@@ -10,7 +10,22 @@ import {
   SEARCH_COUNTRIES,
 } from "./AutoComplete-storyData";
 
-const Template: StoryFn<AutoCompleteProps<CountryItem>> = ({ ...props }) => {
+const meta = {
+  title: "form/component/AutoComplete/AutoComplete",
+  component: AutoComplete,
+  argTypes: {
+    onInputChange: {
+      action: "onInputChange",
+    },
+    onValueChange: {
+      action: "onValueChange",
+    },
+  },
+} satisfies Meta<typeof AutoComplete>;
+
+export default meta;
+
+const Template: StoryFn<typeof AutoComplete<CountryItem>> = ({ ...props }) => {
   return <AutoComplete {...props} />;
 };
 
@@ -54,17 +69,3 @@ CustomValueFunction.args = {
   value: COUNTRIES[1].value,
   itemValue: (country) => `${country.label} (${country.value})`,
 };
-
-const meta: Meta = {
-  title: "form/component/AutoComplete/AutoComplete",
-  component: AutoComplete,
-  argTypes: {
-    onInputChange: {
-      action: "onInputChange",
-    },
-    onValueChange: {
-      action: "onValueChange",
-    },
-  },
-};
-export default meta;

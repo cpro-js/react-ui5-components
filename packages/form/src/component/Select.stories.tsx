@@ -1,4 +1,4 @@
-import { StoryFn } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { COUNTRIES, CountryItem } from "./autocomplete/AutoComplete-storyData";
 import { Select, SelectItem, SelectProps } from "./Select";
@@ -15,7 +15,7 @@ const items: Array<SelectItemAlt> = [
   { value: "4", label: "Test 4", alt: "Test 4 Alt" },
 ];
 
-const Template: StoryFn<SelectProps> = (args) => {
+const Template: StoryFn<typeof Select> = (args) => {
   return <Select {...args} />;
 };
 
@@ -52,7 +52,7 @@ CustomItemModel.args = {
   itemValue: "label",
 };
 
-const TemplateCountry: StoryFn<SelectProps<CountryItem, string>> = (args) => {
+const TemplateCountry: StoryFn<typeof Select<CountryItem, string>> = (args) => {
   return <Select<CountryItem, string> {...args} />;
 };
 
@@ -80,4 +80,4 @@ export default {
       action: "change",
     },
   },
-};
+} satisfies Meta<typeof Select>;
