@@ -3,9 +3,9 @@ import { Meta, StoryFn } from "@storybook/react";
 
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
 import { FormAdapter } from "../form/FormAdapter";
-import { DateTimePicker, DateTimePickerProps } from "./DateTimePicker";
+import { DateTimePicker } from "./DateTimePicker";
 
-const Template: StoryFn<DateTimePickerProps> = (args) => {
+const Template: StoryFn<typeof DateTimePicker> = (args) => {
   return <DateTimePicker {...args} />;
 };
 
@@ -31,7 +31,7 @@ MinDateToday.args = { ...Standard.args, minDate: new Date() };
 export const MaxDateToday = Template.bind({});
 MaxDateToday.args = { ...Standard.args, maxDate: new Date() };
 
-const ISODateTimeTemplate: StoryFn<DateTimePickerProps> = (args) => {
+const ISODateTimeTemplate: StoryFn<typeof DateTimePicker> = (args) => {
   return (
     <FormAdapter dateTime={ISODateTimeAdapter}>
       <DateTimePicker {...args} />
@@ -82,7 +82,7 @@ ISODateTimeMaxDateToday.args = {
 };
 ISODateTimeMaxDateToday.argTypes = { ...ISODateTimeStandard.argTypes };
 
-const meta: Meta = {
+const meta = {
   title: "Form/Component/DateTimePicker",
   component: DateTimePicker,
   argTypes: {
@@ -90,6 +90,6 @@ const meta: Meta = {
     minDate: { type: "string", control: "text" },
     maxDate: { type: "string", control: "text" },
   },
-};
+} satisfies Meta<typeof DateTimePicker>;
 
 export default meta;

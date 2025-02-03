@@ -1,19 +1,9 @@
 import { Meta, StoryFn } from "@storybook/react";
 
 import { COUNTRIES } from "./AutoComplete-storyData";
-import { CreatableSelect, CreatableSelectProps } from "./CreatableSelect";
+import { CreatableSelect } from "./CreatableSelect";
 
-const Template: StoryFn<CreatableSelectProps> = ({ ...props }) => {
-  return <CreatableSelect {...props} />;
-};
-
-export const Empty = Template.bind({});
-Empty.args = { value: undefined, items: [] };
-
-export const Standard = Template.bind({});
-Standard.args = { value: undefined, items: COUNTRIES };
-
-const meta: Meta = {
+const meta = {
   title: "form/component/AutoComplete/CreatableSelect",
   component: CreatableSelect,
   argTypes: {
@@ -27,5 +17,16 @@ const meta: Meta = {
       action: "onValueChange",
     },
   },
-};
+} satisfies Meta<typeof CreatableSelect>;
+
 export default meta;
+
+const Template: StoryFn<typeof CreatableSelect> = ({ ...props }) => {
+  return <CreatableSelect {...props} />;
+};
+
+export const Empty = Template.bind({});
+Empty.args = { value: undefined, items: [] };
+
+export const Standard = Template.bind({});
+Standard.args = { value: undefined, items: COUNTRIES };

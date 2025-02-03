@@ -1,18 +1,15 @@
-import { StoryFn } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { CurrencyInput } from "../CurrencyInput";
 import { NumberInput } from "../NumberInput";
-import {
-  NumberContextProvider,
-  NumberContextProviderProps,
-} from "./NumberContext";
+import { NumberContextProvider } from "./NumberContext";
 
 export default {
   title: "Form/Component/NumberContextProvider",
   component: NumberContextProvider,
-};
+} satisfies Meta<typeof NumberContextProvider>;
 
-const Template: StoryFn<NumberContextProviderProps> = (args) => {
+const Template: StoryFn<typeof NumberContextProvider> = (args) => {
   const value = 1000555.482;
 
   return (
@@ -40,7 +37,7 @@ Standard.args = { locale: "en", currency: "USD", useGrouping: true };
 export const Locale_DE = Template.bind({});
 Locale_DE.args = { locale: "de", currency: "EUR", useGrouping: true };
 
-export const Nested: StoryFn<NumberContextProviderProps> = (args) => {
+export const Nested: StoryFn<typeof NumberContextProvider> = (args) => {
   const value = 1000555.482;
 
   return (

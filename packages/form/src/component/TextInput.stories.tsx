@@ -1,11 +1,11 @@
 import "@ui5/webcomponents-icons/dist/value-help.js";
 
-import { StoryFn } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { Icon } from "@ui5/webcomponents-react";
 
-import { TextInput, TextInputProps } from "./TextInput";
+import { TextInput } from "./TextInput";
 
-const Template: StoryFn<TextInputProps> = (args) => {
+const Template: StoryFn<typeof TextInput> = (args) => {
   return <TextInput {...args} />;
 };
 
@@ -32,4 +32,4 @@ export default {
       action: "onChange",
     },
   },
-};
+} satisfies Meta<typeof TextInput>;

@@ -1,15 +1,16 @@
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryFn } from "@storybook/react";
 
-import { NumberInput, NumberInputProps } from "./NumberInput";
+import { NumberInput } from "./NumberInput";
 
-const meta: Meta = {
+const meta = {
   title: "Form/Component/NumberInput",
   component: NumberInput,
-};
+} satisfies Meta<typeof NumberInput>;
+
 export default meta;
 
-const Template: StoryFn<NumberInputProps> = (args) => {
+const Template: StoryFn<typeof NumberInput> = (args) => {
   return <NumberInput {...args} />;
 };
 
