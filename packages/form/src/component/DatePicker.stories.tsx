@@ -7,6 +7,16 @@ import { FormAdapter } from "../form/FormAdapter";
 import { toISO8601DateString } from "../util/date";
 import { DatePicker } from "./DatePicker";
 
+export default {
+  title: "Form/Component/DatePicker",
+  component: DatePicker,
+  argTypes: {
+    value: { type: "string", control: "text" },
+    minDate: { type: "string", control: "text" },
+    maxDate: { type: "string", control: "text" },
+  },
+} satisfies Meta<typeof DatePicker>;
+
 const Template: StoryFn<typeof DatePicker> = (args) => {
   return <DatePicker {...args} />;
 };
@@ -138,15 +148,3 @@ ISODateTimeMaxDateToday.args = {
   maxDate: new Date().toISOString(),
 };
 ISODateTimeMaxDateToday.argTypes = { ...ISODateTimeStandard.argTypes };
-
-const meta = {
-  title: "Form/Component/DatePicker",
-  component: DatePicker,
-  argTypes: {
-    value: { type: "string", control: "text" },
-    minDate: { type: "string", control: "text" },
-    maxDate: { type: "string", control: "text" },
-  },
-} satisfies Meta<typeof DatePicker>;
-
-export default meta;

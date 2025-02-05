@@ -2,14 +2,18 @@ import "@ui5/webcomponents-icons/dist/add.js";
 
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryFn } from "@storybook/react";
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
 import {
   COUNTRIES,
   SEARCH_COUNTRIES,
 } from "./autocomplete/AutoComplete-storyData";
-import { MultiAutoComplete, MultiAutoCompleteProps } from "./MultiAutoComplete";
+import { MultiAutoComplete } from "./MultiAutoComplete";
 import { DefaultAutoCompletOption } from "./MultiAutoCompleteModel";
+
+export default {
+  title: "Form/Component/MultiAutoComplete",
+  component: MultiAutoComplete,
+} satisfies Meta<typeof MultiAutoComplete>;
 
 const Template: StoryFn<typeof MultiAutoComplete<DefaultAutoCompletOption>> = (
   args
@@ -69,10 +73,3 @@ RenderValue.args = {
     };
   },
 };
-
-const meta = {
-  title: "Form/Component/MultiAutoComplete",
-  component: MultiAutoComplete,
-} satisfies Meta<typeof MultiAutoComplete>;
-
-export default meta;

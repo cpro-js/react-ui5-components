@@ -3,7 +3,7 @@ import { Meta, StoryFn } from "@storybook/react";
 import { COUNTRIES } from "./AutoComplete-storyData";
 import { CreatableSelect } from "./CreatableSelect";
 
-const meta = {
+export default {
   title: "form/component/AutoComplete/CreatableSelect",
   component: CreatableSelect,
   argTypes: {
@@ -18,8 +18,6 @@ const meta = {
     },
   },
 } satisfies Meta<typeof CreatableSelect>;
-
-export default meta;
 
 const Template: StoryFn<typeof CreatableSelect> = ({ ...props }) => {
   return <CreatableSelect {...props} />;

@@ -1,20 +1,15 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
 import { Meta, StoryFn } from "@storybook/react";
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
 import {
   COUNTRIES,
   CountryItem,
   SEARCH_COUNTRIES,
 } from "./AutoComplete-storyData";
-import {
-  CreatableAutoComplete,
-  CreatableAutoCompleteProps,
-} from "./CreatableAutoComplete";
-import { DefaultAutoCompleteOption } from "./internal/CoreAutocomplete";
+import { CreatableAutoComplete } from "./CreatableAutoComplete";
 
-const meta = {
+export default {
   title: "form/component/AutoComplete/CreatableAutocomplete",
   component: CreatableAutoComplete,
   argTypes: {
@@ -29,8 +24,6 @@ const meta = {
     },
   },
 } satisfies Meta<typeof CreatableAutoComplete>;
-
-export default meta;
 
 const Template: StoryFn<typeof CreatableAutoComplete<CountryItem>> = (args) => {
   return <CreatableAutoComplete {...args} />;

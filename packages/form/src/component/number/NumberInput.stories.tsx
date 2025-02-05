@@ -3,12 +3,10 @@ import { Meta, StoryFn } from "@storybook/react";
 
 import { NumberInput } from "./NumberInput";
 
-const meta = {
+export default {
   title: "Form/Component/NumberInput",
   component: NumberInput,
 } satisfies Meta<typeof NumberInput>;
-
-export default meta;
 
 const Template: StoryFn<typeof NumberInput> = (args) => {
   return <NumberInput {...args} />;

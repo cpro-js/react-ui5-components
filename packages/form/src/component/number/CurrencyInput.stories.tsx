@@ -2,12 +2,10 @@ import { Meta, StoryFn } from "@storybook/react";
 
 import { CurrencyInput } from "./CurrencyInput";
 
-const meta = {
+export default {
   title: "Form/Component/CurrencyInput",
   component: CurrencyInput,
 } satisfies Meta<typeof CurrencyInput>;
-
-export default meta;
 
 const Template: StoryFn<typeof CurrencyInput> = (args) => {
   return <CurrencyInput {...args} />;

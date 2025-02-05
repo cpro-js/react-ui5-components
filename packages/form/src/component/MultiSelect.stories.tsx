@@ -1,6 +1,22 @@
 import { Meta, StoryFn } from "@storybook/react";
 
-import { MultiSelect, MultiSelectItem, MultiSelectProps } from "./MultiSelect";
+import { MultiSelect, MultiSelectItem } from "./MultiSelect";
+
+export default {
+  title: "Form/Component/MultiSelect",
+  component: MultiSelect,
+  argTypes: {
+    onSelectionChange: {
+      action: "selection-change",
+    },
+    onInput: {
+      action: "input",
+    },
+    onChange: {
+      action: "change",
+    },
+  },
+} satisfies Meta<typeof MultiSelect>;
 
 const Template: StoryFn<typeof MultiSelect> = (args) => {
   return <MultiSelect {...args} />;
@@ -52,21 +68,3 @@ CustomItemModel.args = {
   itemLabel: "alt",
   itemValue: "label",
 };
-
-const meta = {
-  title: "Form/Component/MultiSelect",
-  component: MultiSelect,
-  argTypes: {
-    onSelectionChange: {
-      action: "selection-change",
-    },
-    onInput: {
-      action: "input",
-    },
-    onChange: {
-      action: "change",
-    },
-  },
-} satisfies Meta<typeof MultiSelect>;
-
-export default meta;

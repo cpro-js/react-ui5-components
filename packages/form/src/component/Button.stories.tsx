@@ -3,7 +3,7 @@ import { Meta, StoryFn } from "@storybook/react";
 
 import { Button } from "./Button";
 
-const meta = {
+export default {
   title: "Form/Component/Button",
   component: Button,
   argTypes: {
@@ -12,8 +12,6 @@ const meta = {
     },
   },
 } satisfies Meta<typeof Button>;
-
-export default meta;
 
 const Template: StoryFn<typeof Button> = (args) => {
   return (
