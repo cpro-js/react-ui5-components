@@ -5,9 +5,19 @@ import { ISO8601DateAdapter } from "../form/adapter/date/ISO8601DateAdapter";
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
 import { FormAdapter } from "../form/FormAdapter";
 import { toISO8601DateString } from "../util/date";
-import { DatePicker, DatePickerProps } from "./DatePicker";
+import { DatePicker } from "./DatePicker";
 
-const Template: StoryFn<DatePickerProps> = (args) => {
+export default {
+  title: "Form/Component/DatePicker",
+  component: DatePicker,
+  argTypes: {
+    value: { type: "string", control: "text" },
+    minDate: { type: "string", control: "text" },
+    maxDate: { type: "string", control: "text" },
+  },
+} satisfies Meta<typeof DatePicker>;
+
+const Template: StoryFn<typeof DatePicker> = (args) => {
   return <DatePicker {...args} />;
 };
 
@@ -40,7 +50,7 @@ MinDateToday.args = { ...Standard.args, minDate: new Date() };
 export const MaxDateToday = Template.bind({});
 MaxDateToday.args = { ...Standard.args, maxDate: new Date() };
 
-const ISO8601DateTemplate: StoryFn<DatePickerProps> = (args) => {
+const ISO8601DateTemplate: StoryFn<typeof DatePicker> = (args) => {
   return (
     <FormAdapter date={ISO8601DateAdapter}>
       <DatePicker {...args} />
@@ -89,7 +99,7 @@ ISO8601DateMaxDateToday.args = {
 };
 ISO8601DateMaxDateToday.argTypes = { ...ISO8601DateStandard.argTypes };
 
-const ISODateTimeTemplate: StoryFn<DatePickerProps> = (args) => {
+const ISODateTimeTemplate: StoryFn<typeof DatePicker> = (args) => {
   return (
     <FormAdapter date={ISODateTimeAdapter}>
       <DatePicker {...args} />
@@ -138,15 +148,3 @@ ISODateTimeMaxDateToday.args = {
   maxDate: new Date().toISOString(),
 };
 ISODateTimeMaxDateToday.argTypes = { ...ISODateTimeStandard.argTypes };
-
-const meta: Meta = {
-  title: "Form/Component/DatePicker",
-  component: DatePicker,
-  argTypes: {
-    value: { type: "string", control: "text" },
-    minDate: { type: "string", control: "text" },
-    maxDate: { type: "string", control: "text" },
-  },
-};
-
-export default meta;

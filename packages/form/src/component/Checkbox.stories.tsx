@@ -1,14 +1,24 @@
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryFn } from "@storybook/react";
+import { ComponentProps } from "react";
 
-import { CheckBoxProps, Checkbox } from "./Checkbox";
+import { Checkbox } from "./Checkbox";
+
+export default {
+  title: "Form/Component/Checkbox",
+  component: Checkbox,
+  argTypes: {
+    onChange: {
+      action: "change",
+    },
+  },
+} satisfies Meta<typeof Checkbox>;
 
 const DEFAULT_NAME = "test";
 
-const Template: StoryFn<CheckBoxProps & { form?: boolean }> = ({
-  form,
-  ...args
-}) => {
+const Template: StoryFn<
+  ComponentProps<typeof Checkbox> & { form?: boolean }
+> = ({ form, ...args }) => {
   if (!form) {
     return <Checkbox {...args} />;
   }
@@ -70,15 +80,3 @@ HtmlFormWithValue.args = {
   ...HtmlForm.args,
   value: "my-value",
 };
-
-const meta: Meta = {
-  title: "Form/Component/Checkbox",
-  component: Checkbox,
-  argTypes: {
-    onChange: {
-      action: "change",
-    },
-  },
-};
-
-export default meta;

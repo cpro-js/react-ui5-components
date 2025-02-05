@@ -1,16 +1,28 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
 import { Meta, StoryFn } from "@storybook/react";
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
-import { AutoComplete, AutoCompleteProps } from "./AutoComplete";
+import { AutoComplete } from "./AutoComplete";
 import {
   COUNTRIES,
   CountryItem,
   SEARCH_COUNTRIES,
 } from "./AutoComplete-storyData";
 
-const Template: StoryFn<AutoCompleteProps<CountryItem>> = ({ ...props }) => {
+export default {
+  title: "form/component/AutoComplete/AutoComplete",
+  component: AutoComplete,
+  argTypes: {
+    onInputChange: {
+      action: "onInputChange",
+    },
+    onValueChange: {
+      action: "onValueChange",
+    },
+  },
+} satisfies Meta<typeof AutoComplete>;
+
+const Template: StoryFn<typeof AutoComplete<CountryItem>> = ({ ...props }) => {
   return <AutoComplete {...props} />;
 };
 
@@ -54,17 +66,3 @@ CustomValueFunction.args = {
   value: COUNTRIES[1].value,
   itemValue: (country) => `${country.label} (${country.value})`,
 };
-
-const meta: Meta = {
-  title: "form/component/AutoComplete/AutoComplete",
-  component: AutoComplete,
-  argTypes: {
-    onInputChange: {
-      action: "onInputChange",
-    },
-    onValueChange: {
-      action: "onValueChange",
-    },
-  },
-};
-export default meta;

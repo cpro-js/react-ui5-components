@@ -1,7 +1,23 @@
-import { StoryFn } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 
 import { COUNTRIES, CountryItem } from "./autocomplete/AutoComplete-storyData";
-import { Select, SelectItem, SelectProps } from "./Select";
+import { Select, SelectItem } from "./Select";
+
+export default {
+  title: "Form/Component/Select",
+  component: Select,
+  argTypes: {
+    onSelectionChange: {
+      action: "selection-change",
+    },
+    onInput: {
+      action: "input",
+    },
+    onChange: {
+      action: "change",
+    },
+  },
+} satisfies Meta<typeof Select>;
 
 export interface SelectItemAlt extends SelectItem {
   alt: string;
@@ -15,7 +31,7 @@ const items: Array<SelectItemAlt> = [
   { value: "4", label: "Test 4", alt: "Test 4 Alt" },
 ];
 
-const Template: StoryFn<SelectProps> = (args) => {
+const Template: StoryFn<typeof Select> = (args) => {
   return <Select {...args} />;
 };
 
@@ -39,7 +55,7 @@ WithValueNumber.args = { ...Standard.args, value: 1 };
 export const WithValueString = Template.bind({});
 WithValueString.args = { ...Standard.args, value: "1" };
 
-const TemplateAlt: StoryFn<SelectProps<SelectItemAlt, string>> = (args) => {
+const TemplateAlt: StoryFn<typeof Select<SelectItemAlt, string>> = (args) => {
   return <Select<SelectItemAlt, string> {...args} />;
 };
 
@@ -52,7 +68,7 @@ CustomItemModel.args = {
   itemValue: "label",
 };
 
-const TemplateCountry: StoryFn<SelectProps<CountryItem, string>> = (args) => {
+const TemplateCountry: StoryFn<typeof Select<CountryItem, string>> = (args) => {
   return <Select<CountryItem, string> {...args} />;
 };
 
@@ -64,20 +80,4 @@ AdditionalText.args = {
   itemLabel: "label",
   itemValue: "value",
   itemAdditionalText: "value",
-};
-
-export default {
-  title: "Form/Component/Select",
-  component: Select,
-  argTypes: {
-    onSelectionChange: {
-      action: "selection-change",
-    },
-    onInput: {
-      action: "input",
-    },
-    onChange: {
-      action: "change",
-    },
-  },
 };

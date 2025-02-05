@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from "@storybook/react";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 
-import { TextAreaProps } from "./TextArea";
 import { TextArea } from "./TextArea";
 
 export default {
