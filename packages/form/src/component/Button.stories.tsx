@@ -1,9 +1,21 @@
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryFn } from "@storybook/react";
 
-import { Button, ButtonProps } from "./Button";
+import { Button } from "./Button";
 
-const Template: StoryFn<{ buttons: Array<ButtonProps> }> = ({ buttons }) => {
+const meta = {
+  title: "Form/Component/Button",
+  component: Button,
+  argTypes: {
+    onClick: {
+      action: "click",
+    },
+  },
+} satisfies Meta<typeof Button>;
+
+export default meta;
+
+const Template: StoryFn<typeof Button> = (args) => {
   return (
     <form
       onSubmit={(e) => {
@@ -12,33 +24,29 @@ const Template: StoryFn<{ buttons: Array<ButtonProps> }> = ({ buttons }) => {
       }}
     >
       <input type={"text"} defaultValue="change value and reset" />
-      {buttons.map((props, index) => (
-        <Button key={index} {...props} />
-      ))}
+      <Button {...args} />
     </form>
   );
 };
 
-export const ParentForm = Template.bind({});
-ParentForm.args = {
-  buttons: [
-    {
-      children: "Button",
-    },
-    {
-      children: "Submit",
-      type: "submit",
-    },
-    {
-      children: "Reset",
-      type: "reset",
-    },
-  ],
+export const DefaultButton = Template.bind({});
+DefaultButton.args = {
+  children: "Button",
 };
 
-const TemplateExternalForm: StoryFn<{ buttons: Array<ButtonProps> }> = ({
-  buttons,
-}) => {
+export const SubmitButton = Template.bind({});
+SubmitButton.args = {
+  children: "Submit",
+  type: "submit",
+};
+
+export const ResetButton = Template.bind({});
+ResetButton.args = {
+  children: "Reset",
+  type: "reset",
+};
+
+const TemplateExternalForm: StoryFn<typeof Button> = (args) => {
   return (
     <>
       <form
@@ -50,41 +58,27 @@ const TemplateExternalForm: StoryFn<{ buttons: Array<ButtonProps> }> = ({
       >
         <input type={"text"} defaultValue="change value and reset" />
       </form>
-      {buttons.map((props, index) => (
-        <Button key={index} {...props} />
-      ))}
+      <Button {...args} />
     </>
   );
 };
 
-export const ExternalForm = TemplateExternalForm.bind({});
-ExternalForm.args = {
-  buttons: [
-    {
-      children: "Button",
-      form: "my-form-id",
-    },
-    {
-      form: "my-form-id",
-      children: "Submit",
-      type: "submit",
-    },
-    {
-      form: "my-form-id",
-      children: "Reset",
-      type: "reset",
-    },
-  ],
+export const ExternalDefaultButton = TemplateExternalForm.bind({});
+ExternalDefaultButton.args = {
+  children: "Button",
+  form: "my-form-id",
 };
 
-const meta: Meta = {
-  title: "Form/Component/Button",
-  component: Button,
-  argTypes: {
-    onClick: {
-      action: "click",
-    },
-  },
+export const ExternalSubmitButton = TemplateExternalForm.bind({});
+ExternalSubmitButton.args = {
+  children: "Submit",
+  type: "submit",
+  form: "my-form-id",
 };
 
-export default meta;
+export const ExternalResetButton = TemplateExternalForm.bind({});
+ExternalResetButton.args = {
+  children: "Reset",
+  type: "reset",
+  form: "my-form-id",
+};
