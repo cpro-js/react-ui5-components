@@ -38,9 +38,13 @@ ResetButton.args = {
 const TemplateParentForm: StoryFn<typeof Button> = (args) => {
   return (
     <form
+      style={{ border: "1px solid black", padding: 20, margin: 20 }}
       onSubmit={(e) => {
         e.preventDefault();
-        action("onSubmit")(e);
+        action("submit-clicked")(e);
+      }}
+      onReset={(e) => {
+        action("reset-clicked")(e);
       }}
     >
       <input type="text" defaultValue="change value and reset" />
@@ -57,17 +61,21 @@ const TemplateParentForm: StoryFn<typeof Button> = (args) => {
   );
 };
 
-export const ParentForm = TemplateParentForm.bind({});
-ParentForm.args = {};
+export const InsideHtmlForm = TemplateParentForm.bind({});
+InsideHtmlForm.args = {};
 
 const TemplateExternalForm: StoryFn<typeof Button> = (args) => {
   return (
     <>
       <form
         id="my-form-id"
+        style={{ border: "1px solid black", padding: 20, margin: 20 }}
         onSubmit={(e) => {
           e.preventDefault();
           action("onSubmit")(e);
+        }}
+        onReset={(e) => {
+          action("onReset")(e);
         }}
       >
         <input type="text" defaultValue="change value and reset" />
@@ -85,5 +93,5 @@ const TemplateExternalForm: StoryFn<typeof Button> = (args) => {
   );
 };
 
-export const ExternalForm = TemplateExternalForm.bind({});
-ExternalForm.args = {};
+export const ExternalHtmlForm = TemplateExternalForm.bind({});
+ExternalHtmlForm.args = {};
