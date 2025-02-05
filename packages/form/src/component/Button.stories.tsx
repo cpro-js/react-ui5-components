@@ -12,19 +12,8 @@ export default {
     },
   },
 } satisfies Meta<typeof Button>;
-
 const Template: StoryFn<typeof Button> = (args) => {
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        action("onSubmit")(e);
-      }}
-    >
-      <input type={"text"} defaultValue="change value and reset" />
-      <Button {...args} />
-    </form>
-  );
+  return <Button {...args} />;
 };
 
 export const DefaultButton = Template.bind({});
@@ -36,47 +25,65 @@ export const SubmitButton = Template.bind({});
 SubmitButton.args = {
   children: "Submit",
   type: "submit",
+  onClick: action("submit-clicked"),
 };
 
 export const ResetButton = Template.bind({});
 ResetButton.args = {
   children: "Reset",
   type: "reset",
+  onClick: action("reset-clicked"),
 };
+
+const TemplateParentForm: StoryFn<typeof Button> = (args) => {
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        action("onSubmit")(e);
+      }}
+    >
+      <input type="text" defaultValue="change value and reset" />
+      <Button {...args} type="button">
+        Button
+      </Button>
+      <Button {...args} type="submit">
+        Submit
+      </Button>
+      <Button {...args} type="reset">
+        Reset
+      </Button>
+    </form>
+  );
+};
+
+export const ParentForm = TemplateParentForm.bind({});
+ParentForm.args = {};
 
 const TemplateExternalForm: StoryFn<typeof Button> = (args) => {
   return (
     <>
       <form
-        id={"my-form-id"}
+        id="my-form-id"
         onSubmit={(e) => {
           e.preventDefault();
           action("onSubmit")(e);
         }}
       >
-        <input type={"text"} defaultValue="change value and reset" />
+        <input type="text" defaultValue="change value and reset" />
       </form>
-      <Button {...args} />
+      <Button {...args} form="my-form-id" type="button">
+        Button
+      </Button>
+      <Button {...args} form="my-form-id" type="submit">
+        Submit
+      </Button>
+      <Button {...args} form="my-form-id" type="reset">
+        Reset
+      </Button>
     </>
   );
 };
 
-export const ExternalDefaultButton = TemplateExternalForm.bind({});
-ExternalDefaultButton.args = {
-  children: "Button",
-  form: "my-form-id",
-};
-
-export const ExternalSubmitButton = TemplateExternalForm.bind({});
-ExternalSubmitButton.args = {
-  children: "Submit",
-  type: "submit",
-  form: "my-form-id",
-};
-
-export const ExternalResetButton = TemplateExternalForm.bind({});
-ExternalResetButton.args = {
-  children: "Reset",
-  type: "reset",
-  form: "my-form-id",
-};
+export const ExternalForm = TemplateExternalForm.bind({});
+ExternalForm.args = {};
