@@ -1,3 +1,4 @@
+import { useDebounceCallback } from "@react-hook/debounce";
 import { klona } from "klona/json";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
@@ -134,6 +135,17 @@ export function useFormController<FormValues extends {}>(
     [handleSubmit, submitHandler]
   );
 
+  // NOTE / TODO / WORKAROUND: remove the following and triggerSubmit in
+  // components when https://github.com/SAP/ui5-webcomponents/issues/10534 is resolved
+  const debouncedHandleSubmit = useDebounceCallback(submitForm, 10, false);
+  const workaroundSubmitHandler = useCallback(
+    (e?: React.BaseSyntheticEvent) => {
+      e?.preventDefault();
+      debouncedHandleSubmit(e);
+    },
+    [debouncedHandleSubmit]
+  );
+
   useEffect(() => {
     // refresh action ref if any of our methods changes
     actions.current = {
@@ -148,7 +160,7 @@ export function useFormController<FormValues extends {}>(
   return {
     context: form,
     handleReset: resetForm,
-    handleSubmit: submitForm,
+    handleSubmit: workaroundSubmitHandler,
     setErrors: setErrors,
     setValues: setValues,
     reset: resetForm,
