@@ -32,7 +32,7 @@ const Template: StoryFn<FormControllerProps<FormData> & SelectFieldProps> = (
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>();
+  const fieldRef = useRef<FormFieldElement>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -42,20 +42,21 @@ const Template: StoryFn<FormControllerProps<FormData> & SelectFieldProps> = (
   );
 };
 
-const I18nTemplate: StoryFn<FormControllerProps<FormData> & SelectFieldProps> =
-  (args, context) => {
-    return (
-      <FormI18nProvider
-        getValidationErrorMessage={({ name }, error) => {
-          return `Field '${name}' has Error '${
-            error.type
-          }'. Original error message: ${error.message || "---"}`;
-        }}
-      >
-        {Template(args, context)}
-      </FormI18nProvider>
-    );
-  };
+const I18nTemplate: StoryFn<
+  FormControllerProps<FormData> & SelectFieldProps
+> = (args, context) => {
+  return (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) => {
+        return `Field '${name}' has Error '${
+          error.type
+        }'. Original error message: ${error.message || "---"}`;
+      }}
+    >
+      {Template(args, context)}
+    </FormI18nProvider>
+  );
+};
 
 export const Empty = Template.bind({});
 Empty.args = {};
@@ -107,7 +108,7 @@ const TemplateAlt: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>();
+  const fieldRef = useRef<FormFieldElement>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>

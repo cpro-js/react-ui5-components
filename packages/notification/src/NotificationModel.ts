@@ -1,11 +1,6 @@
-import { ReactElement, ReactFragment, ReactNode, ReactPortal } from "react";
+import { ReactElement, ReactNode } from "react";
 
-export type ErrorDetail =
-  | string
-  | ReactElement
-  | ReactFragment
-  | null
-  | undefined;
+export type ErrorDetail = string | ReactElement | ReactNode | null | undefined;
 
 export interface UserErrorModel {
   message: string;

@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { FormState, useFormState } from "react-hook-form";
 
 export type FormStatusValues = Pick<
@@ -6,7 +7,7 @@ export type FormStatusValues = Pick<
 >;
 
 export type FormStatusProps = {
-  render: (values: FormStatusValues) => JSX.Element | null;
+  render: (values: FormStatusValues) => ReactNode | null;
 };
 
 export const FormStatus = (props: FormStatusProps) => {

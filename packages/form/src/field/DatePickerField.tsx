@@ -1,4 +1,3 @@
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import { DatePickerDomRef } from "@ui5/webcomponents-react";
 import {
   forwardRef,
@@ -94,7 +93,7 @@ export const DatePickerField = forwardRef<
   const { field, fieldState } = useController({ name, rules });
 
   // store input ref for intenral usage
-  const internalRef = useRef<DatePickerDomRef>();
+  const internalRef = useRef<DatePickerDomRef>(null);
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {
@@ -126,9 +125,7 @@ export const DatePickerField = forwardRef<
       onChange={(event, value) =>
         field.onChange(value != null ? value : undefined)
       }
-      valueState={
-        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
-      }
+      valueState={hasError(fieldState.error) ? "Negative" : "None"}
       valueStateMessage={
         errorMessage != null && (
           <div slot="valueStateMessage">{errorMessage}</div>

@@ -1,7 +1,5 @@
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import { InputDomRef } from "@ui5/webcomponents-react";
 import {
-  FC,
   forwardRef,
   useCallback,
   useImperativeHandle,
@@ -81,9 +79,7 @@ export const CurrencyInputField = forwardRef<
       }}
       onBlur={field.onBlur}
       required={required}
-      valueState={
-        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
-      }
+      valueState={hasError(fieldState.error) ? "Negative" : "None"}
       valueStateMessage={
         errorMessage != null && (
           <div slot="valueStateMessage">{errorMessage}</div>

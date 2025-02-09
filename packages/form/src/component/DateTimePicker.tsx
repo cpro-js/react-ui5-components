@@ -75,7 +75,7 @@ export type DateTimePickerProps<TDate extends Date | string = string> =
  * adding additional functionalities and handling specific to date picking.
  */
 export const DateTimePicker = forwardRef<
-  DateTimePickerDomRef | undefined,
+  DateTimePickerDomRef | null,
   DateTimePickerProps
 >(
   (
@@ -91,10 +91,13 @@ export const DateTimePicker = forwardRef<
     },
     forwardedRef
   ) => {
-    const ref = useRef<DateTimePickerDomRef>();
+    const ref = useRef<DateTimePickerDomRef>(null);
 
     // forward our internal ref as external
-    useImperativeHandle(forwardedRef, () => ref.current);
+    useImperativeHandle<
+      DateTimePickerDomRef | null,
+      DateTimePickerDomRef | null
+    >(forwardedRef, () => ref.current);
 
     const {
       dateTime: { format, parse },
@@ -109,7 +112,7 @@ export const DateTimePicker = forwardRef<
     const setRef = useCallback(
       (ui5DateTimePicker: null | DateTimePickerDomRef) => {
         if (ui5DateTimePicker == null) {
-          ref.current = undefined;
+          ref.current = null;
           return;
         }
         ref.current = ui5DateTimePicker as any;

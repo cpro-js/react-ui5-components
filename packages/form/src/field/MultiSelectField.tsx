@@ -1,4 +1,3 @@
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import { MultiComboBoxDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
@@ -49,7 +48,7 @@ export const MultiSelectField = forwardRef<
   });
 
   // store input ref for intenral usage
-  const internalRef = useRef<MultiComboBoxDomRef>();
+  const internalRef = useRef<MultiComboBoxDomRef>(null);
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {
@@ -75,9 +74,7 @@ export const MultiSelectField = forwardRef<
       onSelectionChange={(_, value) => {
         field.onChange(value);
       }}
-      valueState={
-        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
-      }
+      valueState={hasError(fieldState.error) ? "Negative" : "None"}
       valueStateMessage={
         errorMessage != null && (
           <div slot="valueStateMessage">{errorMessage}</div>

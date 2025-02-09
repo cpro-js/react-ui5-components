@@ -43,7 +43,7 @@ export type TextInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
  * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-input--docs" target="_blank">UI5 Input</a>
  * adding a custom `SubmitOnEnter` eventhandler, which triggers when pressing enter.
  */
-export const TextInput = forwardRef<InputDomRef, TextInputProps>(
+export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
   ({ value, onKeyPress, ...props }, forwardedRef) => {
     const handleKeyPress = useCallback(
       (event: KeyboardEvent<HTMLElement>) => {
@@ -58,8 +58,11 @@ export const TextInput = forwardRef<InputDomRef, TextInputProps>(
     );
 
     // store input ref for internal usage
-    const inputRef = useRef<InputDomRef>() as MutableRefObject<InputDomRef>;
-    useImperativeHandle(forwardedRef, () => inputRef.current);
+    const inputRef = useRef<InputDomRef>(null);
+    useImperativeHandle<InputDomRef | null, InputDomRef | null>(
+      forwardedRef,
+      () => inputRef.current
+    );
 
     return (
       <Input

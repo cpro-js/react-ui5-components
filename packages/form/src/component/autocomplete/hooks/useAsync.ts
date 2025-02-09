@@ -80,7 +80,7 @@ export const useAsync = <
 
   const lastRequest = useRef<unknown>(undefined);
   const mounted = useRef<boolean>(false);
-  const lastItemSelection = useRef<TItemModel | undefined>();
+  const lastItemSelection = useRef<TItemModel | undefined>(undefined);
   const latestGetItemLabel = useLatestRef(propsGetItemLabel);
 
   useEffect(() => {

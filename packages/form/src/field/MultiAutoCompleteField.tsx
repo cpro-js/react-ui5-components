@@ -1,4 +1,3 @@
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import {
   MutableRefObject,
   ReactElement,
@@ -46,7 +45,8 @@ export const MultiAutoCompleteField = forwardRef<
   });
 
   // store input ref for intenral usage
-  const internalRef = useRef<MultiAutoComplete<DefaultAutoCompleteOption>>();
+  const internalRef =
+    useRef<MultiAutoComplete<DefaultAutoCompleteOption>>(null);
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {
@@ -74,9 +74,7 @@ export const MultiAutoCompleteField = forwardRef<
       name={field.name}
       values={field.value}
       onChange={(_, value) => field.onChange(value)}
-      valueState={
-        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
-      }
+      valueState={hasError(fieldState.error) ? "Negative" : "None"}
       valueStateMessage={
         errorMessage != null && (
           <div slot="valueStateMessage">{errorMessage}</div>

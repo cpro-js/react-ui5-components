@@ -30,8 +30,8 @@ export const FormFilterBar: FC<FormFilterBarProps> = forwardRef<
   const { getValues, setValue } = useFormContext();
   const { clear, reset, submit } = useFormActions();
 
-  const valuesBeforeRef = useRef<any>();
-  const valuesChangedRef = useRef<any>();
+  const valuesBeforeRef = useRef<any>(null);
+  const valuesChangedRef = useRef<any>(null);
   const openRef = useRef<boolean>(false);
 
   useFormListener((values) => {

@@ -11,8 +11,8 @@ export interface useFormViewerProps<FormValues extends {}> {
 export interface FormViewerProps<T> {
   submittedValues?: T | undefined;
   fieldRef?:
-    | MutableRefObject<FormFieldElement | undefined>
-    | RefObject<FormFieldElement | undefined>;
+    | MutableRefObject<FormFieldElement | null>
+    | RefObject<FormFieldElement | null>;
 }
 
 export function useFormViewer<FormValues extends {}>(
