@@ -1,4 +1,3 @@
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import {
   ReactElement,
   Ref,
@@ -46,7 +45,7 @@ export const AutoCompleteField = forwardRef<
   });
 
   // store input ref for intenral usage
-  const internalRef = useRef<HTMLInputElement>();
+  const internalRef = useRef<HTMLInputElement>(null);
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {
@@ -70,9 +69,7 @@ export const AutoCompleteField = forwardRef<
       name={field.name}
       value={field.value}
       onValueChange={field.onChange}
-      valueState={
-        hasError(fieldState.error) ? ValueState.Negative : ValueState.None
-      }
+      valueState={hasError(fieldState.error) ? "Negative" : "None"}
       valueStateMessage={
         errorMessage != null && (
           <div slot="valueStateMessage">{errorMessage}</div>

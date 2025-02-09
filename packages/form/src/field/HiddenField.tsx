@@ -23,7 +23,7 @@ export const HiddenField: FC<HiddenFieldProps> = forwardRef<
   const { field } = useController({ name });
 
   // store input ref for intenral usage
-  const internalRef = useRef<HTMLInputElement>();
+  const internalRef = useRef<HTMLInputElement>(null);
   // forward outer ref to custom element
   useImperativeHandle(forwardedRef, () => ({
     focus() {

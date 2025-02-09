@@ -1,8 +1,6 @@
-import { DeepPartial, FieldPath, UnpackNestedValue } from "react-hook-form";
+import { DeepPartial, FieldPath } from "react-hook-form";
 
-export type PartialFormValues<FormValues extends {}> = UnpackNestedValue<
-  DeepPartial<FormValues>
->;
+export type PartialFormValues<FormValues extends {}> = DeepPartial<FormValues>;
 
 export type FormSubmitHandler<FormValues extends {}> = (
   values: FormValues,

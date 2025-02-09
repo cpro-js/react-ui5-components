@@ -1,4 +1,3 @@
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState";
 import { InputDomRef } from "@ui5/webcomponents-react";
 import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { useController } from "react-hook-form";
@@ -63,9 +62,7 @@ export const TextInputField = forwardRef<FormFieldElement, TextInputFieldProps>(
         value={value}
         onChange={field.onChange}
         onBlur={field.onBlur}
-        valueState={
-          hasError(fieldState.error) ? ValueState.Negative : ValueState.None
-        }
+        valueState={hasError(fieldState.error) ? "Negative" : "None"}
         valueStateMessage={
           errorMessage != null && (
             <div slot="valueStateMessage">{errorMessage}</div>

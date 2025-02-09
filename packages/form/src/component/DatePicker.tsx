@@ -6,6 +6,7 @@ import {
 } from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,
+  MutableRefObject,
   ReactElement,
   Ref,
   forwardRef,
@@ -126,109 +127,116 @@ export type DatePickerProps<TDate extends Date | string = string> =
  * ```
  *  If you retrieve the value from the DatePicker, you will receive it in its original form, just as it was provided.
  */
-export const DatePicker = forwardRef<
-  DatePickerDomRef | undefined,
-  DatePickerProps
->((props, forwardedRef) => {
-  const {
-    className,
-    value,
-    minDate,
-    maxDate,
-    onChange,
-    onKeyPress,
-    ...passThroughProps
-  } = props;
-  const ref = useRef<DatePickerDomRef>();
+export const DatePicker = forwardRef<DatePickerDomRef | null, DatePickerProps>(
+  (props, forwardedRef) => {
+    const {
+      className,
+      value,
+      minDate,
+      maxDate,
+      onChange,
+      onKeyPress,
+      ...passThroughProps
+    } = props;
+    const ref = useRef<DatePickerDomRef>(
+      null
+    ) as MutableRefObject<DatePickerDomRef | null>;
 
-  // forward our internal ref as external
-  useImperativeHandle(forwardedRef, () => ref.current);
+    // forward our internal ref as external
+    useImperativeHandle<DatePickerDomRef | null, DatePickerDomRef | null>(
+      forwardedRef,
+      () => ref.current
+    );
 
-  const {
-    date: { format, parse },
-  } = useContext(FormAdapterContext);
+    const {
+      date: { format, parse },
+    } = useContext(FormAdapterContext);
 
-  const ui5Loaded = useWaitForWebcomponent("ui5-date-picker");
+    const ui5Loaded = useWaitForWebcomponent("ui5-date-picker");
 
-  // Workaround: API of UI5 Datepicker supports only user formatted date strings as input and output
-  // that's why we need to transform our used date objects to string and vice versa with their API
-  const [isRefSet, setIsRefSet] = useState(false);
+    // Workaround: API of UI5 Datepicker supports only user formatted date strings as input and output
+    // that's why we need to transform our used date objects to string and vice versa with their API
+    const [isRefSet, setIsRefSet] = useState(false);
 
-  const setRef = useCallback((ui5DatePicker: null | DatePickerDomRef) => {
-    if (ui5DatePicker == null) {
-      ref.current = undefined;
-      return;
-    }
-    ref.current = ui5DatePicker;
-
-    setIsRefSet(true);
-  }, []);
-
-  const handleChange = useCallback(
-    (
-      event: Ui5CustomEvent<DatePickerDomRef, { value: string; valid: boolean }>
-    ) => {
-      if (!ui5Loaded) {
+    const setRef = useCallback((ui5DatePicker: null | DatePickerDomRef) => {
+      if (ui5DatePicker == null) {
+        ref.current = null;
         return;
       }
-      if (onChange != null) {
-        const value: Date | undefined | null = event.target.dateValue;
-        const formattedValue = event.detail.value;
+      ref.current = ui5DatePicker;
 
-        const normalizedValue =
-          value == null || !formattedValue ? null : (format(value) as any);
-        onChange(event, normalizedValue);
+      setIsRefSet(true);
+    }, []);
+
+    const handleChange = useCallback(
+      (
+        event: Ui5CustomEvent<
+          DatePickerDomRef,
+          { value: string; valid: boolean }
+        >
+      ) => {
+        if (!ui5Loaded) {
+          return;
+        }
+        if (onChange != null) {
+          const value: Date | undefined | null = event.target.dateValue;
+          const formattedValue = event.detail.value;
+
+          const normalizedValue =
+            value == null || !formattedValue ? null : (format(value) as any);
+          onChange(event, normalizedValue);
+        }
+      },
+      [onChange, ui5Loaded, format]
+    );
+
+    const handleKeyPress = useCallback(
+      (event: KeyboardEvent<DatePickerDomRef>) => {
+        // Workaround: Webcomponents catches enter -> need to submit manually
+        // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
+        triggerSubmitOnEnter(event);
+        if (onKeyPress != null) {
+          onKeyPress(event);
+        }
+      },
+      [onKeyPress]
+    );
+
+    const finalValues = useMemo(() => {
+      // @ts-ignore
+      const formatToUiString = ref.current?.formatValue?.bind(ref.current);
+      if (!ui5Loaded || !formatToUiString) {
+        return { value: "" };
       }
-    },
-    [onChange, ui5Loaded, format]
-  );
 
-  const handleKeyPress = useCallback(
-    (event: KeyboardEvent<DatePickerDomRef>) => {
-      // Workaround: Webcomponents catches enter -> need to submit manually
-      // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
-      triggerSubmitOnEnter(event);
-      if (onKeyPress != null) {
-        onKeyPress(event);
-      }
-    },
-    [onKeyPress]
-  );
+      const normalizedValue = convertToDate(value, parse);
+      const normalizedMinDate = convertToDate(minDate, parse);
+      const normalizedMaxDate = convertToDate(maxDate, parse);
+      return {
+        value: normalizedValue ? formatToUiString(normalizedValue) : "",
+        minDate: normalizedMinDate
+          ? formatToUiString(normalizedMinDate)
+          : undefined,
+        maxDate: normalizedMaxDate
+          ? formatToUiString(normalizedMaxDate)
+          : undefined,
+      };
+    }, [ui5Loaded, isRefSet, value, minDate, maxDate]);
 
-  const finalValues = useMemo(() => {
-    // @ts-ignore
-    const formatToUiString = ref.current?.formatValue?.bind(ref.current);
-    if (!ui5Loaded || !formatToUiString) {
-      return { value: "" };
-    }
-
-    const normalizedValue = convertToDate(value, parse);
-    const normalizedMinDate = convertToDate(minDate, parse);
-    const normalizedMaxDate = convertToDate(maxDate, parse);
-    return {
-      value: normalizedValue ? formatToUiString(normalizedValue) : "",
-      minDate: normalizedMinDate
-        ? formatToUiString(normalizedMinDate)
-        : undefined,
-      maxDate: normalizedMaxDate
-        ? formatToUiString(normalizedMaxDate)
-        : undefined,
-    };
-  }, [ui5Loaded, isRefSet, value, minDate, maxDate]);
-
-  return (
-    <UI5DatePicker
-      {...passThroughProps}
-      className={className}
-      ref={setRef}
-      value={finalValues.value}
-      minDate={finalValues.minDate}
-      maxDate={finalValues.maxDate}
-      onChange={handleChange}
-      onKeyPress={handleKeyPress}
-    />
-  );
-}) as <TDate extends Date | string = string>(
+    return (
+      <UI5DatePicker
+        {...passThroughProps}
+        className={className}
+        ref={setRef}
+        value={finalValues.value}
+        minDate={finalValues.minDate}
+        maxDate={finalValues.maxDate}
+        onChange={handleChange}
+        onKeyPress={handleKeyPress}
+      />
+    );
+  }
+) as <TDate extends Date | string = string>(
   p: DatePickerProps<TDate> & {
     ref?: Ref<DatePickerDomRef | undefined>;
   }

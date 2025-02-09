@@ -25,22 +25,23 @@ interface FormData {
   item?: Array<string | number>;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & MultiSelectFieldProps> =
-  (args) => {
-    const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<
+  FormControllerProps<FormData> & MultiSelectFieldProps
+> = (args) => {
+  const { initialValues, onSubmit, ...props } = args;
 
-    const { submittedValues, handleSubmit } = useFormViewer({
-      onSubmit: onSubmit,
-    });
-    const fieldRef = useRef<FormFieldElement>();
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldElement>(null);
 
-    return (
-      <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
-        <MultiSelectField {...props} ref={fieldRef} name={"item"} />
-        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-      </FormController>
-    );
-  };
+  return (
+    <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
+      <MultiSelectField {...props} ref={fieldRef} name={"item"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+    </FormController>
+  );
+};
 
 const I18nTemplate: StoryFn<
   FormControllerProps<FormData> & MultiSelectFieldProps
@@ -106,7 +107,7 @@ const TemplateAlt: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>();
+  const fieldRef = useRef<FormFieldElement>(null);
 
   return (
     <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>

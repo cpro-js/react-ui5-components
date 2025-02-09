@@ -15,8 +15,8 @@ import { debounce } from "@ui5/webcomponents-react-base";
 import {
   IInputSuggestionItem,
   InputSelectionChangeEventDetail,
-} from "@ui5/webcomponents/dist/Input";
-import { MultiInputTokenDeleteEventDetail } from "@ui5/webcomponents/dist/MultiInput";
+} from "@ui5/webcomponents/dist/Input.js";
+import { MultiInputTokenDeleteEventDetail } from "@ui5/webcomponents/dist/MultiInput.js";
 import {
   ClipboardEvent,
   Component,
@@ -93,7 +93,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   searchTerm: string = "";
   searching: boolean = false;
 
-  private inputRef: RefObject<MultiInputDomRef> = createRef();
+  private inputRef: RefObject<MultiInputDomRef | null> = createRef();
   /**
    * we need to store last selected item see migration guide: https://sap.github.io/ui5-webcomponents/docs/migration-guides/to-version-2/#ui5-input
    */
@@ -472,7 +472,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     return (
       <MultiInput
         {...originalProps}
-        ref={this.inputRef}
+        ref={this.inputRef as RefObject<MultiInputDomRef>}
         showSuggestions={true}
         tokens={this.renderTokens()}
         onTokenDelete={this.onDelete}
