@@ -6,6 +6,7 @@ import {
 } from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,
+  MutableRefObject,
   ReactElement,
   Ref,
   forwardRef,
@@ -137,7 +138,9 @@ export const DatePicker = forwardRef<DatePickerDomRef | null, DatePickerProps>(
       onKeyPress,
       ...passThroughProps
     } = props;
-    const ref = useRef<DatePickerDomRef>(null);
+    const ref = useRef<DatePickerDomRef>(
+      null
+    ) as MutableRefObject<DatePickerDomRef | null>;
 
     // forward our internal ref as external
     useImperativeHandle<DatePickerDomRef | null, DatePickerDomRef | null>(

@@ -472,7 +472,7 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     return (
       <MultiInput
         {...originalProps}
-        ref={this.inputRef}
+        ref={this.inputRef as RefObject<MultiInputDomRef>}
         showSuggestions={true}
         tokens={this.renderTokens()}
         onTokenDelete={this.onDelete}
