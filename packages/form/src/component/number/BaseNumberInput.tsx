@@ -67,7 +67,6 @@ export const BaseNumberInput = forwardRef<
     maximumSignificantDigits,
     useGrouping = false,
     onKeyDown: onKeyDownOriginal,
-    onKeyUp: onKeyUpOriginal,
     onFocus: onFocusOriginal,
     onBlur: onBlurOriginal,
     onPaste: onPasteOriginal,
@@ -305,78 +304,77 @@ export const BaseNumberInput = forwardRef<
 
       // update message
       setMessage(invalidDataMsg ?? undefined);
-    },
-    [parser, maxFractionDigits, decimalSeparator, onKeyDownOriginal]
-  );
 
-  /**
-   * Sets the current value, enables submit via enter and triggers events.
-   */
-  const onKeyUp = useCallback(
-    (event: KeyboardEvent<InputDomRef>) => {
-      const originalValue = event.currentTarget.value ?? "";
-      const parsedValue = parser.parse(originalValue);
-      const safeValue = parseValue(originalValue);
+      if (!event.isDefaultPrevented()) {
+        const originalValue = event.currentTarget.value ?? "";
+        const parsedValue = parser.parse(originalValue);
+        const safeValue = parseValue(originalValue);
 
-      let invalidDataMsg: NumberWarningMessage | undefined;
+        let invalidDataMsg: NumberWarningMessage | undefined;
 
-      if (originalValue !== currentValueRef.current && originalValue !== "-") {
-        // parsed value is invalid, but the original value has content
-        // => reset to last valid value before the change
-        if (parsedValue === undefined && originalValue !== "") {
-          event.currentTarget.value = currentValueRef.current || "";
-          invalidDataMsg = {
-            type: WarningMessageTypes.RESET_NOT_A_NUMBER,
-            discardedValue: originalValue,
-          };
-        } else {
-          // too many fraction digits
-          const decIndex = originalValue.indexOf(decimalSeparator);
-          const fracDigits =
-            decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
-          const tooManyFracs = fracDigits > maxFractionDigits;
-
-          // if parseValue changed the value, then reset the input to our value
-          // corner case for checking tooManyFracs: 1.110 => 1.11
-          if (safeValue !== parsedValue || tooManyFracs) {
-            const isChanged =
-              safeValue !== undefined && parsedValue !== undefined;
-
-            currentValueRef.current = formatForInput(safeValue);
+        if (
+          originalValue !== currentValueRef.current &&
+          originalValue !== "-"
+        ) {
+          // parsed value is invalid, but the original value has content
+          // => reset to last valid value before the change
+          if (parsedValue === undefined && originalValue !== "") {
             event.currentTarget.value = currentValueRef.current || "";
             invalidDataMsg = {
-              type: tooManyFracs
-                ? WarningMessageTypes.MODIFIED_MAX_FRACTION_DIGITS
-                : !isChanged
-                ? WarningMessageTypes.MODIFIED
-                : safeValue > parsedValue
-                ? WarningMessageTypes.MODIFIED_MIN_NUMBER
-                : WarningMessageTypes.MODIFIED_MAX_NUMBER,
+              type: WarningMessageTypes.RESET_NOT_A_NUMBER,
               discardedValue: originalValue,
             };
           } else {
-            // set the current value to the changed value
-            currentValueRef.current = originalValue;
-          }
+            // too many fraction digits
+            const decIndex = originalValue.indexOf(decimalSeparator);
+            const fracDigits =
+              decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
+            const tooManyFracs = fracDigits > maxFractionDigits;
 
-          // fire onInput event after any changed value
-          inputRef.current?.fireEvent("input");
+            // if parseValue changed the value, then reset the input to our value
+            // corner case for checking tooManyFracs: 1.110 => 1.11
+            if (safeValue !== parsedValue || tooManyFracs) {
+              const isChanged =
+                safeValue !== undefined && parsedValue !== undefined;
+
+              currentValueRef.current = formatForInput(safeValue);
+              event.currentTarget.value = currentValueRef.current || "";
+              invalidDataMsg = {
+                type: tooManyFracs
+                  ? WarningMessageTypes.MODIFIED_MAX_FRACTION_DIGITS
+                  : !isChanged
+                  ? WarningMessageTypes.MODIFIED
+                  : safeValue > parsedValue
+                  ? WarningMessageTypes.MODIFIED_MIN_NUMBER
+                  : WarningMessageTypes.MODIFIED_MAX_NUMBER,
+                discardedValue: originalValue,
+              };
+            } else {
+              // set the current value to the changed value
+              currentValueRef.current = originalValue;
+            }
+
+            // fire onInput event after any changed value
+            inputRef.current?.fireEvent("input");
+          }
+        }
+
+        if (invalidDataMsg) {
+          setMessage(invalidDataMsg);
+        } else {
+          // allow for submit via enter
+          triggerSubmitOnEnter(event);
         }
       }
-
-      if (invalidDataMsg) {
-        setMessage(invalidDataMsg);
-      } else {
-        // allow for submit via enter
-        triggerSubmitOnEnter(event);
-      }
-
-      // allow consumers to have access to onKeyUp too
-      if (onKeyUpOriginal) {
-        onKeyUpOriginal(event, parseValue(currentValueRef.current));
-      }
     },
-    [parser, decimalSeparator, parseValue, onKeyUpOriginal]
+    [
+      parser,
+      decimalSeparator,
+      maxFractionDigits,
+      decimalSeparator,
+      parseValue,
+      onKeyDownOriginal,
+    ]
   );
 
   const leaveInputState = useCallback(() => {
@@ -486,7 +484,6 @@ export const BaseNumberInput = forwardRef<
       valueState={msgType}
       valueStateMessage={msg}
       onKeyDown={onKeyDown}
-      onKeyUp={onKeyUp}
       onFocus={onFocus}
       onBlur={onBlur}
       onMouseEnter={onMouseEnter}

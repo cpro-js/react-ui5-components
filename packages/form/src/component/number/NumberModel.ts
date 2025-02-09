@@ -19,7 +19,6 @@ export interface CommonNumberInputProps
     | "showSuggestions"
     | "onSelectionChange"
     | "onChange"
-    | "onKeyUp"
   > {
   /**
    * The initial value, if any.
@@ -38,13 +37,6 @@ export interface CommonNumberInputProps
    * Fired when the value has changed and the user leaves the input field.
    */
   onValue?: (value?: number) => void;
-  /**
-   * Modified onKeyUp method, which also supplies the consumer with the parsed number value.
-   */
-  onKeyUp?: (
-    event: KeyboardEvent<InputDomRef>,
-    value: number | undefined
-  ) => void;
   /**
    * Locale to use for currency formatting style.
    * Might have been provided by NumberI18nProvider, otherwise must be set manually via this attribute.

@@ -61,11 +61,6 @@ export const NumberInputField = forwardRef<
     ? getValidationErrorMessage(fieldState.error, field.value)
     : undefined;
 
-  // clear error on first change
-  const onKeyUp = useCallback(() => {
-    clearErrors(name);
-  }, [clearErrors, name]);
-
   return (
     <NumberInput
       {...props}
@@ -89,7 +84,6 @@ export const NumberInputField = forwardRef<
       aria-valuemax={
         max != null ? (typeof max === "number" ? max : max.value) : undefined
       }
-      onKeyUp={hasError(fieldState.error) ? onKeyUp : undefined}
     />
   );
 });
