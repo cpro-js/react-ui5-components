@@ -2527,7 +2527,7 @@ __metadata:
     klona: "npm:^2.0.6"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
-    react-hook-form: "npm:^7.54.2"
+    react-hook-form: "npm:7.54.2"
     resize-observer-polyfill: "npm:^1.5.1"
     rimraf: "npm:^3.0.2"
     storybook: "npm:8.6.0-alpha.4"
@@ -9565,7 +9565,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.54.2":
+"react-hook-form@npm:7.54.2":
   version: 7.54.2
   resolution: "react-hook-form@npm:7.54.2"
   peerDependencies:
