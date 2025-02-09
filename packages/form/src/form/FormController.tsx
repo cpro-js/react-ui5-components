@@ -37,6 +37,7 @@ export function FormController<FormValues extends {}>(
       onReset={handleReset}
       className={className}
       style={style}
+      noValidate
     >
       <FormProvider {...form}>
         {onChange != null && <FormListener onChange={onChange} />}
