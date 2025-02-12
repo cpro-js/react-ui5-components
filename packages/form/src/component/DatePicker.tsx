@@ -226,6 +226,7 @@ export const DatePicker = forwardRef<
       maxDate={finalValues.maxDate}
       onChange={handleChange}
       onKeyPress={handleKeyPress}
+      data-testid="datepicker-input"
     />
   );
 }) as <TDate extends Date | string = string>(

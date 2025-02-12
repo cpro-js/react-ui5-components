@@ -1,5 +1,6 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { expect, userEvent, within } from "@storybook/test";
 
 import { ISO8601DateAdapter } from "../form/adapter/date/ISO8601DateAdapter";
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
@@ -7,17 +8,53 @@ import { FormAdapter } from "../form/FormAdapter";
 import { toISO8601DateString } from "../util/date";
 import { DatePicker, DatePickerProps } from "./DatePicker";
 
+export default {
+  title: "Form/Component/DatePicker",
+  component: DatePicker,
+  argTypes: {
+    value: { type: "string", control: "text" },
+    minDate: { type: "string", control: "text" },
+    maxDate: { type: "string", control: "text" },
+  },
+} satisfies Meta<typeof DatePicker>;
+
 const Template: StoryFn<DatePickerProps> = (args) => {
   return <DatePicker {...args} />;
 };
 
 export const Standard = Template.bind({});
-Standard.args = {
+(Standard.args = {
   onChange: (...args) => {
     console.log("onChange", ...args);
     action("onChange")(...args);
   },
-};
+}),
+  (Standard.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(await canvas.findByTestId("datepicker-input"));
+
+    const datePickerPopup = await within(document.body).findByRole(
+      "dialog",
+      {},
+      { timeout: 3000 }
+    );
+    expect(datePickerPopup).toBeVisible();
+
+    //click on current date
+    const dateButtons = await within(datePickerPopup).findAllByRole("button");
+    const firstDateButton = dateButtons.find(
+      (btn) => btn.textContent && /\d+/.test(btn.textContent)
+    );
+
+    const selectedDate = firstDateButton!.textContent!.trim();
+
+    await userEvent.click(firstDateButton!);
+
+    await expect(canvas.findByTestId("datepicker-input")).resolves.toHaveValue(
+      expect.stringContaining(selectedDate)
+    );
+  });
 
 export const Prefilled = Template.bind({});
 Prefilled.args = { ...Standard.args, value: new Date() };
@@ -138,15 +175,3 @@ ISODateTimeMaxDateToday.args = {
   maxDate: new Date().toISOString(),
 };
 ISODateTimeMaxDateToday.argTypes = { ...ISODateTimeStandard.argTypes };
-
-const meta: Meta = {
-  title: "Form/Component/DatePicker",
-  component: DatePicker,
-  argTypes: {
-    value: { type: "string", control: "text" },
-    minDate: { type: "string", control: "text" },
-    maxDate: { type: "string", control: "text" },
-  },
-};
-
-export default meta;

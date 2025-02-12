@@ -9,6 +9,7 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-links"),
     getAbsolutePath("@storybook/addon-essentials"),
     getAbsolutePath("@storybook/addon-docs"),
+    "@storybook/addon-interactions",
   ],
 
   framework: {
