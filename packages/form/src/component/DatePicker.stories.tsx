@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 
 import { ISO8601DateAdapter } from "../form/adapter/date/ISO8601DateAdapter";
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
@@ -17,38 +17,46 @@ export default {
   },
 } satisfies Meta<typeof DatePicker>;
 
-const Template: StoryFn<typeof DatePicker> = (args) => {
+/*const Template: StoryFn<typeof DatePicker> = (args) => {
   return <DatePicker {...args} />;
-};
+};*/
 
-export const Standard = Template.bind({});
-Standard.args = {
-  onChange: (...args) => {
-    console.log("onChange", ...args);
-    action("onChange")(...args);
+type Story = StoryObj<typeof DatePicker>;
+
+export const Standard: Story = {
+  args: {
+    onChange: (...args) => {
+      console.log("onChange", ...args);
+      action("onChange")(...args);
+    },
   },
 };
 
-export const Prefilled = Template.bind({});
-Prefilled.args = { ...Standard.args, value: new Date() };
+export const Prefilled: Story = {
+  args: { ...Standard.args, value: new Date() },
+};
 
-export const ShortFormat = Template.bind({});
-ShortFormat.args = { ...Prefilled.args, formatPattern: "short" };
+export const ShortFormat: Story = {
+  args: { ...Prefilled.args, formatPattern: "short" },
+};
 
-export const CustomFormat = Template.bind({});
-CustomFormat.args = { ...Prefilled.args, formatPattern: "dd---MM---yyyy" };
+export const CustomFormat: Story = {
+  args: { ...Prefilled.args, formatPattern: "dd---MM---yyyy" },
+};
 
 /**
  *  Only the current date or any date in the future can be selected.
  **/
-export const MinDateToday = Template.bind({});
-MinDateToday.args = { ...Standard.args, minDate: new Date() };
+export const MinDateToday: Story = {
+  args: { ...Standard.args, minDate: new Date() },
+};
 
 /**
  *  Only the current date or previous dates can be selected.
  **/
-export const MaxDateToday = Template.bind({});
-MaxDateToday.args = { ...Standard.args, maxDate: new Date() };
+export const MaxDateToday: Story = {
+  args: { ...Standard.args, maxDate: new Date() },
+};
 
 const ISO8601DateTemplate: StoryFn<typeof DatePicker> = (args) => {
   return (
@@ -58,46 +66,58 @@ const ISO8601DateTemplate: StoryFn<typeof DatePicker> = (args) => {
   );
 };
 
-export const ISO8601DateStandard = ISO8601DateTemplate.bind({});
-ISO8601DateStandard.args = {
-  onChange: (...args) => {
-    console.log("onChange", ...args);
-    action("onChange")(...args);
+const ISO8601Date: Story = {
+  render: (args) => (
+    <FormAdapter date={ISO8601DateAdapter}>
+      <DatePicker {...args} />
+    </FormAdapter>
+  ),
+};
+
+export const ISO8601DateStandard: Story = {
+  ...ISO8601Date,
+  args: {
+    onChange: (...args) => {
+      console.log("onChange", ...args);
+      action("onChange")(...args);
+    },
+  },
+  argTypes: {
+    value: { type: "string", control: "text" },
+    minDate: { type: "string", control: "text" },
+    maxDate: { type: "string", control: "text" },
   },
 };
-ISO8601DateStandard.argTypes = {
-  value: { type: "string", control: "text" },
-  minDate: { type: "string", control: "text" },
-  maxDate: { type: "string", control: "text" },
+
+export const ISO8601DateCustomFormat: Story = {
+  ...ISO8601DateStandard,
+  args: {
+    ...ISO8601DateStandard.args,
+    formatPattern: "dd__MM__yyyy",
+  },
 };
 
-export const ISO8601DateCustomFormat = ISO8601DateTemplate.bind({});
-ISO8601DateCustomFormat.args = {
-  ...ISO8601DateStandard.args,
-  formatPattern: "dd__MM__yyyy",
+export const ISO8601DatePrefilled: Story = {
+  ...ISO8601DateStandard,
+  args: {
+    ...ISO8601DateStandard.args,
+    value: toISO8601DateString(new Date()),
+  },
 };
-ISO8601DateCustomFormat.argTypes = { ...ISO8601DateStandard.argTypes };
 
-export const ISO8601DatePrefilled = ISO8601DateTemplate.bind({});
-ISO8601DatePrefilled.args = {
-  ...ISO8601DateStandard.args,
-  value: toISO8601DateString(new Date()),
+export const ISO8601DateMinDateToday: Story = {
+  args: {
+    ...ISO8601DateStandard.args,
+    minDate: toISO8601DateString(new Date()),
+  },
 };
-ISO8601DatePrefilled.argTypes = { ...ISO8601DateStandard.argTypes };
 
-export const ISO8601DateMinDateToday = ISO8601DateTemplate.bind({});
-ISO8601DateMinDateToday.args = {
-  ...ISO8601DateStandard.args,
-  minDate: toISO8601DateString(new Date()),
+export const ISO8601DateMaxDateToday: Story = {
+  args: {
+    ...ISO8601DateStandard.args,
+    maxDate: toISO8601DateString(new Date()),
+  },
 };
-ISO8601DateMinDateToday.argTypes = { ...ISO8601DateStandard.argTypes };
-
-export const ISO8601DateMaxDateToday = ISO8601DateTemplate.bind({});
-ISO8601DateMaxDateToday.args = {
-  ...ISO8601DateStandard.args,
-  maxDate: toISO8601DateString(new Date()),
-};
-ISO8601DateMaxDateToday.argTypes = { ...ISO8601DateStandard.argTypes };
 
 const ISODateTimeTemplate: StoryFn<typeof DatePicker> = (args) => {
   return (
