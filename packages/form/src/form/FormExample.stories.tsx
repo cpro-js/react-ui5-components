@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Form, FormItem, Label } from "@ui5/webcomponents-react";
 
+import { FormBusyIndicator } from "../field/FormBusyIndicator";
 import { TextInputField } from "../field/TextInputField";
 import { FormChangeHandler, FormSubmitHandler } from "../field/types";
 import { FormController } from "./FormController";
@@ -36,7 +37,7 @@ export const SimpleClientSideForm: Story = {
             "Only Client Side Validation (required, minLength, maxLength"
           }
           labelSpan="S12 M12 L12 XL12"
-          layout="S12 M12 L12 XL12"
+          layout="S1 M1 L1 XL1"
         >
           <FormItem
             labelContent={
@@ -50,9 +51,25 @@ export const SimpleClientSideForm: Story = {
               required
               minLength={1}
               maxLength={10}
-              onFieldSubmit={(value, formApi) => {
-                // field is valid! -> focus next field
-                void formApi.focusField("lastName");
+              onChange={(event) => {
+                console.log(
+                  "change",
+                  event.detail.name,
+                  event.detail.value,
+                  event.detail.valid
+                );
+              }}
+              onSubmit={(event) => {
+                console.log(
+                  "submit",
+                  event.detail.name,
+                  event.detail.value,
+                  event.detail.valid
+                );
+
+                // go to next field when field is valid
+                event.detail.valid &&
+                  event.detail.formApi.focusField("lastName");
               }}
             />
           </FormItem>
@@ -68,9 +85,24 @@ export const SimpleClientSideForm: Story = {
               required
               minLength={1}
               maxLength={10}
-              onFieldSubmit={(value, formApi) => {
-                // field is valid! -> submit form
-                void formApi.submit();
+              onChange={(event) => {
+                console.log(
+                  "change",
+                  event.detail.name,
+                  event.detail.value,
+                  event.detail.valid
+                );
+              }}
+              onSubmit={(event) => {
+                console.log(
+                  "submit",
+                  event.detail.name,
+                  event.detail.value,
+                  event.detail.valid
+                );
+
+                // submit form when field is valid
+                event.detail.valid && event.detail.formApi.submitForm();
               }}
             />
           </FormItem>
@@ -84,6 +116,7 @@ export const CustomValidationForm: Story = {
   render: () => {
     const onSubmit: FormSubmitHandler<PersonForm> = (values, formApi) => {
       // triggers only when valid
+      console.log("submit", values);
     };
 
     const onChange: FormChangeHandler<PersonForm> = (
@@ -99,7 +132,7 @@ export const CustomValidationForm: Story = {
         <Form
           headerText={"Client Side Validation + custom sync/async Validation"}
           labelSpan="S12 M12 L12 XL12"
-          layout="S12 M12 L12 XL12"
+          layout="S1 M1 L1 XL1"
         >
           <FormItem
             labelContent={
@@ -108,23 +141,40 @@ export const CustomValidationForm: Story = {
               </Label>
             }
           >
-            <TextInputField
+            <TextInputField<PersonForm, "firstName">
               name="firstName"
               required
               minLength={1}
               maxLength={10}
-              validateField={(value, formApi) => {
+              validate={async (value, values) => {
+                // async validation
+                await new Promise((r) => setTimeout(r, 1000));
                 // required, min, max already checked!
-
                 const onlyLettersError = /^[a-zA-Z]+$/i.test(value)
                   ? undefined
                   : "Nur Buchstaben!";
 
                 return onlyLettersError;
               }}
-              onFieldSubmit={(value, formApi) => {
-                // field is valid! -> focus next field
-                void formApi.focusField("lastName");
+              onChange={(event) => {
+                console.log(
+                  "change",
+                  event.detail.name,
+                  event.detail.value,
+                  event.detail.valid
+                );
+              }}
+              onSubmit={(event) => {
+                console.log(
+                  "submit",
+                  event.detail.name,
+                  event.detail.value,
+                  event.detail.valid
+                );
+
+                // go to next field when field is valid
+                event.detail.valid &&
+                  event.detail.formApi.focusField("lastName");
               }}
             />
           </FormItem>
@@ -135,22 +185,36 @@ export const CustomValidationForm: Story = {
               </Label>
             }
           >
-            <TextInputField
+            <TextInputField<PersonForm, "lastName">
               name="lastName"
               required
               minLength={1}
               maxLength={10}
-              validateField={async (value, formApi) => {
+              validate={async (value, formApi) => {
                 // required, min, max already checked!
-
                 // async validation
-                new Promise((r) => setTimeout(r, 1000));
+                await new Promise((r) => setTimeout(r, 1000));
                 // all good
                 return undefined;
               }}
-              onFieldSubmit={(value, formApi) => {
-                // field is valid! -> submit form
-                void formApi.submit();
+              onChange={(event) => {
+                console.log(
+                  "change",
+                  event.detail.name,
+                  event.detail.value,
+                  event.detail.valid
+                );
+              }}
+              onSubmit={(event) => {
+                console.log(
+                  "submit",
+                  event.detail.name,
+                  event.detail.value,
+                  event.detail.valid
+                );
+
+                // submit form when field is valid
+                event.detail.valid && event.detail.formApi.submitForm();
               }}
             />
           </FormItem>
@@ -245,7 +309,7 @@ export const DependentValidationForm: Story = {
 
     return (
       <FormController<SetPasswordForm> onSubmit={onSubmit} onChange={onChange}>
-        <Form labelSpan="S12 M12 L12 XL12" layout="S12 M12 L12 XL12">
+        <Form labelSpan="S12 M12 L12 XL12" layout="S1 M1 L1 XL1">
           <FormItem
             labelContent={
               <Label showColon required>
@@ -253,46 +317,43 @@ export const DependentValidationForm: Story = {
               </Label>
             }
           >
-            <TextInputField
+            <TextInputField<SetPasswordForm, "password">
               name="password"
               required
               minLength={1}
               maxLength={10}
-              validateField={(value, formApi) => {
-                // required, min, max already checked!
-                return undefined;
-              }}
-              onFieldSubmit={(value, formApi) => {
-                // field is valid! -> focus next field
-                void formApi.focusField("passwordRepeat");
+              onSubmit={(event) => {
+                // go to next field when field is valid
+                event.detail.valid &&
+                  event.detail.formApi.focusField("passwordRepeat");
               }}
             />
           </FormItem>
           <FormItem
             labelContent={
               <Label showColon required>
-                passwordRepeat
+                PasswordRepeat
               </Label>
             }
           >
-            <TextInputField
+            <TextInputField<SetPasswordForm, "passwordRepeat">
               name="passwordRepeat"
               required
               minLength={1}
               maxLength={10}
-              validateForFields={["password"]}
-              validateField={async (value, formApi) => {
-                const otherValues = formApi.getValues();
-
-                if (otherValues.password && value !== otherValues.password) {
-                  return "Passwords don't match!";
-                }
-                // all good
-                return undefined;
+              dependsOn={["password"]}
+              validate={{
+                passwordMustMatch: async (value, values) => {
+                  if (values.password && value !== values.password) {
+                    return "Passwords don't match!";
+                  }
+                  // all good
+                  return undefined;
+                },
               }}
-              onFieldSubmit={(value, formApi) => {
+              onSubmit={(event) => {
                 // field is valid! -> submit form
-                void formApi.submit();
+                event.detail.valid && event.detail.formApi.submitForm();
               }}
             />
           </FormItem>

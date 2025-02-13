@@ -1,42 +1,102 @@
-import { InputDomRef } from "@ui5/webcomponents-react";
-import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
-import { useController } from "react-hook-form";
+import { useDebounce, useDebounceCallback } from "@react-hook/debounce";
+import { BusyIndicator, InputDomRef } from "@ui5/webcomponents-react";
+import {
+  KeyboardEventHandler,
+  ReactElement,
+  Ref,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
+import { FieldPath, FieldValues, useFormContext } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import { TextInput, TextInputProps } from "../component/TextInput";
-import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldElement, FormFieldValidation } from "./types";
-import { hasError } from "./util";
+import {
+  FieldActions,
+  useControlledField,
+  useCustomEvent,
+  useFieldActionRef,
+} from "../form/useField";
+import {
+  ChangedField,
+  FormFieldElement,
+  FormFieldValidation,
+  PartialFormValues,
+} from "./types";
 
-export type TextInputFieldProps = Omit<
+export type FieldEventDetail<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = {
+  name: FormFieldName;
+  value: string;
+  valid: boolean;
+  formApi: FieldActions<FormValues, FormFieldName>;
+};
+
+export type TextInputFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = Omit<
   TextInputProps,
   "name" | "value" | "onChange" | "valueState" | "onBlur" | "maxlength"
 > &
-  Pick<FormFieldValidation, "required" | "minLength" | "maxLength"> & {
-    name: string;
+  Pick<
+    FormFieldValidation<FormValues, string>,
+    "required" | "minLength" | "maxLength" | "validate"
+  > & {
+    name: FormFieldName;
+    dependsOn?:
+      | string
+      | string[]
+      | FieldPath<FormValues>
+      | FieldPath<FormValues>[];
+    onChange?: (
+      event: CustomEvent<FieldEventDetail<FormValues, FormFieldName>>
+    ) => void;
+    onSubmit?: (
+      event: CustomEvent<FieldEventDetail<FormValues, FormFieldName>>
+    ) => void;
   };
 
-export const TextInputField = forwardRef<FormFieldElement, TextInputFieldProps>(
-  ({ name, required, minLength, maxLength, ...props }, forwardedRef) => {
-    const rules: Partial<FormFieldValidation> = useMemo(
-      () => ({
-        required,
-        minLength,
-        maxLength,
-      }),
-      [required, minLength, maxLength]
-    );
-
-    const getValidationErrorMessage = useI18nValidationError(name, rules);
-
-    const { field, fieldState } = useController({
-      name: name,
-      rules,
+export const TextInputField = forwardRef<
+  FormFieldElement,
+  TextInputFieldProps<any, any>
+>(
+  (
+    {
+      name,
+      required,
+      minLength,
+      maxLength,
+      validate,
+      dependsOn,
+      onKeyUp,
+      onChange,
+      onSubmit,
+      ...props
+    },
+    forwardedRef
+  ) => {
+    const field = useControlledField({
+      name,
+      required,
+      minLength,
+      maxLength,
+      validate,
     });
+
+    const actionsRef = useFieldActionRef(name);
+    const pressedEnterPreviously = useRef<boolean>(false);
+    const firedSubmitByChange = useRef<boolean>(false);
 
     // store input ref for intenral usage
     const inputRef = useRef<InputDomRef>(null);
     // forward outer ref to custom element
     useImperativeHandle(forwardedRef, () => ({
+      // TODO provide more methods! -> validate, getValue, setValue
       focus() {
         if (inputRef.current != null) {
           inputRef.current.focus();
@@ -46,37 +106,147 @@ export const TextInputField = forwardRef<FormFieldElement, TextInputFieldProps>(
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => inputRef.current);
 
-    // use empty string to reset value, undefined will be ignored by web component
-    const value = field.value === undefined ? "" : field.value;
+    const dispatchChangeEvent = useCustomEvent<FieldEventDetail<any, any>>({
+      ref: inputRef,
+      name: "field-change",
+      onEvent: onChange,
+    });
 
-    // get error message (Note: undefined fallbacks to default message of ui5 component)
-    const errorMessage = hasError(fieldState.error)
-      ? getValidationErrorMessage(fieldState.error, field.value)
-      : undefined;
+    const dispatchSubmitEvent = useCustomEvent<FieldEventDetail<any, any>>({
+      ref: inputRef,
+      name: "field-submit",
+      onEvent: onSubmit,
+    });
+
+    const handleKeyUp: KeyboardEventHandler<InputDomRef> = useEventCallback(
+      async (event) => {
+        onKeyUp?.(event);
+        if (
+          !event.isDefaultPrevented() &&
+          pressedEnterPreviously.current &&
+          !firedSubmitByChange.current
+        ) {
+          // user just pressed enter again (value didn't change) -> validate again!
+          const value = actionsRef.current.getValue();
+          const valid = await actionsRef.current.validate();
+
+          dispatchSubmitEvent({
+            name,
+            valid,
+            value,
+            formApi: actionsRef.current,
+          });
+        }
+      }
+    );
+
+    const { watch, getFieldState } = useFormContext();
+
+    const revalidateIfDiry = useEventCallback(
+      useDebounceCallback(
+        () => {
+          if (getFieldState(name).isTouched) {
+            console.log("revalidate", name);
+            // values changed -> revalidate
+            void actionsRef.current.validate();
+          }
+        },
+        10,
+        false
+      )
+    );
+
+    // dependsOn
+    useEffect(() => {
+      if (!dependsOn || dependsOn.length === 0) {
+        return;
+      }
+
+      const { unsubscribe } = watch((_, { name }) => {
+        if (name && dependsOn.includes(name)) {
+          // values changed -> revalidate
+          revalidateIfDiry();
+        }
+      });
+
+      return () => unsubscribe();
+    }, [dependsOn, revalidateIfDiry]);
 
     return (
-      <TextInput
-        {...props}
-        ref={inputRef}
-        name={field.name}
-        value={value}
-        onChange={field.onChange}
-        onBlur={field.onBlur}
-        valueState={hasError(fieldState.error) ? "Negative" : "None"}
-        valueStateMessage={
-          errorMessage != null && (
-            <div slot="valueStateMessage">{errorMessage}</div>
-          )
-        }
-        required={required}
-        maxlength={
-          maxLength != null
-            ? typeof maxLength === "number"
-              ? maxLength
-              : maxLength.value
-            : undefined
-        }
-      />
+      <BusyIndicator active={field.busy} delay={0}>
+        <TextInput
+          {...props}
+          ref={inputRef}
+          name={field.name}
+          // use empty string to reset value, undefined will be ignored by web component
+          value={field.value === undefined ? "" : field.value}
+          onInput={() => {
+            // reset any previous errors
+            getFieldState(name).error && actionsRef.current.clearError();
+          }}
+          onFocus={() => {
+            pressedEnterPreviously.current = false;
+            firedSubmitByChange.current = false;
+          }}
+          onChange={async (event) => {
+            await new Promise((r) => setTimeout(r, 0));
+
+            actionsRef.current.setValue(event.target.value);
+
+            const fireSubmit = (firedSubmitByChange.current =
+              pressedEnterPreviously.current);
+
+            const value = actionsRef.current.getValue();
+            const valid = await actionsRef.current.validate();
+
+            dispatchChangeEvent({
+              name,
+              value,
+              valid,
+              formApi: actionsRef.current,
+            });
+
+            if (fireSubmit) {
+              // just delay it a bit
+              setTimeout(() => {
+                dispatchSubmitEvent({
+                  name,
+                  value,
+                  valid,
+                  formApi: actionsRef.current,
+                });
+              }, 0);
+            }
+          }}
+          onKeyDown={(event) => {
+            pressedEnterPreviously.current =
+              event.key == "Enter" || event.keyCode === 13;
+            firedSubmitByChange.current = false;
+          }}
+          onKeyUp={handleKeyUp}
+          valueState={field.valueState}
+          valueStateMessage={
+            field.valueStateMessage != null && (
+              <div slot="valueStateMessage">{field.valueStateMessage}</div>
+            )
+          }
+          required={required}
+          maxlength={
+            maxLength != null
+              ? typeof maxLength === "number"
+                ? maxLength
+                : maxLength.value
+              : undefined
+          }
+        />
+      </BusyIndicator>
     );
   }
-);
+) as <
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+>(
+  p: TextInputFieldProps<FormValues, FormFieldName> & {
+    ref?: Ref<FormFieldElement | undefined>;
+  }
+) => ReactElement;

@@ -24,7 +24,7 @@ export const FormBusyIndicator: FC<FormBusyIndicatorProps> = ({
   // Note: wrapped with flexbox in column mode to provide full width busy indicator
   return (
     <FlexBox direction={FlexBoxDirection.Column}>
-      <BusyIndicator active={active}>
+      <BusyIndicator active={active} delay={0}>
         <div style={{ width: "100%" }}>{children}</div>
       </BusyIndicator>
     </FlexBox>

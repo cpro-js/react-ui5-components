@@ -1,5 +1,6 @@
 import * as React from "react";
-import { CSSProperties, ReactNode } from "react";
+import { CSSProperties, FormEvent, ReactNode } from "react";
+import { useEventCallback } from "usehooks-ts";
 
 import { FormChangeHandler } from "../field/types";
 import { FormListener } from "./FormListener";
@@ -28,12 +29,16 @@ export function FormController<FormValues extends {}>(
     onSubmit,
   });
 
+  const prevent = useEventCallback((event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  });
+
   const { handleSubmit, handleReset } = form;
 
   return (
     <form
       id={id}
-      onSubmit={handleSubmit}
+      onSubmit={prevent}
       onReset={handleReset}
       className={className}
       style={style}

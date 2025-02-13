@@ -44,33 +44,7 @@ export type TextInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
  * adding a custom `SubmitOnEnter` eventhandler, which triggers when pressing enter.
  */
 export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
-  ({ value, onKeyPress, ...props }, forwardedRef) => {
-    const handleKeyPress = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
-        // Workaround: Webcomponents catches enter -> need to submit manually
-        // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
-        triggerSubmitOnEnter(event);
-        if (onKeyPress != null) {
-          onKeyPress(event);
-        }
-      },
-      [onKeyPress]
-    );
-
-    // store input ref for internal usage
-    const inputRef = useRef<InputDomRef>(null);
-    useImperativeHandle<InputDomRef | null, InputDomRef | null>(
-      forwardedRef,
-      () => inputRef.current
-    );
-
-    return (
-      <Input
-        {...props}
-        ref={inputRef}
-        onKeyPress={handleKeyPress}
-        value={value}
-      />
-    );
+  ({ value, ...props }, forwardedRef) => {
+    return <Input {...props} ref={forwardedRef} value={value} />;
   }
 );

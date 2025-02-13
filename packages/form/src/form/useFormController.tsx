@@ -52,8 +52,8 @@ export function useFormController<FormValues extends {}>(
 
   const form = useForm<FormValues>({
     defaultValues: initialValuesRef.current as DefaultValues<FormValues>,
-    mode: "onTouched", // Validation will trigger on the first blur event. After that, it will trigger on every change event.
-    reValidateMode: "onChange", // Validation will trigger on the change event with each input, and lead to multiple re-renders.
+    mode: "onChange", // Validation will trigger on the first blur event. After that, it will trigger on every change event.
+    reValidateMode: "onSubmit", // Validation will trigger on the change event with each input, and lead to multiple re-renders.
     criteriaMode: "firstError",
     shouldUnregister: false,
   });
@@ -118,13 +118,14 @@ export function useFormController<FormValues extends {}>(
 
   const submitHandler: HookFormSubmitHandler<FormValues> = useCallback(
     async (data) => {
+      console.log("submithandler", data);
       // need to trigger validation to ensure everything is really ok
-      const valid = await trigger();
+      // const valid = await trigger();
 
-      if (valid) {
-        // call submit
-        return onSubmit(data as FormValues, actions.current);
-      }
+      // if (valid) {
+      // call submit
+      return onSubmit(data as FormValues, actions.current);
+      // }
     },
     [trigger, onSubmit]
   );

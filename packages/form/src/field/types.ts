@@ -32,21 +32,24 @@ export type FormFieldValidationRule<
 > = T | { value: T; message: string };
 
 export type FormFieldValidateResult = string | boolean | undefined;
-export type FormFieldValidate<TFieldValue> = (
-  value: TFieldValue
+export type FormFieldValidate<FormValues extends {}, TFieldValue> = (
+  value: TFieldValue,
+  values: PartialFormValues<FormValues>
 ) => FormFieldValidateResult | Promise<FormFieldValidateResult>;
 
-export interface FormFieldValidation {
+export interface FormFieldValidation<FormValues extends {}, TFieldValue> {
   required?: FormFieldValidationRule<boolean>;
   min?: FormFieldValidationRule<number>;
   max?: FormFieldValidationRule<number>;
   minLength?: FormFieldValidationRule<number>;
   maxLength?: FormFieldValidationRule<number>;
-  validate?: FormFieldValidate<any> | Record<string, FormFieldValidate<any>>;
+  validate?:
+    | FormFieldValidate<FormValues, TFieldValue>
+    | Record<string, FormFieldValidate<FormValues, TFieldValue>>;
 }
 
 export interface FormFieldValidationError {
-  type: keyof FormFieldValidation | string; // string to allow user types
+  type: keyof FormFieldValidation<any, any> | string; // string to allow user types
   message?: string;
 }
 
