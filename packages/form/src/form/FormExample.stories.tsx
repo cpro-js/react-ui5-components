@@ -331,56 +331,116 @@ export const DependentValidationForm: Story = {
     };
 
     return (
-      <FormController<SetPasswordForm> onSubmit={onSubmit} onChange={onChange}>
-        <Form labelSpan="S12 M12 L12 XL12" layout="S1 M1 L1 XL1">
-          <FormItem
-            labelContent={
-              <Label showColon required>
-                Password
-              </Label>
-            }
+      <FormController<SetPasswordForm>
+        onSubmit={useEventCallback(async (values, formApi) => {
+          // triggers only when valid
+          console.log("submit", values);
+
+          await new Promise((r) => setTimeout(r, 3000));
+        })}
+      >
+        <FormBusyIndicator style={{ display: "block" }}>
+          <Form
+            style={{ width: "100%" }}
+            headerText={"Dependent validation"}
+            labelSpan="S12 M12 L12 XL12"
+            layout="S1 M1 L1 XL1"
           >
-            <TextInputField<SetPasswordForm, "password">
-              name="password"
-              required
-              minLength={1}
-              maxLength={10}
-              onSubmit={(event) => {
-                // go to next field when field is valid
-                event.detail.valid &&
-                  event.detail.fieldApi.focus("passwordRepeat");
-              }}
-            />
-          </FormItem>
-          <FormItem
-            labelContent={
-              <Label showColon required>
-                PasswordRepeat
-              </Label>
-            }
-          >
-            <TextInputField<SetPasswordForm, "passwordRepeat">
-              name="passwordRepeat"
-              required
-              minLength={1}
-              maxLength={10}
-              dependsOn={["password"]}
-              validate={{
-                passwordMustMatch: async (value, values) => {
-                  if (values.password && value !== values.password) {
-                    return "Passwords don't match!";
-                  }
-                  // all good
-                  return undefined;
-                },
-              }}
-              onSubmit={(event) => {
-                // field is valid! -> submit form
-                event.detail.valid && event.detail.fieldApi.submitForm();
-              }}
-            />
-          </FormItem>
-        </Form>
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  Password
+                </Label>
+              }
+            >
+              <FormBusyIndicator<SetPasswordForm>
+                name="password"
+                delay={100}
+                style={{ display: "block" }}
+              >
+                <TextInputField<SetPasswordForm, "password">
+                  style={{ width: "100%" }}
+                  name="password"
+                  required
+                  minLength={1}
+                  maxLength={10}
+                  onChange={(event) => {
+                    console.log(
+                      "change",
+                      event.detail.name,
+                      event.detail.value,
+                      event.detail.valid
+                    );
+                  }}
+                  onSubmit={(event) => {
+                    console.log(
+                      "submit",
+                      event.detail.name,
+                      event.detail.value,
+                      event.detail.valid
+                    );
+
+                    // go to next field when field is valid
+                    event.detail.valid &&
+                      event.detail.fieldApi.focus("passwordRepeat");
+                  }}
+                />
+              </FormBusyIndicator>
+            </FormItem>
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  PasswordRepeat
+                </Label>
+              }
+            >
+              <FormBusyIndicator<SetPasswordForm>
+                name="passwordRepeat"
+                delay={100}
+                style={{ display: "block" }}
+              >
+                <TextInputField<SetPasswordForm, "passwordRepeat">
+                  style={{ width: "100%" }}
+                  name="passwordRepeat"
+                  required
+                  minLength={1}
+                  maxLength={10}
+                  dependsOn={["password"]}
+                  validate={{
+                    passwordMustMatch: async (value, values) => {
+                      await new Promise((r) => setTimeout(r, 1000));
+
+                      if (values.password && value !== values.password) {
+                        return "Passwords don't match!";
+                      }
+                      // all good
+                      return undefined;
+                    },
+                  }}
+                  onChange={(event) => {
+                    console.log(
+                      "change",
+                      event.target.name,
+                      event.detail.value,
+                      event.detail.valid
+                    );
+                  }}
+                  onSubmit={(event) => {
+                    console.log(
+                      "submit",
+                      event.detail.name,
+                      event.detail.value,
+                      event.detail.valid
+                    );
+
+                    // submit form when field is valid
+                    event.detail.valid && event.detail.fieldApi.submitForm();
+                  }}
+                />
+              </FormBusyIndicator>
+            </FormItem>
+          </Form>
+        </FormBusyIndicator>
       </FormController>
     );
   },
