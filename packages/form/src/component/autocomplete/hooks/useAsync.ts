@@ -1,8 +1,8 @@
 import { useDebounceCallback } from "@react-hook/debounce";
 import { InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useEventCallback } from "usehooks-ts";
 
-import { useLatestRef } from "../../../hook/useLatestRef";
 import { DEBOUNCE_RATE } from "../../common/CommonSelection";
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";
 
@@ -81,7 +81,7 @@ export const useAsync = <
   const lastRequest = useRef<unknown>(undefined);
   const mounted = useRef<boolean>(false);
   const lastItemSelection = useRef<TItemModel | undefined>(undefined);
-  const latestGetItemLabel = useLatestRef(propsGetItemLabel);
+  const stableGetItemLabel = useEventCallback(propsGetItemLabel);
 
   useEffect(() => {
     mounted.current = true;
@@ -107,7 +107,7 @@ export const useAsync = <
       // => only search if the search term doesn't match the label of the current value
       const hasBeenSelected =
         lastItemSelection.current != null &&
-        inputValue === latestGetItemLabel.current(lastItemSelection.current);
+        inputValue === stableGetItemLabel(lastItemSelection.current);
 
       if (hasBeenSelected) {
         return;

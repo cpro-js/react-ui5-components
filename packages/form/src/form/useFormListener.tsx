@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
+import { WatchObserver, useFormContext } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import {
   ChangedField,
   FormChangeHandler,
   PartialFormValues,
 } from "../field/types";
-import { useLatestRef } from "../hook/useLatestRef";
 import { useFormActions } from "./useFormActions";
 
 /**
@@ -18,27 +18,22 @@ export function useFormListener<FormValues extends {}>(
   onChange: FormChangeHandler<FormValues>
 ): void {
   const { watch } = useFormContext<FormValues>();
-
-  // Remember the latest callback.
-  const changeCallbackRef =
-    useLatestRef<FormChangeHandler<FormValues>>(onChange);
-
-  // Get actions
   const actions = useFormActions<FormValues>();
-  const actionsRef = useLatestRef(actions);
+
+  const formWatcher: WatchObserver<FormValues> = useEventCallback(
+    (values, { name }) => {
+      // TODO watcher triggers multiple times, even if there is no difference
+      onChange(values as PartialFormValues<FormValues>, actions, {
+        name,
+      } as ChangedField<FormValues>);
+    }
+  );
 
   // Set up the watcher
   useEffect(() => {
-    const subscription = watch((values, { name }) => {
-      changeCallbackRef.current(
-        values as PartialFormValues<FormValues>,
-        actionsRef.current,
-        { name } as ChangedField<FormValues>
-      );
-    });
-
+    const { unsubscribe } = watch(formWatcher);
     return () => {
-      subscription.unsubscribe();
+      unsubscribe();
     };
-  }, [watch]);
+  }, [formWatcher, watch]);
 }
