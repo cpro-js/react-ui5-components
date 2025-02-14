@@ -1,4 +1,8 @@
-import { BusyIndicator, InputDomRef } from "@ui5/webcomponents-react";
+import {
+  BusyIndicator,
+  InputDomRef,
+  Ui5CustomEvent,
+} from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
@@ -46,10 +50,16 @@ export type TextInputFieldProps<
       | FieldPath<FormValues>
       | FieldPath<FormValues>[];
     onChange?: (
-      event: CustomEvent<FieldEventDetail<FormValues, FormFieldName>>
+      event: Ui5CustomEvent<
+        InputDomRef,
+        FieldEventDetail<FormValues, FormFieldName>
+      >
     ) => void;
     onSubmit?: (
-      event: CustomEvent<FieldEventDetail<FormValues, FormFieldName>>
+      event: Ui5CustomEvent<
+        InputDomRef,
+        FieldEventDetail<FormValues, FormFieldName>
+      >
     ) => void;
   };
 
@@ -102,7 +112,9 @@ export const TextInputField = forwardRef<
     >({
       ref: inputRef,
       name: "field-change",
-      onEvent: onChange,
+      onEvent: onChange as unknown as (
+        event: CustomEvent<FieldEventDetail<any, any>>
+      ) => void,
     });
 
     const dispatchSubmitEvent = useCustomEventDispatcher<
@@ -110,7 +122,9 @@ export const TextInputField = forwardRef<
     >({
       ref: inputRef,
       name: "field-submit",
-      onEvent: onSubmit,
+      onEvent: onSubmit as unknown as (
+        event: CustomEvent<FieldEventDetail<any, any>>
+      ) => void,
     });
 
     return (
