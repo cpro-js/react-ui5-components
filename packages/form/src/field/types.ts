@@ -8,6 +8,10 @@ import {
 
 export type PartialFormValues<FormValues extends {}> = DeepPartial<FormValues>;
 
+export type InitialFormValues<FormValues extends {}> =
+  | PartialFormValues<FormValues>
+  | (() => Promise<PartialFormValues<FormValues>>);
+
 export type FormSubmitHandler<FormValues extends {}> = (
   values: FormValues,
   actions: FormActions<FormValues>

@@ -4,9 +4,12 @@ import { useEventCallback } from "usehooks-ts";
 
 import { FormBusyIndicator } from "../field/FormBusyIndicator";
 import { TextInputField } from "../field/TextInputField";
-import { FormChangeHandler, FormSubmitHandler } from "../field/types";
+import {
+  FormChangeHandler,
+  FormSubmitHandler,
+  InitialFormValues,
+} from "../field/types";
 import { FormController } from "./FormController";
-import { FormFieldBusyIndicator } from "./FormFieldBusyIndicator";
 
 export default {
   title: "Form Example",
@@ -22,7 +25,6 @@ export const SimpleClientSideForm: Story = {
   render: () => {
     const onSubmit: FormSubmitHandler<PersonForm> = (values, formApi) => {
       // triggers only when valid
-      console.log("submit", values);
 
       return new Promise((r) => setTimeout(r, 3000));
     };
@@ -249,8 +251,10 @@ export const CustomValidationForm: Story = {
 
 export const AsyncInitialValuesPersonForm: Story = {
   render: () => {
-    const onSubmit: FormSubmitHandler<PersonForm> = (values, formApi) => {
+    const onSubmit: FormSubmitHandler<PersonForm> = async (values, formApi) => {
       // triggers only when valid
+
+      await new Promise((r) => setTimeout(r, 1000));
     };
 
     const onChange: FormChangeHandler<PersonForm> = (
@@ -261,7 +265,8 @@ export const AsyncInitialValuesPersonForm: Story = {
       // triggers maybe with invalid values
     };
 
-    const fetchValues: FormInitialValues<PersonForm> = async () => {
+    const fetchValues: InitialFormValues<PersonForm> = async () => {
+      await new Promise((r) => setTimeout(r, 1000));
       // will only trigger once!
       // additional trigger via <FormController key="..." .../>
       return {
@@ -276,36 +281,49 @@ export const AsyncInitialValuesPersonForm: Story = {
         onSubmit={onSubmit}
         onChange={onChange}
       >
-        <Form labelSpan="S12 M12 L12 XL12" layout="S12 M12 L12 XL12">
-          <FormItem
-            labelContent={
-              <Label showColon required>
-                Username
-              </Label>
-            }
+        <FormBusyIndicator style={{ display: "block" }}>
+          <Form
+            style={{ width: "100%" }}
+            headerText={"Async Initial Values"}
+            labelSpan="S12 M12 L12 XL12"
+            layout="S1 M1 L1 XL1"
           >
-            <TextInputField
-              name="username"
-              required
-              minLength={1}
-              maxLength={10}
-            />
-          </FormItem>
-          <FormItem
-            labelContent={
-              <Label showColon required>
-                lastName
-              </Label>
-            }
-          >
-            <TextInputField
-              name="lastName"
-              required
-              minLength={1}
-              maxLength={10}
-            />
-          </FormItem>
-        </Form>
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  firstName
+                </Label>
+              }
+            >
+              <TextInputField<PersonForm, "firstName">
+                name="firstName"
+                required
+                minLength={1}
+                maxLength={10}
+                onSubmit={useEventCallback((event) => {
+                  event.detail.valid && event.detail.fieldApi.focus("lastName");
+                })}
+              />
+            </FormItem>
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  lastName
+                </Label>
+              }
+            >
+              <TextInputField<PersonForm, "lastName">
+                name="lastName"
+                required
+                minLength={1}
+                maxLength={10}
+                onSubmit={useEventCallback((event) => {
+                  event.detail.valid && event.detail.fieldApi.submitForm();
+                })}
+              />
+            </FormItem>
+          </Form>
+        </FormBusyIndicator>
       </FormController>
     );
   },

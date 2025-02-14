@@ -1,4 +1,3 @@
-import { klona } from "klona/json";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
@@ -16,13 +15,13 @@ import {
   FormActionSubmitForm,
   FormActions,
   FormSubmitHandler,
-  PartialFormValues,
+  InitialFormValues,
 } from "../field/types";
 
 const noop = () => undefined;
 
 export interface UseFormControllerProps<FormValues extends {}> {
-  initialValues?: PartialFormValues<FormValues>;
+  initialValues?: InitialFormValues<FormValues>;
   onSubmit: FormSubmitHandler<FormValues>;
 }
 
@@ -43,15 +42,10 @@ export interface UseFormControllerReturn<FormValues extends {}> {
 export function useFormController<FormValues extends {}>(
   props: UseFormControllerProps<FormValues>
 ): UseFormControllerReturn<FormValues> {
-  const { initialValues, onSubmit } = props;
-
-  // store initial values & deep clone initial values to bypass mutations
-  const initialValuesRef = useRef<typeof initialValues>(
-    initialValues != null ? klona(initialValues) : undefined
-  );
+  const { initialValues = {}, onSubmit } = props;
 
   const form = useForm<FormValues>({
-    defaultValues: initialValuesRef.current as DefaultValues<FormValues>,
+    defaultValues: initialValues as DefaultValues<FormValues>,
     mode: "onChange", // Validation will trigger on the first blur event. After that, it will trigger on every change event.
     reValidateMode: "onSubmit", // Validation will trigger on the change event with each input, and lead to multiple re-renders.
     criteriaMode: "firstError",
@@ -105,29 +99,20 @@ export function useFormController<FormValues extends {}>(
   );
 
   const resetForm: FormActionResetForm<FormValues> = useCallback(() => {
-    if (initialValuesRef.current != null) {
-      reset(initialValuesRef.current as DefaultValues<FormValues>);
-    } else {
-      reset();
-    }
+    // reset other form state but keep defaultValues and form values
+    reset(undefined, { keepDirtyValues: true });
   }, [reset]);
 
   const clearForm: FormActionClearForm<FormValues> = useCallback(() => {
+    // clear out all form fields
     reset({} as DefaultValues<FormValues>);
   }, [reset]);
 
   const submitHandler: HookFormSubmitHandler<FormValues> = useCallback(
     async (data) => {
-      console.log("submithandler", data);
-      // need to trigger validation to ensure everything is really ok
-      // const valid = await trigger();
-
-      // if (valid) {
-      // call submit
       return onSubmit(data as FormValues, actions.current);
-      // }
     },
-    [trigger, onSubmit]
+    [onSubmit]
   );
 
   const submitForm = useMemo(
