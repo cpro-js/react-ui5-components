@@ -47,8 +47,8 @@ export interface UseControlledFieldsReturn<
   error: boolean;
   valueState: ValueState | keyof typeof ValueState;
   valueStateMessage: string | undefined;
-  busy: boolean;
-  getFieldState: UseFormGetFieldState<FormValues>;
+  isValidating: boolean;
+  isSubmitting: boolean;
 }
 
 export const useControlledField = <
@@ -123,7 +123,11 @@ export const useControlledField = <
     name,
     controllerProps.rules
   );
-  const { field, fieldState, formState } = useController(controllerProps);
+  const {
+    field,
+    fieldState,
+    formState: { isSubmitting },
+  } = useController(controllerProps);
 
   // get error message (Note: undefined fallbacks to default message of ui5 component)
   const errorMessage = hasError(fieldState.error)
@@ -139,8 +143,8 @@ export const useControlledField = <
     error: hasError(fieldState.error),
     valueState: hasError(fieldState.error) ? "Negative" : "None",
     valueStateMessage: errorMessage,
-    busy: fieldState.isValidating,
-    getFieldState,
+    isValidating: fieldState.isValidating,
+    isSubmitting: isSubmitting,
   };
 };
 

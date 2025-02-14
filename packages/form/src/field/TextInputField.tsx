@@ -114,10 +114,13 @@ export const TextInputField = forwardRef<
     });
 
     return (
-      <BusyIndicator active={field.busy} delay={0}>
+      <BusyIndicator
+        active={field.isValidating && !field.isSubmitting}
+        delay={0}
+      >
         <TextInput
           {...props}
-          readonly={props.readonly || field.busy}
+          readonly={props.readonly || field.isValidating || field.isSubmitting}
           ref={inputRef}
           name={field.name}
           // use empty string to reset value, undefined will be ignored by web component
