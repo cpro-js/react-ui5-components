@@ -5,6 +5,7 @@ import { FormBusyIndicator } from "../field/FormBusyIndicator";
 import { TextInputField } from "../field/TextInputField";
 import { FormChangeHandler, FormSubmitHandler } from "../field/types";
 import { FormController } from "./FormController";
+import { FormFieldBusyIndicator } from "./FormFieldBusyIndicator";
 
 export default {
   title: "Form Example",
@@ -117,6 +118,8 @@ export const CustomValidationForm: Story = {
     const onSubmit: FormSubmitHandler<PersonForm> = (values, formApi) => {
       // triggers only when valid
       console.log("submit", values);
+
+      return new Promise((r) => setTimeout(r, 3000));
     };
 
     const onChange: FormChangeHandler<PersonForm> = (
@@ -141,82 +144,80 @@ export const CustomValidationForm: Story = {
               </Label>
             }
           >
-            <TextInputField<PersonForm, "firstName">
-              name="firstName"
-              required
-              minLength={1}
-              maxLength={10}
-              validate={async (value, values) => {
-                // async validation
-                await new Promise((r) => setTimeout(r, 1000));
-                // required, min, max already checked!
-                const onlyLettersError = /^[a-zA-Z]+$/i.test(value)
-                  ? undefined
-                  : "Nur Buchstaben!";
+            <FormFieldBusyIndicator name="firstName">
+              <TextInputField<PersonForm, "firstName">
+                name="firstName"
+                required
+                minLength={1}
+                maxLength={10}
+                validate={async (value, values) => {
+                  console.log("validate firstname", value);
+                  // async validation
+                  await new Promise((r) => setTimeout(r, 1000));
+                  // required, min, max already checked!
+                  const onlyLettersError = /^[a-zA-Z]+$/i.test(value)
+                    ? undefined
+                    : "Nur Buchstaben!";
 
-                return onlyLettersError;
-              }}
-              onChange={(event) => {
-                console.log(
-                  "change",
-                  event.detail.name,
-                  event.detail.value,
-                  event.detail.valid
-                );
-              }}
-              onSubmit={(event) => {
-                console.log(
-                  "submit",
-                  event.detail.name,
-                  event.detail.value,
-                  event.detail.valid
-                );
+                  return onlyLettersError;
+                }}
+                onChange={(event) => {
+                  console.log(
+                    "change",
+                    event.detail.name,
+                    event.detail.value,
+                    event.detail.valid
+                  );
+                }}
+                onSubmit={(event) => {
+                  console.log(
+                    "submit",
+                    event.detail.name,
+                    event.detail.value,
+                    event.detail.valid
+                  );
 
-                // go to next field when field is valid
-                event.detail.valid &&
-                  event.detail.formApi.focusField("lastName");
-              }}
-            />
+                  // go to next field when field is valid
+                  event.detail.valid &&
+                    event.detail.formApi.focusField("lastName");
+                }}
+              />
+            </FormFieldBusyIndicator>
           </FormItem>
-          <FormItem
-            labelContent={
-              <Label showColon required>
-                lastName
-              </Label>
-            }
-          >
-            <TextInputField<PersonForm, "lastName">
-              name="lastName"
-              required
-              minLength={1}
-              maxLength={10}
-              validate={async (value, formApi) => {
-                // required, min, max already checked!
-                // async validation
-                await new Promise((r) => setTimeout(r, 1000));
-                // all good
-                return undefined;
-              }}
-              onChange={(event) => {
-                console.log(
-                  "change",
-                  event.detail.name,
-                  event.detail.value,
-                  event.detail.valid
-                );
-              }}
-              onSubmit={(event) => {
-                console.log(
-                  "submit",
-                  event.detail.name,
-                  event.detail.value,
-                  event.detail.valid
-                );
+          <FormItem labelContent={<Label showColon>lastName</Label>}>
+            <FormFieldBusyIndicator<PersonForm> name="lastName">
+              <TextInputField<PersonForm, "lastName">
+                name="lastName"
+                minLength={1}
+                maxLength={10}
+                validate={async (value, formApi) => {
+                  // required, min, max already checked!
+                  // async validation
+                  await new Promise((r) => setTimeout(r, 1000));
+                  // all good
+                  return undefined;
+                }}
+                onChange={(event) => {
+                  console.log(
+                    "change",
+                    event.target.name,
+                    event.detail.value,
+                    event.detail.valid
+                  );
+                }}
+                onSubmit={(event) => {
+                  console.log(
+                    "submit",
+                    event.detail.name,
+                    event.detail.value,
+                    event.detail.valid
+                  );
 
-                // submit form when field is valid
-                event.detail.valid && event.detail.formApi.submitForm();
-              }}
-            />
+                  // submit form when field is valid
+                  event.detail.valid && event.detail.formApi.submitForm();
+                }}
+              />
+            </FormFieldBusyIndicator>
           </FormItem>
         </Form>
       </FormController>

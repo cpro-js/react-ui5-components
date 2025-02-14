@@ -128,62 +128,57 @@ export const TextInputField = forwardRef<
     });
 
     return (
-      <BusyIndicator
-        active={field.isValidating && !field.isSubmitting}
-        delay={0}
-      >
-        <TextInput
-          {...props}
-          readonly={props.readonly || field.isValidating || field.isSubmitting}
-          ref={inputRef}
-          name={field.name}
-          // use empty string to reset value, undefined will be ignored by web component
-          value={field.value === undefined ? "" : field.value}
-          onInput={useEventCallback((event) => {
-            // reset previous errors
-            field.error && actionsRef.current.clearError();
-            onInput?.(event);
-          })}
-          onChange={useEventCallback(async (event) => {
-            actionsRef.current.setValue(event.target.value);
+      <TextInput
+        {...props}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
+        ref={inputRef}
+        name={field.name}
+        // use empty string to reset value, undefined will be ignored by web component
+        value={field.value === undefined ? "" : field.value}
+        onInput={useEventCallback((event) => {
+          // reset previous errors
+          field.error && actionsRef.current.clearError();
+          onInput?.(event);
+        })}
+        onChange={useEventCallback(async (event) => {
+          actionsRef.current.setValue(event.target.value);
 
-            const value = actionsRef.current.getValue();
-            const valid = await actionsRef.current.validate();
+          const value = actionsRef.current.getValue();
+          const valid = await actionsRef.current.validate();
 
-            dispatchChangeEvent({
-              name,
-              value,
-              valid,
-              formApi: actionsRef.current,
-            });
-          })}
-          onSubmit={useEventCallback(async (event) => {
-            const value = actionsRef.current.getValue();
-            const valid = await actionsRef.current.validate();
+          dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            formApi: actionsRef.current,
+          });
+        })}
+        onSubmit={useEventCallback(async (event) => {
+          const value = actionsRef.current.getValue();
+          const valid = await actionsRef.current.validate();
 
-            dispatchSubmitEvent({
-              name,
-              value,
-              valid,
-              formApi: actionsRef.current,
-            });
-          })}
-          valueState={field.valueState}
-          valueStateMessage={
-            field.valueStateMessage != null && (
-              <div slot="valueStateMessage">{field.valueStateMessage}</div>
-            )
-          }
-          required={required}
-          maxlength={
-            maxLength != null
-              ? typeof maxLength === "number"
-                ? maxLength
-                : maxLength.value
-              : undefined
-          }
-        />
-      </BusyIndicator>
+          dispatchSubmitEvent({
+            name,
+            value,
+            valid,
+            formApi: actionsRef.current,
+          });
+        })}
+        valueState={field.valueState}
+        valueStateMessage={
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
+        }
+        required={required}
+        maxlength={
+          maxLength != null
+            ? typeof maxLength === "number"
+              ? maxLength
+              : maxLength.value
+            : undefined
+        }
+      />
     );
   }
 ) as <
