@@ -10,7 +10,7 @@ import { FieldPath, FieldValues } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
 import { TextInput, TextInputProps } from "../component/TextInput";
-import { useControlledField, useFieldApiRef } from "../form/useField";
+import { useControlledField } from "../form/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
   FormFieldApi,
@@ -84,8 +84,7 @@ export const TextInputField = forwardRef<
     });
 
     // support imperative form field api via ref
-    const actionsRef = useFieldApiRef(name);
-    useImperativeHandle(forwardedRef, () => actionsRef.current);
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
 
     // store input ref for internal usage
     const inputRef = useRef<InputDomRef>(null);
@@ -123,31 +122,31 @@ export const TextInputField = forwardRef<
         value={field.value === undefined ? "" : field.value}
         onInput={useEventCallback((event) => {
           // reset previous errors
-          field.error && actionsRef.current.clearError();
+          field.error && field.fieldApiRef.current.clearError();
           onInput?.(event);
         })}
         onChange={useEventCallback(async (event) => {
-          actionsRef.current.setValue(event.target.value);
+          field.fieldApiRef.current.setValue(event.target.value);
 
-          const value = actionsRef.current.getValue();
-          const valid = await actionsRef.current.validate();
+          const value = field.fieldApiRef.current.getValue();
+          const valid = await field.fieldApiRef.current.validate();
 
           dispatchChangeEvent({
             name,
             value,
             valid,
-            fieldApi: actionsRef.current,
+            fieldApi: field.fieldApiRef.current,
           });
         })}
         onSubmit={useEventCallback(async (event) => {
-          const value = actionsRef.current.getValue();
-          const valid = await actionsRef.current.validate();
+          const value = field.fieldApiRef.current.getValue();
+          const valid = await field.fieldApiRef.current.validate();
 
           dispatchSubmitEvent({
             name,
             value,
             valid,
-            fieldApi: actionsRef.current,
+            fieldApi: field.fieldApiRef.current,
           });
         })}
         valueState={field.valueState}

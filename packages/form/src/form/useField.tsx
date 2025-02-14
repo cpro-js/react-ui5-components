@@ -3,7 +3,6 @@ import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import pDebounce from "p-debounce";
 import { RefObject, useEffect, useMemo, useRef } from "react";
 import {
-  FieldError,
   FieldPath,
   FieldPathValue,
   FieldValues,
@@ -22,6 +21,8 @@ import {
 import { hasError } from "../field/util";
 import { useI18nValidationError } from "../i18n/FormI18n";
 import { useFormActions } from "./useFormActions";
+
+const noop = () => undefined;
 
 export interface UseControlledFieldProps<
   FormValues extends FieldValues,
@@ -43,6 +44,7 @@ export interface UseControlledFieldsReturn<
   valueStateMessage: string | undefined;
   isValidating: boolean;
   isSubmitting: boolean;
+  fieldApiRef: RefObject<FormFieldApi<FormValues, FormFieldName>>;
 }
 
 export const useControlledField = <
@@ -79,9 +81,46 @@ export const useControlledField = <
     },
   };
 
-  const { watch, getFieldState } = useFormContext();
+  const {
+    setError,
+    clearErrors,
+    getValues,
+    setValue,
+    trigger,
+    setFocus,
+    watch,
+    getFieldState,
+  } = useFormContext<FormValues>();
 
-  const fieldApiRef = useFieldApiRef(name);
+  const { submit } = useFormActions();
+
+  const fieldApiRef = useRef<FormFieldApi<FormValues, FormFieldName>>({
+    validate: () => Promise.resolve(true),
+    clearError: noop,
+    setError: noop,
+    getValue: noop,
+    setValue: noop,
+    focus: noop,
+    submitForm: noop,
+  });
+
+  useMemo(() => {
+    // debounce validation within short time to trigger same validation for onChange / onSubmit once
+    fieldApiRef.current.validate = pDebounce(() => trigger(name), 50, {
+      before: true,
+    });
+    fieldApiRef.current.clearError = () => clearErrors(name);
+    fieldApiRef.current.setError = (error) => setError(name, error);
+    fieldApiRef.current.getValue = () => getValues(name);
+    fieldApiRef.current.setValue = (value) =>
+      setValue(name, value, {
+        shouldDirty: true,
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+    fieldApiRef.current.focus = (fieldName) => setFocus(fieldName ?? name);
+    fieldApiRef.current.submitForm = () => submit();
+  }, [name, setError, clearErrors, getValues, setValue, trigger]);
 
   const revalidateIfDirty = useEventCallback(
     useDebounceCallback(
@@ -138,47 +177,6 @@ export const useControlledField = <
     valueStateMessage: errorMessage,
     isValidating: fieldState.isValidating,
     isSubmitting: isSubmitting,
+    fieldApiRef: fieldApiRef,
   };
-};
-
-const noop = () => undefined;
-export const useFieldApiRef = <
-  FormValues extends FieldValues,
-  FormFieldName extends FieldPath<FormValues>
->(
-  name: string
-): RefObject<FormFieldApi<FormValues, FormFieldName>> => {
-  const { setError, clearErrors, getValues, setValue, trigger, setFocus } =
-    useFormContext();
-  const { submit } = useFormActions();
-
-  const actionsRef = useRef<FormFieldApi<FormValues, FormFieldName>>({
-    validate: () => Promise.resolve(true),
-    clearError: noop,
-    setError: noop,
-    getValue: noop,
-    setValue: noop,
-    focus: noop,
-    submitForm: noop,
-  });
-
-  useMemo(() => {
-    // debounce validation within short time to trigger same validation for onChange / onSubmit once
-    actionsRef.current.validate = pDebounce(() => trigger(name), 50, {
-      before: true,
-    });
-    actionsRef.current.clearError = () => clearErrors(name);
-    actionsRef.current.setError = (error) => setError(name, error);
-    actionsRef.current.getValue = () => getValues(name);
-    actionsRef.current.setValue = (value) =>
-      setValue(name, value, {
-        shouldDirty: true,
-        shouldValidate: false,
-        shouldTouch: true,
-      });
-    actionsRef.current.focus = (fieldName) => setFocus(fieldName ?? name);
-    actionsRef.current.submitForm = () => submit();
-  }, [name, setError, clearErrors, getValues, setValue, trigger]);
-
-  return actionsRef;
 };
