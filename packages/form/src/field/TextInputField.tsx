@@ -1,30 +1,22 @@
-import { useDebounce, useDebounceCallback } from "@react-hook/debounce";
 import { BusyIndicator, InputDomRef } from "@ui5/webcomponents-react";
 import {
-  KeyboardEventHandler,
   ReactElement,
   Ref,
   forwardRef,
-  useEffect,
   useImperativeHandle,
   useRef,
 } from "react";
-import { FieldPath, FieldValues, useFormContext } from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
 import { TextInput, TextInputProps } from "../component/TextInput";
 import {
   FieldActions,
   useControlledField,
-  useCustomEvent,
   useFieldActionRef,
 } from "../form/useField";
-import {
-  ChangedField,
-  FormFieldElement,
-  FormFieldValidation,
-  PartialFormValues,
-} from "./types";
+import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
+import { FormFieldElement, FormFieldValidation } from "./types";
 
 export type FieldEventDetail<
   FormValues extends FieldValues,
@@ -73,7 +65,7 @@ export const TextInputField = forwardRef<
       maxLength,
       validate,
       dependsOn,
-      onKeyUp,
+      onInput,
       onChange,
       onSubmit,
       ...props
@@ -86,13 +78,12 @@ export const TextInputField = forwardRef<
       minLength,
       maxLength,
       validate,
+      dependsOn,
     });
 
     const actionsRef = useFieldActionRef(name);
-    const pressedEnterPreviously = useRef<boolean>(false);
-    const firedSubmitByChange = useRef<boolean>(false);
 
-    // store input ref for intenral usage
+    // store input ref for internal usage
     const inputRef = useRef<InputDomRef>(null);
     // forward outer ref to custom element
     useImperativeHandle(forwardedRef, () => ({
@@ -106,95 +97,38 @@ export const TextInputField = forwardRef<
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => inputRef.current);
 
-    const dispatchChangeEvent = useCustomEvent<FieldEventDetail<any, any>>({
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      FieldEventDetail<any, any>
+    >({
       ref: inputRef,
       name: "field-change",
       onEvent: onChange,
     });
 
-    const dispatchSubmitEvent = useCustomEvent<FieldEventDetail<any, any>>({
+    const dispatchSubmitEvent = useCustomEventDispatcher<
+      FieldEventDetail<any, any>
+    >({
       ref: inputRef,
       name: "field-submit",
       onEvent: onSubmit,
     });
 
-    const handleKeyUp: KeyboardEventHandler<InputDomRef> = useEventCallback(
-      async (event) => {
-        onKeyUp?.(event);
-        if (
-          !event.isDefaultPrevented() &&
-          pressedEnterPreviously.current &&
-          !firedSubmitByChange.current
-        ) {
-          // user just pressed enter again (value didn't change) -> validate again!
-          const value = actionsRef.current.getValue();
-          const valid = await actionsRef.current.validate();
-
-          dispatchSubmitEvent({
-            name,
-            valid,
-            value,
-            formApi: actionsRef.current,
-          });
-        }
-      }
-    );
-
-    const { watch, getFieldState } = useFormContext();
-
-    const revalidateIfDiry = useEventCallback(
-      useDebounceCallback(
-        () => {
-          if (getFieldState(name).isTouched) {
-            console.log("revalidate", name);
-            // values changed -> revalidate
-            void actionsRef.current.validate();
-          }
-        },
-        10,
-        false
-      )
-    );
-
-    // dependsOn
-    useEffect(() => {
-      if (!dependsOn || dependsOn.length === 0) {
-        return;
-      }
-
-      const { unsubscribe } = watch((_, { name }) => {
-        if (name && dependsOn.includes(name)) {
-          // values changed -> revalidate
-          revalidateIfDiry();
-        }
-      });
-
-      return () => unsubscribe();
-    }, [dependsOn, revalidateIfDiry]);
-
     return (
       <BusyIndicator active={field.busy} delay={0}>
         <TextInput
           {...props}
+          readonly={props.readonly || field.busy}
           ref={inputRef}
           name={field.name}
           // use empty string to reset value, undefined will be ignored by web component
           value={field.value === undefined ? "" : field.value}
-          onInput={() => {
-            // reset any previous errors
-            getFieldState(name).error && actionsRef.current.clearError();
-          }}
-          onFocus={() => {
-            pressedEnterPreviously.current = false;
-            firedSubmitByChange.current = false;
-          }}
-          onChange={async (event) => {
-            await new Promise((r) => setTimeout(r, 0));
-
+          onInput={useEventCallback((event) => {
+            // reset previous errors
+            field.error && actionsRef.current.clearError();
+            onInput?.(event);
+          })}
+          onChange={useEventCallback(async (event) => {
             actionsRef.current.setValue(event.target.value);
-
-            const fireSubmit = (firedSubmitByChange.current =
-              pressedEnterPreviously.current);
 
             const value = actionsRef.current.getValue();
             const valid = await actionsRef.current.validate();
@@ -205,25 +139,18 @@ export const TextInputField = forwardRef<
               valid,
               formApi: actionsRef.current,
             });
+          })}
+          onSubmit={useEventCallback(async (event) => {
+            const value = actionsRef.current.getValue();
+            const valid = await actionsRef.current.validate();
 
-            if (fireSubmit) {
-              // just delay it a bit
-              setTimeout(() => {
-                dispatchSubmitEvent({
-                  name,
-                  value,
-                  valid,
-                  formApi: actionsRef.current,
-                });
-              }, 0);
-            }
-          }}
-          onKeyDown={(event) => {
-            pressedEnterPreviously.current =
-              event.key == "Enter" || event.keyCode === 13;
-            firedSubmitByChange.current = false;
-          }}
-          onKeyUp={handleKeyUp}
+            dispatchSubmitEvent({
+              name,
+              value,
+              valid,
+              formApi: actionsRef.current,
+            });
+          })}
           valueState={field.valueState}
           valueStateMessage={
             field.valueStateMessage != null && (

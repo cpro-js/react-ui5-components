@@ -1,4 +1,6 @@
+import { useDebounceCallback } from "@react-hook/debounce";
 import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import pDebounce from "p-debounce";
 import { RefObject, useEffect, useMemo, useRef } from "react";
 import {
   FieldError,
@@ -7,6 +9,7 @@ import {
   FieldValues,
   RefCallBack,
   UseControllerProps,
+  UseFormGetFieldState,
   useController,
   useFormContext,
 } from "react-hook-form";
@@ -41,9 +44,11 @@ export interface UseControlledFieldsReturn<
   value: FieldPathValue<FormValues, FormFieldName>;
   onChange: (value: FieldPathValue<FormValues, FormFieldName>) => void;
   onBlur: () => void;
+  error: boolean;
   valueState: ValueState | keyof typeof ValueState;
   valueStateMessage: string | undefined;
   busy: boolean;
+  getFieldState: UseFormGetFieldState<FormValues>;
 }
 
 export const useControlledField = <
@@ -77,10 +82,42 @@ export const useControlledField = <
       // @ts-ignore TODO try to fix it
       validate,
       required,
-      // @ts-ignore TODO try to fix it
-      deps: dependsOn,
     },
   };
+
+  const { watch, getFieldState } = useFormContext();
+
+  const actionsRef = useFieldActionRef(name);
+
+  const revalidateIfDirty = useEventCallback(
+    useDebounceCallback(
+      () => {
+        if (getFieldState(name).isTouched) {
+          // values changed -> revalidate
+          void actionsRef.current.validate();
+        }
+      },
+      10,
+      false
+    )
+  );
+
+  // dependsOn
+  useEffect(() => {
+    if (!dependsOn || dependsOn.length === 0) {
+      return;
+    }
+
+    const { unsubscribe } = watch((_, { name }) => {
+      console.log("watch", name);
+      if (name && dependsOn.includes(name)) {
+        // values changed -> revalidate
+        revalidateIfDirty();
+      }
+    });
+
+    return () => unsubscribe();
+  }, [dependsOn, revalidateIfDirty]);
 
   const getValidationErrorMessage = useI18nValidationError(
     name,
@@ -99,9 +136,11 @@ export const useControlledField = <
     value: field.value as FieldPathValue<FormValues, FormFieldName>,
     onChange: field.onChange,
     onBlur: field.onBlur,
+    error: hasError(fieldState.error),
     valueState: hasError(fieldState.error) ? "Negative" : "None",
     valueStateMessage: errorMessage,
     busy: fieldState.isValidating,
+    getFieldState,
   };
 };
 
@@ -146,7 +185,10 @@ export const useFieldActionRef = <
   });
 
   useMemo(() => {
-    actionsRef.current.validate = () => trigger(name);
+    // debounce validation within short time to trigger same validation for onChange / onSubmit once
+    actionsRef.current.validate = pDebounce(() => trigger(name), 50, {
+      before: true,
+    });
     actionsRef.current.clearError = () => clearErrors(name);
     actionsRef.current.setError = (error) => setError(name, error);
     actionsRef.current.getValue = () => getValues(name);
@@ -161,42 +203,4 @@ export const useFieldActionRef = <
   }, [name, setError, clearErrors, getValues, setValue, trigger]);
 
   return actionsRef;
-};
-
-export const useCustomEvent = <Detail,>(options: {
-  ref: RefObject<HTMLElement | null>;
-  name: string;
-  onEvent?: (event: CustomEvent<Detail>) => void;
-}): ((detail: Detail) => void) => {
-  const onHandleEvent = useEventCallback((event: CustomEvent<Detail>) => {
-    options.onEvent?.(event);
-  });
-
-  const dispatchEvent = useEventCallback((detail: Detail) => {
-    options.ref.current?.dispatchEvent(
-      new CustomEvent<Detail>(options.name, {
-        detail,
-        bubbles: true,
-        cancelable: false,
-      })
-    );
-  });
-
-  useEffect(() => {
-    const element = options.ref;
-
-    element.current?.addEventListener(
-      options.name,
-      onHandleEvent as EventListener
-    );
-
-    return () => {
-      element.current?.removeEventListener(
-        options.name,
-        onHandleEvent as EventListener
-      );
-    };
-  }, [options.name, options.ref.current]);
-
-  return dispatchEvent;
 };
