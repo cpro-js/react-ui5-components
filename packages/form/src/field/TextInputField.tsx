@@ -10,13 +10,14 @@ import { FieldPath, FieldValues } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
 import { TextInput, TextInputProps } from "../component/TextInput";
-import {
-  FieldActions,
-  useControlledField,
-  useFieldActionRef,
-} from "../form/useField";
+import { useControlledField, useFieldApiRef } from "../form/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
-import { FormFieldElement, FormFieldValidation } from "./types";
+import {
+  FormFieldApi,
+  FormFieldCommonProps,
+  FormFieldElement,
+  FormFieldValidation,
+} from "./types";
 
 export type FieldEventDetail<
   FormValues extends FieldValues,
@@ -25,7 +26,7 @@ export type FieldEventDetail<
   name: FormFieldName;
   value: string;
   valid: boolean;
-  formApi: FieldActions<FormValues, FormFieldName>;
+  fieldApi: FormFieldApi<FormValues, FormFieldName>;
 };
 
 export type TextInputFieldProps<
@@ -33,18 +34,13 @@ export type TextInputFieldProps<
   FormFieldName extends FieldPath<FormValues>
 > = Omit<
   TextInputProps,
-  "name" | "value" | "onChange" | "valueState" | "onBlur" | "maxlength"
+  "name" | "value" | "onChange" | "valueState" | "maxlength"
 > &
   Pick<
     FormFieldValidation<FormValues, string>,
     "required" | "minLength" | "maxLength" | "validate"
-  > & {
-    name: FormFieldName;
-    dependsOn?:
-      | string
-      | string[]
-      | FieldPath<FormValues>
-      | FieldPath<FormValues>[];
+  > &
+  FormFieldCommonProps<FormValues, FormFieldName> & {
     onChange?: (
       event: Ui5CustomEvent<
         InputDomRef,
@@ -60,7 +56,7 @@ export type TextInputFieldProps<
   };
 
 export const TextInputField = forwardRef<
-  FormFieldElement,
+  FormFieldElement<any, any>,
   TextInputFieldProps<any, any>
 >(
   (
@@ -87,19 +83,13 @@ export const TextInputField = forwardRef<
       dependsOn,
     });
 
-    const actionsRef = useFieldActionRef(name);
+    // support imperative form field api via ref
+    const actionsRef = useFieldApiRef(name);
+    useImperativeHandle(forwardedRef, () => actionsRef.current);
 
     // store input ref for internal usage
     const inputRef = useRef<InputDomRef>(null);
-    // forward outer ref to custom element
-    useImperativeHandle(forwardedRef, () => ({
-      // TODO provide more methods! -> validate, getValue, setValue
-      focus() {
-        if (inputRef.current != null) {
-          inputRef.current.focus();
-        }
-      },
-    }));
+
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => inputRef.current);
 
@@ -146,7 +136,7 @@ export const TextInputField = forwardRef<
             name,
             value,
             valid,
-            formApi: actionsRef.current,
+            fieldApi: actionsRef.current,
           });
         })}
         onSubmit={useEventCallback(async (event) => {
@@ -157,7 +147,7 @@ export const TextInputField = forwardRef<
             name,
             value,
             valid,
-            formApi: actionsRef.current,
+            fieldApi: actionsRef.current,
           });
         })}
         valueState={field.valueState}
@@ -182,6 +172,6 @@ export const TextInputField = forwardRef<
   FormFieldName extends FieldPath<FormValues>
 >(
   p: TextInputFieldProps<FormValues, FormFieldName> & {
-    ref?: Ref<FormFieldElement | undefined>;
+    ref?: Ref<FormFieldElement<FormValues, FormFieldName>> | undefined;
   }
 ) => ReactElement;

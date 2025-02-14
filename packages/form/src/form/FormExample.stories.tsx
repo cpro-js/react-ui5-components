@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Form, FormItem, Label } from "@ui5/webcomponents-react";
+import { useEventCallback } from "usehooks-ts";
 
 import { FormBusyIndicator } from "../field/FormBusyIndicator";
 import { TextInputField } from "../field/TextInputField";
@@ -74,8 +75,7 @@ export const SimpleClientSideForm: Story = {
                   );
 
                   // go to next field when field is valid
-                  event.detail.valid &&
-                    event.detail.formApi.focusField("lastName");
+                  event.detail.valid && event.detail.fieldApi.focus("lastName");
                 }}
               />
             </FormItem>
@@ -108,7 +108,7 @@ export const SimpleClientSideForm: Story = {
                   );
 
                   // submit form when field is valid
-                  event.detail.valid && event.detail.formApi.submitForm();
+                  event.detail.valid && event.detail.fieldApi.submitForm();
                 }}
               />
             </FormItem>
@@ -121,23 +121,19 @@ export const SimpleClientSideForm: Story = {
 
 export const CustomValidationForm: Story = {
   render: () => {
-    const onSubmit: FormSubmitHandler<PersonForm> = (values, formApi) => {
-      // triggers only when valid
-      console.log("submit", values);
-
-      return new Promise((r) => setTimeout(r, 3000));
-    };
-
-    const onChange: FormChangeHandler<PersonForm> = (
-      values,
-      actions,
-      changedField
-    ) => {
-      // triggers maybe with invalid values
-    };
-
     return (
-      <FormController<PersonForm> onSubmit={onSubmit} onChange={onChange}>
+      <FormController<PersonForm>
+        onSubmit={useEventCallback(async (values, formApi) => {
+          // triggers only when valid
+          console.log("submit", values);
+
+          await new Promise((r) => setTimeout(r, 3000));
+
+          formApi.setErrors([{ name: "firstName", message: "Backend Error" }], {
+            shouldFocus: true,
+          });
+        })}
+      >
         <FormBusyIndicator style={{ display: "block" }}>
           <Form
             style={{ width: "100%" }}
@@ -192,7 +188,7 @@ export const CustomValidationForm: Story = {
 
                     // go to next field when field is valid
                     event.detail.valid &&
-                      event.detail.formApi.focusField("lastName");
+                      event.detail.fieldApi.focus("lastName");
                   }}
                 />
               </FormBusyIndicator>
@@ -239,7 +235,7 @@ export const CustomValidationForm: Story = {
                     );
 
                     // submit form when field is valid
-                    event.detail.valid && event.detail.formApi.submitForm();
+                    event.detail.valid && event.detail.fieldApi.submitForm();
                   }}
                 />
               </FormBusyIndicator>
@@ -352,7 +348,7 @@ export const DependentValidationForm: Story = {
               onSubmit={(event) => {
                 // go to next field when field is valid
                 event.detail.valid &&
-                  event.detail.formApi.focusField("passwordRepeat");
+                  event.detail.fieldApi.focus("passwordRepeat");
               }}
             />
           </FormItem>
@@ -380,7 +376,7 @@ export const DependentValidationForm: Story = {
               }}
               onSubmit={(event) => {
                 // field is valid! -> submit form
-                event.detail.valid && event.detail.formApi.submitForm();
+                event.detail.valid && event.detail.fieldApi.submitForm();
               }}
             />
           </FormItem>

@@ -111,6 +111,7 @@ export type {
   FormChangeHandler,
   FormSubmitHandler,
   PartialFormValues,
+  FormFieldApi,
 } from "./field/types";
 export { useFormActions } from "./form/useFormActions";
 

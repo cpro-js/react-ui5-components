@@ -9,31 +9,25 @@ import {
   FieldValues,
   RefCallBack,
   UseControllerProps,
-  UseFormGetFieldState,
   useController,
   useFormContext,
 } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
-import { FormFieldValidation } from "../field/types";
+import {
+  FormFieldApi,
+  FormFieldCommonProps,
+  FormFieldValidation,
+} from "../field/types";
 import { hasError } from "../field/util";
 import { useI18nValidationError } from "../i18n/FormI18n";
 import { useFormActions } from "./useFormActions";
 
-export interface FormFieldProps<
+export interface UseControlledFieldProps<
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
-> extends FormFieldValidation<
-    FormValues,
-    FieldPathValue<FormValues, FormFieldName>
-  > {
-  name: FieldPath<FormValues>;
-  dependsOn?:
-    | string
-    | string[]
-    | FieldPath<FormValues>
-    | FieldPath<FormValues>[];
-}
+> extends FormFieldCommonProps<FormValues, FormFieldName>,
+    FormFieldValidation<FormValues, ""> {}
 
 export interface UseControlledFieldsReturn<
   FormValues extends FieldValues,
@@ -55,7 +49,7 @@ export const useControlledField = <
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
 >(
-  props: FormFieldProps<FormValues, FormFieldName>
+  props: UseControlledFieldProps<FormValues, FormFieldName>
 ): UseControlledFieldsReturn<FormValues, FormFieldName> => {
   const {
     name,
@@ -87,14 +81,14 @@ export const useControlledField = <
 
   const { watch, getFieldState } = useFormContext();
 
-  const actionsRef = useFieldActionRef(name);
+  const fieldApiRef = useFieldApiRef(name);
 
   const revalidateIfDirty = useEventCallback(
     useDebounceCallback(
       () => {
         if (getFieldState(name).isTouched) {
           // values changed -> revalidate
-          void actionsRef.current.validate();
+          void fieldApiRef.current.validate();
         }
       },
       10,
@@ -109,8 +103,7 @@ export const useControlledField = <
     }
 
     const { unsubscribe } = watch((_, { name }) => {
-      console.log("watch", name);
-      if (name && dependsOn.includes(name)) {
+      if (name && dependsOn.includes(name as FieldPath<FormValues>)) {
         // values changed -> revalidate
         revalidateIfDirty();
       }
@@ -148,43 +141,24 @@ export const useControlledField = <
   };
 };
 
-export interface FieldActions<
-  FormValues extends FieldValues,
-  FormFieldName extends FieldPath<FormValues>
-> {
-  validate(): Promise<boolean>;
-
-  clearError(): void;
-
-  setError(error: FieldError): void;
-
-  setValue(value: FieldPathValue<FormValues, FormFieldName>): void;
-
-  getValue(): FieldPathValue<FormValues, FormFieldName> | undefined;
-
-  focusField(name: FieldPath<FormValues>): void;
-
-  submitForm(): void;
-}
-
 const noop = () => undefined;
-export const useFieldActionRef = <
+export const useFieldApiRef = <
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
 >(
   name: string
-): RefObject<FieldActions<FormValues, FormFieldName>> => {
+): RefObject<FormFieldApi<FormValues, FormFieldName>> => {
   const { setError, clearErrors, getValues, setValue, trigger, setFocus } =
     useFormContext();
   const { submit } = useFormActions();
 
-  const actionsRef = useRef<FieldActions<FormValues, FormFieldName>>({
+  const actionsRef = useRef<FormFieldApi<FormValues, FormFieldName>>({
     validate: () => Promise.resolve(true),
     clearError: noop,
     setError: noop,
     getValue: noop,
     setValue: noop,
-    focusField: noop,
+    focus: noop,
     submitForm: noop,
   });
 
@@ -202,7 +176,7 @@ export const useFieldActionRef = <
         shouldValidate: false,
         shouldTouch: true,
       });
-    actionsRef.current.focusField = (name) => setFocus(name);
+    actionsRef.current.focus = (fieldName) => setFocus(fieldName ?? name);
     actionsRef.current.submitForm = () => submit();
   }, [name, setError, clearErrors, getValues, setValue, trigger]);
 

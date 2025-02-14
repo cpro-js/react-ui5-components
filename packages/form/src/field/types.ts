@@ -1,4 +1,10 @@
-import { DeepPartial, FieldPath } from "react-hook-form";
+import {
+  DeepPartial,
+  FieldError,
+  FieldPath,
+  FieldPathValue,
+  FieldValues,
+} from "react-hook-form";
 
 export type PartialFormValues<FormValues extends {}> = DeepPartial<FormValues>;
 
@@ -17,14 +23,69 @@ export type FormChangeHandler<FormValues extends {}> = (
   changedField: ChangedField<FormValues>
 ) => void;
 
+export interface FormFieldApi<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> {
+  /**
+   * Validates this field only
+   */
+  validate(): Promise<boolean>;
+
+  /**
+   * Clears errors of this field
+   */
+  clearError(): void;
+
+  /**
+   * Sets validation error for this field
+   * @param error
+   */
+  setError(error: FieldError): void;
+
+  /**
+   * Updates a new value for this field.
+   * Note: This doesn't trigger validation again, but marks that field as touched/dirty
+   * @param value
+   */
+  setValue(value: FieldPathValue<FormValues, FormFieldName>): void;
+
+  /**
+   * Gets the current value of this field
+   */
+  getValue(): FieldPathValue<FormValues, FormFieldName> | undefined;
+
+  /**
+   * Allows to focus a specific form field or focuses this field again when name is omitted
+   * @param name field to focus or when omitted this field
+   */
+  focus(name?: FieldPath<FormValues>): void;
+
+  /**
+   * Submits the whole form
+   * This will trigger validation again and call the submit handler of your form when it's valid
+   */
+  submitForm(): void;
+}
+
 /**
  * Base element that will be returned by ref
  */
-export interface FormFieldElement {
-  /**
-   * Focus field
-   */
-  focus(): void;
+export interface FormFieldElement<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> extends FormFieldApi<FormValues, FormFieldName> {}
+
+export interface FormFieldCommonProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> {
+  name: FormFieldName;
+  dependsOn?:
+    | string
+    | string[]
+    | FieldPath<FormValues>
+    | FieldPath<FormValues>[];
 }
 
 export type FormFieldValidationRule<
