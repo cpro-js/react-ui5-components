@@ -21,6 +21,9 @@ export const SimpleClientSideForm: Story = {
   render: () => {
     const onSubmit: FormSubmitHandler<PersonForm> = (values, formApi) => {
       // triggers only when valid
+      console.log("submit", values);
+
+      return new Promise((r) => setTimeout(r, 3000));
     };
 
     const onChange: FormChangeHandler<PersonForm> = (
@@ -33,81 +36,84 @@ export const SimpleClientSideForm: Story = {
 
     return (
       <FormController<PersonForm> onSubmit={onSubmit} onChange={onChange}>
-        <Form
-          headerText={
-            "Only Client Side Validation (required, minLength, maxLength"
-          }
-          labelSpan="S12 M12 L12 XL12"
-          layout="S1 M1 L1 XL1"
-        >
-          <FormItem
-            labelContent={
-              <Label showColon required>
-                firstName
-              </Label>
+        <FormBusyIndicator style={{ display: "block" }}>
+          <Form
+            style={{ width: "100%" }}
+            headerText={
+              "Only Client Side Validation (required, minLength, maxLength"
             }
+            labelSpan="S12 M12 L12 XL12"
+            layout="S1 M1 L1 XL1"
           >
-            <TextInputField
-              name="firstName"
-              required
-              minLength={1}
-              maxLength={10}
-              onChange={(event) => {
-                console.log(
-                  "change",
-                  event.detail.name,
-                  event.detail.value,
-                  event.detail.valid
-                );
-              }}
-              onSubmit={(event) => {
-                console.log(
-                  "submit",
-                  event.detail.name,
-                  event.detail.value,
-                  event.detail.valid
-                );
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  firstName
+                </Label>
+              }
+            >
+              <TextInputField
+                name="firstName"
+                required
+                minLength={1}
+                maxLength={10}
+                onChange={(event) => {
+                  console.log(
+                    "change",
+                    event.detail.name,
+                    event.detail.value,
+                    event.detail.valid
+                  );
+                }}
+                onSubmit={(event) => {
+                  console.log(
+                    "submit",
+                    event.detail.name,
+                    event.detail.value,
+                    event.detail.valid
+                  );
 
-                // go to next field when field is valid
-                event.detail.valid &&
-                  event.detail.formApi.focusField("lastName");
-              }}
-            />
-          </FormItem>
-          <FormItem
-            labelContent={
-              <Label showColon required>
-                lastName
-              </Label>
-            }
-          >
-            <TextInputField
-              name="lastName"
-              required
-              minLength={1}
-              maxLength={10}
-              onChange={(event) => {
-                console.log(
-                  "change",
-                  event.detail.name,
-                  event.detail.value,
-                  event.detail.valid
-                );
-              }}
-              onSubmit={(event) => {
-                console.log(
-                  "submit",
-                  event.detail.name,
-                  event.detail.value,
-                  event.detail.valid
-                );
+                  // go to next field when field is valid
+                  event.detail.valid &&
+                    event.detail.formApi.focusField("lastName");
+                }}
+              />
+            </FormItem>
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  lastName
+                </Label>
+              }
+            >
+              <TextInputField
+                name="lastName"
+                required
+                minLength={1}
+                maxLength={10}
+                onChange={(event) => {
+                  console.log(
+                    "change",
+                    event.detail.name,
+                    event.detail.value,
+                    event.detail.valid
+                  );
+                }}
+                onSubmit={(event) => {
+                  console.log(
+                    "submit",
+                    event.detail.name,
+                    event.detail.value,
+                    event.detail.valid
+                  );
 
-                // submit form when field is valid
-                event.detail.valid && event.detail.formApi.submitForm();
-              }}
-            />
-          </FormItem>
-        </Form>
+                  // submit form when field is valid
+                  event.detail.valid && event.detail.formApi.submitForm();
+                }}
+              />
+            </FormItem>
+          </Form>
+        </FormBusyIndicator>
       </FormController>
     );
   },
@@ -132,94 +138,114 @@ export const CustomValidationForm: Story = {
 
     return (
       <FormController<PersonForm> onSubmit={onSubmit} onChange={onChange}>
-        <Form
-          headerText={"Client Side Validation + custom sync/async Validation"}
-          labelSpan="S12 M12 L12 XL12"
-          layout="S1 M1 L1 XL1"
-        >
-          <FormItem
-            labelContent={
-              <Label showColon required>
-                firstName
-              </Label>
-            }
+        <FormBusyIndicator style={{ display: "block" }}>
+          <Form
+            style={{ width: "100%" }}
+            headerText={"Client Side Validation + custom sync/async Validation"}
+            labelSpan="S12 M12 L12 XL12"
+            layout="S1 M1 L1 XL1"
           >
-            <FormFieldBusyIndicator name="firstName">
-              <TextInputField<PersonForm, "firstName">
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  firstName
+                </Label>
+              }
+            >
+              <FormBusyIndicator<PersonForm>
                 name="firstName"
-                required
-                minLength={1}
-                maxLength={10}
-                validate={async (value, values) => {
-                  console.log("validate firstname", value);
-                  // async validation
-                  await new Promise((r) => setTimeout(r, 1000));
-                  // required, min, max already checked!
-                  const onlyLettersError = /^[a-zA-Z]+$/i.test(value)
-                    ? undefined
-                    : "Nur Buchstaben!";
+                delay={100}
+                style={{ display: "block" }}
+              >
+                <TextInputField<PersonForm, "firstName">
+                  style={{ width: "100%" }}
+                  name="firstName"
+                  required
+                  minLength={1}
+                  maxLength={10}
+                  validate={async (value, values) => {
+                    console.log("validate firstname", value);
+                    // async validation
+                    await new Promise((r) => setTimeout(r, 1000));
+                    // required, min, max already checked!
+                    const onlyLettersError = /^[a-zA-Z]+$/i.test(value)
+                      ? undefined
+                      : "Nur Buchstaben!";
 
-                  return onlyLettersError;
-                }}
-                onChange={(event) => {
-                  console.log(
-                    "change",
-                    event.detail.name,
-                    event.detail.value,
-                    event.detail.valid
-                  );
-                }}
-                onSubmit={(event) => {
-                  console.log(
-                    "submit",
-                    event.detail.name,
-                    event.detail.value,
-                    event.detail.valid
-                  );
+                    return onlyLettersError;
+                  }}
+                  onChange={(event) => {
+                    console.log(
+                      "change",
+                      event.detail.name,
+                      event.detail.value,
+                      event.detail.valid
+                    );
+                  }}
+                  onSubmit={(event) => {
+                    console.log(
+                      "submit",
+                      event.detail.name,
+                      event.detail.value,
+                      event.detail.valid
+                    );
 
-                  // go to next field when field is valid
-                  event.detail.valid &&
-                    event.detail.formApi.focusField("lastName");
-                }}
-              />
-            </FormFieldBusyIndicator>
-          </FormItem>
-          <FormItem labelContent={<Label showColon>lastName</Label>}>
-            <FormFieldBusyIndicator<PersonForm> name="lastName">
-              <TextInputField<PersonForm, "lastName">
+                    // go to next field when field is valid
+                    event.detail.valid &&
+                      event.detail.formApi.focusField("lastName");
+                  }}
+                />
+              </FormBusyIndicator>
+            </FormItem>
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  lastName
+                </Label>
+              }
+            >
+              <FormBusyIndicator<PersonForm>
                 name="lastName"
-                minLength={1}
-                maxLength={10}
-                validate={async (value, formApi) => {
-                  // required, min, max already checked!
-                  // async validation
-                  await new Promise((r) => setTimeout(r, 1000));
-                  // all good
-                  return undefined;
-                }}
-                onChange={(event) => {
-                  console.log(
-                    "change",
-                    event.target.name,
-                    event.detail.value,
-                    event.detail.valid
-                  );
-                }}
-                onSubmit={(event) => {
-                  console.log(
-                    "submit",
-                    event.detail.name,
-                    event.detail.value,
-                    event.detail.valid
-                  );
+                delay={100}
+                style={{ display: "block" }}
+              >
+                <TextInputField<PersonForm, "lastName">
+                  style={{ width: "100%" }}
+                  name="lastName"
+                  required
+                  minLength={1}
+                  maxLength={10}
+                  validate={async (value, formApi) => {
+                    // required, min, max already checked!
+                    // async validation
+                    await new Promise((r) => setTimeout(r, 1000));
+                    // all good
+                    return undefined;
+                  }}
+                  onChange={(event) => {
+                    console.log(
+                      "change",
+                      event.target.name,
+                      event.detail.value,
+                      event.detail.valid
+                    );
+                  }}
+                  onSubmit={(event) => {
+                    console.log(
+                      "submit",
+                      event.detail.name,
+                      event.detail.value,
+                      event.detail.valid
+                    );
 
-                  // submit form when field is valid
-                  event.detail.valid && event.detail.formApi.submitForm();
-                }}
-              />
-            </FormFieldBusyIndicator>
-          </FormItem>
-        </Form>
+                    // submit form when field is valid
+                    event.detail.valid && event.detail.formApi.submitForm();
+                  }}
+                />
+              </FormBusyIndicator>
+            </FormItem>
+          </Form>
+        </FormBusyIndicator>
       </FormController>
     );
   },

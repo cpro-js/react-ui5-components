@@ -1,8 +1,4 @@
-import {
-  BusyIndicator,
-  InputDomRef,
-  Ui5CustomEvent,
-} from "@ui5/webcomponents-react";
+import { InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
