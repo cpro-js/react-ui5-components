@@ -17,6 +17,7 @@ export type NumberInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
     CommonNumberInputProps,
     | "value"
     | "onChange"
+    | "onInput"
     | "onValue"
     | "onKeyUp"
     | "locale"
@@ -33,7 +34,6 @@ export type NumberInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
     | "required"
     | "showClearIcon"
     | "valueState"
-    | "onInput"
   >;
 
 /** `NumberInput` as a wrapper for

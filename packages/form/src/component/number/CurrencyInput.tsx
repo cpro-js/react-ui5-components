@@ -17,6 +17,7 @@ export type CurrencyInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
     CommonNumberInputProps,
     | "value"
     | "onChange"
+    | "onInput"
     | "onValue"
     | "onKeyUp"
     | "locale"

@@ -1,97 +1,134 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from "react";
-import { useController, useFormContext } from "react-hook-form";
+import { forwardRef, useImperativeHandle, useRef } from "react";
+import { FieldPath, FieldValues } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import {
   CurrencyInput,
   CurrencyInputProps,
 } from "../component/number/CurrencyInput";
-import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldElement, FormFieldValidation } from "./types";
-import { hasError } from "./util";
-
-export type CurrencyInputFieldProps = Omit<
-  CurrencyInputProps,
-  "name" | "value" | "onChange" | "valueState" | "onBlur"
-> &
-  Pick<FormFieldValidation, "required" | "min" | "max"> & {
-    name: string;
-  };
-
-export const CurrencyInputField = forwardRef<
+import { useControlledField } from "../form/useField";
+import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
+import {
+  FieldEventDetail,
+  FormFieldChangeEvent,
+  FormFieldCommonProps,
   FormFieldElement,
-  CurrencyInputFieldProps
->(({ name, required, min, max, ...props }, forwardedRef) => {
-  const rules: Partial<FormFieldValidation> = useMemo(
-    () => ({
+  FormFieldValidation,
+} from "./types";
+
+export type CurrencyInputFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = Omit<
+  CurrencyInputProps,
+  "name" | "value" | "valueState" | "valueStateMessage" | "max" | "onChange"
+> &
+  Pick<
+    FormFieldValidation<FormValues, number>,
+    "required" | "min" | "max" | "validate"
+  > &
+  FormFieldCommonProps<FormValues, FormFieldName> & {
+    onChange?: (
+      event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
+    ) => void;
+    // onSubmit?: (
+    //   event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
+    // ) => void;
+  };
+export const CurrencyInputField = forwardRef<
+  FormFieldElement<any, any>,
+  CurrencyInputFieldProps<any, any>
+>(
+  (
+    {
+      name,
       required,
       min,
       max,
-    }),
-    [required, min, max]
-  );
-
-  const getValidationErrorMessage = useI18nValidationError(name, rules);
-
-  const { field, fieldState } = useController({ name, rules });
-  const { clearErrors } = useFormContext();
-
-  // store input ref for intenral usage
-  const internalRef = useRef<InputDomRef>(null);
-  // forward outer ref to custom element
-  useImperativeHandle(forwardedRef, () => ({
-    focus() {
-      if (internalRef.current != null) {
-        internalRef.current.focus();
-      }
+      validate,
+      dependsOn,
+      onChange,
+      onInput,
+      ...props
     },
-  }));
-  // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => internalRef.current);
+    forwardedRef
+  ) => {
+    const field = useControlledField({
+      name,
+      required,
+      min,
+      max,
+      // @ts-ignore TODO type mapping
+      validate,
+      dependsOn,
+    });
+    // support imperative form field api via ref
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
 
-  // use empty string to reset value, undefined will be ignored by web component
-  const value = field.value;
+    // store input ref for internal usage
+    const elementRef = useRef<InputDomRef>(null);
 
-  // get error message (Note: undefined fallbacks to default message of ui5 component)
-  const errorMessage = hasError(fieldState.error)
-    ? getValidationErrorMessage(fieldState.error, field.value)
-    : undefined;
+    // forward field ref to stored internal input ref
+    useImperativeHandle(field.ref, () => elementRef.current);
 
-  // clear error on first change
-  const onKeyUp = useCallback(() => {
-    clearErrors(name);
-  }, [clearErrors, name]);
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-change",
+      onEvent: onChange as unknown as (
+        event: CustomEvent<FieldEventDetail<any, any>>
+      ) => void,
+    });
 
-  return (
-    <CurrencyInput
-      {...props}
-      ref={internalRef}
-      name={field.name}
-      value={value}
-      onChange={(_, val) => {
-        field.onChange(val);
-      }}
-      onBlur={field.onBlur}
-      required={required}
-      valueState={hasError(fieldState.error) ? "Negative" : "None"}
-      valueStateMessage={
-        errorMessage != null && (
-          <div slot="valueStateMessage">{errorMessage}</div>
-        )
-      }
-      aria-valuemin={
-        min != null ? (typeof min === "number" ? min : min.value) : undefined
-      }
-      aria-valuemax={
-        max != null ? (typeof max === "number" ? max : max.value) : undefined
-      }
-      onKeyUp={hasError(fieldState.error) ? onKeyUp : undefined}
-    />
-  );
-});
+    // const dispatchSubmitEvent = useCustomEventDispatcher<
+    //   FieldEventDetail<any, any>
+    // >({
+    //   ref: elementRef,
+    //   name: "field-submit",
+    //   onEvent: onSubmit as unknown as (
+    //     event: CustomEvent<FieldEventDetail<any, any>>
+    //   ) => void,
+    // });
+
+    return (
+      <CurrencyInput
+        {...props}
+        ref={elementRef}
+        name={field.name}
+        value={field.value}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
+        required={required}
+        aria-valuemin={
+          min != null ? (typeof min === "number" ? min : min.value) : undefined
+        }
+        aria-valuemax={
+          max != null ? (typeof max === "number" ? max : max.value) : undefined
+        }
+        valueState={field.valueState}
+        valueStateMessage={
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
+        }
+        onInput={useEventCallback((event) => {
+          // reset previous errors
+          field.error && field.fieldApiRef.current.clearError();
+          onInput?.(event);
+        })}
+        onChange={useEventCallback(async (_, value) => {
+          field.fieldApiRef.current.setValue(value);
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            fieldApi: field.fieldApiRef.current,
+          });
+        })}
+      />
+    );
+  }
+);
