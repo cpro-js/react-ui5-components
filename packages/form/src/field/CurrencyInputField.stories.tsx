@@ -15,14 +15,14 @@ interface FormData {
 }
 
 const Template: StoryFn<
-  FormControllerProps<FormData> & CurrencyInputFieldProps
+  FormControllerProps<FormData> & CurrencyInputFieldProps<FormData, "theNumber">
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldElement<FormData, "theNumber">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -33,7 +33,7 @@ const Template: StoryFn<
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & CurrencyInputFieldProps
+  FormControllerProps<FormData> & CurrencyInputFieldProps<FormData, "theNumber">
 > = (args, context) => {
   return (
     <FormI18nProvider

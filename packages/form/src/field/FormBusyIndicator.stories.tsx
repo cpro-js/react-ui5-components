@@ -10,12 +10,12 @@ interface FormData {
 }
 
 const Template: StoryFn<
-  FormControllerProps<FormData> & FormBusyIndicatorProps
+  FormControllerProps<FormData> & FormBusyIndicatorProps<FormData>
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
   return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
+    <FormController<FormData> initialValues={initialValues} onSubmit={onSubmit}>
       <FormBusyIndicator {...props}>
         <TextInputField name={"text"} />
         <div>
@@ -38,7 +38,7 @@ Standard.args = {
 
 export const ForcedBusyInactive = Template.bind({});
 ForcedBusyInactive.args = {
-  busy: false,
+  active: false,
   onSubmit: async (...args) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     action("submit")(...args);
@@ -47,7 +47,7 @@ ForcedBusyInactive.args = {
 
 export const ForcedBusyActive = Template.bind({});
 ForcedBusyActive.args = {
-  busy: true,
+  active: true,
   onSubmit: async (...args) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     action("submit")(...args);

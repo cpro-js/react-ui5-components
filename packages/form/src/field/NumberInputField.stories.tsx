@@ -11,25 +11,26 @@ interface FormData {
   theNumber?: number;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & NumberInputFieldProps> =
-  (args) => {
-    const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<
+  FormControllerProps<FormData> & NumberInputFieldProps<FormData, "theNumber">
+> = (args) => {
+  const { initialValues, onSubmit, ...props } = args;
 
-    const { submittedValues, handleSubmit } = useFormViewer({
-      onSubmit: onSubmit,
-    });
-    const fieldRef = useRef<FormFieldElement>(null);
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldElement<FormData, "theNumber">>(null);
 
-    return (
-      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <NumberInputField {...props} ref={fieldRef} name={"theNumber"} />
-        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-      </FormController>
-    );
-  };
+  return (
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <NumberInputField {...props} ref={fieldRef} name={"theNumber"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+    </FormController>
+  );
+};
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & NumberInputFieldProps
+  FormControllerProps<FormData> & NumberInputFieldProps<FormData, "theNumber">
 > = (args, context) => {
   return (
     <FormI18nProvider

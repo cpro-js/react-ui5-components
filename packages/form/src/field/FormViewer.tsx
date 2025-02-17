@@ -10,7 +10,7 @@ export interface useFormViewerProps<FormValues extends {}> {
 
 export interface FormViewerProps<T> {
   submittedValues?: T | undefined;
-  fieldRef?: RefObject<FormFieldElement<Record<string, unknown>, string>>;
+  fieldRef?: RefObject<FormFieldElement<any, any> | null>;
 }
 
 export function useFormViewer<FormValues extends {}>(

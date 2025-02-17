@@ -21,14 +21,14 @@ interface FormData {
 
 const Template: StoryFn<
   FormControllerProps<FormData> &
-    CreatableAutoCompleteFieldProps<DefaultAutoCompleteOption>
+    CreatableAutoCompleteFieldProps<FormData, "item", DefaultAutoCompleteOption>
 > = (args, context) => {
   const { initialValues, onSubmit, ...props } = args;
 
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldElement<FormData, "item">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -40,7 +40,7 @@ const Template: StoryFn<
 
 const I18nTemplate: StoryFn<
   FormControllerProps<FormData> &
-    CreatableAutoCompleteFieldProps<DefaultAutoCompleteOption>
+    CreatableAutoCompleteFieldProps<FormData, "item", DefaultAutoCompleteOption>
 > = (args, context) => {
   return (
     <FormI18nProvider

@@ -12,7 +12,17 @@ export enum FormBusyState {
 }
 
 export interface FormBusyIndicatorProps<FormValues extends FieldValues>
-  extends BusyIndicatorPropTypes {
+  extends Pick<
+    BusyIndicatorPropTypes,
+    | "active"
+    | "delay"
+    | "size"
+    | "text"
+    | "textPlacement"
+    | "style"
+    | "className"
+    | "children"
+  > {
   /**
    * Restricts busy indicator to specific field
    */

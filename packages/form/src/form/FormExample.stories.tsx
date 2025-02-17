@@ -2,6 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Form, FormItem, Label } from "@ui5/webcomponents-react";
 import { useEventCallback } from "usehooks-ts";
 
+import { Button } from "../component/Button";
 import { FormBusyIndicator } from "../field/FormBusyIndicator";
 import { TextInputField } from "../field/TextInputField";
 import {
@@ -244,6 +245,9 @@ export const CustomValidationForm: Story = {
             </FormItem>
           </Form>
         </FormBusyIndicator>
+
+        <Button type="submit">Submit</Button>
+        <Button type="reset">Reset</Button>
       </FormController>
     );
   },

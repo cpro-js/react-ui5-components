@@ -21,15 +21,15 @@ interface FormData {
   text?: string;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & TextAreaFieldProps> = (
-  args
-) => {
+const Template: StoryFn<
+  FormControllerProps<FormData> & TextAreaFieldProps<FormData, "text">
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldElement<FormData, "text">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -40,7 +40,7 @@ const Template: StoryFn<FormControllerProps<FormData> & TextAreaFieldProps> = (
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & TextAreaFieldProps
+  FormControllerProps<FormData> & TextAreaFieldProps<FormData, "text">
 > = (args, context) => {
   return (
     <FormI18nProvider

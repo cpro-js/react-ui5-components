@@ -12,25 +12,26 @@ interface FormData {
   date?: string;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & DatePickerFieldProps> =
-  (args) => {
-    const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<
+  FormControllerProps<FormData> & DatePickerFieldProps<FormData, "date">
+> = (args) => {
+  const { initialValues, onSubmit, ...props } = args;
 
-    const { submittedValues, handleSubmit } = useFormViewer({
-      onSubmit: onSubmit,
-    });
-    const fieldRef = useRef<FormFieldElement>(null);
+  const { submittedValues, handleSubmit } = useFormViewer({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldElement<FormData, "date">>(null);
 
-    return (
-      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <DatePickerField {...props} ref={fieldRef} name={"date"} />
-        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-      </FormController>
-    );
-  };
+  return (
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <DatePickerField {...props} ref={fieldRef} name={"date"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+    </FormController>
+  );
+};
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & DatePickerFieldProps
+  FormControllerProps<FormData> & DatePickerFieldProps<FormData, "date">
 > = (args, context) => {
   return (
     <FormI18nProvider
