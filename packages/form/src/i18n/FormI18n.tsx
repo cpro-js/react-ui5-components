@@ -11,7 +11,7 @@ import { FormFieldValidation, FormFieldValidationError } from "../field/types";
 export type GetValidationErrorMessage = (
   field: { name: string; value?: string | number | boolean | Date | null },
   error: FormFieldValidationError,
-  rules: Partial<FormFieldValidation>
+  rules: Partial<FormFieldValidation<{}, unknown>>
 ) => string | undefined;
 
 export interface FormI18nContextProps {
@@ -51,7 +51,7 @@ export const FormI18nProvider: FC<FormI18nProviderProps> = ({
 
 export const useI18nValidationError = (
   name: string,
-  rules: Partial<FormFieldValidation>
+  rules: Partial<FormFieldValidation<{}, unknown>>
 ) => {
   const { getValidationErrorMessage } = useContext(FormI18nContext);
 
