@@ -100,7 +100,7 @@ export function useFormController<FormValues extends {}>(
 
   const resetForm: FormActionResetForm<FormValues> = useCallback(() => {
     // reset other form state but keep defaultValues and form values
-    reset(undefined, { keepDirtyValues: true });
+    reset(undefined, { keepDirtyValues: false });
   }, [reset]);
 
   const clearForm: FormActionClearForm<FormValues> = useCallback(() => {

@@ -1,11 +1,9 @@
 import { useDebounceCallback } from "@react-hook/debounce";
-import { InputDomRef } from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,
   MouseEvent,
   RefObject,
   useCallback,
-  useEffect,
   useRef,
 } from "react";
 
@@ -43,7 +41,7 @@ export const triggerSubmit = (
     const submitEvent = new SubmitEvent("submit", {
       bubbles: true,
       cancelable: true,
-      // submitter: event.target as HTMLElement
+      submitter: event.target as HTMLElement,
     });
 
     formElement.dispatchEvent(submitEvent);

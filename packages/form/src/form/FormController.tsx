@@ -29,16 +29,25 @@ export function FormController<FormValues extends {}>(
     onSubmit,
   });
 
-  const prevent = useEventCallback((event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  });
-
   const { handleSubmit, handleReset } = form;
+
+  const handleRestrictedSubmit = useEventCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const nativeEvent = event.nativeEvent as SubmitEvent;
+
+      const submitter = nativeEvent.submitter?.tagName.toLowerCase();
+      // restrict submits to button
+      if (submitter && ["ui5-button".includes(submitter)]) {
+        handleSubmit(event);
+      }
+    }
+  );
 
   return (
     <form
       id={id}
-      onSubmit={prevent}
+      onSubmit={handleRestrictedSubmit}
       onReset={handleReset}
       className={className}
       style={style}
