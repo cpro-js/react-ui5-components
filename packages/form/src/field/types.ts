@@ -86,7 +86,7 @@ export type FieldEventDetail<
   FormFieldName extends FieldPath<FormValues>
 > = {
   name: FormFieldName;
-  value: string;
+  value: FieldPathValue<FormValues, FormFieldName>;
   valid: boolean;
   fieldApi: FormFieldApi<FormValues, FormFieldName>;
 };
