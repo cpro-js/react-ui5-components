@@ -25,7 +25,12 @@ export type TextInputFieldProps<
   FormFieldName extends FieldPath<FormValues>
 > = Omit<
   TextInputProps,
-  "name" | "value" | "onChange" | "valueState" | "maxlength"
+  | "name"
+  | "value"
+  | "valueState"
+  | "valueStateMessage"
+  | "maxlength"
+  | "onChange"
 > &
   Pick<
     FormFieldValidation<FormValues, string>,

@@ -25,7 +25,12 @@ export type TextAreaFieldProps<
   FormFieldName extends FieldPath<FormValues>
 > = Omit<
   TextAreaProps,
-  "name" | "value" | "onChange" | "valueState" | "maxlength"
+  | "name"
+  | "value"
+  | "maxlength"
+  | "valueState"
+  | "valueStateMessage"
+  | "onChange"
 > &
   Pick<
     FormFieldValidation<FormValues, string>,
