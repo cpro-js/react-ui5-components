@@ -1,46 +1,37 @@
-import {
-  FC,
-  MutableRefObject,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from "react";
-import { useController } from "react-hook-form";
+import { forwardRef, useImperativeHandle, useRef } from "react";
+import { FieldPath, FieldValues } from "react-hook-form";
 
-import { FormFieldElement } from "./types";
+import { useControlledField } from "../form/useField";
+import { FormFieldCommonProps, FormFieldElement } from "./types";
 
-export interface HiddenFieldProps {
-  name: string;
-  // Note: using disabled to hide values within submit data is not supported in react hook form, yet
-  // see https://github.com/react-hook-form/react-hook-form/issues/2826
-  // disabled?: boolean;
-}
+export type HiddenFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = FormFieldCommonProps<FormValues, FormFieldName>;
 
-export const HiddenField: FC<HiddenFieldProps> = forwardRef<
-  FormFieldElement,
-  HiddenFieldProps
+export const HiddenField = forwardRef<
+  FormFieldElement<any, any>,
+  HiddenFieldProps<any, any>
 >(({ name }, forwardedRef) => {
-  const { field } = useController({ name });
+  const field = useControlledField({
+    name,
+  });
+  // support imperative form field api via ref
+  useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
 
-  // store input ref for intenral usage
-  const internalRef = useRef<HTMLInputElement>(null);
-  // forward outer ref to custom element
-  useImperativeHandle(forwardedRef, () => ({
-    focus() {
-      if (internalRef.current != null) {
-        internalRef.current.focus();
-      }
-    },
-  }));
+  // store input ref for internal usage
+  const elementRef = useRef<HTMLInputElement>(null);
+
   // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => internalRef.current);
+  useImperativeHandle(field.ref, () => elementRef.current);
 
   return (
     <input
       {...field}
-      ref={internalRef as MutableRefObject<HTMLInputElement>}
+      ref={elementRef}
       type="hidden"
-      value={field.value == null ? "" : field.value}
+      // use empty string to reset value, undefined will be ignored by web component
+      value={field.value === undefined ? "" : field.value}
     />
   );
 });
