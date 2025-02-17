@@ -72,15 +72,15 @@ export const TextInputField = forwardRef<
     useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
 
     // store input ref for internal usage
-    const inputRef = useRef<InputDomRef>(null);
+    const elementRef = useRef<InputDomRef>(null);
 
     // forward field ref to stored internal input ref
-    useImperativeHandle(field.ref, () => inputRef.current);
+    useImperativeHandle(field.ref, () => elementRef.current);
 
     const dispatchChangeEvent = useCustomEventDispatcher<
       FieldEventDetail<any, any>
     >({
-      ref: inputRef,
+      ref: elementRef,
       name: "field-change",
       onEvent: onChange as unknown as (
         event: CustomEvent<FieldEventDetail<any, any>>
@@ -90,7 +90,7 @@ export const TextInputField = forwardRef<
     const dispatchSubmitEvent = useCustomEventDispatcher<
       FieldEventDetail<any, any>
     >({
-      ref: inputRef,
+      ref: elementRef,
       name: "field-submit",
       onEvent: onSubmit as unknown as (
         event: CustomEvent<FieldEventDetail<any, any>>
@@ -100,11 +100,25 @@ export const TextInputField = forwardRef<
     return (
       <TextInput
         {...props}
-        readonly={props.readonly || field.isValidating || field.isSubmitting}
-        ref={inputRef}
+        ref={elementRef}
         name={field.name}
         // use empty string to reset value, undefined will be ignored by web component
         value={field.value === undefined ? "" : field.value}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
+        required={required}
+        maxlength={
+          maxLength != null
+            ? typeof maxLength === "number"
+              ? maxLength
+              : maxLength.value
+            : undefined
+        }
+        valueState={field.valueState}
+        valueStateMessage={
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
+        }
         onInput={useEventCallback((event) => {
           // reset previous errors
           field.error && field.fieldApiRef.current.clearError();
@@ -134,20 +148,6 @@ export const TextInputField = forwardRef<
             fieldApi: field.fieldApiRef.current,
           });
         })}
-        valueState={field.valueState}
-        valueStateMessage={
-          field.valueStateMessage != null && (
-            <div slot="valueStateMessage">{field.valueStateMessage}</div>
-          )
-        }
-        required={required}
-        maxlength={
-          maxLength != null
-            ? typeof maxLength === "number"
-              ? maxLength
-              : maxLength.value
-            : undefined
-        }
       />
     );
   }
