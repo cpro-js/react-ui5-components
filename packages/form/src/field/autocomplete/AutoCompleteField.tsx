@@ -1,84 +1,123 @@
+import { InputDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
   forwardRef,
   useImperativeHandle,
-  useMemo,
   useRef,
 } from "react";
-import { useController } from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import {
   AutoComplete,
   AutoCompleteProps,
 } from "../../component/autocomplete/AutoComplete";
 import { DefaultAutoCompleteOption } from "../../component/AutoCompleteModel";
-import { useI18nValidationError } from "../../i18n/FormI18n";
-import { FormFieldElement, FormFieldValidation } from "../types";
-import { hasError } from "../util";
+import { useControlledField } from "../../form/useField";
+import { useCustomEventDispatcher } from "../../hook/useCustomEventDispatcher";
+import {
+  FieldEventDetail,
+  FormFieldChangeEvent,
+  FormFieldCommonProps,
+  FormFieldElement,
+  FormFieldValidation,
+} from "../types";
 
-export type AutoCompleteFieldProps<T extends {} = DefaultAutoCompleteOption> =
-  Omit<
-    AutoCompleteProps<T>,
-    "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
-  > &
-    Pick<FormFieldValidation, "required"> & {
-      name: string;
-    };
+export type AutoCompleteFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>,
+  T extends {} = DefaultAutoCompleteOption
+> = Omit<
+  AutoCompleteProps<T>,
+  | "name"
+  | "value"
+  | "inputValue"
+  | "valueState"
+  | "valueStateMessage"
+  | "onChange"
+  | "onValueChange"
+> &
+  Pick<FormFieldValidation<FormValues, string>, "required" | "validate"> &
+  FormFieldCommonProps<FormValues, FormFieldName> & {
+    onChange?: (
+      event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
+    ) => void;
+  };
 
 export const AutoCompleteField = forwardRef<
-  FormFieldElement,
-  AutoCompleteFieldProps
->(({ name, required, ...props }, forwardedRef) => {
-  const rules: Partial<FormFieldValidation> = useMemo(
-    () => ({
+  FormFieldElement<any, any>,
+  AutoCompleteFieldProps<any, any>
+>(
+  (
+    { name, required, validate, dependsOn, onKeyDown, onChange, ...props },
+    forwardedRef
+  ) => {
+    const field = useControlledField({
+      name,
       required,
-    }),
-    [required]
-  );
+      validate,
+      dependsOn,
+    });
 
-  const getValidationErrorMessage = useI18nValidationError(name, rules);
+    // support imperative form field api via ref
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
 
-  const { field, fieldState } = useController({
-    name: name,
-    rules,
-  });
+    // store input ref for internal usage
+    const elementRef = useRef<InputDomRef>(null);
 
-  // store input ref for intenral usage
-  const internalRef = useRef<HTMLInputElement>(null);
-  // forward outer ref to custom element
-  useImperativeHandle(forwardedRef, () => ({
-    focus() {
-      if (internalRef.current != null) {
-        internalRef.current.focus();
-      }
-    },
-  }));
-  // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => internalRef.current);
+    // forward field ref to stored internal input ref
+    useImperativeHandle(field.ref, () => elementRef.current);
 
-  // get error message (Note: undefined fallbacks to default message of ui5 component)
-  const errorMessage = hasError(fieldState.error)
-    ? getValidationErrorMessage(fieldState.error, field.value)
-    : undefined;
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-change",
+      onEvent: onChange as unknown as (
+        event: CustomEvent<FieldEventDetail<any, any>>
+      ) => void,
+    });
 
-  return (
-    <AutoComplete
-      {...props}
-      ref={internalRef}
-      name={field.name}
-      value={field.value}
-      onValueChange={field.onChange}
-      valueState={hasError(fieldState.error) ? "Negative" : "None"}
-      valueStateMessage={
-        errorMessage != null && (
-          <div slot="valueStateMessage">{errorMessage}</div>
-        )
-      }
-      onBlur={field.onBlur}
-      required={required}
-    />
-  );
-}) as <T extends {} = DefaultAutoCompleteOption>(
-  p: AutoCompleteFieldProps<T> & { ref?: Ref<FormFieldElement | undefined> }
+    return (
+      <AutoComplete
+        {...props}
+        ref={elementRef}
+        name={field.name}
+        value={field.value}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
+        required={required}
+        valueState={field.valueState}
+        valueStateMessage={
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
+        }
+        onKeyDown={useEventCallback((event) => {
+          // reset previous errors
+          field.error && field.fieldApiRef.current.clearError();
+          onKeyDown?.(event);
+        })}
+        onValueChange={useEventCallback(async (value) => {
+          field.fieldApiRef.current.setValue(value);
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            fieldApi: field.fieldApiRef.current,
+          });
+        })}
+      />
+    );
+  }
+) as <
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>,
+  T extends {} = DefaultAutoCompleteOption
+>(
+  p: AutoCompleteFieldProps<FormValues, FormFieldName, T> & {
+    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+  }
 ) => ReactElement;
