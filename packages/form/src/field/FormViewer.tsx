@@ -1,5 +1,5 @@
-import { Text, Title, Toolbar } from "@ui5/webcomponents-react";
-import { MutableRefObject, RefObject, useCallback, useState } from "react";
+import { Text, Title } from "@ui5/webcomponents-react";
+import { RefObject, useCallback, useState } from "react";
 
 import { Button } from "../component/Button";
 import { FormFieldElement, FormSubmitHandler } from "./types";
@@ -10,9 +10,7 @@ export interface useFormViewerProps<FormValues extends {}> {
 
 export interface FormViewerProps<T> {
   submittedValues?: T | undefined;
-  fieldRef?:
-    | MutableRefObject<FormFieldElement | null>
-    | RefObject<FormFieldElement | null>;
+  fieldRef?: RefObject<FormFieldElement<Record<string, unknown>, string>>;
 }
 
 export function useFormViewer<FormValues extends {}>(
