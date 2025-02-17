@@ -93,7 +93,8 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
   searchTerm: string = "";
   searching: boolean = false;
 
-  private inputRef: RefObject<MultiInputDomRef | null> = createRef();
+  // TODO allow passing ref
+  public inputRef: RefObject<MultiInputDomRef | null> = createRef();
   /**
    * we need to store last selected item see migration guide: https://sap.github.io/ui5-webcomponents/docs/migration-guides/to-version-2/#ui5-input
    */
