@@ -1,78 +1,115 @@
-import { ComboBoxDomRef } from "@ui5/webcomponents-react";
+import { ComboBoxDomRef, TextAreaDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
   forwardRef,
   useImperativeHandle,
-  useMemo,
   useRef,
 } from "react";
-import { useController } from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import { Select, SelectItem, SelectProps } from "../component/Select";
-import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldElement, FormFieldValidation } from "./types";
-import { hasError } from "./util";
+import { useControlledField } from "../form/useField";
+import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
+import {
+  FieldEventDetail,
+  FormFieldChangeEvent,
+  FormFieldCommonProps,
+  FormFieldElement,
+  FormFieldValidation,
+} from "./types";
 
-export type SelectFieldProps<Item = SelectItem, Value = string | number> = Omit<
+export type SelectFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>,
+  Item = SelectItem,
+  Value = string | number
+> = Omit<
   SelectProps<Item, Value>,
-  "name" | "value" | "onChange" | "onSelectionChange" | "onBlur"
+  | "name"
+  | "value"
+  | "valueState"
+  | "valueStateMessage"
+  | "onChange"
+  | "onSelectionChange"
 > &
-  Pick<FormFieldValidation, "required"> & {
-    name: string;
+  Pick<FormFieldValidation<FormValues, string>, "required" | "validate"> &
+  FormFieldCommonProps<FormValues, FormFieldName> & {
+    onChange?: (
+      event: FormFieldChangeEvent<TextAreaDomRef, FormValues, FormFieldName>
+    ) => void;
   };
 
-export const SelectField = forwardRef<FormFieldElement, SelectFieldProps>(
-  ({ name, required, ...props }, forwardedRef) => {
-    const rules: Partial<FormFieldValidation> = useMemo(
-      () => ({
-        required,
-      }),
-      [required]
-    );
-
-    const getValidationErrorMessage = useI18nValidationError(name, rules);
-
-    const { field, fieldState } = useController({
-      name: name,
-      rules,
+export const SelectField = forwardRef<
+  FormFieldElement<any, any>,
+  SelectFieldProps<any, any>
+>(
+  (
+    { name, required, validate, dependsOn, onChange, ...props },
+    forwardedRef
+  ) => {
+    const field = useControlledField({
+      name,
+      required,
+      validate,
+      dependsOn,
     });
 
-    // store input ref for intenral usage
-    const internalRef = useRef<ComboBoxDomRef>(null);
-    // forward outer ref to custom element
-    useImperativeHandle(forwardedRef, () => ({
-      focus() {
-        if (internalRef.current != null) {
-          internalRef.current.focus();
-        }
-      },
-    }));
-    // forward field ref to stored internal input ref
-    useImperativeHandle(field.ref, () => internalRef.current);
+    // support imperative form field api via ref
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
 
-    // get error message (Note: undefined fallbacks to default message of ui5 component)
-    const errorMessage = hasError(fieldState.error)
-      ? getValidationErrorMessage(fieldState.error, field.value)
-      : undefined;
+    // store input ref for internal usage
+    const elementRef = useRef<ComboBoxDomRef>(null);
+
+    // forward field ref to stored internal input ref
+    useImperativeHandle(field.ref, () => elementRef.current);
+
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-change",
+      onEvent: onChange as unknown as (
+        event: CustomEvent<FieldEventDetail<any, any>>
+      ) => void,
+    });
+
     return (
       <Select
         {...props}
-        ref={internalRef}
+        ref={elementRef}
         name={field.name}
         value={field.value}
-        onChange={(_, value) => field.onChange(value)}
-        valueState={hasError(fieldState.error) ? "Negative" : "None"}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
+        required={required}
+        valueState={field.valueState}
         valueStateMessage={
-          errorMessage != null && (
-            <div slot="valueStateMessage">{errorMessage}</div>
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
           )
         }
-        onBlur={field.onBlur}
-        required={required}
+        onChange={useEventCallback(async (_, value) => {
+          field.fieldApiRef.current.setValue(value);
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            fieldApi: field.fieldApiRef.current,
+          });
+        })}
       />
     );
   }
-) as <Item = SelectItem, Value = string | number>(
-  p: SelectFieldProps<Item, Value> & { ref?: Ref<FormFieldElement | undefined> }
+) as <
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>,
+  Item = SelectItem,
+  Value = string | number
+>(
+  p: SelectFieldProps<FormValues, FormFieldName, Item, Value> & {
+    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+  }
 ) => ReactElement;
