@@ -61,7 +61,7 @@ export const MultiAutoCompleteField = forwardRef<
   MultiAutoCompleteFieldProps<any, any>
 >(
   (
-    { name, required, validate, dependsOn, onChange, ...props },
+    { name, required, validate, dependsOn, onKeyDown, onChange, ...props },
     forwardedRef
   ) => {
     const field = useControlledField({
@@ -111,6 +111,11 @@ export const MultiAutoCompleteField = forwardRef<
             <div slot="valueStateMessage">{field.valueStateMessage}</div>
           )
         }
+        onKeyDown={useEventCallback((event) => {
+          // reset previous errors
+          field.error && field.fieldApiRef.current.clearError();
+          onKeyDown?.(event);
+        })}
         onChange={useEventCallback(async (_, value) => {
           field.fieldApiRef.current.setValue(value);
           const valid = await field.fieldApiRef.current.validate();
