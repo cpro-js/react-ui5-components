@@ -38,7 +38,7 @@ export function FormController<FormValues extends {}>(
 
       const submitter = nativeEvent.submitter?.tagName.toLowerCase();
       // restrict submits to button
-      if (submitter && ["ui5-button".includes(submitter)]) {
+      if (submitter && ["ui5-button"].includes(submitter)) {
         handleSubmit(event);
       }
     }
