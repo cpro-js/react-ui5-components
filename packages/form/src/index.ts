@@ -106,12 +106,15 @@ export { MultiAutoCompleteField } from "./field/MultiAutoCompleteField";
 export type { MultiAutoCompleteFieldProps } from "./field/MultiAutoCompleteField";
 
 export type {
+  FormFieldElement,
+  // FormFieldChangeEvent,
+  // FormFieldSubmitEvent,
+  FormFieldApi,
   ChangedField,
   FormActions,
   FormChangeHandler,
   FormSubmitHandler,
   PartialFormValues,
-  FormFieldApi,
 } from "./field/types";
 export { useFormActions } from "./form/useFormActions";
 

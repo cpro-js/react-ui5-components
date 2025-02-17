@@ -13,21 +13,12 @@ import { TextInput, TextInputProps } from "../component/TextInput";
 import { useControlledField } from "../form/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
-  FormFieldApi,
+  FieldEventDetail,
+  FormFieldChangeEvent,
   FormFieldCommonProps,
   FormFieldElement,
   FormFieldValidation,
 } from "./types";
-
-export type FieldEventDetail<
-  FormValues extends FieldValues,
-  FormFieldName extends FieldPath<FormValues>
-> = {
-  name: FormFieldName;
-  value: string;
-  valid: boolean;
-  fieldApi: FormFieldApi<FormValues, FormFieldName>;
-};
 
 export type TextInputFieldProps<
   FormValues extends FieldValues,
@@ -42,16 +33,10 @@ export type TextInputFieldProps<
   > &
   FormFieldCommonProps<FormValues, FormFieldName> & {
     onChange?: (
-      event: Ui5CustomEvent<
-        InputDomRef,
-        FieldEventDetail<FormValues, FormFieldName>
-      >
+      event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
     ) => void;
     onSubmit?: (
-      event: Ui5CustomEvent<
-        InputDomRef,
-        FieldEventDetail<FormValues, FormFieldName>
-      >
+      event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
     ) => void;
   };
 
@@ -171,6 +156,6 @@ export const TextInputField = forwardRef<
   FormFieldName extends FieldPath<FormValues>
 >(
   p: TextInputFieldProps<FormValues, FormFieldName> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>> | undefined;
+    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

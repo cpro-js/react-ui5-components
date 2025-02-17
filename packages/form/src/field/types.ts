@@ -1,3 +1,4 @@
+import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
   DeepPartial,
   FieldError,
@@ -79,6 +80,28 @@ export interface FormFieldElement<
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
 > extends FormFieldApi<FormValues, FormFieldName> {}
+
+export type FieldEventDetail<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = {
+  name: FormFieldName;
+  value: string;
+  valid: boolean;
+  fieldApi: FormFieldApi<FormValues, FormFieldName>;
+};
+
+export type FormFieldChangeEvent<
+  EventTarget,
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = Ui5CustomEvent<EventTarget, FieldEventDetail<FormValues, FormFieldName>>;
+
+export type FormFieldSubmitEvent<
+  EventTarget,
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = Ui5CustomEvent<EventTarget, FieldEventDetail<FormValues, FormFieldName>>;
 
 export interface FormFieldCommonProps<
   FormValues extends FieldValues,
