@@ -3,6 +3,7 @@ import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import pDebounce from "p-debounce";
 import { RefObject, useEffect, useMemo, useRef } from "react";
 import {
+  FieldError,
   FieldPath,
   FieldPathValue,
   FieldValues,
@@ -28,7 +29,7 @@ export interface UseControlledFieldProps<
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
 > extends FormFieldCommonProps<FormValues, FormFieldName>,
-    FormFieldValidation<FormValues, ""> {}
+    FormFieldValidation<FormValues, any> {}
 
 export interface UseControlledFieldsReturn<
   FormValues extends FieldValues,
@@ -39,7 +40,7 @@ export interface UseControlledFieldsReturn<
   value: FieldPathValue<FormValues, FormFieldName>;
   onChange: (value: FieldPathValue<FormValues, FormFieldName>) => void;
   onBlur: () => void;
-  error: boolean;
+  error: FieldError | undefined;
   valueState: ValueState | keyof typeof ValueState;
   valueStateMessage: string | undefined;
   isValidating: boolean;
@@ -153,7 +154,7 @@ export const useControlledField = <
 
   const getValidationErrorMessage = useI18nValidationError(
     name,
-    controllerProps.rules
+    controllerProps.rules as FormFieldValidation<FormValues, any>
   );
   const {
     field,
@@ -172,7 +173,7 @@ export const useControlledField = <
     value: field.value as FieldPathValue<FormValues, FormFieldName>,
     onChange: field.onChange,
     onBlur: field.onBlur,
-    error: hasError(fieldState.error),
+    error: fieldState.error,
     valueState: hasError(fieldState.error) ? "Negative" : "None",
     valueStateMessage: errorMessage,
     isValidating: fieldState.isValidating,
