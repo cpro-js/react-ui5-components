@@ -1,10 +1,10 @@
-import { DatePicker as UI5DatePicker } from "@ui5/webcomponents-react";
-import { Ui5CustomEvent } from "@ui5/webcomponents-react";
 import {
   DatePickerDomRef,
   DatePickerPropTypes,
+  DatePicker as UI5DatePicker,
 } from "@ui5/webcomponents-react";
 import {
+  FocusEvent,
   KeyboardEvent,
   MutableRefObject,
   ReactElement,
@@ -17,11 +17,16 @@ import {
   useRef,
   useState,
 } from "react";
+import { useEventCallback } from "usehooks-ts";
 
 import { FormAdapterContext } from "../form/FormAdapter";
+import {
+  TypedCustomEvent,
+  useCustomEventDispatcher,
+} from "../hook/useCustomEventDispatcher";
 import { useWaitForWebcomponent } from "../hook/useWaitForWebcomponent";
 import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
-import { triggerSubmitOnEnter } from "./util";
+import { useFireSubmit } from "./util";
 
 const convertToDate = (
   value: Date | any,
@@ -64,13 +69,13 @@ export type DatePickerProps<TDate extends Date | string = string> =
       minDate?: Date | TDate;
       /** Disables all dates after this date */
       maxDate?: Date | TDate;
-      /** Custom UI5 event handler that fires when the field loses focus. */
+      /** Fired when the input operation has finished by pressing Enter or on focusout. */
       onChange?: (
-        event: Ui5CustomEvent<
-          DatePickerDomRef,
-          { valid: boolean; value: string }
-        >,
-        value: TDate | null
+        event: TypedCustomEvent<DatePickerDomRef, { value: TDate | undefined }>
+      ) => void;
+      /** Fired when the input operation has finished by pressing Enter */
+      onSubmit?: (
+        event: TypedCustomEvent<DatePickerDomRef, { value: TDate | undefined }>
       ) => void;
     };
 
@@ -86,19 +91,9 @@ export type DatePickerProps<TDate extends Date | string = string> =
  *  //ISO8601 String
  *  <DatePicker
  *    value={"2024-04-30T09:52:17Z"}
- *    onChange={(
- *      event: Ui5CustomEvent<
- *        DatePickerDomRef,
- *        { valid: boolean; value: string }
- *      >,
- *      value: string | null
- *   ): void => {
- *     if (event.detail.valid) {
- *        console.log("Valid date from event:", event.detail.value);
- *        console.log(typeof value);
- *     } else {
- *       console.error("Invalid date entered");
- *     }
+ *    onChange={(event) => {
+ *      console.log(event.detail.value);
+ *      console.log(typeof event.detail.value
  *    }}
  *  />
  * ```
@@ -107,22 +102,12 @@ export type DatePickerProps<TDate extends Date | string = string> =
  * //Date Object
  * <FormAdapter date={IdentityDateAdapter}>
  *  <DatePicker
- *    value={new Date()}
- *    onChange={(
- *      event: Ui5CustomEvent<
- *        DatePickerDomRef,
- *        { valid: boolean; value: string }
- *      >,
- *      value: Date | null
- *    ): void => {
- *      if (event.detail.valid) {
- *        console.log("Valid date from event:", event.detail.value);
- *        console.log(typeof value);
- *      } else {
- *        console.error("Invalid date entered");
- *      }
- *     }}
-    />
+ *   value={new Date()}
+ *   onChange={(event) => {
+ *      console.log(event.detail.value);
+ *      console.log(typeof event.detail.value
+ *    }}
+ *  />
  * </FormAdapter>
  * ```
  *  If you retrieve the value from the DatePicker, you will receive it in its original form, just as it was provided.
@@ -134,8 +119,11 @@ export const DatePicker = forwardRef<DatePickerDomRef | null, DatePickerProps>(
       value,
       minDate,
       maxDate,
+      onFocus,
+      onKeyDown,
+      onKeyUp,
       onChange,
-      onKeyPress,
+      onSubmit,
       ...passThroughProps
     } = props;
     const ref = useRef<DatePickerDomRef>(
@@ -168,39 +156,32 @@ export const DatePicker = forwardRef<DatePickerDomRef | null, DatePickerProps>(
       setIsRefSet(true);
     }, []);
 
-    const handleChange = useCallback(
-      (
-        event: Ui5CustomEvent<
-          DatePickerDomRef,
-          { value: string; valid: boolean }
-        >
-      ) => {
-        if (!ui5Loaded) {
-          return;
-        }
-        if (onChange != null) {
-          const value: Date | undefined | null = event.target.dateValue;
-          const formattedValue = event.detail.value;
-
-          const normalizedValue =
-            value == null || !formattedValue ? null : (format(value) as any);
-          onChange(event, normalizedValue);
-        }
-      },
-      [onChange, ui5Loaded, format]
+    const lastValue = useRef<string | undefined>(
+      value instanceof Date ? (format(value) as string | undefined) : undefined
     );
+    const submit = useFireSubmit();
 
-    const handleKeyPress = useCallback(
-      (event: KeyboardEvent<DatePickerDomRef>) => {
-        // Workaround: Webcomponents catches enter -> need to submit manually
-        // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
-        triggerSubmitOnEnter(event);
-        if (onKeyPress != null) {
-          onKeyPress(event);
-        }
-      },
-      [onKeyPress]
-    );
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      DatePickerDomRef,
+      {
+        value: string | undefined;
+      }
+    >({
+      ref: ref,
+      name: "cpro-change",
+      onEvent: onChange,
+    });
+
+    const dispatchSubmitEvent = useCustomEventDispatcher<
+      DatePickerDomRef,
+      {
+        value: string | undefined;
+      }
+    >({
+      ref: ref,
+      name: "cpro-submit",
+      onEvent: onSubmit,
+    });
 
     const finalValues = useMemo(() => {
       // @ts-ignore
@@ -231,8 +212,54 @@ export const DatePicker = forwardRef<DatePickerDomRef | null, DatePickerProps>(
         value={finalValues.value}
         minDate={finalValues.minDate}
         maxDate={finalValues.maxDate}
-        onChange={handleChange}
-        onKeyPress={handleKeyPress}
+        onFocus={useEventCallback((e) => {
+          submit.focus();
+          onFocus?.(e as FocusEvent<DatePickerDomRef>);
+        })}
+        onKeyDown={useEventCallback((e) => {
+          submit.keyDown(e);
+          onKeyDown?.(e as KeyboardEvent<DatePickerDomRef>);
+        })}
+        onKeyUp={useEventCallback(async (event) => {
+          onKeyUp?.(event as KeyboardEvent<DatePickerDomRef>);
+          if (submit.shouldFireSubmitOnKeyUp()) {
+            // no change fired before -> user just pressed enter again -> trigger submit
+            setTimeout(() => {
+              dispatchSubmitEvent({
+                value: lastValue.current,
+              });
+            }, 0);
+          }
+        })}
+        onChange={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
+          if (!ui5Loaded) {
+            return;
+          }
+          const value: Date | undefined | null = event.target.dateValue;
+          const formattedValue = event.detail.value;
+
+          const normalizedValue =
+            value == null || !formattedValue
+              ? undefined
+              : (format(value) as any);
+
+          lastValue.current = normalizedValue;
+          dispatchChangeEvent({
+            value: normalizedValue,
+          });
+
+          if (submit.shouldFireSubmitOnChange()) {
+            // change event was triggered by enter --> submit
+            setTimeout(() => {
+              dispatchSubmitEvent({
+                value: normalizedValue,
+              });
+            }, 0);
+          }
+        })}
       />
     );
   }
