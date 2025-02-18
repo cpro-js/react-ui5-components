@@ -13,8 +13,6 @@ import {
   InputSelectionChangeEventDetail,
 } from "@ui5/webcomponents/dist/Input.js";
 import {
-  KeyboardEvent,
-  MutableRefObject,
   forwardRef,
   useCallback,
   useImperativeHandle,
@@ -24,7 +22,6 @@ import {
 
 import { useLatestRef } from "../../../hook/useLatestRef";
 import type { DefaultAutoCompleteOption } from "../../AutoCompleteModel";
-import { triggerSubmitOnEnter } from "../../util";
 import { startsWithPerTerm } from "./filter";
 
 export type { DefaultAutoCompleteOption };
@@ -231,10 +228,6 @@ export const CoreAutocomplete = forwardRef<
     [onInputChange]
   );
 
-  const handleKeyPress = useCallback((event: KeyboardEvent<HTMLElement>) => {
-    triggerSubmitOnEnter(event);
-  }, []);
-
   let shownValue: string = inputValue ?? "";
 
   if (value != null) {
@@ -259,7 +252,6 @@ export const CoreAutocomplete = forwardRef<
       onChange={handleChange}
       onOpen={resetSuggenstionItem}
       onSelectionChange={handleSelectionChange}
-      onKeyPress={handleKeyPress}
     >
       {filteredItems.map((item) => {
         const value = getItemValue(item);

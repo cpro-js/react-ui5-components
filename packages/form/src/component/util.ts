@@ -7,17 +7,6 @@ import {
 } from "react";
 import { useDebounceCallback, useEventCallback } from "usehooks-ts";
 
-export const triggerSubmitOnEnter = (event: KeyboardEvent<HTMLElement>) => {
-  if (event.key !== "Enter" || !(event.target instanceof Element)) {
-    return;
-  }
-
-  // delay dispatch to avoid race conditions between storing new value in onChange and submitting form state in onSubmit
-  setTimeout(() => {
-    triggerSubmit(event);
-  }, 1);
-};
-
 export const getForm = (
   event: KeyboardEvent<HTMLElement> | MouseEvent<HTMLElement>,
   form?: string

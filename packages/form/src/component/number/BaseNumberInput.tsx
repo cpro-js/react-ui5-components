@@ -10,7 +10,6 @@ import {
   useState,
 } from "react";
 
-import { triggerSubmitOnEnter } from "../util";
 import {
   getCurrencyConfig,
   getCurrencyFormatter,
