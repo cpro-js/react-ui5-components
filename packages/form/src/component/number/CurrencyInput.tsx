@@ -10,7 +10,10 @@ import type {
   NumberInputConfig,
 } from "./NumberModel";
 
-export type CurrencyInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
+export type CurrencyInputProps = Omit<
+  GlobalHtmlKeyInputElementProps<InputDomRef>,
+  "onKeyUp"
+> &
   NumberDisplayConfig &
   NumberInputConfig &
   Pick<
