@@ -75,7 +75,6 @@ export const MultiSelectField = forwardRef<
     const field = useControlledField({
       name,
       required,
-      // @ts-ignore TODO type mapping
       validate,
       dependsOn,
     });

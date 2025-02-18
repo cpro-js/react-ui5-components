@@ -66,7 +66,6 @@ export const CurrencyInputField = forwardRef<
       required,
       min,
       max,
-      // @ts-ignore TODO type mapping
       validate,
       dependsOn,
     });
