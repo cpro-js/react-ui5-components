@@ -130,8 +130,10 @@ export const TextInputField = forwardRef<
           onInput?.(event);
         })}
         onChange={useEventCallback(async (event) => {
-          field.fieldApiRef.current.setValue(event.target.value);
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
 
+          field.fieldApiRef.current.setValue(event.target.value);
           const value = field.fieldApiRef.current.getValue();
           const valid = await field.fieldApiRef.current.validate();
 
@@ -143,6 +145,9 @@ export const TextInputField = forwardRef<
           });
         })}
         onSubmit={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
           const value = field.fieldApiRef.current.getValue();
           const valid = await field.fieldApiRef.current.validate();
 

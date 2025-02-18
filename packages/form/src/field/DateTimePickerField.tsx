@@ -179,6 +179,9 @@ export const DateTimePickerField = forwardRef<
           onInput?.(event);
         })}
         onChange={useEventCallback(async (event, value) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
           field.fieldApiRef.current.setValue(value);
           const valid = await field.fieldApiRef.current.validate();
 

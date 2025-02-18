@@ -90,7 +90,7 @@ export const MultiSelectField = forwardRef<
     });
 
     return (
-      <MultiSelect
+      <MultiSelect<MultiSelectItem, string | number>
         {...props}
         ref={elementRef}
         name={field.name}
@@ -108,7 +108,10 @@ export const MultiSelectField = forwardRef<
           field.error && field.fieldApiRef.current.clearError();
           onKeyDown?.(event);
         })}
-        onSelectionChange={useEventCallback(async (_, value) => {
+        onSelectionChange={useEventCallback(async (event, value) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
           field.fieldApiRef.current.setValue(value);
           const valid = await field.fieldApiRef.current.validate();
 

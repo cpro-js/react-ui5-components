@@ -131,6 +131,9 @@ export const CheckboxField = forwardRef<
       valueState={field.valueState}
       onChange={useEventCallback(
         async (event: ChangeEvent<HTMLInputElement>) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
           let updatedValue: any = event.target.checked
             ? event.target.value
             : undefined;

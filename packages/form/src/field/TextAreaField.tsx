@@ -104,6 +104,9 @@ export const TextAreaField = forwardRef<
             : undefined
         }
         onChange={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
           field.fieldApiRef.current.setValue(event.target.value);
 
           const value = field.fieldApiRef.current.getValue();

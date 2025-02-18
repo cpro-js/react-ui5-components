@@ -121,7 +121,10 @@ export const NumberInputField = forwardRef<
           field.error && field.fieldApiRef.current.clearError();
           onInput?.(event);
         })}
-        onChange={useEventCallback(async (_, value) => {
+        onChange={useEventCallback(async (event, value) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
           field.fieldApiRef.current.setValue(value);
           const valid = await field.fieldApiRef.current.validate();
 
