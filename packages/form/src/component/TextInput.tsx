@@ -13,8 +13,12 @@ import {
 } from "react";
 import { useEventCallback } from "usehooks-ts";
 
-import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
+import {
+  TypedCustomEvent,
+  useCustomEventDispatcher,
+} from "../hook/useCustomEventDispatcher";
 import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
+import { useFireSubmit } from "./util";
 
 export type TextInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
   Pick<
@@ -38,7 +42,7 @@ export type TextInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
     | "value"
     | "valueState"
   > & {
-    onSubmit?: (event: Ui5CustomEvent<InputDomRef>) => void;
+    onSubmit?: (event: TypedCustomEvent<InputDomRef>) => void;
   };
 
 /** `TextInput` as a wrapper of
@@ -54,13 +58,12 @@ export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
     const inputRef = useRef<InputDomRef>(null);
     useImperativeHandle(forwardedRef, () => inputRef.current!);
 
-    const pressedEnterPreviously = useRef<boolean>(false);
-    const firedSubmitByChange = useRef<boolean>(false);
+    const submit = useFireSubmit();
 
-    const dispatchSubmitEvent = useCustomEventDispatcher({
+    const dispatchSubmitEvent = useCustomEventDispatcher<InputDomRef>({
       ref: inputRef,
       name: "cpro-submit",
-      onEvent: onSubmit as ((event: CustomEvent<unknown>) => void) | undefined,
+      onEvent: onSubmit,
     });
 
     return (
@@ -68,17 +71,16 @@ export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
         {...props}
         ref={inputRef}
         onFocus={useEventCallback((e) => {
-          pressedEnterPreviously.current = firedSubmitByChange.current = false;
+          submit.focus();
           onFocus?.(e as FocusEvent<InputDomRef>);
         })}
         onKeyDown={useEventCallback((e) => {
-          pressedEnterPreviously.current = e.key == "Enter" || e.keyCode === 13;
-          firedSubmitByChange.current = false;
+          submit.keyDown(e);
           onKeyDown?.(e as KeyboardEvent<InputDomRef>);
         })}
         onKeyUp={useEventCallback(async (event) => {
           onKeyUp?.(event as KeyboardEvent<InputDomRef>);
-          if (pressedEnterPreviously.current && !firedSubmitByChange.current) {
+          if (submit.shouldFireSubmitOnKeyUp()) {
             // no change fired before -> user just pressed enter again -> trigger submit
             setTimeout(() => {
               dispatchSubmitEvent();
@@ -86,11 +88,8 @@ export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
           }
         })}
         onChange={useEventCallback(async (event) => {
-          const fireSubmit = (firedSubmitByChange.current =
-            pressedEnterPreviously.current);
-
           onChange?.(event);
-          if (fireSubmit) {
+          if (submit.shouldFireSubmitOnChange()) {
             // change event was triggered by enter --> submit
             setTimeout(() => {
               dispatchSubmitEvent();

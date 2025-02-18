@@ -7,6 +7,8 @@ import {
   FieldValues,
 } from "react-hook-form";
 
+import { TypedCustomEvent } from "../hook/useCustomEventDispatcher";
+
 export type PartialFormValues<FormValues extends {}> = DeepPartial<FormValues>;
 
 export type InitialFormValues<FormValues extends {}> =
@@ -95,13 +97,13 @@ export type FormFieldChangeEvent<
   EventTarget,
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
-> = Ui5CustomEvent<EventTarget, FieldEventDetail<FormValues, FormFieldName>>;
+> = TypedCustomEvent<EventTarget, FieldEventDetail<FormValues, FormFieldName>>;
 
 export type FormFieldSubmitEvent<
   EventTarget,
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
-> = Ui5CustomEvent<EventTarget, FieldEventDetail<FormValues, FormFieldName>>;
+> = TypedCustomEvent<EventTarget, FieldEventDetail<FormValues, FormFieldName>>;
 
 export interface FormFieldCommonProps<
   FormValues extends FieldValues,

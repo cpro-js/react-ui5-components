@@ -46,11 +46,7 @@ export type MultiAutoCompleteFieldProps<
   > &
   FormFieldCommonProps<FormValues, FormFieldName> & {
     onChange?: (
-      event: FormFieldChangeEvent<
-        MultiComboBoxDomRef,
-        FormValues,
-        FormFieldName
-      >
+      event: FormFieldChangeEvent<MultiInputDomRef, FormValues, FormFieldName>
     ) => void;
     // onSubmit?: (
     //   event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
@@ -88,13 +84,12 @@ export const MultiAutoCompleteField = forwardRef<
     useImperativeHandle(field.ref, () => elementRef.current);
 
     const dispatchChangeEvent = useCustomEventDispatcher<
+      MultiInputDomRef,
       FieldEventDetail<any, any>
     >({
       ref: internalElementRef,
       name: "field-change",
-      onEvent: onChange as unknown as (
-        event: CustomEvent<FieldEventDetail<any, any>>
-      ) => void,
+      onEvent: onChange,
     });
 
     return (

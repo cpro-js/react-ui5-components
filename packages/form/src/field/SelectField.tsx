@@ -37,7 +37,7 @@ export type SelectFieldProps<
   Pick<FormFieldValidation<FormValues, string>, "required" | "validate"> &
   FormFieldCommonProps<FormValues, FormFieldName> & {
     onChange?: (
-      event: FormFieldChangeEvent<TextAreaDomRef, FormValues, FormFieldName>
+      event: FormFieldChangeEvent<ComboBoxDomRef, FormValues, FormFieldName>
     ) => void;
   };
 
@@ -66,13 +66,12 @@ export const SelectField = forwardRef<
     useImperativeHandle(field.ref, () => elementRef.current);
 
     const dispatchChangeEvent = useCustomEventDispatcher<
+      ComboBoxDomRef,
       FieldEventDetail<any, any>
     >({
       ref: elementRef,
       name: "field-change",
-      onEvent: onChange as unknown as (
-        event: CustomEvent<FieldEventDetail<any, any>>
-      ) => void,
+      onEvent: onChange,
     });
 
     return (

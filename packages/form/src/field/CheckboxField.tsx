@@ -57,7 +57,7 @@ export type CheckboxFieldProps<
     boolean?: boolean;
 
     onChange?: (
-      event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
+      event: FormFieldChangeEvent<CheckBoxDomRef, FormValues, FormFieldName>
     ) => void;
   };
 
@@ -81,7 +81,6 @@ export const CheckboxField = forwardRef<
     ...otherProps
   } = props;
 
-  const { getValues } = useFormContext<any>(); // retrieve all hook methods
   const isMultiValue = checkboxGroupProps != null;
 
   const field = useControlledField({
@@ -101,13 +100,12 @@ export const CheckboxField = forwardRef<
   useImperativeHandle(field.ref, () => elementRef.current);
 
   const dispatchChangeEvent = useCustomEventDispatcher<
+    CheckBoxDomRef,
     FieldEventDetail<any, any>
   >({
     ref: elementRef,
     name: "field-change",
-    onEvent: onChange as unknown as (
-      event: CustomEvent<FieldEventDetail<any, any>>
-    ) => void,
+    onEvent: onChange,
   });
 
   const checked = isMultiValue

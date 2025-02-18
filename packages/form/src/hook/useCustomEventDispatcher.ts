@@ -1,7 +1,15 @@
 import { RefObject, useEffect } from "react";
 import { useEventCallback } from "usehooks-ts";
 
-export interface UseCustomEventDispatcherProps<EventDetails> {
+export interface TypedCustomEvent<EventTarget = HTMLElement, Detail = never>
+  extends Omit<CustomEvent<Detail>, "target"> {
+  readonly target: EventTarget;
+}
+
+export interface UseCustomEventDispatcherProps<
+  EventTarget extends HTMLElement,
+  EventDetails extends Record<string, unknown> | unknown = unknown
+> {
   /**
    * Target element ref
    */
@@ -14,7 +22,7 @@ export interface UseCustomEventDispatcherProps<EventDetails> {
    * Callback that should be triggered when the event was dispatched on the target element
    * @param event
    */
-  onEvent?: (event: CustomEvent<EventDetails>) => void;
+  onEvent?: (event: TypedCustomEvent<EventTarget, EventDetails>) => void;
 }
 
 /**
@@ -23,19 +31,28 @@ export interface UseCustomEventDispatcherProps<EventDetails> {
  * @param options
  */
 export const useCustomEventDispatcher = <
-  EventDetails extends Record<string, unknown> | unknown = unknown
+  EventTarget extends HTMLElement,
+  EventDetails extends Record<string, unknown> | never = never
 >(
-  options: UseCustomEventDispatcherProps<EventDetails>
+  options: UseCustomEventDispatcherProps<EventTarget, EventDetails>
 ): ((
-  ...args: EventDetails extends Record<string, unknown> ? [EventDetails] : []
+  ...args: [EventDetails] extends [never]
+    ? []
+    : [EventDetails] extends [Record<string, unknown>]
+    ? [EventDetails]
+    : []
 ) => void) => {
-  const onHandleEvent = useEventCallback((event: CustomEvent<EventDetails>) => {
-    options.onEvent?.(event);
-  });
+  const onHandleEvent = useEventCallback(
+    (event: TypedCustomEvent<EventTarget, EventDetails>) => {
+      options.onEvent?.(event);
+    }
+  );
 
   const dispatchEvent = useEventCallback(
     (
-      ...args: EventDetails extends Record<string, unknown>
+      ...args: [EventDetails] extends [never]
+        ? []
+        : [EventDetails] extends [Record<string, unknown>]
         ? [EventDetails]
         : []
     ) => {

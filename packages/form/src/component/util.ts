@@ -5,7 +5,7 @@ import {
   useCallback,
   useRef,
 } from "react";
-import { useDebounceCallback } from "usehooks-ts";
+import { useDebounceCallback, useEventCallback } from "usehooks-ts";
 
 export const triggerSubmitOnEnter = (event: KeyboardEvent<HTMLElement>) => {
   if (event.key !== "Enter" || !(event.target instanceof Element)) {
@@ -86,4 +86,29 @@ export const useAllowAction = (
   );
 
   return [allowActionRef, setAllowAction];
+};
+
+export const useFireSubmit = () => {
+  const pressedEnterPreviously = useRef<boolean>(false);
+  const firedSubmitByChange = useRef<boolean>(false);
+
+  const methods = useRef({
+    focus: () => {
+      pressedEnterPreviously.current = firedSubmitByChange.current = false;
+    },
+    keyDown: (event: KeyboardEvent) => {
+      pressedEnterPreviously.current =
+        event.key == "Enter" || event.keyCode === 13;
+      firedSubmitByChange.current = false;
+    },
+    shouldFireSubmitOnKeyUp: (): boolean => {
+      return pressedEnterPreviously.current && !firedSubmitByChange.current;
+    },
+    shouldFireSubmitOnChange: (): boolean => {
+      firedSubmitByChange.current = pressedEnterPreviously.current;
+      return firedSubmitByChange.current;
+    },
+  });
+
+  return methods.current;
 };

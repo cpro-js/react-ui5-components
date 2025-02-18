@@ -80,13 +80,12 @@ export const MultiSelectField = forwardRef<
     useImperativeHandle(field.ref, () => elementRef.current);
 
     const dispatchChangeEvent = useCustomEventDispatcher<
+      MultiComboBoxDomRef,
       FieldEventDetail<any, any>
     >({
       ref: elementRef,
       name: "field-change",
-      onEvent: onChange as unknown as (
-        event: CustomEvent<FieldEventDetail<any, any>>
-      ) => void,
+      onEvent: onChange,
     });
 
     return (
