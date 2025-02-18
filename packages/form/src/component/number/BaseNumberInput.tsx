@@ -366,9 +366,6 @@ export const BaseNumberInput = forwardRef<
 
       if (invalidDataMsg) {
         setMessage(invalidDataMsg);
-      } else {
-        // allow for submit via enter
-        triggerSubmitOnEnter(event);
       }
 
       // allow consumers to have access to onKeyUp too

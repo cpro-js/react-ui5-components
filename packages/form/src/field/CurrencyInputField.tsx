@@ -7,6 +7,7 @@ import {
   CurrencyInput,
   CurrencyInputProps,
 } from "../component/number/CurrencyInput";
+import { useFireSubmit } from "../component/util";
 import { useControlledField } from "../form/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
@@ -14,6 +15,7 @@ import {
   FormFieldChangeEvent,
   FormFieldCommonProps,
   FormFieldElement,
+  FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
 
@@ -32,9 +34,9 @@ export type CurrencyInputFieldProps<
     onChange?: (
       event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
     ) => void;
-    // onSubmit?: (
-    //   event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
-    // ) => void;
+    onSubmit?: (
+      event: FormFieldSubmitEvent<InputDomRef, FormValues, FormFieldName>
+    ) => void;
   };
 export const CurrencyInputField = forwardRef<
   FormFieldElement<any, any>,
@@ -48,8 +50,12 @@ export const CurrencyInputField = forwardRef<
       max,
       validate,
       dependsOn,
-      onChange,
+      onFocus,
+      onKeyDown,
+      onKeyUp,
       onInput,
+      onChange,
+      onSubmit,
       ...props
     },
     forwardedRef
@@ -72,6 +78,8 @@ export const CurrencyInputField = forwardRef<
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => elementRef.current);
 
+    const submit = useFireSubmit();
+
     const dispatchChangeEvent = useCustomEventDispatcher<
       InputDomRef,
       FieldEventDetail<any, any>
@@ -81,15 +89,14 @@ export const CurrencyInputField = forwardRef<
       onEvent: onChange,
     });
 
-    // const dispatchSubmitEvent = useCustomEventDispatcher<
-    //   FieldEventDetail<any, any>
-    // >({
-    //   ref: elementRef,
-    //   name: "field-submit",
-    //   onEvent: onSubmit as unknown as (
-    //     event: CustomEvent<FieldEventDetail<any, any>>
-    //   ) => void,
-    // });
+    const dispatchSubmitEvent = useCustomEventDispatcher<
+      InputDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-submit",
+      onEvent: onSubmit,
+    });
 
     return (
       <CurrencyInput
@@ -111,10 +118,13 @@ export const CurrencyInputField = forwardRef<
             <div slot="valueStateMessage">{field.valueStateMessage}</div>
           )
         }
-        onInput={useEventCallback((event) => {
+        onFocus={useEventCallback((event) => {
+          submit.focus();
+        })}
+        onKeyDown={useEventCallback((event) => {
           // reset previous errors
           field.error && field.fieldApiRef.current.clearError();
-          onInput?.(event);
+          submit.keyDown(event);
         })}
         onChange={useEventCallback(async (event, value) => {
           // don't bubble up this event -> we trigger our own enhanced event
@@ -129,6 +139,29 @@ export const CurrencyInputField = forwardRef<
             valid,
             fieldApi: field.fieldApiRef.current,
           });
+
+          if (submit.shouldFireSubmitOnChange()) {
+            dispatchSubmitEvent({
+              name,
+              value,
+              valid,
+              fieldApi: field.fieldApiRef.current,
+            });
+          }
+        })}
+        onKeyUp={useEventCallback(async (event, value) => {
+          onKeyUp?.(event, value);
+          if (submit.shouldFireSubmitOnKeyUp()) {
+            const value = field.fieldApiRef.current.getValue();
+            const valid = await field.fieldApiRef.current.validate();
+
+            dispatchSubmitEvent({
+              name,
+              value,
+              valid,
+              fieldApi: field.fieldApiRef.current,
+            });
+          }
         })}
       />
     );

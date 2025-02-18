@@ -10,6 +10,7 @@ import { FieldPath, FieldValues } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
 import { NumberInput, NumberInputProps } from "../component/number/NumberInput";
+import { useFireSubmit } from "../component/util";
 import { useControlledField } from "../form/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
@@ -17,6 +18,7 @@ import {
   FormFieldChangeEvent,
   FormFieldCommonProps,
   FormFieldElement,
+  FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
 
@@ -35,9 +37,9 @@ export type NumberInputFieldProps<
     onChange?: (
       event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
     ) => void;
-    // onSubmit?: (
-    //   event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
-    // ) => void;
+    onSubmit?: (
+      event: FormFieldSubmitEvent<InputDomRef, FormValues, FormFieldName>
+    ) => void;
   };
 
 export const NumberInputField = forwardRef<
@@ -52,8 +54,12 @@ export const NumberInputField = forwardRef<
       max,
       validate,
       dependsOn,
-      onChange,
+      onFocus,
+      onKeyDown,
+      onKeyUp,
       onInput,
+      onChange,
+      onSubmit,
       ...props
     },
     forwardedRef
@@ -76,6 +82,8 @@ export const NumberInputField = forwardRef<
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => elementRef.current);
 
+    const submit = useFireSubmit();
+
     const dispatchChangeEvent = useCustomEventDispatcher<
       InputDomRef,
       FieldEventDetail<any, any>
@@ -85,15 +93,14 @@ export const NumberInputField = forwardRef<
       onEvent: onChange,
     });
 
-    // const dispatchSubmitEvent = useCustomEventDispatcher<
-    //   FieldEventDetail<any, any>
-    // >({
-    //   ref: elementRef,
-    //   name: "field-submit",
-    //   onEvent: onSubmit as unknown as (
-    //     event: CustomEvent<FieldEventDetail<any, any>>
-    //   ) => void,
-    // });
+    const dispatchSubmitEvent = useCustomEventDispatcher<
+      InputDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-submit",
+      onEvent: onSubmit,
+    });
 
     return (
       <NumberInput
@@ -115,20 +122,15 @@ export const NumberInputField = forwardRef<
             <div slot="valueStateMessage">{field.valueStateMessage}</div>
           )
         }
-        onInput={useEventCallback((event) => {
+        onFocus={useEventCallback((event) => {
+          submit.focus();
+        })}
+        onKeyDown={useEventCallback((event) => {
           // reset previous errors
           field.error && field.fieldApiRef.current.clearError();
-          onInput?.(event);
-        })}
-        onKeyDown={useEventCallback(() => {
-          console.log("1. key down");
-        })}
-        onKeyUp={useEventCallback(() => {
-          console.log("3. key dup");
+          submit.keyDown(event);
         })}
         onChange={useEventCallback(async (event, value) => {
-          console.log("2. change");
-
           // don't bubble up this event -> we trigger our own enhanced event
           event.stopPropagation();
 
@@ -141,6 +143,29 @@ export const NumberInputField = forwardRef<
             valid,
             fieldApi: field.fieldApiRef.current,
           });
+
+          if (submit.shouldFireSubmitOnChange()) {
+            dispatchSubmitEvent({
+              name,
+              value,
+              valid,
+              fieldApi: field.fieldApiRef.current,
+            });
+          }
+        })}
+        onKeyUp={useEventCallback(async (event, value) => {
+          onKeyUp?.(event, value);
+          if (submit.shouldFireSubmitOnKeyUp()) {
+            const value = field.fieldApiRef.current.getValue();
+            const valid = await field.fieldApiRef.current.validate();
+
+            dispatchSubmitEvent({
+              name,
+              value,
+              valid,
+              fieldApi: field.fieldApiRef.current,
+            });
+          }
         })}
       />
     );

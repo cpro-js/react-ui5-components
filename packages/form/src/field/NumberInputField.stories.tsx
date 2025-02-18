@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
@@ -16,14 +17,20 @@ const Template: StoryFn<
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
   const fieldRef = useRef<FormFieldElement<FormData, "theNumber">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <NumberInputField {...props} ref={fieldRef} name={"theNumber"} />
+      <NumberInputField
+        {...props}
+        ref={fieldRef}
+        name={"theNumber"}
+        onSubmit={action("onSubmit")}
+        onChange={action("onChange")}
+      />
       <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
