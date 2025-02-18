@@ -32,6 +32,7 @@ export type TextInputFieldProps<
   | "valueStateMessage"
   | "maxlength"
   | "onChange"
+  | "onSubmit"
 > &
   Pick<
     FormFieldValidation<FormValues, string>,
