@@ -90,7 +90,7 @@ export type FieldEventDetail<
   name: FormFieldName;
   value: FieldPathValue<FormValues, FormFieldName>;
   valid: boolean;
-  fieldApi: FormFieldApi<FormValues, FormFieldName>;
+  field: FormFieldApi<FormValues, FormFieldName>;
 };
 
 export type FormFieldChangeEvent<

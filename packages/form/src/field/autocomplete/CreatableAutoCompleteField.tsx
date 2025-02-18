@@ -105,7 +105,7 @@ export const CreatableAutoCompleteField = forwardRef<
             name,
             value,
             valid,
-            fieldApi: field.fieldApiRef.current,
+            field: field.fieldApiRef.current,
           });
         })}
       />

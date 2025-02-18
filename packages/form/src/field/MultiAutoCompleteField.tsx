@@ -122,7 +122,7 @@ export const MultiAutoCompleteField = forwardRef<
             name,
             value,
             valid,
-            fieldApi: field.fieldApiRef.current,
+            field: field.fieldApiRef.current,
           });
         })}
       />

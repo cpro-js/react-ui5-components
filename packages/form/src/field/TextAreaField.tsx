@@ -115,7 +115,7 @@ export const TextAreaField = forwardRef<
             name,
             value,
             valid,
-            fieldApi: field.fieldApiRef.current,
+            field: field.fieldApiRef.current,
           });
         })}
         valueState={field.valueState}

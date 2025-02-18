@@ -78,7 +78,7 @@ export const SimpleClientSideForm: Story = {
                   );
 
                   // go to next field when field is valid
-                  event.detail.valid && event.detail.fieldApi.focus("lastName");
+                  event.detail.valid && event.detail.field.focus("lastName");
                 }}
               />
             </FormItem>
@@ -111,7 +111,7 @@ export const SimpleClientSideForm: Story = {
                   );
 
                   // submit form when field is valid
-                  event.detail.valid && event.detail.fieldApi.submitForm();
+                  event.detail.valid && event.detail.field.submitForm();
                 }}
               />
             </FormItem>
@@ -190,8 +190,7 @@ export const CustomValidationForm: Story = {
                     );
 
                     // go to next field when field is valid
-                    event.detail.valid &&
-                      event.detail.fieldApi.focus("lastName");
+                    event.detail.valid && event.detail.field.focus("lastName");
                   }}
                 />
               </FormBusyIndicator>
@@ -238,7 +237,7 @@ export const CustomValidationForm: Story = {
                     );
 
                     // submit form when field is valid
-                    event.detail.valid && event.detail.fieldApi.submitForm();
+                    event.detail.valid && event.detail.field.submitForm();
                   }}
                 />
               </FormBusyIndicator>
@@ -305,7 +304,7 @@ export const AsyncInitialValuesPersonForm: Story = {
                 minLength={1}
                 maxLength={10}
                 onSubmit={useEventCallback((event) => {
-                  event.detail.valid && event.detail.fieldApi.focus("lastName");
+                  event.detail.valid && event.detail.field.focus("lastName");
                 })}
               />
             </FormItem>
@@ -322,7 +321,7 @@ export const AsyncInitialValuesPersonForm: Story = {
                 minLength={1}
                 maxLength={10}
                 onSubmit={useEventCallback((event) => {
-                  event.detail.valid && event.detail.fieldApi.submitForm();
+                  event.detail.valid && event.detail.field.submitForm();
                 })}
               />
             </FormItem>
@@ -404,7 +403,7 @@ export const DependentValidationForm: Story = {
 
                     // go to next field when field is valid
                     event.detail.valid &&
-                      event.detail.fieldApi.focus("passwordRepeat");
+                      event.detail.field.focus("passwordRepeat");
                   }}
                 />
               </FormBusyIndicator>
@@ -456,7 +455,7 @@ export const DependentValidationForm: Story = {
                     );
 
                     // submit form when field is valid
-                    event.detail.valid && event.detail.fieldApi.submitForm();
+                    event.detail.valid && event.detail.field.submitForm();
                   }}
                 />
               </FormBusyIndicator>

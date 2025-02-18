@@ -137,7 +137,7 @@ export const CurrencyInputField = forwardRef<
             name,
             value,
             valid,
-            fieldApi: field.fieldApiRef.current,
+            field: field.fieldApiRef.current,
           });
 
           if (submit.shouldFireSubmitOnChange()) {
@@ -145,7 +145,7 @@ export const CurrencyInputField = forwardRef<
               name,
               value,
               valid,
-              fieldApi: field.fieldApiRef.current,
+              field: field.fieldApiRef.current,
             });
           }
         })}
@@ -159,7 +159,7 @@ export const CurrencyInputField = forwardRef<
               name,
               value,
               valid,
-              fieldApi: field.fieldApiRef.current,
+              field: field.fieldApiRef.current,
             });
           }
         })}

@@ -209,7 +209,7 @@ export const DateTimePickerField = forwardRef<
             name,
             value,
             valid,
-            fieldApi: field.fieldApiRef.current,
+            field: field.fieldApiRef.current,
           });
         })}
         onSubmit={useEventCallback(async (event) => {
@@ -223,7 +223,7 @@ export const DateTimePickerField = forwardRef<
             name,
             value,
             valid,
-            fieldApi: field.fieldApiRef.current,
+            field: field.fieldApiRef.current,
           });
         })}
       />
