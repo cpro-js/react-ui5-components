@@ -55,6 +55,7 @@ export const TextAreaField = forwardRef<
       validate,
       dependsOn,
       onChange,
+      onBlur,
       ...props
     },
     forwardedRef
@@ -102,6 +103,12 @@ export const TextAreaField = forwardRef<
               : maxLength.value
             : undefined
         }
+        valueState={field.valueState}
+        valueStateMessage={
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
+        }
         onChange={useEventCallback(async (event) => {
           // don't bubble up this event -> we trigger our own enhanced event
           event.stopPropagation();
@@ -118,12 +125,10 @@ export const TextAreaField = forwardRef<
             field: field.fieldApiRef.current,
           });
         })}
-        valueState={field.valueState}
-        valueStateMessage={
-          field.valueStateMessage != null && (
-            <div slot="valueStateMessage">{field.valueStateMessage}</div>
-          )
-        }
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
+        })}
       />
     );
   }

@@ -57,7 +57,16 @@ export const MultiAutoCompleteField = forwardRef<
   MultiAutoCompleteFieldProps<any, any>
 >(
   (
-    { name, required, validate, dependsOn, onKeyDown, onChange, ...props },
+    {
+      name,
+      required,
+      validate,
+      dependsOn,
+      onKeyDown,
+      onChange,
+      onBlur,
+      ...props
+    },
     forwardedRef
   ) => {
     const field = useControlledField({
@@ -124,6 +133,10 @@ export const MultiAutoCompleteField = forwardRef<
             valid,
             field: field.fieldApiRef.current,
           });
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
         })}
       />
     );

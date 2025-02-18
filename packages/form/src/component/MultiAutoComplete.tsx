@@ -230,8 +230,9 @@ export class MultiAutoComplete<T> extends Component<MultiAutoCompleteProps<T>> {
     });
   };
 
-  private onBlur = (event: FocusEvent<HTMLInputElement>) => {
+  private onBlur = (event: FocusEvent<MultiInputDomRef>) => {
     event.target.value = "";
+    this.props.onBlur?.(event);
   };
 
   private findItemFromSuggestions = (value?: string) => {

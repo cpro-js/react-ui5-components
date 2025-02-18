@@ -60,7 +60,16 @@ export const MultiSelectField = forwardRef<
   MultiSelectFieldProps<any, any>
 >(
   (
-    { name, required, validate, dependsOn, onKeyDown, onChange, ...props },
+    {
+      name,
+      required,
+      validate,
+      dependsOn,
+      onKeyDown,
+      onChange,
+      onBlur,
+      ...props
+    },
     forwardedRef
   ) => {
     const field = useControlledField({
@@ -121,13 +130,10 @@ export const MultiSelectField = forwardRef<
             field: field.fieldApiRef.current,
           });
         })}
-        // onBlur={(event) => {
-        //   // ignore blur event when combobox items are clicked
-        //   if ((event.target as any).open && event.relatedTarget != null) {
-        //     return;
-        //   }
-        //   field.onBlur();
-        // }}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
+        })}
       />
     );
   }

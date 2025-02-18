@@ -56,6 +56,7 @@ export const CurrencyInputField = forwardRef<
       onInput,
       onChange,
       onSubmit,
+      onBlur,
       ...props
     },
     forwardedRef
@@ -162,6 +163,10 @@ export const CurrencyInputField = forwardRef<
               field: field.fieldApiRef.current,
             });
           }
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
         })}
       />
     );

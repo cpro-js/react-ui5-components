@@ -1,4 +1,4 @@
-import { InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
+import { InputDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
@@ -62,6 +62,7 @@ export const TextInputField = forwardRef<
       onInput,
       onChange,
       onSubmit,
+      onBlur,
       ...props
     },
     forwardedRef
@@ -157,6 +158,10 @@ export const TextInputField = forwardRef<
             valid,
             field: field.fieldApiRef.current,
           });
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
         })}
       />
     );

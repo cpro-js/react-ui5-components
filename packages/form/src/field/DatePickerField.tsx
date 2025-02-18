@@ -84,6 +84,7 @@ export const DatePickerField = forwardRef<
       onInput,
       onChange,
       onSubmit,
+      onBlur,
       ...props
     },
     forwardedRef
@@ -214,6 +215,10 @@ export const DatePickerField = forwardRef<
             valid,
             field: field.fieldApiRef.current,
           });
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
         })}
       />
     );

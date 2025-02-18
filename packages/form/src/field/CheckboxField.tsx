@@ -78,6 +78,7 @@ export const CheckboxField = forwardRef<
     validate,
     dependsOn,
     onChange,
+    onBlur,
     ...otherProps
   } = props;
 
@@ -155,6 +156,10 @@ export const CheckboxField = forwardRef<
           });
         }
       )}
+      onBlur={useEventCallback((event) => {
+        onBlur?.(event);
+        field.onBlur();
+      })}
     />
   );
 }) as <

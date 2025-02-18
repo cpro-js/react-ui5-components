@@ -58,6 +58,7 @@ export const SelectField = forwardRef<
       onKeyDown,
       onChange,
       onSubmit,
+      onBlur,
       ...props
     },
     forwardedRef
@@ -143,6 +144,10 @@ export const SelectField = forwardRef<
             valid,
             field: field.fieldApiRef.current,
           });
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
         })}
       />
     );

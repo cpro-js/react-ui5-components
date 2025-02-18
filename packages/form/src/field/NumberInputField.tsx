@@ -60,6 +60,7 @@ export const NumberInputField = forwardRef<
       onInput,
       onChange,
       onSubmit,
+      onBlur,
       ...props
     },
     forwardedRef
@@ -166,6 +167,10 @@ export const NumberInputField = forwardRef<
               field: field.fieldApiRef.current,
             });
           }
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
         })}
       />
     );
