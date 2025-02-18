@@ -1,7 +1,7 @@
 import { useDebounceCallback } from "@react-hook/debounce";
 import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import pDebounce from "p-debounce";
-import { RefObject, useEffect, useMemo, useRef } from "react";
+import { MutableRefObject, useEffect, useMemo, useRef } from "react";
 import {
   FieldError,
   FieldPath,
@@ -45,7 +45,7 @@ export interface UseControlledFieldsReturn<
   valueStateMessage: string | undefined;
   isValidating: boolean;
   isSubmitting: boolean;
-  fieldApiRef: RefObject<FormFieldApi<FormValues, FormFieldName>>;
+  fieldApiRef: MutableRefObject<FormFieldApi<FormValues, FormFieldName>>;
 }
 
 export const useControlledField = <
