@@ -6,15 +6,23 @@ import {
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
 import {
+  FocusEvent,
   KeyboardEvent,
   ReactElement,
   Ref,
   forwardRef,
   useCallback,
+  useImperativeHandle,
+  useRef,
 } from "react";
+import { useEventCallback } from "usehooks-ts";
 
+import {
+  TypedCustomEvent,
+  useCustomEventDispatcher,
+} from "../hook/useCustomEventDispatcher";
 import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
-import { triggerSubmitOnEnter } from "./util";
+import { useFireSubmit } from "./util";
 
 export interface SelectItem {
   value: string | number;
@@ -65,8 +73,14 @@ export type SelectProps<
       >,
       value?: Value
     ) => void;
-    /** Event handler triggered when Item in component changes */
-    onChange?: (event: Ui5CustomEvent<ComboBoxDomRef>, value?: Value) => void;
+    /** Fired when the input operation has finished by pressing Enter, focusout or an item is selected. */
+    onChange?: (
+      event: TypedCustomEvent<ComboBoxDomRef, { value: Value | undefined }>
+    ) => void;
+    /** Fired when the input operation has finished by pressing Enter */
+    onSubmit?: (
+      event: TypedCustomEvent<ComboBoxDomRef, { value: Value | undefined }>
+    ) => void;
   };
 
 /** `Select` as a wrapper for
@@ -80,14 +94,21 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       items = [],
       addEmptyOption,
       onSelectionChange,
+      onFocus,
+      onKeyDown,
+      onKeyUp,
       onChange,
-      onKeyPress,
+      onSubmit,
       value,
       itemValue = "value",
       itemLabel = "label",
       itemAdditionalText,
       ...otherProps
     } = props;
+
+    // store internal input ref and pass it back
+    const elementRef = useRef<ComboBoxDomRef>(null);
+    useImperativeHandle(forwardedRef, () => elementRef.current!);
 
     const retrieveItemLabel = useCallback(
       (item: SelectItem) => {
@@ -121,58 +142,30 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       [itemAdditionalText]
     );
 
-    const handleSelectionChange = useCallback(
-      (event: Ui5CustomEvent<ComboBoxDomRef, { item: any }>) => {
-        if (onSelectionChange != null) {
-          const index = event.detail.item.dataset.index;
-          const selectedItem = index == null ? undefined : items[Number(index)];
-          const value =
-            selectedItem == null ? undefined : retrieveItemValue(selectedItem);
-          onSelectionChange(event, value);
-        }
-      },
-      [items, onSelectionChange, retrieveItemValue]
-    );
+    const lastValue = useRef<typeof value>(value);
+    const submit = useFireSubmit();
 
-    const handleChange = useCallback(
-      (event: Ui5CustomEvent<ComboBoxDomRef>) => {
-        if (onChange != null) {
-          // determine selected item
-          const item =
-            // first attempt: prefer item which matches our text and is selected -> best one
-            (
-              Array.from(event.target.childNodes) as Array<HTMLOptionElement>
-            ).find(
-              (item) => item.text === event.target.value && item.selected
-            ) ??
-            // nothing found -> selected property might be incorrect or delayed
-            // fallback: just find an item with the same text
-            (
-              Array.from(event.target.childNodes) as Array<HTMLOptionElement>
-            ).find((item) => item.text === event.target.value);
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      ComboBoxDomRef,
+      {
+        value: typeof value;
+      }
+    >({
+      ref: elementRef,
+      name: "cpro-change",
+      onEvent: onChange,
+    });
 
-          const index = item?.dataset.index;
-          const selectedItem = index == null ? undefined : items[Number(index)];
-          const value =
-            selectedItem == null ? undefined : retrieveItemValue(selectedItem);
-
-          onChange(event, value);
-        }
-      },
-      [items, onChange, retrieveItemValue]
-    );
-
-    const handleKeyPress = useCallback(
-      (event: KeyboardEvent<ComboBoxDomRef>) => {
-        // Workaround: Webcomponents catches enter -> need to submit manually
-        // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
-        triggerSubmitOnEnter(event);
-        if (onKeyPress != null) {
-          onKeyPress(event);
-        }
-      },
-      [onKeyPress]
-    );
+    const dispatchSubmitEvent = useCustomEventDispatcher<
+      ComboBoxDomRef,
+      {
+        value: typeof value;
+      }
+    >({
+      ref: elementRef,
+      name: "cpro-submit",
+      onEvent: onSubmit,
+    });
 
     const selectedItem = items.find(
       (item) => retrieveItemValue(item) === value
@@ -185,11 +178,76 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       <>
         <ComboBox
           {...otherProps}
-          ref={forwardedRef}
+          ref={elementRef}
           value={text}
-          onSelectionChange={handleSelectionChange}
-          onChange={handleChange}
-          onKeyPress={handleKeyPress}
+          onFocus={useEventCallback((e) => {
+            submit.focus();
+            onFocus?.(e as FocusEvent<ComboBoxDomRef>);
+          })}
+          onKeyDown={useEventCallback((e) => {
+            submit.keyDown(e);
+            onKeyDown?.(e as KeyboardEvent<ComboBoxDomRef>);
+          })}
+          onKeyUp={useEventCallback(async (event) => {
+            onKeyUp?.(event as KeyboardEvent<ComboBoxDomRef>);
+            if (submit.shouldFireSubmitOnKeyUp()) {
+              // no change fired before -> user just pressed enter again -> trigger submit
+              setTimeout(() => {
+                dispatchSubmitEvent({
+                  value: lastValue.current,
+                });
+              }, 0);
+            }
+          })}
+          onSelectionChange={useEventCallback((event) => {
+            if (onSelectionChange != null) {
+              const index = event.detail.item.dataset.index;
+              const selectedItem =
+                index == null ? undefined : items[Number(index)];
+              const value =
+                selectedItem == null
+                  ? undefined
+                  : retrieveItemValue(selectedItem);
+              onSelectionChange(event, value);
+            }
+          })}
+          onChange={useEventCallback((event) => {
+            // determine selected item
+            const item =
+              // first attempt: prefer item which matches our text and is selected -> best one
+              (
+                Array.from(event.target.childNodes) as Array<HTMLOptionElement>
+              ).find(
+                (item) => item.text === event.target.value && item.selected
+              ) ??
+              // nothing found -> selected property might be incorrect or delayed
+              // fallback: just find an item with the same text
+              (
+                Array.from(event.target.childNodes) as Array<HTMLOptionElement>
+              ).find((item) => item.text === event.target.value);
+
+            const index = item?.dataset.index;
+            const selectedItem =
+              index == null ? undefined : items[Number(index)];
+            const value =
+              selectedItem == null
+                ? undefined
+                : retrieveItemValue(selectedItem);
+
+            lastValue.current = value;
+            dispatchChangeEvent({
+              value,
+            });
+
+            if (submit.shouldFireSubmitOnChange()) {
+              // change event was triggered by enter --> submit
+              setTimeout(() => {
+                dispatchSubmitEvent({
+                  value,
+                });
+              }, 0);
+            }
+          })}
         >
           {addEmptyOption && <ComboBoxItem text="---" />}
           {items.map((item, index) => (

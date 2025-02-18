@@ -1,4 +1,4 @@
-import { ComboBoxDomRef, TextAreaDomRef } from "@ui5/webcomponents-react";
+import { ComboBoxDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
@@ -17,6 +17,7 @@ import {
   FormFieldChangeEvent,
   FormFieldCommonProps,
   FormFieldElement,
+  FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
 
@@ -39,6 +40,9 @@ export type SelectFieldProps<
     onChange?: (
       event: FormFieldChangeEvent<ComboBoxDomRef, FormValues, FormFieldName>
     ) => void;
+    onSubmit?: (
+      event: FormFieldSubmitEvent<ComboBoxDomRef, FormValues, FormFieldName>
+    ) => void;
   };
 
 export const SelectField = forwardRef<
@@ -46,7 +50,16 @@ export const SelectField = forwardRef<
   SelectFieldProps<any, any>
 >(
   (
-    { name, required, validate, dependsOn, onKeyDown, onChange, ...props },
+    {
+      name,
+      required,
+      validate,
+      dependsOn,
+      onKeyDown,
+      onChange,
+      onSubmit,
+      ...props
+    },
     forwardedRef
   ) => {
     const field = useControlledField({
@@ -74,6 +87,15 @@ export const SelectField = forwardRef<
       onEvent: onChange,
     });
 
+    const dispatchSubmitEvent = useCustomEventDispatcher<
+      ComboBoxDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-submit",
+      onEvent: onSubmit,
+    });
+
     return (
       <Select
         {...props}
@@ -93,14 +115,29 @@ export const SelectField = forwardRef<
           field.error && field.fieldApiRef.current.clearError();
           onKeyDown?.(event);
         })}
-        onChange={useEventCallback(async (event, value) => {
+        onChange={useEventCallback(async (event) => {
           // don't bubble up this event -> we trigger our own enhanced event
           event.stopPropagation();
 
+          const value = event.detail.value;
           field.fieldApiRef.current.setValue(value);
           const valid = await field.fieldApiRef.current.validate();
 
           dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            fieldApi: field.fieldApiRef.current,
+          });
+        })}
+        onSubmit={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
+          const value = field.fieldApiRef.current.getValue();
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchSubmitEvent({
             name,
             value,
             valid,
