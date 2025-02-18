@@ -29,7 +29,7 @@ const Template: StoryFn<
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
   const fieldRef = useRef<FormFieldElement<FormData, "item">>(null);
@@ -106,7 +106,7 @@ const TemplateAlt: StoryFn<
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
   const fieldRef = useRef<FormFieldElement<FormData, "item">>(null);
