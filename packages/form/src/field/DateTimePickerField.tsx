@@ -1,4 +1,4 @@
-import { DateTimePickerDomRef, InputDomRef } from "@ui5/webcomponents-react";
+import { DateTimePickerDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
@@ -27,6 +27,7 @@ import {
   FormFieldChangeEvent,
   FormFieldCommonProps,
   FormFieldElement,
+  FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
 
@@ -51,7 +52,12 @@ export type DateTimePickerFieldProps<
   FormFieldName extends FieldPath<FormValues>
 > = Omit<
   DateTimePickerProps,
-  "name" | "value" | "valueState" | "valueStateMessage" | "onChange"
+  | "name"
+  | "value"
+  | "valueState"
+  | "valueStateMessage"
+  | "onChange"
+  | "onSubmit"
 > &
   Pick<
     FormFieldValidation<FormValues, FieldPathValue<FormValues, FormFieldName>>,
@@ -65,9 +71,13 @@ export type DateTimePickerFieldProps<
         FormFieldName
       >
     ) => void;
-    // onSubmit?: (
-    //   event: FormFieldChangeEvent<DateTimePickerDomRef, FormValues, FormFieldName>
-    // ) => void;
+    onSubmit?: (
+      event: FormFieldSubmitEvent<
+        DateTimePickerDomRef,
+        FormValues,
+        FormFieldName
+      >
+    ) => void;
   };
 
 export const DateTimePickerField = forwardRef<
@@ -84,6 +94,7 @@ export const DateTimePickerField = forwardRef<
       dependsOn,
       onInput,
       onChange,
+      onSubmit,
       ...props
     },
     forwardedRef
@@ -153,6 +164,15 @@ export const DateTimePickerField = forwardRef<
       onEvent: onChange,
     });
 
+    const dispatchSubmitEvent = useCustomEventDispatcher<
+      DateTimePickerDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-submit",
+      onEvent: onSubmit,
+    });
+
     return (
       <DateTimePicker
         {...props}
@@ -177,14 +197,29 @@ export const DateTimePickerField = forwardRef<
           field.error && field.fieldApiRef.current.clearError();
           onInput?.(event);
         })}
-        onChange={useEventCallback(async (event, value) => {
+        onChange={useEventCallback(async (event) => {
           // don't bubble up this event -> we trigger our own enhanced event
           event.stopPropagation();
 
+          const value = event.detail.value;
           field.fieldApiRef.current.setValue(value);
           const valid = await field.fieldApiRef.current.validate();
 
           dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            fieldApi: field.fieldApiRef.current,
+          });
+        })}
+        onSubmit={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
+          const value = field.fieldApiRef.current.getValue();
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchSubmitEvent({
             name,
             value,
             valid,
