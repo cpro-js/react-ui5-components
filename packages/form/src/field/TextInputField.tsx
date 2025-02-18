@@ -99,9 +99,7 @@ export const TextInputField = forwardRef<
     >({
       ref: elementRef,
       name: "field-submit",
-      onEvent: onSubmit as unknown as (
-        event: CustomEvent<FieldEventDetail<any, any>>
-      ) => void,
+      onEvent: onSubmit,
     });
 
     return (
