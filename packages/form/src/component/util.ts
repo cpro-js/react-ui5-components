@@ -98,7 +98,7 @@ export const useFireSubmit = () => {
     },
     keyDown: (event: KeyboardEvent) => {
       pressedEnterPreviously.current =
-        event.key == "Enter" || event.keyCode === 13;
+        event.code === "Enter" || event.key === "Enter" || event.keyCode === 13;
       firedSubmitByChange.current = false;
     },
     shouldFireSubmitOnKeyUp: (): boolean => {
