@@ -1,4 +1,3 @@
-import { useDebounceCallback } from "@react-hook/debounce";
 import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import pDebounce from "p-debounce";
 import { MutableRefObject, useEffect, useMemo, useRef } from "react";
@@ -12,7 +11,7 @@ import {
   useController,
   useFormContext,
 } from "react-hook-form";
-import { useEventCallback } from "usehooks-ts";
+import { useDebounceCallback, useEventCallback } from "usehooks-ts";
 
 import {
   FormFieldApi,
@@ -132,7 +131,7 @@ export const useControlledField = <
         }
       },
       10,
-      false
+      { trailing: true, leading: false }
     )
   );
 

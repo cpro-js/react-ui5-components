@@ -1,7 +1,6 @@
-import { useDebounceCallback } from "@react-hook/debounce";
 import { InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useEventCallback } from "usehooks-ts";
+import { useDebounceCallback, useEventCallback } from "usehooks-ts";
 
 import { DEBOUNCE_RATE } from "../../common/CommonSelection";
 import { CoreAutocompleteProps } from "../internal/CoreAutocomplete";

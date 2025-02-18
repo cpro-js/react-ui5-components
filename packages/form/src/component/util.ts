@@ -1,4 +1,3 @@
-import { useDebounceCallback } from "@react-hook/debounce";
 import {
   KeyboardEvent,
   MouseEvent,
@@ -6,6 +5,7 @@ import {
   useCallback,
   useRef,
 } from "react";
+import { useDebounceCallback } from "usehooks-ts";
 
 export const triggerSubmitOnEnter = (event: KeyboardEvent<HTMLElement>) => {
   if (event.key !== "Enter" || !(event.target instanceof Element)) {
