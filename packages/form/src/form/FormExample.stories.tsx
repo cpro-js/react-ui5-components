@@ -647,3 +647,82 @@ export const DependentFormFields: Story = {
     );
   },
 };
+
+export const AutoFocusNextField: Story = {
+  render: () => {
+    const formRef = useRef<FormControllerRef<PersonForm>>(null);
+    const fieldOrder: Array<keyof PersonForm> = ["firstName", "lastName"];
+
+    useEffect(() => {
+      // focus first field
+      formRef.current?.focus(fieldOrder[0]);
+    }, []);
+
+    return (
+      <FormController<PersonForm>
+        ref={formRef}
+        onSubmit={(values, formActions) => {
+          // triggers only when valid
+
+          return new Promise((r) => setTimeout(r, 3000));
+        }}
+        onFieldSubmit={(event) => {
+          if (!event.detail.valid) {
+            // ignore invalid fields
+            return;
+          }
+
+          // determine next field
+          const nextFieldName = fieldOrder.find(
+            (_, index) =>
+              index > 0 && fieldOrder[index - 1] === event.detail.name
+          );
+
+          if (nextFieldName) {
+            event.detail.form.focus(nextFieldName);
+          } else {
+            event.detail.form.submit();
+          }
+        }}
+      >
+        <FormBusyIndicator style={{ display: "block" }}>
+          <Form
+            style={{ width: "100%" }}
+            headerText={"Focus next field on 'enter' key"}
+            labelSpan="S12 M12 L12 XL12"
+            layout="S1 M1 L1 XL1"
+          >
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  firstName
+                </Label>
+              }
+            >
+              <TextInputField
+                name="firstName"
+                required
+                minLength={1}
+                maxLength={10}
+              />
+            </FormItem>
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  lastName
+                </Label>
+              }
+            >
+              <TextInputField
+                name="lastName"
+                required
+                minLength={1}
+                maxLength={10}
+              />
+            </FormItem>
+          </Form>
+        </FormBusyIndicator>
+      </FormController>
+    );
+  },
+};
