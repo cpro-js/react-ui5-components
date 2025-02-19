@@ -1,5 +1,11 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import {
+  ReactElement,
+  Ref,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { FieldPath, FieldValues } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
@@ -161,4 +167,11 @@ export const CurrencyInputField = forwardRef<
       />
     );
   }
-);
+) as <
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+>(
+  p: CurrencyInputFieldProps<FormValues, FormFieldName> & {
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
+  }
+) => ReactElement;
