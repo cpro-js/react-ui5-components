@@ -1,18 +1,14 @@
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
   DefaultValues,
   SubmitHandler as HookFormSubmitHandler,
   UseFormReturn,
   useForm,
 } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import {
-  FormActionClearForm,
-  FormActionResetForm,
-  FormActionSetErrors,
-  FormActionSetValues,
-  FormActionSubmitForm,
   FormActions,
   FormSubmitHandler,
   InitialFormValues,
@@ -32,11 +28,7 @@ export interface UseFormControllerReturn<FormValues extends {}> {
   context: UseFormReturn<FormValues>;
   handleSubmit: (e?: React.BaseSyntheticEvent) => void | Promise<void>;
   handleReset: () => void;
-  setErrors: FormActionSetErrors<FormValues>;
-  setValues: FormActionSetValues<FormValues>;
-  reset: FormActionResetForm<FormValues>;
-  clear: FormActionClearForm<FormValues>;
-  submit: FormActionSubmitForm<FormValues>;
+  actions: FormActions<FormValues>;
 }
 
 export function useFormController<FormValues extends {}>(
@@ -52,9 +44,8 @@ export function useFormController<FormValues extends {}>(
     shouldUnregister: false,
   });
 
-  const { handleSubmit, reset, trigger, setValue, setError, setFocus } = form;
-
   const actions = useRef<FormActions<FormValues>>({
+    focus: noop,
     setErrors: noop,
     setValues: noop,
     reset: noop,
@@ -62,83 +53,75 @@ export function useFormController<FormValues extends {}>(
     submit: noop,
   });
 
-  const setErrors: FormActionSetErrors<FormValues> = useCallback(
-    (errors, config) => {
-      if (errors.length > 0) {
-        errors.forEach(({ name, message }) => {
-          setError(
-            name,
-            {
-              type: "external-error",
-              message: message,
-            },
-            { shouldFocus: false }
-          );
-        });
+  const {
+    handleSubmit: createHandleSubmit,
+    reset,
+    setValue,
+    setError,
+    setFocus,
+  } = form;
 
-        if (config?.shouldFocus) {
-          // TODO is there any way to ensure that the error order matches the input order?
-          setFocus(errors[0].name);
-        }
-      }
-    },
-    [setError, setFocus]
-  );
+  actions.current.focus = useEventCallback((name) => {
+    setFocus(name);
+  });
 
-  const setValues: FormActionSetValues<FormValues> = useCallback(
-    (values, options) => {
-      values.forEach(({ name, value }) => {
-        setValue(name, value, {
-          shouldValidate: options?.shouldValidate ?? false,
-          shouldDirty: options?.shouldDirty ?? false,
-          shouldTouch: options?.shouldTouch,
-        });
+  actions.current.setErrors = useEventCallback((errors, config) => {
+    if (errors.length > 0) {
+      errors.forEach(({ name, message }) => {
+        setError(
+          name,
+          {
+            type: "external-error",
+            message: message,
+          },
+          { shouldFocus: false }
+        );
       });
-    },
-    [setValue]
-  );
 
-  const resetForm: FormActionResetForm<FormValues> = useCallback(() => {
+      if (config?.shouldFocus) {
+        // TODO is there any way to ensure that the error order matches the input order?
+        setFocus(errors[0].name);
+      }
+    }
+  });
+
+  actions.current.setValues = useEventCallback((values, options) => {
+    values.forEach(({ name, value }) => {
+      setValue(name, value, {
+        shouldValidate: options?.shouldValidate ?? false,
+        shouldDirty: options?.shouldDirty ?? false,
+        shouldTouch: options?.shouldTouch,
+      });
+    });
+  });
+
+  actions.current.reset = useEventCallback(() => {
     // reset other form state but keep defaultValues and form values
     reset(undefined, { keepDirtyValues: false });
-  }, [reset]);
+  });
 
-  const clearForm: FormActionClearForm<FormValues> = useCallback(() => {
+  actions.current.clear = useEventCallback(() => {
     // clear out all form fields
     reset({} as DefaultValues<FormValues>);
-  }, [reset]);
+  });
 
-  const submitHandler: HookFormSubmitHandler<FormValues> = useCallback(
+  const submitHandler: HookFormSubmitHandler<FormValues> = useEventCallback(
     async (data) => {
       return onSubmit(data as FormValues, actions.current);
-    },
-    [onSubmit]
+    }
   );
 
-  const submitForm = useMemo(
-    () => handleSubmit(submitHandler),
-    [handleSubmit, submitHandler]
+  const handleSubmit: ReturnType<typeof createHandleSubmit> = useMemo(
+    () => createHandleSubmit(submitHandler),
+    [createHandleSubmit, submitHandler]
   );
 
-  useEffect(() => {
-    // refresh action ref if any of our methods changes
-    actions.current = {
-      setErrors: setErrors,
-      setValues: setValues,
-      reset: resetForm,
-      clear: clearForm,
-      submit: submitForm,
-    };
-  }, [setErrors, setValues, resetForm, clearForm, submitForm]);
+  actions.current.submit = useEventCallback(() => handleSubmit());
 
   return {
     context: form,
-    handleReset: resetForm,
-    handleSubmit: submitForm,
-    setErrors: setErrors,
-    setValues: setValues,
-    reset: resetForm,
-    clear: clearForm,
-    submit: submitForm,
+    handleReset: actions.current.reset,
+    handleSubmit: handleSubmit,
+    actions: actions.current,
   };
 }

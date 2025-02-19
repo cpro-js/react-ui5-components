@@ -30,7 +30,7 @@ export type FormChangeHandler<FormValues extends {}> = (
   changedField: ChangedField<FormValues>
 ) => void;
 
-export interface FormFieldApi<
+export interface FormFieldActions<
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
 > {
@@ -63,16 +63,9 @@ export interface FormFieldApi<
   getValue(): FieldPathValue<FormValues, FormFieldName> | undefined;
 
   /**
-   * Allows to focus a specific form field or focuses this field again when name is omitted
-   * @param name field to focus or when omitted this field
+   * Allows to focus this field
    */
-  focus(name?: FieldPath<FormValues>): void;
-
-  /**
-   * Submits the whole form
-   * This will trigger validation again and call the submit handler of your form when it's valid
-   */
-  submitForm(): void;
+  focus(): void;
 }
 
 /**
@@ -81,7 +74,7 @@ export interface FormFieldApi<
 export interface FormFieldElement<
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
-> extends FormFieldApi<FormValues, FormFieldName> {}
+> extends FormFieldActions<FormValues, FormFieldName> {}
 
 export type FieldEventDetail<
   FormValues extends FieldValues,
@@ -90,7 +83,8 @@ export type FieldEventDetail<
   name: FormFieldName;
   value: FieldPathValue<FormValues, FormFieldName>;
   valid: boolean;
-  field: FormFieldApi<FormValues, FormFieldName>;
+  field: FormFieldActions<FormValues, FormFieldName>;
+  form: FormActions<FormValues>;
 };
 
 export type FormFieldChangeEvent<
@@ -146,6 +140,14 @@ export interface FormFieldValidationError {
 export type FormActionErrors<FormValues> = { [P in keyof FormValues]?: string };
 
 /**
+ * Allows to focus a specific form field
+ * @param name field to focus
+ */
+export type FormActionFocus<FormValues extends {}> = (
+  name: FieldPath<FormValues>
+) => void;
+
+/**
  * Set error messages for specific fields.
  * @param errors
  * @param config
@@ -186,6 +188,12 @@ export type FormActionClearForm<FormValues> = () => void;
 export type FormActionSubmitForm<FormValues> = () => void;
 
 export interface FormActions<FormValues extends {}> {
+  /**
+   * Allows to focus a specific form field
+   * @param name field to focus
+   */
+  focus: FormActionFocus<FormValues>;
+
   /**
    * Set error messages for specific fields.
    * @param errors

@@ -14,7 +14,8 @@ import {
 import { useDebounceCallback, useEventCallback } from "usehooks-ts";
 
 import {
-  FormFieldApi,
+  FormActions,
+  FormFieldActions,
   FormFieldCommonProps,
   FormFieldValidation,
 } from "../field/types";
@@ -44,7 +45,8 @@ export interface UseControlledFieldsReturn<
   valueStateMessage: string | undefined;
   isValidating: boolean;
   isSubmitting: boolean;
-  fieldApiRef: MutableRefObject<FormFieldApi<FormValues, FormFieldName>>;
+  fieldApiRef: MutableRefObject<FormFieldActions<FormValues, FormFieldName>>;
+  formApiRef: MutableRefObject<FormActions<FormValues>>;
 }
 
 export const useControlledField = <
@@ -92,17 +94,18 @@ export const useControlledField = <
     getFieldState,
   } = useFormContext<FormValues>();
 
-  const { submit } = useFormActions();
+  const formActions = useFormActions<FormValues>();
 
-  const fieldApiRef = useRef<FormFieldApi<FormValues, FormFieldName>>({
+  const fieldApiRef = useRef<FormFieldActions<FormValues, FormFieldName>>({
     validate: () => Promise.resolve(true),
     clearError: noop,
     setError: noop,
     getValue: noop,
     setValue: noop,
     focus: noop,
-    submitForm: noop,
   });
+
+  const formApiRef = useRef<FormActions<FormValues>>(formActions);
 
   useMemo(() => {
     // debounce validation within short time to trigger same validation for onChange / onSubmit once
@@ -118,8 +121,7 @@ export const useControlledField = <
         shouldValidate: false,
         shouldTouch: true,
       });
-    fieldApiRef.current.focus = (fieldName) => setFocus(fieldName ?? name);
-    fieldApiRef.current.submitForm = () => submit();
+    fieldApiRef.current.focus = () => setFocus(name);
   }, [name, setError, clearErrors, getValues, setValue, trigger]);
 
   const revalidateIfDirty = useEventCallback(
@@ -178,5 +180,6 @@ export const useControlledField = <
     isValidating: fieldState.isValidating,
     isSubmitting: isSubmitting,
     fieldApiRef: fieldApiRef,
+    formApiRef: formApiRef,
   };
 };

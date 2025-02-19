@@ -109,7 +109,7 @@ export type {
   FormFieldElement,
   // FormFieldChangeEvent,
   // FormFieldSubmitEvent,
-  FormFieldApi,
+  FormFieldActions,
   ChangedField,
   FormActions,
   FormChangeHandler,

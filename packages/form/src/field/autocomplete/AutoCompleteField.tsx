@@ -115,6 +115,7 @@ export const AutoCompleteField = forwardRef<
             value,
             valid,
             field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
           });
         })}
         onBlur={useEventCallback((event) => {

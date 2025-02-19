@@ -153,6 +153,7 @@ export const CheckboxField = forwardRef<
             value: updatedValue,
             valid,
             field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
           });
         }
       )}

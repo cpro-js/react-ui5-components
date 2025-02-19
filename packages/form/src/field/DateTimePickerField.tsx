@@ -211,6 +211,7 @@ export const DateTimePickerField = forwardRef<
             value,
             valid,
             field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
           });
         })}
         onSubmit={useEventCallback(async (event) => {
@@ -225,6 +226,7 @@ export const DateTimePickerField = forwardRef<
             value,
             valid,
             field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
           });
         })}
         onBlur={useEventCallback((event) => {

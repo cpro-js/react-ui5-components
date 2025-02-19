@@ -27,10 +27,10 @@ const TemplateFormActions: StoryFn<UseFormControllerProps<FormData>> = (
     onSubmit: onFormViewerSubmit,
     initialValues: initialValues,
   });
-  const { handleSubmit, handleReset, setValues } = form;
+  const { handleSubmit, handleReset, actions } = form;
 
   const updateValues = useCallback(() => {
-    setValues(
+    actions.setValues(
       [
         { name: "value1", value: Date.now().toString() },
         { name: "value2", value: Date.now().toString() },
@@ -41,7 +41,7 @@ const TemplateFormActions: StoryFn<UseFormControllerProps<FormData>> = (
         shouldTouch: true,
       }
     );
-  }, [setValues]);
+  }, [actions]);
 
   return (
     <form onSubmit={handleSubmit} onReset={handleReset}>
