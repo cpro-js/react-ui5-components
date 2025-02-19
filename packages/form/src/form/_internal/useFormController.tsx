@@ -47,6 +47,9 @@ export function useFormController<FormValues extends {}>(
   const actions = useRef<FormActions<FormValues>>({
     focus: noop,
     setErrors: noop,
+    getValues: () => {
+      throw new Error("Not initialized yet");
+    },
     setValues: noop,
     reset: noop,
     clear: noop,
@@ -57,6 +60,7 @@ export function useFormController<FormValues extends {}>(
     handleSubmit: createHandleSubmit,
     reset,
     setValue,
+    getValues,
     setError,
     setFocus,
   } = form;
@@ -93,6 +97,10 @@ export function useFormController<FormValues extends {}>(
         shouldTouch: options?.shouldTouch,
       });
     });
+  });
+
+  actions.current.getValues = useEventCallback(() => {
+    return getValues();
   });
 
   actions.current.reset = useEventCallback(() => {

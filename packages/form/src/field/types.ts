@@ -172,6 +172,10 @@ export type FormActionSetValues<FormValues extends {}> = (
   }>
 ) => void;
 
+export type FormActionGetValues<FormValues extends {}> = () =>
+  | PartialFormValues<FormValues>
+  | FormValues;
+
 /**
  * Reset form to it's initial state.
  */
@@ -208,6 +212,11 @@ export interface FormActions<FormValues extends {}> {
    * @param values
    */
   setValues: FormActionSetValues<FormValues>;
+
+  /**
+   * Returns the
+   */
+  getValues: FormActionGetValues<FormValues>;
 
   /**
    * Reset form to it's initial state.
