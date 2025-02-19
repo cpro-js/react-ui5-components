@@ -102,6 +102,7 @@ export function useFormController<FormValues extends {}>(
 
   actions.current.clear = useEventCallback(() => {
     // clear out all form fields
+    // TODO doesn't work in FormFilterBar
     reset({} as DefaultValues<FormValues>);
   });
 
