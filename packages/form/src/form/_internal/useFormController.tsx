@@ -14,7 +14,9 @@ import {
   InitialFormValues,
 } from "../../field/types";
 
-const noop = () => undefined;
+const noop = () => {
+  throw new Error("Form isn't initialized yet");
+};
 
 export interface UseFormControllerProps<FormValues extends {}> {
   initialValues?: InitialFormValues<FormValues>;
@@ -47,9 +49,7 @@ export function useFormController<FormValues extends {}>(
   const actions = useRef<FormActions<FormValues>>({
     focus: noop,
     setErrors: noop,
-    getValues: () => {
-      throw new Error("Not initialized yet");
-    },
+    getValues: noop,
     setValues: noop,
     reset: noop,
     clear: noop,
