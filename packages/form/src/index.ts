@@ -107,8 +107,8 @@ export type { MultiAutoCompleteFieldProps } from "./field/MultiAutoCompleteField
 
 export type {
   FormFieldRef,
-  // FormFieldChangeEvent,
-  // FormFieldSubmitEvent,
+  FormFieldChangeEvent,
+  FormFieldSubmitEvent,
   FormFieldActions,
   ChangedField,
   FormActions,
