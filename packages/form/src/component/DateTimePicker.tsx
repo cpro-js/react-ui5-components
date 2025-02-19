@@ -164,6 +164,7 @@ export const DateTimePicker = forwardRef<
       ref: ref,
       name: "cpro-submit",
       onEvent: onSubmit,
+      delay: 0,
     });
 
     const finalValues = useMemo(() => {
@@ -207,11 +208,9 @@ export const DateTimePicker = forwardRef<
           onKeyUp?.(event as KeyboardEvent<DateTimePickerDomRef>);
           if (submit.shouldFireSubmitOnKeyUp()) {
             // no change fired before -> user just pressed enter again -> trigger submit
-            setTimeout(() => {
-              dispatchSubmitEvent({
-                value: lastValue.current,
-              });
-            }, 0);
+            dispatchSubmitEvent({
+              value: lastValue.current,
+            });
           }
         })}
         onChange={useEventCallback(async (event) => {
@@ -236,11 +235,9 @@ export const DateTimePicker = forwardRef<
 
           if (submit.shouldFireSubmitOnChange()) {
             // change event was triggered by enter --> submit
-            setTimeout(() => {
-              dispatchSubmitEvent({
-                value: normalizedValue,
-              });
-            }, 0);
+            dispatchSubmitEvent({
+              value: normalizedValue,
+            });
           }
         })}
       />

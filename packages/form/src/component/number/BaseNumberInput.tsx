@@ -119,6 +119,7 @@ export const BaseNumberInput = forwardRef<
     ref: inputRef,
     name: "cpro-submit",
     onEvent: onSubmitOriginal,
+    delay: 0,
   });
 
   const inputConfig = useMemo(() => {
@@ -396,11 +397,9 @@ export const BaseNumberInput = forwardRef<
     if (submit.shouldFireSubmitOnKeyUp()) {
       const val = parseValue(currentValueRef.current);
 
-      setTimeout(() => {
-        dispatchSubmitEvent({
-          value: val,
-        });
-      }, 0);
+      dispatchSubmitEvent({
+        value: val,
+      });
     }
   });
 
@@ -440,11 +439,9 @@ export const BaseNumberInput = forwardRef<
     });
 
     if (submit.shouldFireSubmitOnChange()) {
-      setTimeout(() => {
-        dispatchSubmitEvent({
-          value: val,
-        });
-      }, 0);
+      dispatchSubmitEvent({
+        value: val,
+      });
     }
   });
 

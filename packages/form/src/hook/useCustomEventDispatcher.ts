@@ -23,6 +23,11 @@ export interface UseCustomEventDispatcherProps<
    * @param event
    */
   onEvent?: (event: TypedCustomEvent<EventTarget, EventDetails>) => void;
+  /**
+   * Delays the dispatching of the event by setTimeout
+   * Triggers instantly when undefined
+   */
+  delay?: number;
 }
 
 /**
@@ -56,13 +61,20 @@ export const useCustomEventDispatcher = <
         ? [EventDetails]
         : []
     ) => {
-      options.ref.current?.dispatchEvent(
-        new CustomEvent(options.name, {
-          detail: args.length > 0 ? args[0] : undefined,
-          bubbles: true,
-          cancelable: false,
-        })
-      );
+      const event = new CustomEvent(options.name, {
+        detail: args.length > 0 ? args[0] : undefined,
+        bubbles: true,
+        cancelable: false,
+      });
+
+      if (options.delay != null) {
+        setTimeout(
+          () => options.ref.current?.dispatchEvent(event),
+          options.delay
+        );
+      } else {
+        options.ref.current?.dispatchEvent(event);
+      }
     }
   );
 

@@ -165,6 +165,7 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
       ref: elementRef,
       name: "cpro-submit",
       onEvent: onSubmit,
+      delay: 0,
     });
 
     const selectedItem = items.find(
@@ -192,11 +193,9 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
             onKeyUp?.(event as KeyboardEvent<ComboBoxDomRef>);
             if (submit.shouldFireSubmitOnKeyUp()) {
               // no change fired before -> user just pressed enter again -> trigger submit
-              setTimeout(() => {
-                dispatchSubmitEvent({
-                  value: lastValue.current,
-                });
-              }, 0);
+              dispatchSubmitEvent({
+                value: lastValue.current,
+              });
             }
           })}
           onSelectionChange={useEventCallback((event) => {
@@ -241,11 +240,9 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
 
             if (submit.shouldFireSubmitOnChange()) {
               // change event was triggered by enter --> submit
-              setTimeout(() => {
-                dispatchSubmitEvent({
-                  value,
-                });
-              }, 0);
+              dispatchSubmitEvent({
+                value,
+              });
             }
           })}
         >

@@ -65,6 +65,7 @@ export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
       ref: inputRef,
       name: "cpro-submit",
       onEvent: onSubmit,
+      delay: 0,
     });
 
     return (
@@ -83,18 +84,14 @@ export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
           onKeyUp?.(event as KeyboardEvent<InputDomRef>);
           if (submit.shouldFireSubmitOnKeyUp()) {
             // no change fired before -> user just pressed enter again -> trigger submit
-            setTimeout(() => {
-              dispatchSubmitEvent();
-            }, 0);
+            dispatchSubmitEvent();
           }
         })}
         onChange={useEventCallback(async (event) => {
           onChange?.(event);
           if (submit.shouldFireSubmitOnChange()) {
             // change event was triggered by enter --> submit
-            setTimeout(() => {
-              dispatchSubmitEvent();
-            }, 0);
+            dispatchSubmitEvent();
           }
         })}
       />
