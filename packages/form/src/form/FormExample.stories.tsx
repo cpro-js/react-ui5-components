@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Form, FormItem, Label } from "@ui5/webcomponents-react";
+import { useRef } from "react";
 import { useEventCallback } from "usehooks-ts";
 
 import { Button } from "../component/Button";
@@ -7,10 +8,11 @@ import { FormBusyIndicator } from "../field/FormBusyIndicator";
 import { TextInputField } from "../field/TextInputField";
 import {
   FormChangeHandler,
+  FormFieldRef,
   FormSubmitHandler,
   InitialFormValues,
 } from "../field/types";
-import { FormController } from "./FormController";
+import { FormController, FormControllerRef } from "./FormController";
 
 export default {
   title: "Form Example",
@@ -24,7 +26,7 @@ interface PersonForm {
 
 export const SimpleClientSideForm: Story = {
   render: () => {
-    const onSubmit: FormSubmitHandler<PersonForm> = (values, formApi) => {
+    const onSubmit: FormSubmitHandler<PersonForm> = (values, formActions) => {
       // triggers only when valid
 
       return new Promise((r) => setTimeout(r, 3000));
@@ -126,15 +128,18 @@ export const CustomValidationForm: Story = {
   render: () => {
     return (
       <FormController<PersonForm>
-        onSubmit={useEventCallback(async (values, formApi) => {
+        onSubmit={useEventCallback(async (values, formActions) => {
           // triggers only when valid
           console.log("submit", values);
 
           await new Promise((r) => setTimeout(r, 3000));
 
-          formApi.setErrors([{ name: "firstName", message: "Backend Error" }], {
-            shouldFocus: true,
-          });
+          formActions.setErrors(
+            [{ name: "firstName", message: "Backend Error" }],
+            {
+              shouldFocus: true,
+            }
+          );
         })}
       >
         <FormBusyIndicator style={{ display: "block" }}>
@@ -213,7 +218,7 @@ export const CustomValidationForm: Story = {
                   required
                   minLength={1}
                   maxLength={10}
-                  validate={async (value, formApi) => {
+                  validate={async (value, formActions) => {
                     // required, min, max already checked!
                     // async validation
                     await new Promise((r) => setTimeout(r, 1000));
@@ -254,7 +259,10 @@ export const CustomValidationForm: Story = {
 
 export const AsyncInitialValuesPersonForm: Story = {
   render: () => {
-    const onSubmit: FormSubmitHandler<PersonForm> = async (values, formApi) => {
+    const onSubmit: FormSubmitHandler<PersonForm> = async (
+      values,
+      formActions
+    ) => {
       // triggers only when valid
 
       await new Promise((r) => setTimeout(r, 1000));
@@ -339,7 +347,10 @@ interface SetPasswordForm {
 
 export const DependentValidationForm: Story = {
   render: () => {
-    const onSubmit: FormSubmitHandler<SetPasswordForm> = (values, formApi) => {
+    const onSubmit: FormSubmitHandler<SetPasswordForm> = (
+      values,
+      formActions
+    ) => {
       // triggers only when valid
     };
 
@@ -353,7 +364,7 @@ export const DependentValidationForm: Story = {
 
     return (
       <FormController<SetPasswordForm>
-        onSubmit={useEventCallback(async (values, formApi) => {
+        onSubmit={useEventCallback(async (values, formActions) => {
           // triggers only when valid
           console.log("submit", values);
 
@@ -462,6 +473,92 @@ export const DependentValidationForm: Story = {
             </FormItem>
           </Form>
         </FormBusyIndicator>
+      </FormController>
+    );
+  },
+};
+
+export const ImperativeApi: Story = {
+  render: () => {
+    const formRef = useRef<FormControllerRef<PersonForm>>(null);
+    const firstNameRef = useRef<FormFieldRef<PersonForm, "firstName">>(null);
+
+    const onSubmit: FormSubmitHandler<PersonForm> = (values, actiosn) => {
+      // triggers only when valid
+      return new Promise((r) => setTimeout(r, 3000));
+    };
+
+    return (
+      <FormController<PersonForm> ref={formRef} onSubmit={onSubmit}>
+        <FormBusyIndicator style={{ display: "block" }}>
+          <Form
+            style={{ width: "100%" }}
+            headerText={"Imperative API via form/field ref"}
+            labelSpan="S12 M12 L12 XL12"
+            layout="S1 M1 L1 XL1"
+          >
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  firstName
+                </Label>
+              }
+            >
+              <div>
+                <TextInputField
+                  ref={firstNameRef}
+                  name="firstName"
+                  required
+                  minLength={1}
+                  maxLength={10}
+                  onSubmit={(event) => {
+                    // go to next field when field is valid
+                    event.detail.valid && event.detail.form.focus("lastName");
+                  }}
+                />
+                <Button
+                  onClick={() => {
+                    formRef.current?.setValues([
+                      { name: "firstName", value: "Max" },
+                      { name: "lastName", value: "Mustermann" },
+                    ]);
+                    firstNameRef.current?.focus();
+                  }}
+                >
+                  Prefill
+                </Button>
+                <Button
+                  onClick={() => {
+                    formRef.current?.reset();
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </FormItem>
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  lastName
+                </Label>
+              }
+            >
+              <TextInputField
+                name="lastName"
+                required
+                minLength={1}
+                maxLength={10}
+                onSubmit={(event) => {
+                  // submit form
+                  event.detail.valid && event.detail.form.submit();
+                }}
+              />
+            </FormItem>
+          </Form>
+        </FormBusyIndicator>
+
+        <Button type="submit">Submit</Button>
+        <Button type="reset">Reset</Button>
       </FormController>
     );
   },
