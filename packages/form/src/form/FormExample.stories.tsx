@@ -1,9 +1,10 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Form, FormItem, Label } from "@ui5/webcomponents-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useEventCallback } from "usehooks-ts";
 
 import { Button } from "../component/Button";
+import { CurrencyInputField } from "../field/CurrencyInputField";
 import { FormBusyIndicator } from "../field/FormBusyIndicator";
 import { TextInputField } from "../field/TextInputField";
 import {
@@ -488,6 +489,10 @@ export const ImperativeApi: Story = {
       return new Promise((r) => setTimeout(r, 3000));
     };
 
+    useEffect(() => {
+      formRef.current?.focus("firstName");
+    }, []);
+
     return (
       <FormController<PersonForm> ref={formRef} onSubmit={onSubmit}>
         <FormBusyIndicator style={{ display: "block" }}>
@@ -552,6 +557,85 @@ export const ImperativeApi: Story = {
                   // submit form
                   event.detail.valid && event.detail.form.submit();
                 }}
+              />
+            </FormItem>
+          </Form>
+        </FormBusyIndicator>
+
+        <Button type="submit">Submit</Button>
+        <Button type="reset">Reset</Button>
+      </FormController>
+    );
+  },
+};
+
+export const DependentFormFields: Story = {
+  render: () => {
+    type TestForm = {
+      price: number;
+      comment: number;
+    };
+    const formRef = useRef<FormControllerRef<TestForm>>(null);
+    const [commentRequired, setCommentRequired] = useState(false);
+
+    const onSubmit: FormSubmitHandler<TestForm> = (values, actiosn) => {
+      console.log("lallaa");
+      // triggers only when valid
+      return new Promise((r) => setTimeout(r, 3000));
+    };
+
+    const onChange: FormChangeHandler<TestForm> = (values, actiosn) => {
+      setCommentRequired(!!(values.price && values.price > 10));
+    };
+
+    useEffect(() => {
+      formRef.current?.focus("price");
+    }, []);
+
+    return (
+      <FormController<TestForm>
+        ref={formRef}
+        onSubmit={onSubmit}
+        onChange={onChange}
+      >
+        <FormBusyIndicator style={{ display: "block" }}>
+          <Form
+            style={{ width: "100%" }}
+            headerText={"Dependent form fields"}
+            labelSpan="S12 M12 L12 XL12"
+            layout="S1 M1 L1 XL1"
+          >
+            <FormItem
+              labelContent={
+                <Label showColon required>
+                  Value (more than 10 EUR to force comment field)
+                </Label>
+              }
+            >
+              <CurrencyInputField<TestForm, "price">
+                name="price"
+                required
+                currency="EUR"
+                onSubmit={(event) => {
+                  event.detail.valid && event.detail.form.focus("comment");
+                }}
+              />
+            </FormItem>
+            <FormItem
+              labelContent={
+                <div>
+                  <Label showColon required={commentRequired}>
+                    Comment
+                  </Label>
+                </div>
+              }
+            >
+              <TextInputField<TestForm, "comment">
+                name="comment"
+                required={commentRequired}
+                onSubmit={(event) =>
+                  event.detail.valid && event.detail.form.submit()
+                }
               />
             </FormItem>
           </Form>
