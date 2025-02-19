@@ -1,4 +1,4 @@
-import { FormChangeHandler } from "../field/types";
+import { FormChangeHandler } from "../../field/types";
 import { useFormListener } from "./useFormListener";
 
 export type FormListenerProps<FormValues extends {}> = {

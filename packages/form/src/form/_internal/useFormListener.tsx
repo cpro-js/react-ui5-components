@@ -6,7 +6,7 @@ import {
   ChangedField,
   FormChangeHandler,
   PartialFormValues,
-} from "../field/types";
+} from "../../field/types";
 import { useFormActions } from "./useFormActions";
 
 /**

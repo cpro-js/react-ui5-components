@@ -10,7 +10,7 @@ import { FieldPath, FieldValues } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
 import { Select, SelectItem, SelectProps } from "../component/Select";
-import { useControlledField } from "../form/useField";
+import { useControlledField } from "../form/_internal/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
   FieldEventDetail,

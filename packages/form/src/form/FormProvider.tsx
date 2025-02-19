@@ -2,8 +2,8 @@ import * as React from "react";
 import { ReactNode } from "react";
 import { FormProvider as ReactHookFormProvider } from "react-hook-form";
 
+import { UseFormControllerReturn } from "./_internal/useFormController";
 import { FormActionContext } from "./context/FormActionContext";
-import { UseFormControllerReturn } from "./useFormController";
 
 export interface FormProviderProps<FormValues extends {}>
   extends UseFormControllerReturn<FormValues> {

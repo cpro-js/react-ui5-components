@@ -21,9 +21,12 @@ import {
   FormFieldSubmitEvent,
 } from "../field/types";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
-import { FormListener } from "./FormListener";
+import { FormListener } from "./_internal/FormListener";
+import {
+  UseFormControllerProps,
+  useFormController,
+} from "./_internal/useFormController";
 import { FormProvider } from "./FormProvider";
-import { UseFormControllerProps, useFormController } from "./useFormController";
 
 export type FormControllerRef<FormValues extends {}> = FormActions<FormValues>;
 

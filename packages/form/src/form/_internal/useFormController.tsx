@@ -12,7 +12,7 @@ import {
   FormActions,
   FormSubmitHandler,
   InitialFormValues,
-} from "../field/types";
+} from "../../field/types";
 
 const noop = () => undefined;
 

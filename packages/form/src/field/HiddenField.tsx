@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { FieldPath, FieldValues } from "react-hook-form";
 
-import { useControlledField } from "../form/useField";
+import { useControlledField } from "../form/_internal/useField";
 import { FormFieldCommonProps, FormFieldRef } from "./types";
 
 export type HiddenFieldProps<

@@ -11,7 +11,7 @@ import { useEventCallback } from "usehooks-ts";
 
 import { NumberInput, NumberInputProps } from "../component/number/NumberInput";
 import { useFireSubmit } from "../component/util";
-import { useControlledField } from "../form/useField";
+import { useControlledField } from "../form/_internal/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
   FieldEventDetail,

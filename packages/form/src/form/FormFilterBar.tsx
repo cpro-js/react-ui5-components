@@ -2,8 +2,8 @@ import { FilterBar, FilterBarPropTypes } from "@ui5/webcomponents-react";
 import { FC, forwardRef, useCallback, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { useFormActions } from "./useFormActions";
-import { useFormListener } from "./useFormListener";
+import { useFormActions } from "./_internal/useFormActions";
+import { useFormListener } from "./_internal/useFormListener";
 
 export interface FormFilterBarProps extends FilterBarPropTypes {}
 

@@ -18,9 +18,9 @@ import {
   FormFieldActions,
   FormFieldCommonProps,
   FormFieldValidation,
-} from "../field/types";
-import { hasError } from "../field/util";
-import { useI18nValidationError } from "../i18n/FormI18n";
+} from "../../field/types";
+import { hasError } from "../../field/util";
+import { useI18nValidationError } from "../../i18n/FormI18n";
 import { useFormActions } from "./useFormActions";
 
 const noop = () => undefined;

@@ -14,7 +14,7 @@ import {
   MultiSelectItem,
   MultiSelectProps,
 } from "../component/MultiSelect";
-import { useControlledField } from "../form/useField";
+import { useControlledField } from "../form/_internal/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
   FieldEventDetail,

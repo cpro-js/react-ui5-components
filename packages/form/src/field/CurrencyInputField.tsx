@@ -7,7 +7,7 @@ import {
   CurrencyInput,
   CurrencyInputProps,
 } from "../component/number/CurrencyInput";
-import { useControlledField } from "../form/useField";
+import { useControlledField } from "../form/_internal/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
   FieldEventDetail,

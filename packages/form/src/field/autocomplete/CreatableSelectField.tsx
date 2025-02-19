@@ -14,7 +14,7 @@ import {
   CreatableSelectProps,
 } from "../../component/autocomplete/CreatableSelect";
 import { DefaultAutoCompleteOption } from "../../component/AutoCompleteModel";
-import { useControlledField } from "../../form/useField";
+import { useControlledField } from "../../form/_internal/useField";
 import { useCustomEventDispatcher } from "../../hook/useCustomEventDispatcher";
 import {
   FieldEventDetail,
