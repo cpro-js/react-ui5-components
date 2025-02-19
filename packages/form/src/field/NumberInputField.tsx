@@ -27,7 +27,13 @@ export type NumberInputFieldProps<
   FormFieldName extends FieldPath<FormValues>
 > = Omit<
   NumberInputProps,
-  "name" | "value" | "valueState" | "valueStateMessage" | "max" | "onChange"
+  | "name"
+  | "value"
+  | "valueState"
+  | "valueStateMessage"
+  | "max"
+  | "onChange"
+  | "onSubmit"
 > &
   Pick<
     FormFieldValidation<FormValues, number>,
@@ -54,10 +60,7 @@ export const NumberInputField = forwardRef<
       max,
       validate,
       dependsOn,
-      onFocus,
       onKeyDown,
-      onKeyUp,
-      onInput,
       onChange,
       onSubmit,
       onBlur,
@@ -122,18 +125,16 @@ export const NumberInputField = forwardRef<
             <div slot="valueStateMessage">{field.valueStateMessage}</div>
           )
         }
-        onFocus={useEventCallback((event) => {
-          submit.focus();
-        })}
         onKeyDown={useEventCallback((event) => {
           // reset previous errors
           field.error && field.fieldApiRef.current.clearError();
-          submit.keyDown(event);
+          onKeyDown?.(event);
         })}
-        onChange={useEventCallback(async (event, value) => {
+        onChange={useEventCallback(async (event) => {
           // don't bubble up this event -> we trigger our own enhanced event
           event.stopPropagation();
 
+          const value = event.detail.value;
           field.fieldApiRef.current.setValue(value);
           const valid = await field.fieldApiRef.current.validate();
 
@@ -143,29 +144,20 @@ export const NumberInputField = forwardRef<
             valid,
             field: field.fieldApiRef.current,
           });
-
-          if (submit.shouldFireSubmitOnChange()) {
-            dispatchSubmitEvent({
-              name,
-              value,
-              valid,
-              field: field.fieldApiRef.current,
-            });
-          }
         })}
-        onKeyUp={useEventCallback(async (event, value) => {
-          onKeyUp?.(event, value);
-          if (submit.shouldFireSubmitOnKeyUp()) {
-            const value = field.fieldApiRef.current.getValue();
-            const valid = await field.fieldApiRef.current.validate();
+        onSubmit={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
 
-            dispatchSubmitEvent({
-              name,
-              value,
-              valid,
-              field: field.fieldApiRef.current,
-            });
-          }
+          const value = field.fieldApiRef.current.getValue();
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchSubmitEvent({
+            name,
+            value,
+            valid,
+            field: field.fieldApiRef.current,
+          });
         })}
         onBlur={useEventCallback((event) => {
           onBlur?.(event);

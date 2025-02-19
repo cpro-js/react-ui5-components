@@ -7,7 +7,6 @@ import {
   CurrencyInput,
   CurrencyInputProps,
 } from "../component/number/CurrencyInput";
-import { useFireSubmit } from "../component/util";
 import { useControlledField } from "../form/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
@@ -24,7 +23,13 @@ export type CurrencyInputFieldProps<
   FormFieldName extends FieldPath<FormValues>
 > = Omit<
   CurrencyInputProps,
-  "name" | "value" | "valueState" | "valueStateMessage" | "max" | "onChange"
+  | "name"
+  | "value"
+  | "valueState"
+  | "valueStateMessage"
+  | "max"
+  | "onChange"
+  | "onSubmit"
 > &
   Pick<
     FormFieldValidation<FormValues, number>,
@@ -50,10 +55,7 @@ export const CurrencyInputField = forwardRef<
       max,
       validate,
       dependsOn,
-      onFocus,
       onKeyDown,
-      onKeyUp,
-      onInput,
       onChange,
       onSubmit,
       onBlur,
@@ -77,8 +79,6 @@ export const CurrencyInputField = forwardRef<
 
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => elementRef.current);
-
-    const submit = useFireSubmit();
 
     const dispatchChangeEvent = useCustomEventDispatcher<
       InputDomRef,
@@ -118,18 +118,16 @@ export const CurrencyInputField = forwardRef<
             <div slot="valueStateMessage">{field.valueStateMessage}</div>
           )
         }
-        onFocus={useEventCallback((event) => {
-          submit.focus();
-        })}
         onKeyDown={useEventCallback((event) => {
           // reset previous errors
           field.error && field.fieldApiRef.current.clearError();
-          submit.keyDown(event);
+          onKeyDown?.(event);
         })}
-        onChange={useEventCallback(async (event, value) => {
+        onChange={useEventCallback(async (event) => {
           // don't bubble up this event -> we trigger our own enhanced event
           event.stopPropagation();
 
+          const value = event.detail.value;
           field.fieldApiRef.current.setValue(value);
           const valid = await field.fieldApiRef.current.validate();
 
@@ -139,29 +137,20 @@ export const CurrencyInputField = forwardRef<
             valid,
             field: field.fieldApiRef.current,
           });
-
-          if (submit.shouldFireSubmitOnChange()) {
-            dispatchSubmitEvent({
-              name,
-              value,
-              valid,
-              field: field.fieldApiRef.current,
-            });
-          }
         })}
-        onKeyUp={useEventCallback(async (event, value) => {
-          onKeyUp?.(event, value);
-          if (submit.shouldFireSubmitOnKeyUp()) {
-            const value = field.fieldApiRef.current.getValue();
-            const valid = await field.fieldApiRef.current.validate();
+        onSubmit={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
 
-            dispatchSubmitEvent({
-              name,
-              value,
-              valid,
-              field: field.fieldApiRef.current,
-            });
-          }
+          const value = field.fieldApiRef.current.getValue();
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchSubmitEvent({
+            name,
+            value,
+            valid,
+            field: field.fieldApiRef.current,
+          });
         })}
         onBlur={useEventCallback((event) => {
           onBlur?.(event);

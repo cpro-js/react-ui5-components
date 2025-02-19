@@ -20,8 +20,8 @@ export type CurrencyInputProps = Omit<
     CommonNumberInputProps,
     | "value"
     | "onChange"
+    | "onSubmit"
     | "onInput"
-    | "onValue"
     | "onKeyUp"
     | "locale"
     | "showNumberWarningMessages"

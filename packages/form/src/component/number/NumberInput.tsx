@@ -1,5 +1,5 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { FC, HTMLAttributes, forwardRef, useContext } from "react";
+import { forwardRef, useContext } from "react";
 
 import { GlobalHtmlKeyInputElementProps } from "../GlobalHtmlElementProps";
 import { BaseNumberInput } from "./BaseNumberInput";
@@ -20,8 +20,8 @@ export type NumberInputProps = Omit<
     CommonNumberInputProps,
     | "value"
     | "onChange"
+    | "onSubmit"
     | "onInput"
-    | "onValue"
     | "onKeyUp"
     | "locale"
     | "showNumberWarningMessages"

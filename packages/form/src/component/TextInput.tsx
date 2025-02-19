@@ -42,6 +42,7 @@ export type TextInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
     | "value"
     | "valueState"
   > & {
+    /** Fired when the input operation has finished by pressing Enter */
     onSubmit?: (event: TypedCustomEvent<InputDomRef>) => void;
   };
 
