@@ -13,7 +13,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
@@ -44,7 +44,7 @@ export type CurrencyInputFieldProps<
     ) => void;
   };
 export const CurrencyInputField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   CurrencyInputFieldProps<any, any>
 >(
   (

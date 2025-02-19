@@ -12,7 +12,7 @@ import {
   MultiAutoCompleteField,
   MultiAutoCompleteFieldProps,
 } from "./MultiAutoCompleteField";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   items?: Array<string>;
@@ -26,7 +26,7 @@ const Template: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "items">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "items">>(null);
 
   return (
     <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>

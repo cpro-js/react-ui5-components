@@ -20,7 +20,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldValidation,
 } from "./types";
 
@@ -56,7 +56,7 @@ export type MultiSelectFieldProps<
   };
 
 export const MultiSelectField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   MultiSelectFieldProps<any, any>
 >(
   (
@@ -144,6 +144,6 @@ export const MultiSelectField = forwardRef<
   Value = string | number
 >(
   p: MultiSelectFieldProps<FormValues, FormFieldName, Item, Value> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

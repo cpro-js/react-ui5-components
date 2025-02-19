@@ -71,7 +71,7 @@ export interface FormFieldActions<
 /**
  * Base element that will be returned by ref
  */
-export interface FormFieldElement<
+export interface FormFieldRef<
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
 > extends FormFieldActions<FormValues, FormFieldName> {}

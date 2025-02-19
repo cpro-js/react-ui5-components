@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from "react";
 import { FieldPath, FieldValues } from "react-hook-form";
 
 import { useControlledField } from "../form/useField";
-import { FormFieldCommonProps, FormFieldElement } from "./types";
+import { FormFieldCommonProps, FormFieldRef } from "./types";
 
 export type HiddenFieldProps<
   FormValues extends FieldValues,
@@ -10,7 +10,7 @@ export type HiddenFieldProps<
 > = FormFieldCommonProps<FormValues, FormFieldName>;
 
 export const HiddenField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   HiddenFieldProps<any, any>
 >(({ name }, forwardedRef) => {
   const field = useControlledField({

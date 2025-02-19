@@ -26,7 +26,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
@@ -81,7 +81,7 @@ export type DateTimePickerFieldProps<
   };
 
 export const DateTimePickerField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   DateTimePickerFieldProps<any, any>
 >(
   (
@@ -241,6 +241,6 @@ export const DateTimePickerField = forwardRef<
   FormFieldName extends FieldPath<FormValues>
 >(
   p: DateTimePickerFieldProps<FormValues, FormFieldName> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

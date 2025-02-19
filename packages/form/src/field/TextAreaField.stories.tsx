@@ -5,7 +5,7 @@ import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { TextAreaField, TextAreaFieldProps } from "./TextAreaField";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 export default {
   title: "Form/Field/TextAreaField",
@@ -29,7 +29,7 @@ const Template: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "text">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "text">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>

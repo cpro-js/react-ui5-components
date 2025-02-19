@@ -2,7 +2,7 @@ import { Text, Title } from "@ui5/webcomponents-react";
 import { RefObject, useCallback, useState } from "react";
 
 import { Button } from "../component/Button";
-import { FormFieldElement, FormSubmitHandler } from "./types";
+import { FormFieldRef, FormSubmitHandler } from "./types";
 
 export interface useFormViewerProps<FormValues extends {}> {
   onSubmit: FormSubmitHandler<FormValues>;
@@ -10,7 +10,7 @@ export interface useFormViewerProps<FormValues extends {}> {
 
 export interface FormViewerProps<T> {
   submittedValues?: T | undefined;
-  fieldRef?: RefObject<FormFieldElement<any, any> | null>;
+  fieldRef?: RefObject<FormFieldRef<any, any> | null>;
 }
 
 export function useFormViewer<FormValues extends {}>(

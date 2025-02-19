@@ -23,7 +23,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
@@ -70,7 +70,7 @@ export type DatePickerFieldProps<
   };
 
 export const DatePickerField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   DatePickerFieldProps<any, any>
 >(
   (
@@ -230,6 +230,6 @@ export const DatePickerField = forwardRef<
   FormFieldName extends FieldPath<FormValues>
 >(
   p: DatePickerFieldProps<FormValues, FormFieldName> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

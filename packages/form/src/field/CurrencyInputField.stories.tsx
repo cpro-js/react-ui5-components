@@ -9,7 +9,7 @@ import {
   CurrencyInputFieldProps,
 } from "./CurrencyInputField";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   theNumber?: number;
@@ -23,7 +23,7 @@ const Template: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "theNumber">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "theNumber">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>

@@ -16,7 +16,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldValidation,
 } from "./types";
 
@@ -43,7 +43,7 @@ export type TextAreaFieldProps<
   };
 
 export const TextAreaField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   TextAreaFieldProps<any, any>
 >(
   (
@@ -138,6 +138,6 @@ export const TextAreaField = forwardRef<
   FormFieldName extends FieldPath<FormValues>
 >(
   p: TextAreaFieldProps<FormValues, FormFieldName> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

@@ -17,7 +17,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
@@ -49,7 +49,7 @@ export type NumberInputFieldProps<
   };
 
 export const NumberInputField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   NumberInputFieldProps<any, any>
 >(
   (
@@ -173,6 +173,6 @@ export const NumberInputField = forwardRef<
   FormFieldName extends FieldPath<FormValues>
 >(
   p: NumberInputFieldProps<FormValues, FormFieldName> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

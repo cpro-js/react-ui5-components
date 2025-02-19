@@ -20,7 +20,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldValidation,
 } from "../types";
 
@@ -46,7 +46,7 @@ export type CreatableSelectFieldProps<
   };
 
 export const CreatableSelectField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   CreatableSelectFieldProps<any, any>
 >(
   (
@@ -131,6 +131,6 @@ export const CreatableSelectField = forwardRef<
   T extends {} = DefaultAutoCompleteOption
 >(
   p: CreatableSelectFieldProps<FormValues, FormFieldName, T> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

@@ -16,7 +16,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldSubmitEvent,
   FormFieldValidation,
 } from "./types";
@@ -46,7 +46,7 @@ export type SelectFieldProps<
   };
 
 export const SelectField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   SelectFieldProps<any, any>
 >(
   (
@@ -161,6 +161,6 @@ export const SelectField = forwardRef<
   Value = string | number
 >(
   p: SelectFieldProps<FormValues, FormFieldName, Item, Value> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

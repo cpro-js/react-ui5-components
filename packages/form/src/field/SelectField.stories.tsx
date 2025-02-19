@@ -6,7 +6,7 @@ import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { SelectField, SelectFieldProps } from "./SelectField";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 export interface SelectItemAlt extends SelectItem {
   alt: string;
@@ -32,7 +32,7 @@ const Template: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "item">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -109,7 +109,7 @@ const TemplateAlt: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "item">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>

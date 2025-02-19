@@ -24,7 +24,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldValidation,
 } from "./types";
 
@@ -63,7 +63,7 @@ export type CheckboxFieldProps<
 
 /** `CheckboxField` as wrapper of `Checkbox` to be used in a form*/
 export const CheckboxField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   CheckboxFieldProps<any, any>
 >((props, forwardedRef) => {
   const checkboxGroupProps = useContext(CheckboxFieldGroupContext);
@@ -168,6 +168,6 @@ export const CheckboxField = forwardRef<
   FormFieldName extends FieldPath<FormValues>
 >(
   p: CheckboxFieldProps<FormValues, FormFieldName> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

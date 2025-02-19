@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { CheckboxField, CheckboxFieldProps } from "./CheckboxField";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   value?: string;
@@ -23,7 +23,7 @@ const createTemplate = function <T extends {}>(): StoryFn<
     const { submittedValues, handleSubmit } = useFormViewer<T>({
       onSubmit: onSubmit,
     });
-    const fieldRef = useRef<FormFieldElement<FormData, "value">>(null);
+    const fieldRef = useRef<FormFieldRef<FormData, "value">>(null);
 
     return (
       <FormController<T> {...{ initialValues, onSubmit: handleSubmit }}>

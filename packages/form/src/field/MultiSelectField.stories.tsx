@@ -7,7 +7,7 @@ import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
 import { SelectItemAlt } from "./SelectField.stories";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 export interface MultiSelectItemAlt extends MultiSelectItem {
   alt: string;
@@ -33,7 +33,7 @@ const Template: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "item">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
@@ -107,7 +107,7 @@ const TemplateAlt: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "item">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>

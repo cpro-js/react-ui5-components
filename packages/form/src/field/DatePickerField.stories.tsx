@@ -6,7 +6,7 @@ import { FormI18nProvider } from "../i18n/FormI18n";
 import { toISO8601DateString } from "../util/date";
 import { DatePickerField, DatePickerFieldProps } from "./DatePickerField";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   date?: string;
@@ -20,7 +20,7 @@ const Template: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "date">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "date">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>

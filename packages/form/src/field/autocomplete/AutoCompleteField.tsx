@@ -20,7 +20,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldValidation,
 } from "../types";
 
@@ -46,7 +46,7 @@ export type AutoCompleteFieldProps<
   };
 
 export const AutoCompleteField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   AutoCompleteFieldProps<any, any>
 >(
   (
@@ -131,6 +131,6 @@ export const AutoCompleteField = forwardRef<
   T extends {} = DefaultAutoCompleteOption
 >(
   p: AutoCompleteFieldProps<FormValues, FormFieldName, T> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

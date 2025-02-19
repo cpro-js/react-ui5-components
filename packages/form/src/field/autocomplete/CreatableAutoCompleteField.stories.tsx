@@ -9,7 +9,7 @@ import { DefaultAutoCompleteOption } from "../../component/autocomplete/internal
 import { FormController, FormControllerProps } from "../../form/FormController";
 import { FormI18nProvider } from "../../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "../FormViewer";
-import { FormFieldElement } from "../types";
+import { FormFieldRef } from "../types";
 import {
   CreatableAutoCompleteField,
   CreatableAutoCompleteFieldProps,
@@ -28,7 +28,7 @@ const Template: StoryFn<
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement<FormData, "item">>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>

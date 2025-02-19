@@ -23,7 +23,7 @@ import {
   FieldEventDetail,
   FormFieldChangeEvent,
   FormFieldCommonProps,
-  FormFieldElement,
+  FormFieldRef,
   FormFieldValidation,
 } from "./types";
 
@@ -53,7 +53,7 @@ export type MultiAutoCompleteFieldProps<
     // ) => void;
   };
 export const MultiAutoCompleteField = forwardRef<
-  FormFieldElement<any, any>,
+  FormFieldRef<any, any>,
   MultiAutoCompleteFieldProps<any, any>
 >(
   (
@@ -147,6 +147,6 @@ export const MultiAutoCompleteField = forwardRef<
   T = DefaultAutoCompleteOption
 >(
   p: MultiAutoCompleteFieldProps<FormValues, FormFieldName, T> & {
-    ref?: Ref<FormFieldElement<FormValues, FormFieldName>>;
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;
