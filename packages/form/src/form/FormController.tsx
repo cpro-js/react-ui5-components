@@ -1,11 +1,21 @@
 import { Ui5DomRef } from "@ui5/webcomponents-react";
 import * as React from "react";
-import { CSSProperties, FormEvent, ReactNode, useRef } from "react";
+import {
+  CSSProperties,
+  FormEvent,
+  ReactElement,
+  ReactNode,
+  Ref,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { FieldPath } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
 import {
   FieldEventDetail,
+  FormActions,
   FormChangeHandler,
   FormFieldChangeEvent,
   FormFieldSubmitEvent,
@@ -14,6 +24,8 @@ import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import { FormListener } from "./FormListener";
 import { FormProvider } from "./FormProvider";
 import { UseFormControllerProps, useFormController } from "./useFormController";
+
+export type FormControllerRef<FormValues extends {}> = FormActions<FormValues>;
 
 export interface FormControllerProps<FormValues extends {}>
   extends UseFormControllerProps<FormValues> {
@@ -33,9 +45,10 @@ export interface FormControllerProps<FormValues extends {}>
   ) => void;
 }
 
-export function FormController<FormValues extends {}>(
-  props: FormControllerProps<FormValues>
-) {
+export const FormController = forwardRef<
+  FormControllerRef<{}>,
+  FormControllerProps<{}>
+>((props, forwardedRef) => {
   const {
     id,
     children,
@@ -50,10 +63,13 @@ export function FormController<FormValues extends {}>(
 
   const ref = useRef<HTMLFormElement>(null);
 
-  const form = useFormController<FormValues>({
+  const form = useFormController<any>({
     initialValues,
     onSubmit,
   });
+
+  // support imperative form field api via ref
+  useImperativeHandle(forwardedRef, () => form.actions);
 
   const { handleSubmit, handleReset } = form;
 
@@ -70,19 +86,13 @@ export function FormController<FormValues extends {}>(
     }
   );
 
-  useCustomEventDispatcher<
-    Ui5DomRef,
-    FieldEventDetail<FormValues, FieldPath<FormValues>>
-  >({
+  useCustomEventDispatcher<Ui5DomRef, FieldEventDetail<{}, FieldPath<{}>>>({
     ref: ref,
     name: "field-change",
     onEvent: onFieldChange,
   });
 
-  useCustomEventDispatcher<
-    Ui5DomRef,
-    FieldEventDetail<FormValues, FieldPath<FormValues>>
-  >({
+  useCustomEventDispatcher<Ui5DomRef, FieldEventDetail<{}, FieldPath<{}>>>({
     ref: ref,
     name: "field-submit",
     onEvent: onFieldSubmit,
@@ -104,4 +114,8 @@ export function FormController<FormValues extends {}>(
       </FormProvider>
     </form>
   );
-}
+}) as <FormValues extends {}>(
+  p: FormControllerProps<FormValues> & {
+    ref?: Ref<FormControllerRef<FormValues> | undefined>;
+  }
+) => ReactElement;

@@ -122,7 +122,10 @@ export { useFormController } from "./form/useFormController";
 export type { UseFormControllerProps } from "./form/useFormController";
 
 export { FormController } from "./form/FormController";
-export type { FormControllerProps } from "./form/FormController";
+export type {
+  FormControllerRef,
+  FormControllerProps,
+} from "./form/FormController";
 
 export { FormProvider } from "./form/FormProvider";
 export type { FormProviderProps } from "./form/FormProvider";
