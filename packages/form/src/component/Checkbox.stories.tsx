@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn } from "@storybook/react";
+import { Decorator, Meta, StoryFn, StoryObj } from "@storybook/react";
 import { ComponentProps } from "react";
 
 import { Checkbox } from "./Checkbox";
@@ -14,16 +14,67 @@ export default {
   },
 } satisfies Meta<typeof Checkbox>;
 
+type Story = StoryObj<typeof Checkbox>;
+
 const DEFAULT_NAME = "test";
 
-const Template: StoryFn<
-  ComponentProps<typeof Checkbox> & { form?: boolean }
-> = ({ form, ...args }) => {
-  if (!form) {
-    return <Checkbox {...args} />;
-  }
+const FormDecorator: Decorator = (Story) => (
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      const data = new FormData(e.currentTarget).get(DEFAULT_NAME);
+      const toLog = `Submitted value for key [${DEFAULT_NAME}]: ${data}`;
+      action("onSubmit")(toLog);
+    }}
+  >
+    <Story />
+    <button>Submit</button>
+  </form>
+);
 
-  return (
+export const Standard: Story = {
+  args: {
+    name: DEFAULT_NAME,
+  },
+};
+
+export const Checked: Story = {
+  args: {
+    ...Standard.args,
+    checked: true,
+  },
+};
+
+export const Indeterminate: Story = {
+  args: {
+    ...Standard.args,
+    indeterminate: true,
+    checked: true,
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    ...Standard.args,
+    disabled: true,
+  },
+};
+
+export const DisabledAndChecked: Story = {
+  args: {
+    ...Standard.args,
+    disabled: true,
+    checked: true,
+  },
+};
+
+export const HtmlForm: Story = {
+  args: {
+    ...Standard.args,
+  },
+  decorators: [FormDecorator],
+  //alternative with render
+  /*render: (args) => (
     <form
       onSubmit={(e) => {
         e.preventDefault();
@@ -35,48 +86,13 @@ const Template: StoryFn<
       <Checkbox {...args} />
       <button>Submit</button>
     </form>
-  );
+  ),*/
 };
 
-export const Standard = Template.bind({});
-Standard.args = {
-  name: DEFAULT_NAME,
-};
-
-export const Checked = Template.bind({});
-Checked.args = {
-  ...Standard.args,
-  checked: true,
-};
-
-export const Indeterminate = Template.bind({});
-Indeterminate.args = {
-  ...Standard.args,
-  indeterminate: true,
-  checked: true,
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Standard.args,
-  disabled: true,
-};
-
-export const DisabledAndChecked = Template.bind({});
-DisabledAndChecked.args = {
-  ...Standard.args,
-  disabled: true,
-  checked: true,
-};
-
-export const HtmlForm = Template.bind({});
-HtmlForm.args = {
-  ...Standard.args,
-  form: true,
-};
-
-export const HtmlFormWithValue = Template.bind({});
-HtmlFormWithValue.args = {
-  ...HtmlForm.args,
-  value: "my-value",
+export const HtmlFormWithValue: Story = {
+  ...HtmlForm,
+  args: {
+    ...HtmlForm.args,
+    value: "my-value",
+  },
 };
