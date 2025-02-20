@@ -1,5 +1,6 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { StoryIndexEntry } from "storybook/internal/types";
 
 import { Button } from "./Button";
 
@@ -12,31 +13,33 @@ export default {
     },
   },
 } satisfies Meta<typeof Button>;
-const Template: StoryFn<typeof Button> = (args) => {
-  return <Button {...args} />;
+
+type Story = StoryObj<typeof Button>;
+
+export const DefaultButton: Story = {
+  args: {
+    children: "Button",
+  },
 };
 
-export const DefaultButton = Template.bind({});
-DefaultButton.args = {
-  children: "Button",
+export const SubmitButton: Story = {
+  args: {
+    children: "Submit",
+    type: "submit",
+    onClick: action("submit-clicked"),
+  },
 };
 
-export const SubmitButton = Template.bind({});
-SubmitButton.args = {
-  children: "Submit",
-  type: "submit",
-  onClick: action("submit-clicked"),
+export const ResetButton: Story = {
+  args: {
+    children: "Reset",
+    type: "reset",
+    onClick: action("reset-clicked"),
+  },
 };
 
-export const ResetButton = Template.bind({});
-ResetButton.args = {
-  children: "Reset",
-  type: "reset",
-  onClick: action("reset-clicked"),
-};
-
-const TemplateParentForm: StoryFn<typeof Button> = (args) => {
-  return (
+const ParentForm: Story = {
+  render: (args) => (
     <form
       style={{ border: "1px solid black", padding: 20, margin: 20 }}
       onSubmit={(e) => {
@@ -58,14 +61,16 @@ const TemplateParentForm: StoryFn<typeof Button> = (args) => {
         Reset
       </Button>
     </form>
-  );
+  ),
 };
 
-export const InsideHtmlForm = TemplateParentForm.bind({});
-InsideHtmlForm.args = {};
+export const InsideHtmlForm: Story = {
+  ...ParentForm,
+  args: {},
+};
 
-const TemplateExternalForm: StoryFn<typeof Button> = (args) => {
-  return (
+const ExternalForm: Story = {
+  render: (args) => (
     <>
       <form
         id="my-form-id"
@@ -90,8 +95,10 @@ const TemplateExternalForm: StoryFn<typeof Button> = (args) => {
         Reset
       </Button>
     </>
-  );
+  ),
 };
 
-export const ExternalHtmlForm = TemplateExternalForm.bind({});
-ExternalHtmlForm.args = {};
+export const ExternalHtmlForm: Story = {
+  ...ExternalForm,
+  args: {},
+};
