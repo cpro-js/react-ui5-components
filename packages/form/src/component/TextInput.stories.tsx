@@ -6,7 +6,7 @@ import { Icon } from "@ui5/webcomponents-react";
 import { TextInput } from "./TextInput";
 
 export default {
-  title: "Form/Component/TextInput",
+  title: "Component/TextInput",
   component: TextInput,
   argTypes: {
     onKeyPress: {

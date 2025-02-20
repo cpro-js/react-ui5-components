@@ -3,7 +3,7 @@ import { Meta, StoryFn } from "@storybook/react";
 import { TextArea } from "./TextArea";
 
 export default {
-  title: "Form/Component/TextArea",
+  title: "Component/TextArea",
   component: TextArea,
 } satisfies Meta<typeof TextArea>;
 

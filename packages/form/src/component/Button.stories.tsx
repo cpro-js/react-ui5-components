@@ -5,7 +5,7 @@ import { StoryIndexEntry } from "storybook/internal/types";
 import { Button } from "./Button";
 
 export default {
-  title: "Form/Component/Button",
+  title: "Component/Button",
   component: Button,
   argTypes: {
     onClick: {

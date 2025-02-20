@@ -4,7 +4,7 @@ import { Meta, StoryFn } from "@storybook/react";
 import { NumberInput } from "./NumberInput";
 
 export default {
-  title: "Form/Component/NumberInput",
+  title: "Component/NumberInput",
   component: NumberInput,
 } satisfies Meta<typeof NumberInput>;
 

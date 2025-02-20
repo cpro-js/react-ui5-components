@@ -10,7 +10,7 @@ import {
 import { CreatableAutoComplete } from "./CreatableAutoComplete";
 
 export default {
-  title: "form/component/AutoComplete/CreatableAutocomplete",
+  title: "Component/AutoComplete/CreatableAutocomplete",
   component: CreatableAutoComplete,
   argTypes: {
     onValueCreate: {

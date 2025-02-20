@@ -10,7 +10,7 @@ import {
 } from "./AutoComplete-storyData";
 
 export default {
-  title: "form/component/AutoComplete/AutoComplete",
+  title: "Component/AutoComplete/AutoComplete",
   component: AutoComplete,
   argTypes: {
     onInputChange: {

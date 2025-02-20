@@ -4,7 +4,7 @@ import { COUNTRIES, CountryItem } from "./autocomplete/AutoComplete-storyData";
 import { Select, SelectItem } from "./Select";
 
 export default {
-  title: "Form/Component/Select",
+  title: "Component/Select",
   component: Select,
   argTypes: {
     onSelectionChange: {

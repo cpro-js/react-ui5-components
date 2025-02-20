@@ -6,7 +6,7 @@ import { FormAdapter } from "../form/FormAdapter";
 import { DateTimePicker } from "./DateTimePicker";
 
 export default {
-  title: "Form/Component/DateTimePicker",
+  title: "Component/DateTimePicker",
   component: DateTimePicker,
   argTypes: {
     value: { type: "string", control: "text" },

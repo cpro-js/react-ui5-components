@@ -3,7 +3,7 @@ import { Meta, StoryFn } from "@storybook/react";
 import { CurrencyInput } from "./CurrencyInput";
 
 export default {
-  title: "Form/Component/CurrencyInput",
+  title: "Component/CurrencyInput",
   component: CurrencyInput,
 } satisfies Meta<typeof CurrencyInput>;
 

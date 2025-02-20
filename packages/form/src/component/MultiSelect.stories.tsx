@@ -3,7 +3,7 @@ import { ArgTypes, Meta, StoryFn, StoryObj } from "@storybook/react";
 import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 
 export default {
-  title: "Form/Component/MultiSelect",
+  title: "Component/MultiSelect",
   component: MultiSelect,
   argTypes: {
     onSelectionChange: {

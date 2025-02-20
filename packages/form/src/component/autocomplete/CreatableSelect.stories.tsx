@@ -4,7 +4,7 @@ import { COUNTRIES } from "./AutoComplete-storyData";
 import { CreatableSelect } from "./CreatableSelect";
 
 export default {
-  title: "form/component/AutoComplete/CreatableSelect",
+  title: "Component/AutoComplete/CreatableSelect",
   component: CreatableSelect,
   argTypes: {
     onValueCreate: {

@@ -5,7 +5,7 @@ import { ComponentProps } from "react";
 import { Checkbox } from "./Checkbox";
 
 export default {
-  title: "Form/Component/Checkbox",
+  title: "Component/Checkbox",
   component: Checkbox,
   argTypes: {
     onChange: {

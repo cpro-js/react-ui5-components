@@ -11,7 +11,7 @@ import { MultiAutoComplete } from "./MultiAutoComplete";
 import { DefaultAutoCompletOption } from "./MultiAutoCompleteModel";
 
 export default {
-  title: "Form/Component/MultiAutoComplete",
+  title: "Component/MultiAutoComplete",
   component: MultiAutoComplete,
 } satisfies Meta<typeof MultiAutoComplete>;
 
