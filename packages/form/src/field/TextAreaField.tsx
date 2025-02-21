@@ -1,73 +1,100 @@
 import { TextAreaDomRef } from "@ui5/webcomponents-react";
-import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
-import { useController } from "react-hook-form";
+import {
+  ReactElement,
+  Ref,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from "react";
+import { FieldPath, FieldValues } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import { TextArea, TextAreaProps } from "../component/TextArea";
-import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldElement, FormFieldValidation } from "./types";
-import { hasError } from "./util";
+import { useControlledField } from "../form/_internal/useField";
+import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
+import {
+  FieldEventDetail,
+  FormFieldChangeEvent,
+  FormFieldCommonProps,
+  FormFieldRef,
+  FormFieldValidation,
+} from "./types";
 
-export type TextAreaFieldProps = Omit<
+export type TextAreaFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = Omit<
   TextAreaProps,
-  "name" | "value" | "onChange" | "valueState" | "onBlur" | "maxlength"
+  | "name"
+  | "value"
+  | "maxlength"
+  | "valueState"
+  | "valueStateMessage"
+  | "onChange"
 > &
-  Pick<FormFieldValidation, "required" | "minLength" | "maxLength"> & {
-    name: string;
+  Pick<
+    FormFieldValidation<FormValues, string>,
+    "required" | "minLength" | "maxLength" | "validate"
+  > &
+  FormFieldCommonProps<FormValues, FormFieldName> & {
+    onChange?: (
+      event: FormFieldChangeEvent<TextAreaDomRef, FormValues, FormFieldName>
+    ) => void;
   };
 
-export const TextAreaField = forwardRef<FormFieldElement, TextAreaFieldProps>(
-  ({ name, required, minLength, maxLength, ...props }, forwardedRef) => {
-    const rules: Partial<FormFieldValidation> = useMemo(
-      () => ({
-        required,
-        minLength,
-        maxLength,
-      }),
-      [required, minLength, maxLength]
-    );
-
-    const getValidationErrorMessage = useI18nValidationError(name, rules);
-
-    const { field, fieldState } = useController({
-      name: name,
-      rules,
+export const TextAreaField = forwardRef<
+  FormFieldRef<any, any>,
+  TextAreaFieldProps<any, any>
+>(
+  (
+    {
+      name,
+      required,
+      minLength,
+      maxLength,
+      validate,
+      dependsOn,
+      onChange,
+      onBlur,
+      ...props
+    },
+    forwardedRef
+  ) => {
+    const field = useControlledField({
+      name,
+      required,
+      minLength,
+      maxLength,
+      validate,
+      dependsOn,
     });
 
-    // store input ref for intenral usage
-    const inputRef = useRef<TextAreaDomRef>(null);
-    // forward outer ref to custom element
-    useImperativeHandle(forwardedRef, () => ({
-      focus() {
-        if (inputRef.current != null) {
-          inputRef.current.focus();
-        }
-      },
-    }));
+    // support imperative form field api via ref
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
+
+    // store input ref for internal usage
+    const elementRef = useRef<TextAreaDomRef>(null);
+
     // forward field ref to stored internal input ref
-    useImperativeHandle(field.ref, () => inputRef.current);
+    useImperativeHandle(field.ref, () => elementRef.current);
 
-    // use empty string to reset value, undefined will be ignored by web component
-    const value = field.value === undefined ? "" : field.value;
-
-    // get error message (Note: undefined fallbacks to default message of ui5 component)
-    const errorMessage = hasError(fieldState.error)
-      ? getValidationErrorMessage(fieldState.error, field.value)
-      : undefined;
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      TextAreaDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-change",
+      onEvent: onChange,
+    });
 
     return (
       <TextArea
         {...props}
-        ref={inputRef}
+        ref={elementRef}
         name={field.name}
-        value={value}
-        onChange={field.onChange}
-        onBlur={field.onBlur}
-        valueState={hasError(fieldState.error) ? "Negative" : "None"}
-        valueStateMessage={
-          errorMessage != null && (
-            <div slot="valueStateMessage">{errorMessage}</div>
-          )
-        }
+        // use empty string to reset value, undefined will be ignored by web component
+        value={field.value === undefined ? "" : field.value}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
         required={required}
         maxlength={
           maxLength != null
@@ -76,7 +103,41 @@ export const TextAreaField = forwardRef<FormFieldElement, TextAreaFieldProps>(
               : maxLength.value
             : undefined
         }
+        valueState={field.valueState}
+        valueStateMessage={
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
+        }
+        onChange={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
+          field.fieldApiRef.current.setValue(event.target.value);
+
+          const value = field.fieldApiRef.current.getValue();
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
+          });
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
+        })}
       />
     );
   }
-);
+) as <
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+>(
+  p: TextAreaFieldProps<FormValues, FormFieldName> & {
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
+  }
+) => ReactElement;

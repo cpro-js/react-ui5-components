@@ -1,5 +1,5 @@
 import { InputDomRef } from "@ui5/webcomponents-react";
-import { FC, HTMLAttributes, forwardRef, useContext } from "react";
+import { forwardRef, useContext } from "react";
 
 import { GlobalHtmlKeyInputElementProps } from "../GlobalHtmlElementProps";
 import { BaseNumberInput } from "./BaseNumberInput";
@@ -10,14 +10,18 @@ import type {
   NumberInputConfig,
 } from "./NumberModel";
 
-export type NumberInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
+export type NumberInputProps = Omit<
+  GlobalHtmlKeyInputElementProps<InputDomRef>,
+  "onKeyUp"
+> &
   NumberDisplayConfig &
   NumberInputConfig &
   Pick<
     CommonNumberInputProps,
     | "value"
     | "onChange"
-    | "onValue"
+    | "onSubmit"
+    | "onInput"
     | "onKeyUp"
     | "locale"
     | "showNumberWarningMessages"
@@ -33,7 +37,6 @@ export type NumberInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
     | "required"
     | "showClearIcon"
     | "valueState"
-    | "onInput"
   >;
 
 /** `NumberInput` as a wrapper for

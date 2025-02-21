@@ -7,7 +7,7 @@ import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { MultiSelectField, MultiSelectFieldProps } from "./MultiSelectField";
 import { SelectItemAlt } from "./SelectField.stories";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 export interface MultiSelectItemAlt extends MultiSelectItem {
   alt: string;
@@ -26,14 +26,14 @@ interface FormData {
 }
 
 const Template: StoryFn<
-  FormControllerProps<FormData> & MultiSelectFieldProps
+  FormControllerProps<FormData> & MultiSelectFieldProps<FormData, "item">
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
@@ -44,7 +44,7 @@ const Template: StoryFn<
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & MultiSelectFieldProps
+  FormControllerProps<FormData> & MultiSelectFieldProps<FormData, "item">
 > = (args, context) => {
   return (
     <FormI18nProvider
@@ -100,18 +100,18 @@ ValidationTranslationRequired.args = {
 
 const TemplateAlt: StoryFn<
   FormControllerProps<FormData> &
-    MultiSelectFieldProps<MultiSelectItemAlt, string>
+    MultiSelectFieldProps<FormData, "item", MultiSelectItemAlt, string>
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
-      <MultiSelectField<SelectItemAlt, string>
+      <MultiSelectField<FormData, "item", SelectItemAlt, string>
         {...props}
         ref={fieldRef}
         name="item"

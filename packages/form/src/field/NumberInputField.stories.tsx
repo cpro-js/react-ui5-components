@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
@@ -5,31 +6,38 @@ import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { NumberInputField, NumberInputFieldProps } from "./NumberInputField";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   theNumber?: number;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & NumberInputFieldProps> =
-  (args) => {
-    const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<
+  FormControllerProps<FormData> & NumberInputFieldProps<FormData, "theNumber">
+> = (args) => {
+  const { initialValues, onSubmit, ...props } = args;
 
-    const { submittedValues, handleSubmit } = useFormViewer({
-      onSubmit: onSubmit,
-    });
-    const fieldRef = useRef<FormFieldElement>(null);
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldRef<FormData, "theNumber">>(null);
 
-    return (
-      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <NumberInputField {...props} ref={fieldRef} name={"theNumber"} />
-        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-      </FormController>
-    );
-  };
+  return (
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <NumberInputField
+        {...props}
+        ref={fieldRef}
+        name={"theNumber"}
+        onSubmit={action("onSubmit")}
+        onChange={action("onChange")}
+      />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+    </FormController>
+  );
+};
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & NumberInputFieldProps
+  FormControllerProps<FormData> & NumberInputFieldProps<FormData, "theNumber">
 > = (args, context) => {
   return (
     <FormI18nProvider

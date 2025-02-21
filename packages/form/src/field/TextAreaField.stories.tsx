@@ -5,7 +5,7 @@ import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { TextAreaField, TextAreaFieldProps } from "./TextAreaField";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 export default {
   title: "Form/Field/TextAreaField",
@@ -21,15 +21,15 @@ interface FormData {
   text?: string;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & TextAreaFieldProps> = (
-  args
-) => {
+const Template: StoryFn<
+  FormControllerProps<FormData> & TextAreaFieldProps<FormData, "text">
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "text">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -40,7 +40,7 @@ const Template: StoryFn<FormControllerProps<FormData> & TextAreaFieldProps> = (
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & TextAreaFieldProps
+  FormControllerProps<FormData> & TextAreaFieldProps<FormData, "text">
 > = (args, context) => {
   return (
     <FormI18nProvider

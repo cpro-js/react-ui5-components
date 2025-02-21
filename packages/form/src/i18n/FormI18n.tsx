@@ -9,9 +9,12 @@ import React, {
 import { FormFieldValidation, FormFieldValidationError } from "../field/types";
 
 export type GetValidationErrorMessage = (
-  field: { name: string; value?: string | number | boolean | Date | null },
+  field: {
+    name: string;
+    value?: string | number | boolean | Date | null | undefined;
+  },
   error: FormFieldValidationError,
-  rules: Partial<FormFieldValidation>
+  rules: Partial<FormFieldValidation<{}, unknown>>
 ) => string | undefined;
 
 export interface FormI18nContextProps {
@@ -51,7 +54,7 @@ export const FormI18nProvider: FC<FormI18nProviderProps> = ({
 
 export const useI18nValidationError = (
   name: string,
-  rules: Partial<FormFieldValidation>
+  rules: Partial<FormFieldValidation<any, any>>
 ) => {
   const { getValidationErrorMessage } = useContext(FormI18nContext);
 

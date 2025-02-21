@@ -48,17 +48,15 @@ interface ExtraData {
 
 const Template: StoryFn<FormControllerProps<FormData> & ExtraData> = (args) => {
   const {
-    initialValues,
-    onSubmit,
-    onChange,
-    id,
     initialCurrentCountrySuggestions,
     initialCountriesSuggestions,
+    id,
+    ...formControllerProps
   } = args;
 
   return (
     <>
-      <FormController<FormData> {...{ initialValues, onSubmit, onChange, id }}>
+      <FormController<FormData> {...formControllerProps} id={id}>
         <HiddenField name="id" />
         <Form>
           <FormItem labelContent={<Label>Text</Label>}>
@@ -240,6 +238,12 @@ export default {
     },
     onChange: {
       action: "change",
+    },
+    onFieldChange: {
+      action: "fieldChange",
+    },
+    onFieldSubmit: {
+      action: "fieldSubmit",
     },
   },
 };

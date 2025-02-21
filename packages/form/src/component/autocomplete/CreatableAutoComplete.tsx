@@ -73,6 +73,6 @@ export const CreatableAutoComplete = forwardRef<
   return <CoreAutocomplete ref={forwardedRef} {...creatableProps} />;
 }) as <T extends {} = DefaultAutoCompleteOption>(
   p: CreatableAutoCompleteProps<T> & {
-    ref?: Ref<HTMLInputElement | undefined>;
+    ref?: Ref<InputDomRef | undefined>;
   }
 ) => ReactElement;

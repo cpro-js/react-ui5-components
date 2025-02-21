@@ -4,94 +4,146 @@ import {
   Ref,
   forwardRef,
   useImperativeHandle,
-  useMemo,
   useRef,
 } from "react";
-import { useController } from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import {
   MultiSelect,
   MultiSelectItem,
   MultiSelectProps,
 } from "../component/MultiSelect";
-import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldElement, FormFieldValidation } from "./types";
-import { hasError } from "./util";
+import { useControlledField } from "../form/_internal/useField";
+import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
+import {
+  FieldEventDetail,
+  FormFieldChangeEvent,
+  FormFieldCommonProps,
+  FormFieldRef,
+  FormFieldValidation,
+} from "./types";
 
 export type MultiSelectFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>,
   Item = MultiSelectItem,
   Value = string | number
 > = Omit<
   MultiSelectProps<Item, Value>,
-  "name" | "value" | "onSelectionChange" | "onBlur"
+  | "name"
+  | "value"
+  | "valueState"
+  | "valueStateMessage"
+  | "onSelectionChange"
+  | "onChange"
 > &
-  Pick<FormFieldValidation, "required"> & {
-    name: string;
+  Pick<
+    FormFieldValidation<FormValues, Array<string | number>>,
+    "required" | "validate"
+  > &
+  FormFieldCommonProps<FormValues, FormFieldName> & {
+    onChange?: (
+      event: FormFieldChangeEvent<
+        MultiComboBoxDomRef,
+        FormValues,
+        FormFieldName
+      >
+    ) => void;
+    // onSubmit?: (
+    //   event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
+    // ) => void;
   };
 
 export const MultiSelectField = forwardRef<
-  FormFieldElement,
-  MultiSelectFieldProps
->(({ name, required, ...props }, forwardedRef) => {
-  const rules: Partial<FormFieldValidation> = useMemo(
-    () => ({
+  FormFieldRef<any, any>,
+  MultiSelectFieldProps<any, any>
+>(
+  (
+    {
+      name,
       required,
-    }),
-    [required]
-  );
-
-  const getValidationErrorMessage = useI18nValidationError(name, rules);
-
-  const { field, fieldState } = useController({
-    name: name,
-    rules,
-  });
-
-  // store input ref for intenral usage
-  const internalRef = useRef<MultiComboBoxDomRef>(null);
-  // forward outer ref to custom element
-  useImperativeHandle(forwardedRef, () => ({
-    focus() {
-      if (internalRef.current != null) {
-        internalRef.current.focus();
-      }
+      validate,
+      dependsOn,
+      onKeyDown,
+      onChange,
+      onBlur,
+      ...props
     },
-  }));
-  // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => internalRef.current);
+    forwardedRef
+  ) => {
+    const field = useControlledField({
+      name,
+      required,
+      validate,
+      dependsOn,
+    });
+    // support imperative form field api via ref
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
 
-  // get error message (Note: undefined fallbacks to default message of ui5 component)
-  const errorMessage = hasError(fieldState.error)
-    ? getValidationErrorMessage(fieldState.error, field.value)
-    : undefined;
+    // store input ref for internal usage
+    const elementRef = useRef<MultiComboBoxDomRef>(null);
 
-  return (
-    <MultiSelect
-      {...props}
-      ref={internalRef}
-      name={field.name}
-      value={field.value}
-      onSelectionChange={(_, value) => {
-        field.onChange(value);
-      }}
-      valueState={hasError(fieldState.error) ? "Negative" : "None"}
-      valueStateMessage={
-        errorMessage != null && (
-          <div slot="valueStateMessage">{errorMessage}</div>
-        )
-      }
-      onBlur={(event) => {
-        // ignore blur event when combobox items are clicked
-        if ((event.target as any).open && event.relatedTarget != null) {
-          return;
+    // forward field ref to stored internal input ref
+    useImperativeHandle(field.ref, () => elementRef.current);
+
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      MultiComboBoxDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-change",
+      onEvent: onChange,
+    });
+
+    return (
+      <MultiSelect<MultiSelectItem, string | number>
+        {...props}
+        ref={elementRef}
+        name={field.name}
+        value={field.value}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
+        required={required}
+        valueState={field.valueState}
+        valueStateMessage={
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
         }
-        field.onBlur();
-      }}
-      required={required}
-    />
-  );
-}) as <Item = MultiSelectItem, Value = string | number>(
-  p: MultiSelectFieldProps<Item, Value> & {
-    ref?: Ref<FormFieldElement | undefined>;
+        onKeyDown={useEventCallback((event) => {
+          // reset previous errors
+          field.error && field.fieldApiRef.current.clearError();
+          onKeyDown?.(event);
+        })}
+        onSelectionChange={useEventCallback(async (event, value) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
+          field.fieldApiRef.current.setValue(value);
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
+          });
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
+        })}
+      />
+    );
+  }
+) as <
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>,
+  Item = MultiSelectItem,
+  Value = string | number
+>(
+  p: MultiSelectFieldProps<FormValues, FormFieldName, Item, Value> & {
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

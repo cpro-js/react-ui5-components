@@ -1,24 +1,11 @@
-import { useDebounceCallback } from "@react-hook/debounce";
-import { InputDomRef } from "@ui5/webcomponents-react";
 import {
   KeyboardEvent,
   MouseEvent,
   RefObject,
   useCallback,
-  useEffect,
   useRef,
 } from "react";
-
-export const triggerSubmitOnEnter = (event: KeyboardEvent<HTMLElement>) => {
-  if (event.key !== "Enter" || !(event.target instanceof Element)) {
-    return;
-  }
-
-  // delay dispatch to avoid race conditions between storing new value in onChange and submitting form state in onSubmit
-  setTimeout(() => {
-    triggerSubmit(event);
-  }, 1);
-};
+import { useDebounceCallback, useEventCallback } from "usehooks-ts";
 
 export const getForm = (
   event: KeyboardEvent<HTMLElement> | MouseEvent<HTMLElement>,
@@ -43,7 +30,7 @@ export const triggerSubmit = (
     const submitEvent = new SubmitEvent("submit", {
       bubbles: true,
       cancelable: true,
-      // submitter: event.target as HTMLElement
+      submitter: event.target as HTMLElement,
     });
 
     formElement.dispatchEvent(submitEvent);
@@ -88,4 +75,29 @@ export const useAllowAction = (
   );
 
   return [allowActionRef, setAllowAction];
+};
+
+export const useFireSubmit = () => {
+  const pressedEnterPreviously = useRef<boolean>(false);
+  const firedSubmitByChange = useRef<boolean>(false);
+
+  const methods = useRef({
+    focus: () => {
+      pressedEnterPreviously.current = firedSubmitByChange.current = false;
+    },
+    keyDown: (event: KeyboardEvent) => {
+      pressedEnterPreviously.current =
+        event.code === "Enter" || event.key === "Enter" || event.keyCode === 13;
+      firedSubmitByChange.current = false;
+    },
+    shouldFireSubmitOnKeyUp: (): boolean => {
+      return pressedEnterPreviously.current && !firedSubmitByChange.current;
+    },
+    shouldFireSubmitOnChange: (): boolean => {
+      firedSubmitByChange.current = pressedEnterPreviously.current;
+      return firedSubmitByChange.current;
+    },
+  });
+
+  return methods.current;
 };

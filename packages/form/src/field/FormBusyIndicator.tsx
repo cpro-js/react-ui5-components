@@ -1,32 +1,81 @@
 import {
   BusyIndicator,
-  FlexBox,
-  FlexBoxDirection,
+  BusyIndicatorPropTypes,
 } from "@ui5/webcomponents-react";
-import { FC, ReactNode } from "react";
-import { useFormState } from "react-hook-form";
+import { ReactNode } from "react";
+import { FieldPath, FieldValues, useFormContext } from "react-hook-form";
 
-export interface FormBusyIndicatorProps {
-  children?: ReactNode;
-  /**
-   * Overrides busy state regardless of the current form state
-   */
-  busy?: boolean;
+export enum FormBusyState {
+  Loading = "Loading",
+  Validating = "Validating",
+  Submitting = "Submitting",
 }
 
-export const FormBusyIndicator: FC<FormBusyIndicatorProps> = ({
-  busy,
-  children,
-}) => {
-  const { isSubmitting } = useFormState();
-  const active = busy != null ? busy : isSubmitting;
+export interface FormBusyIndicatorProps<FormValues extends FieldValues>
+  extends Pick<
+    BusyIndicatorPropTypes,
+    | "active"
+    | "delay"
+    | "size"
+    | "text"
+    | "textPlacement"
+    | "style"
+    | "className"
+    | "children"
+  > {
+  /**
+   * Restricts busy indicator to specific field
+   */
+  name?: FieldPath<FormValues>;
+  /**
+   * Shows busy indicator when form is in specific state
+   */
+  activeWhen?: `${FormBusyState}` | Array<`${FormBusyState}`>;
+}
 
-  // Note: wrapped with flexbox in column mode to provide full width busy indicator
+export const FormBusyIndicator = <FormValues extends FieldValues>(
+  props: FormBusyIndicatorProps<FormValues>
+): ReactNode => {
+  const {
+    name,
+    active,
+    delay = 0,
+    activeWhen = name
+      ? [FormBusyState.Validating]
+      : [FormBusyState.Loading, FormBusyState.Submitting],
+    children,
+    ...busyIndicatorProps
+  } = props;
+
+  const busyStates = Array.isArray(activeWhen) ? activeWhen : [activeWhen];
+
+  const {
+    getFieldState,
+    formState: {
+      isLoading: isFormLoading,
+      isSubmitting: isFormSubmitting,
+      isValidating: isFormValidating,
+    },
+  } = useFormContext();
+
+  const isLoading = busyStates.includes(FormBusyState.Loading) && isFormLoading;
+  // without name -> global form validation state; with name -> field validation state
+  const isValidating =
+    busyStates.includes(FormBusyState.Validating) &&
+    isFormValidating &&
+    !isFormSubmitting
+      ? !name || getFieldState(name).isValidating
+      : false;
+  const isSubmitting =
+    busyStates.includes(FormBusyState.Submitting) && isFormSubmitting;
+
   return (
-    <FlexBox direction={FlexBoxDirection.Column}>
-      <BusyIndicator active={active}>
-        <div style={{ width: "100%" }}>{children}</div>
-      </BusyIndicator>
-    </FlexBox>
+    <BusyIndicator
+      {...busyIndicatorProps}
+      active={props.active ?? (isLoading || isValidating || isSubmitting)}
+      delay={delay}
+    >
+      {children}
+    </BusyIndicator>
   );
 };

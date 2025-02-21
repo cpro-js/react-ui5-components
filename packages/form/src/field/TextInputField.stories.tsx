@@ -5,21 +5,21 @@ import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { TextInputField, TextInputFieldProps } from "./TextInputField";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   text?: string;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & TextInputFieldProps> = (
-  args
-) => {
+const Template: StoryFn<
+  FormControllerProps<FormData> & TextInputFieldProps<FormData, "text">
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "text">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -30,7 +30,7 @@ const Template: StoryFn<FormControllerProps<FormData> & TextInputFieldProps> = (
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & TextInputFieldProps
+  FormControllerProps<FormData> & TextInputFieldProps<FormData, "text">
 > = (args, context) => {
   return (
     <FormI18nProvider
