@@ -13,6 +13,26 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - minimum required version of @ui5/webcomponents-react is 2.5.0
 
+## [2.1.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v2.0.2...@cpro-js/react-ui5-webcomponents-form-v2.1.0) (2025-02-21)
+
+
+### Features
+
+* additional text for Select ([#98](https://github.com/cpro-js/react-ui5-components/issues/98)) ([5e6a0c0](https://github.com/cpro-js/react-ui5-components/commit/5e6a0c0edad7abe84d39b644ca75f0f38e78aaf1))
+* form busy indicator as wrapper for whole form or for specific fields ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* onChange event handler for fields (provides access to value, valid, field, form) ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* onSubmit event handler for fields (provides access to value, valid, field, form) ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* support async initial form values ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* support custom (async) validation for each field ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* support react 19  ([#104](https://github.com/cpro-js/react-ui5-components/issues/104)) ([6aa9ec9](https://github.com/cpro-js/react-ui5-components/commit/6aa9ec9393694e82541a0258166633d55f05c774))
+* support ref on each form field to access field api ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* support ref on FormController to access form api ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+
+
+### Bug Fixes
+
+* prevent native browser validation ([#105](https://github.com/cpro-js/react-ui5-components/issues/105)) ([8e849e5](https://github.com/cpro-js/react-ui5-components/commit/8e849e5f6eca6f7f75f8ca72575b2a892eec0560))
+
 ## [2.0.2](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v2.0.1...@cpro-js/react-ui5-webcomponents-form-v2.0.2) (2025-01-31)
 
 
