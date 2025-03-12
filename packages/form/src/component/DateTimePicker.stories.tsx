@@ -17,33 +17,33 @@ export default {
 
 type Story = StoryObj<typeof DateTimePicker>;
 
-export const Standard: Story = {
+export const Standard = {
   args: {
     onChange: (...args) => {
       console.log("onChange", ...args);
       action("onChange")(...args);
     },
   },
-};
+} satisfies Story;
 
-export const CustomFormat: Story = {
+export const CustomFormat = {
   args: {
     ...Standard.args,
     formatPattern: "dd_MM_yyyy 'um' HH:mm",
   },
-};
+} satisfies Story;
 
-export const Prefilled: Story = {
+export const Prefilled = {
   args: { ...Standard.args, value: new Date() },
-};
+} satisfies Story;
 
-export const MinDateToday: Story = {
+export const MinDateToday = {
   args: { ...Standard.args, minDate: new Date() },
-};
+} satisfies Story;
 
-export const MaxDateToday: Story = {
+export const MaxDateToday = {
   args: { ...Standard.args, maxDate: new Date() },
-};
+} satisfies Story;
 
 const ISODateTimeDecorator: Decorator = (Story) => (
   <FormAdapter dateTime={ISODateTimeAdapter}>
@@ -51,7 +51,7 @@ const ISODateTimeDecorator: Decorator = (Story) => (
   </FormAdapter>
 );
 
-export const ISODateTimeStandard: Story = {
+export const ISODateTimeStandard = {
   args: {
     onChange: (...args) => {
       console.log("onChange", ...args);
@@ -67,9 +67,9 @@ export const ISODateTimeStandard: Story = {
   },
 
   decorators: [ISODateTimeDecorator],
-};
+} satisfies Story;
 
-export const ISODateTimeCustomFormat: Story = {
+export const ISODateTimeCustomFormat = {
   ...ISODateTimeStandard,
   args: {
     ...ISODateTimeStandard.args,
@@ -77,9 +77,9 @@ export const ISODateTimeCustomFormat: Story = {
   },
 
   decorators: [ISODateTimeDecorator],
-};
+} satisfies Story;
 
-export const ISODateTimePrefilled: Story = {
+export const ISODateTimePrefilled = {
   ...ISODateTimeStandard,
   args: {
     ...ISODateTimeStandard.args,
@@ -87,22 +87,22 @@ export const ISODateTimePrefilled: Story = {
   },
 
   decorators: [ISODateTimeDecorator],
-};
+} satisfies Story;
 
-export const ISODateTimeMinDateToday: Story = {
+export const ISODateTimeMinDateToday = {
   ...ISODateTimeStandard,
   args: {
     ...ISODateTimeStandard.args,
     minDate: new Date().toISOString(),
   },
   decorators: [ISODateTimeDecorator],
-};
+} satisfies Story;
 
-export const ISODateTimeMaxDateToday: Story = {
+export const ISODateTimeMaxDateToday = {
   ...ISODateTimeStandard,
   args: {
     ...ISODateTimeStandard.args,
     maxDate: new Date().toISOString(),
   },
   decorators: [ISODateTimeDecorator],
-};
+} satisfies Story;
