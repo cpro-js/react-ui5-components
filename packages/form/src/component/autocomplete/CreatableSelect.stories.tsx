@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 
 import { COUNTRIES } from "./AutoComplete-storyData";
 import { CreatableSelect } from "./CreatableSelect";
@@ -23,8 +23,12 @@ const Template: StoryFn<typeof CreatableSelect> = ({ ...props }) => {
   return <CreatableSelect {...props} />;
 };
 
-export const Empty = Template.bind({});
-Empty.args = { value: undefined, items: [] };
+type Story = StoryObj<typeof CreatableSelect>;
 
-export const Standard = Template.bind({});
-Standard.args = { value: undefined, items: COUNTRIES };
+export const Empty = {
+  args: { value: undefined, items: [] },
+} satisfies Story;
+
+export const Standard = {
+  args: { value: undefined, items: COUNTRIES },
+} satisfies Story;
