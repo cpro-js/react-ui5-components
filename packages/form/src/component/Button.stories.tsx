@@ -1,6 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
-import { StoryIndexEntry } from "storybook/internal/types";
+import { Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "./Button";
 
@@ -16,29 +15,29 @@ export default {
 
 type Story = StoryObj<typeof Button>;
 
-export const DefaultButton: Story = {
+export const DefaultButton = {
   args: {
     children: "Button",
   },
-};
+} satisfies Story;
 
-export const SubmitButton: Story = {
+export const SubmitButton = {
   args: {
     children: "Submit",
     type: "submit",
     onClick: action("submit-clicked"),
   },
-};
+} satisfies Story;
 
-export const ResetButton: Story = {
+export const ResetButton = {
   args: {
     children: "Reset",
     type: "reset",
     onClick: action("reset-clicked"),
   },
-};
+} satisfies Story;
 
-const ParentForm: Story = {
+const ParentForm = {
   render: (args) => (
     <form
       style={{ border: "1px solid black", padding: 20, margin: 20 }}
@@ -62,14 +61,14 @@ const ParentForm: Story = {
       </Button>
     </form>
   ),
-};
+} satisfies Story;
 
-export const InsideHtmlForm: Story = {
+export const InsideHtmlForm = {
   ...ParentForm,
   args: {},
-};
+} satisfies Story;
 
-const ExternalForm: Story = {
+const ExternalForm = {
   render: (args) => (
     <>
       <form
@@ -96,9 +95,9 @@ const ExternalForm: Story = {
       </Button>
     </>
   ),
-};
+} satisfies Story;
 
-export const ExternalHtmlForm: Story = {
+export const ExternalHtmlForm = {
   ...ExternalForm,
   args: {},
-};
+} satisfies Story;
