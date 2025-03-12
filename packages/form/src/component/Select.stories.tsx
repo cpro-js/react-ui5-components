@@ -33,43 +33,39 @@ const items: Array<SelectItemAlt> = [
 
 type Story = StoryObj<typeof Select>;
 
-/*const Template: StoryFn<typeof Select> = (args) => {
+/*const TemplateFn<typeof Select> = (args) => {
   return <Select {...args} />;
 };*/
 
-export const Standard: Story = {
+export const Standard = {
   args: {
     items,
   },
-};
+} satisfies Story;
 
-export const Empty: Story = {
+export const Empty = {
   args: {},
-};
+} satisfies Story;
 
-export const WithEmptyOption: Story = {
+export const WithEmptyOption = {
   args: { ...Standard.args, addEmptyOption: true },
-};
+} satisfies Story;
 
-export const WithValue: Story = {
+export const WithValue = {
   args: { ...Standard.args, value: "2" },
-};
+} satisfies Story;
 
-export const WithValueNumber: Story = {
+export const WithValueNumber = {
   args: { ...Standard.args, value: 1 },
-};
+} satisfies Story;
 
-export const WithValueString: Story = {
+export const WithValueString = {
   args: { ...Standard.args, value: "1" },
-};
-
-/*const TemplateAlt: StoryFn<typeof Select<SelectItemAlt, string>> = (args) => {
-  return <Select<SelectItemAlt, string> {...args} />;
-};*/
+} satisfies Story;
 
 type StoryAlt = StoryObj<typeof Select<SelectItemAlt, string>>;
 
-export const CustomItemModel: StoryAlt = {
+export const CustomItemModelAlt = {
   args: {
     ...Standard.args,
     items,
@@ -77,11 +73,11 @@ export const CustomItemModel: StoryAlt = {
     itemLabel: "alt",
     itemValue: "label",
   },
-};
+} satisfies StoryAlt;
 
 type StoryCountry = StoryObj<typeof Select<CountryItem, string>>;
 
-export const AdditionalText: StoryCountry = {
+export const AdditionalTextCountry = {
   args: {
     ...Standard.args,
     items: COUNTRIES,
@@ -90,4 +86,4 @@ export const AdditionalText: StoryCountry = {
     itemValue: "value",
     itemAdditionalText: "value",
   },
-};
+} satisfies StoryCountry;
