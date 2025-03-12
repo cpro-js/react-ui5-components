@@ -19,50 +19,50 @@ export default {
 
 type Story = StoryObj<typeof DatePicker>;
 
-export const Standard: Story = {
+export const Standard = {
   args: {
     onChange: (...args) => {
       console.log("onChange", ...args);
       action("onChange")(...args);
     },
   },
-};
+} satisfies Story;
 
-export const Prefilled: Story = {
+export const Prefilled = {
   args: { ...Standard.args, value: new Date() },
-};
+} satisfies Story;
 
-export const ShortFormat: Story = {
+export const ShortFormat = {
   args: { ...Prefilled.args, formatPattern: "short" },
-};
+} satisfies Story;
 
-export const CustomFormat: Story = {
+export const CustomFormat = {
   args: { ...Prefilled.args, formatPattern: "dd---MM---yyyy" },
-};
+} satisfies Story;
 
 /**
  *  Only the current date or any date in the future can be selected.
  **/
-export const MinDateToday: Story = {
+export const MinDateToday = {
   args: { ...Standard.args, minDate: new Date() },
-};
+} satisfies Story;
 
 /**
  *  Only the current date or previous dates can be selected.
  **/
-export const MaxDateToday: Story = {
+export const MaxDateToday = {
   args: { ...Standard.args, maxDate: new Date() },
-};
+} satisfies Story;
 
-const ISO8601Date: Story = {
+const ISO8601Date = {
   render: (args) => (
     <FormAdapter date={ISO8601DateAdapter}>
       <DatePicker {...args} />
     </FormAdapter>
   ),
-};
+} satisfies Story;
 
-export const ISO8601DateStandard: Story = {
+export const ISO8601DateStandard = {
   ...ISO8601Date,
   args: {
     onChange: (...args) => {
@@ -75,49 +75,49 @@ export const ISO8601DateStandard: Story = {
     minDate: { type: "string", control: "text" },
     maxDate: { type: "string", control: "text" },
   },
-};
+} satisfies Story;
 
-export const ISO8601DateCustomFormat: Story = {
+export const ISO8601DateCustomFormat = {
   ...ISO8601Date,
   args: {
     ...ISO8601DateStandard.args,
     formatPattern: "dd__MM__yyyy",
   },
-};
+} satisfies Story;
 
-export const ISO8601DatePrefilled: Story = {
+export const ISO8601DatePrefilled = {
   ...ISO8601Date,
   args: {
     ...ISO8601DateStandard.args,
     value: toISO8601DateString(new Date()),
   },
-};
+} satisfies Story;
 
-export const ISO8601DateMinDateToday: Story = {
+export const ISO8601DateMinDateToday = {
   ...ISO8601Date,
   args: {
     ...ISO8601DateStandard.args,
     minDate: toISO8601DateString(new Date()),
   },
-};
+} satisfies Story;
 
-export const ISO8601DateMaxDateToday: Story = {
+export const ISO8601DateMaxDateToday = {
   ...ISO8601Date,
   args: {
     ...ISO8601DateStandard.args,
     maxDate: toISO8601DateString(new Date()),
   },
-};
+} satisfies Story;
 
-const ISODateTime: Story = {
+const ISODateTime = {
   render: (args) => (
     <FormAdapter date={ISODateTimeAdapter}>
       <DatePicker {...args} />
     </FormAdapter>
   ),
-};
+} satisfies Story;
 
-export const ISODateTimeStandard: Story = {
+export const ISODateTimeStandard = {
   ...ISODateTime,
   args: {
     onChange: (...args) => {
@@ -131,36 +131,36 @@ export const ISODateTimeStandard: Story = {
     minDate: { type: "string", control: "text" },
     maxDate: { type: "string", control: "text" },
   },
-};
+} satisfies Story;
 
-export const ISODateTimeCustomFormat: Story = {
+export const ISODateTimeCustomFormat = {
   ...ISODateTimeStandard,
   args: {
     ...ISODateTimeStandard.args,
     formatPattern: "dd.MM.yyyy",
   },
-};
+} satisfies Story;
 
-export const ISODateTimePrefilled: Story = {
+export const ISODateTimePrefilled = {
   ...ISODateTimeStandard,
   args: {
     ...ISODateTimeStandard.args,
     value: new Date().toISOString(),
   },
-};
+} satisfies Story;
 
-export const ISODateTimeMinDateToday: Story = {
+export const ISODateTimeMinDateToday = {
   ...ISODateTimeStandard,
   args: {
     ...ISODateTimeStandard.args,
     minDate: new Date().toISOString(),
   },
-};
+} satisfies Story;
 
-export const ISODateTimeMaxDateToday: Story = {
+export const ISODateTimeMaxDateToday = {
   ...ISODateTimeStandard,
   args: {
     ...ISODateTimeStandard.args,
     maxDate: new Date().toISOString(),
   },
-};
+} satisfies Story;
