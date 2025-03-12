@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 
 import {
   COUNTRIES,
@@ -25,49 +25,55 @@ export default {
   },
 } satisfies Meta<typeof CreatableAutoComplete>;
 
-const Template: StoryFn<typeof CreatableAutoComplete<CountryItem>> = (args) => {
-  return <CreatableAutoComplete {...args} />;
-};
+type Story = StoryObj<typeof CreatableAutoComplete<CountryItem>>;
 
-export const Standard = Template.bind({});
-Standard.args = { value: undefined, loadItems: SEARCH_COUNTRIES };
+export const Standard = {
+  args: { value: undefined, loadItems: SEARCH_COUNTRIES },
+} satisfies Story;
 
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  ...Standard.args,
-  value: COUNTRIES[1].value,
-  initialItems: [COUNTRIES[1]],
-};
+export const Prefilled = {
+  args: {
+    ...Standard.args,
+    value: COUNTRIES[1].value,
+    initialItems: [COUNTRIES[1]],
+  },
+} satisfies Story;
 
-export const PrefilledWithValueOnly = Template.bind({});
-PrefilledWithValueOnly.args = {
-  ...Standard.args,
-  value: COUNTRIES[1].value,
-};
+export const PrefilledWithValueOnly = {
+  args: {
+    ...Standard.args,
+    value: COUNTRIES[1].value,
+  },
+} satisfies Story;
 
-export const MinCharacters = Template.bind({});
-MinCharacters.args = { ...Standard.args, minCharsForSearch: 3 };
+export const MinCharacters = {
+  args: { ...Standard.args, minCharsForSearch: 3 },
+} satisfies Story;
 
-export const CustomLabelProp = Template.bind({});
-CustomLabelProp.args = { ...Prefilled.args, itemLabel: "withUmlaut" };
+export const CustomLabelProp = {
+  args: { ...Prefilled.args, itemLabel: "withUmlaut" },
+} satisfies Story;
 
-export const CustomLabelFunction = Template.bind({});
-CustomLabelFunction.args = {
-  ...Prefilled.args,
-  itemLabel: (country) => `ISO code: ${country.value} => ${country.label}`,
-};
+export const CustomLabelFunction = {
+  args: {
+    ...Prefilled.args,
+    itemLabel: (country) => `ISO code: ${country.value} => ${country.label}`,
+  },
+} satisfies Story;
 
-export const CustomValueProp = Template.bind({});
-CustomValueProp.args = { ...Prefilled.args, itemValue: "label" };
+export const CustomValueProp = {
+  args: { ...Prefilled.args, itemValue: "label" },
+} satisfies Story;
 
-export const CustomValueFunction = Template.bind({});
-CustomValueFunction.args = {
-  ...Prefilled.args,
-  value: COUNTRIES[1].value,
-  itemValue: (country) => `${country.label} (${country.value})`,
-};
+export const CustomValueFunction = {
+  args: {
+    ...Prefilled.args,
+    value: COUNTRIES[1].value,
+    itemValue: (country) => `${country.label} (${country.value})`,
+  },
+} satisfies Story;
 
-// export const RenderSuggestion = Template.bind({});
+// export const RenderSuggestion = {}
 // RenderSuggestion.args = {
 //   ...Standard.args,
 //   itemProps: (country) => ({
@@ -79,4 +85,4 @@ CustomValueFunction.args = {
 //     info: "Infozzz",
 //     infoState: ValueState.Positive,
 //   }),
-// };
+// } satisfies Story;
