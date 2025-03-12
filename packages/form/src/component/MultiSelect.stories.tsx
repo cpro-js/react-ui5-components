@@ -32,41 +32,35 @@ const items: Array<MultiSelectItemAlt> = [
   { value: "4", label: "Test 4", alt: "Test 4 Alt" },
 ];
 
-export const Empty: Story = {
+export const Empty = {
   args: {},
-};
+} satisfies Story;
 
-export const Standard: Story = {
+export const Standard = {
   args: {
     items,
   },
-};
+} satisfies Story;
 
-export const WithValue: Story = {
+export const WithValue = {
   args: { ...Standard.args, value: ["2"] },
-};
+} satisfies Story;
 
-export const WithValueNumber: Story = {
+export const WithValueNumber = {
   args: { ...Standard.args, value: [1] },
-};
+} satisfies Story;
 
-export const WithValueString: Story = {
+export const WithValueString = {
   args: { ...Standard.args, value: ["1"] },
-};
+} satisfies Story;
 
-export const WithMultiValue: Story = {
+export const WithMultiValue = {
   args: { ...Standard.args, value: [1, "1", "2"] },
-};
-
-/*const TemplateAlt: StoryFn<typeof MultiSelect<MultiSelectItemAlt, string>> = (
-  args
-) => {
-  return <MultiSelect<MultiSelectItemAlt, string> {...args} />;
-};*/
+} satisfies Story;
 
 type StoryAlt = StoryObj<typeof MultiSelect<MultiSelectItemAlt, string>>;
 
-export const CustomItemModel: StoryAlt = {
+export const CustomItemModelAlt = {
   args: {
     ...Standard.args,
     items,
@@ -74,4 +68,4 @@ export const CustomItemModel: StoryAlt = {
     itemLabel: "alt",
     itemValue: "label",
   },
-};
+} satisfies StoryAlt;
