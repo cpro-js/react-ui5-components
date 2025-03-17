@@ -127,7 +127,7 @@ export const useControlledField = <
   const revalidateIfDirty = useEventCallback(
     useDebounceCallback(
       () => {
-        if (getFieldState(name).isTouched) {
+        if (getFieldState(name).isTouched && getFieldState(name).isDirty) {
           // values changed -> revalidate
           void fieldApiRef.current.validate();
         }
