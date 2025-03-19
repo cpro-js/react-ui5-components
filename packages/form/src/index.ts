@@ -115,6 +115,7 @@ export type {
   FormChangeHandler,
   FormSubmitHandler,
   PartialFormValues,
+  InitialFormValues,
 } from "./field/types";
 
 export { FormController } from "./form/FormController";
