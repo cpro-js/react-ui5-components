@@ -62,7 +62,11 @@ export const CreatableAutoCompleteField = forwardRef<
     },
     forwardedRef
   ) => {
+    // store input ref for internal usage
+    const elementRef = useRef<InputDomRef>(null);
+
     const field = useControlledField({
+      ref: elementRef,
       name,
       required,
       validate,
@@ -73,9 +77,6 @@ export const CreatableAutoCompleteField = forwardRef<
     useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
       field.fieldApiRef,
     ]);
-
-    // store input ref for internal usage
-    const elementRef = useRef<InputDomRef>(null);
 
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => elementRef.current, []);

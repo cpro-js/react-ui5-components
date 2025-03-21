@@ -69,7 +69,12 @@ export const MultiAutoCompleteField = forwardRef<
     },
     forwardedRef
   ) => {
+    // store input ref for internal usage
+    const elementRef =
+      useRef<MultiAutoComplete<DefaultAutoCompleteOption>>(null);
+
     const field = useControlledField({
+      ref: elementRef,
       name,
       required,
       validate,
@@ -79,10 +84,6 @@ export const MultiAutoCompleteField = forwardRef<
     useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
       field.fieldApiRef,
     ]);
-
-    // store input ref for internal usage
-    const elementRef =
-      useRef<MultiAutoComplete<DefaultAutoCompleteOption>>(null);
 
     const internalElementRef = useRef<MultiInputDomRef>(null);
 

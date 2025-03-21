@@ -67,7 +67,11 @@ export const TextInputField = forwardRef<
     },
     forwardedRef
   ) => {
+    // store input ref for internal usage
+    const elementRef = useRef<InputDomRef>(null);
+
     const field = useControlledField({
+      ref: elementRef,
       name,
       required,
       minLength,
@@ -80,9 +84,6 @@ export const TextInputField = forwardRef<
     useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
       field.fieldApiRef,
     ]);
-
-    // store input ref for internal usage
-    const elementRef = useRef<InputDomRef>(null);
 
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => elementRef.current, []);
