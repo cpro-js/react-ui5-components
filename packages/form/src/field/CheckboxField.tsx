@@ -84,7 +84,11 @@ export const CheckboxField = forwardRef<
 
   const isMultiValue = checkboxGroupProps != null;
 
+  // store input ref for internal usage
+  const elementRef = useRef<CheckBoxDomRef>(null);
+
   const field = useControlledField({
+    ref: elementRef,
     name,
     required,
     validate,
@@ -95,9 +99,6 @@ export const CheckboxField = forwardRef<
   useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
     field.fieldApiRef,
   ]);
-
-  // store input ref for internal usage
-  const elementRef = useRef<CheckBoxDomRef>(null);
 
   // forward field ref to stored internal input ref
   useImperativeHandle(field.ref, () => elementRef.current, []);

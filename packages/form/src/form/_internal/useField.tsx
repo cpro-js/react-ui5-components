@@ -1,4 +1,5 @@
 import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import { Ui5DomRef } from "@ui5/webcomponents-react";
 import pDebounce from "p-debounce";
 import { MutableRefObject, useEffect, useMemo, useRef } from "react";
 import {
@@ -29,7 +30,9 @@ export interface UseControlledFieldProps<
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
 > extends FormFieldCommonProps<FormValues, FormFieldName>,
-    FormFieldValidation<FormValues, any> {}
+    FormFieldValidation<FormValues, any> {
+  ref?: MutableRefObject<{ focus: () => unknown } | null>;
+}
 
 export interface UseControlledFieldsReturn<
   FormValues extends FieldValues,
@@ -56,6 +59,7 @@ export const useControlledField = <
   props: UseControlledFieldProps<FormValues, FormFieldName>
 ): UseControlledFieldsReturn<FormValues, FormFieldName> => {
   const {
+    ref,
     name,
     dependsOn,
     min,
@@ -121,8 +125,9 @@ export const useControlledField = <
         shouldValidate: false,
         shouldTouch: true,
       });
-    fieldApiRef.current.focus = () => setFocus(name);
-  }, [name, setError, clearErrors, getValues, setValue, trigger]);
+    fieldApiRef.current.focus = () =>
+      ref?.current ? ref?.current?.focus() : setFocus(name);
+  }, [name, setError, clearErrors, getValues, setValue, trigger, ref]);
 
   const revalidateIfDirty = useEventCallback(
     useDebounceCallback(

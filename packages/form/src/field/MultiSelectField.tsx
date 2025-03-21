@@ -72,7 +72,11 @@ export const MultiSelectField = forwardRef<
     },
     forwardedRef
   ) => {
+    // store input ref for internal usage
+    const elementRef = useRef<MultiComboBoxDomRef>(null);
+
     const field = useControlledField({
+      ref: elementRef,
       name,
       required,
       validate,
@@ -82,9 +86,6 @@ export const MultiSelectField = forwardRef<
     useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
       field.fieldApiRef,
     ]);
-
-    // store input ref for internal usage
-    const elementRef = useRef<MultiComboBoxDomRef>(null);
 
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => elementRef.current, []);

@@ -93,7 +93,11 @@ export const DatePickerField = forwardRef<
       date: { parse },
     } = useContext(FormAdapterContext);
 
+    // store input ref for internal usage
+    const elementRef = useRef<DatePickerDomRef>(null);
+
     const field = useControlledField({
+      ref: elementRef,
       name,
       required,
       validate: {
@@ -140,9 +144,6 @@ export const DatePickerField = forwardRef<
     useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
       field.fieldApiRef,
     ]);
-
-    // store input ref for internal usage
-    const elementRef = useRef<DatePickerDomRef>(null);
 
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => elementRef.current, []);
