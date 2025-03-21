@@ -133,7 +133,8 @@ export const DatePicker = forwardRef<DatePickerDomRef | null, DatePickerProps>(
     // forward our internal ref as external
     useImperativeHandle<DatePickerDomRef | null, DatePickerDomRef | null>(
       forwardedRef,
-      () => ref.current
+      () => ref.current,
+      []
     );
 
     const {

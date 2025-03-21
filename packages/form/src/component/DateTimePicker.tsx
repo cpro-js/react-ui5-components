@@ -114,7 +114,7 @@ export const DateTimePicker = forwardRef<
     useImperativeHandle<
       DateTimePickerDomRef | null,
       DateTimePickerDomRef | null
-    >(forwardedRef, () => ref.current);
+    >(forwardedRef, () => ref.current, []);
 
     const {
       dateTime: { format, parse },
