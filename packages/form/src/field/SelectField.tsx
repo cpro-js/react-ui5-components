@@ -71,13 +71,15 @@ export const SelectField = forwardRef<
     });
 
     // support imperative form field api via ref
-    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
+      field.fieldApiRef,
+    ]);
 
     // store input ref for internal usage
     const elementRef = useRef<ComboBoxDomRef>(null);
 
     // forward field ref to stored internal input ref
-    useImperativeHandle(field.ref, () => elementRef.current);
+    useImperativeHandle(field.ref, () => elementRef.current, []);
 
     const dispatchChangeEvent = useCustomEventDispatcher<
       ComboBoxDomRef,
