@@ -1,9 +1,4 @@
-import {
-  Input,
-  InputDomRef,
-  InputPropTypes,
-  Ui5CustomEvent,
-} from "@ui5/webcomponents-react";
+import { Input, InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import {
   FocusEvent,
   KeyboardEvent,
@@ -57,7 +52,7 @@ export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
   ) => {
     // store internal input ref and pass it back
     const inputRef = useRef<InputDomRef>(null);
-    useImperativeHandle(forwardedRef, () => inputRef.current!);
+    useImperativeHandle(forwardedRef, () => inputRef.current!, []);
 
     const submit = useFireSubmit();
 

@@ -239,7 +239,8 @@ export const CoreAutocomplete = forwardRef<
   const inputRef = useRef<InputDomRef>(null);
   useImperativeHandle<InputDomRef | null, InputDomRef | null>(
     forwardedRef,
-    () => inputRef.current
+    () => inputRef.current,
+    []
   );
 
   return (

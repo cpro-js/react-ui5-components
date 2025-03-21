@@ -94,7 +94,8 @@ export const BaseNumberInput = forwardRef<
   const inputRef = useRef<InputDomRef>(null);
   useImperativeHandle<InputDomRef | null, InputDomRef | null>(
     forwardedRef,
-    () => inputRef.current
+    () => inputRef.current,
+    []
   );
 
   const submit = useFireSubmit();
