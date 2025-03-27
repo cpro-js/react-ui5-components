@@ -10,7 +10,6 @@ import { FieldPath, FieldValues } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
 import { NumberInput, NumberInputProps } from "../component/number/NumberInput";
-import { useFireSubmit } from "../component/util";
 import { useControlledField } from "../form/_internal/useField";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
@@ -87,8 +86,6 @@ export const NumberInputField = forwardRef<
 
     // forward field ref to stored internal input ref
     useImperativeHandle(field.ref, () => elementRef.current, []);
-
-    const submit = useFireSubmit();
 
     const dispatchChangeEvent = useCustomEventDispatcher<
       InputDomRef,
