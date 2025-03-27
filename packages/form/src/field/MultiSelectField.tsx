@@ -72,20 +72,23 @@ export const MultiSelectField = forwardRef<
     },
     forwardedRef
   ) => {
+    // store input ref for internal usage
+    const elementRef = useRef<MultiComboBoxDomRef>(null);
+
     const field = useControlledField({
+      ref: elementRef,
       name,
       required,
       validate,
       dependsOn,
     });
     // support imperative form field api via ref
-    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
-
-    // store input ref for internal usage
-    const elementRef = useRef<MultiComboBoxDomRef>(null);
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
+      field.fieldApiRef,
+    ]);
 
     // forward field ref to stored internal input ref
-    useImperativeHandle(field.ref, () => elementRef.current);
+    useImperativeHandle(field.ref, () => elementRef.current, []);
 
     const dispatchChangeEvent = useCustomEventDispatcher<
       MultiComboBoxDomRef,

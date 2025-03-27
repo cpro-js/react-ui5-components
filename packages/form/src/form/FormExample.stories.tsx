@@ -17,7 +17,7 @@ import { FormController, FormControllerRef } from "./FormController";
 
 export default {
   title: "Form Example",
-  tags: ["!dev", "!autodocs"],
+  tags: ["dev", "!autodocs"],
 } satisfies Meta;
 type Story = StoryObj;
 

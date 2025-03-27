@@ -69,27 +69,34 @@ export const MultiAutoCompleteField = forwardRef<
     },
     forwardedRef
   ) => {
+    // store input ref for internal usage
+    const elementRef =
+      useRef<MultiAutoComplete<DefaultAutoCompleteOption>>(null);
+
     const field = useControlledField({
+      ref: elementRef,
       name,
       required,
       validate,
       dependsOn,
     });
     // support imperative form field api via ref
-    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
-
-    // store input ref for internal usage
-    const elementRef =
-      useRef<MultiAutoComplete<DefaultAutoCompleteOption>>(null);
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
+      field.fieldApiRef,
+    ]);
 
     const internalElementRef = useRef<MultiInputDomRef>(null);
 
-    useImperativeHandle(internalElementRef, () => {
-      return elementRef.current!.inputRef.current!;
-    });
+    useImperativeHandle(
+      internalElementRef,
+      () => {
+        return elementRef.current?.inputRef.current!;
+      },
+      []
+    );
 
     // forward field ref to stored internal input ref
-    useImperativeHandle(field.ref, () => elementRef.current);
+    useImperativeHandle(field.ref, () => elementRef.current, []);
 
     const dispatchChangeEvent = useCustomEventDispatcher<
       MultiInputDomRef,

@@ -69,7 +69,11 @@ export const CurrencyInputField = forwardRef<
     },
     forwardedRef
   ) => {
+    // store input ref for internal usage
+    const elementRef = useRef<InputDomRef>(null);
+
     const field = useControlledField({
+      ref: elementRef,
       name,
       required,
       min,
@@ -78,13 +82,12 @@ export const CurrencyInputField = forwardRef<
       dependsOn,
     });
     // support imperative form field api via ref
-    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current);
-
-    // store input ref for internal usage
-    const elementRef = useRef<InputDomRef>(null);
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
+      field.fieldApiRef,
+    ]);
 
     // forward field ref to stored internal input ref
-    useImperativeHandle(field.ref, () => elementRef.current);
+    useImperativeHandle(field.ref, () => elementRef.current, []);
 
     const dispatchChangeEvent = useCustomEventDispatcher<
       InputDomRef,

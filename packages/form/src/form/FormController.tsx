@@ -72,7 +72,7 @@ export const FormController = forwardRef<
   });
 
   // support imperative form field api via ref
-  useImperativeHandle(forwardedRef, () => form.actions);
+  useImperativeHandle(forwardedRef, () => form.actions, [form.actions]);
 
   const { handleSubmit, handleReset } = form;
 

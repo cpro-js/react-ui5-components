@@ -108,7 +108,7 @@ export const Select = forwardRef<ComboBoxDomRef, SelectProps>(
 
     // store internal input ref and pass it back
     const elementRef = useRef<ComboBoxDomRef>(null);
-    useImperativeHandle(forwardedRef, () => elementRef.current!);
+    useImperativeHandle(forwardedRef, () => elementRef.current!, []);
 
     const retrieveItemLabel = useCallback(
       (item: SelectItem) => {

@@ -96,7 +96,8 @@ export const MultiSelect = forwardRef<
   const internalRef = useRef<MultiComboBoxDomRef>(null);
   useImperativeHandle<MultiComboBoxDomRef | null, MultiComboBoxDomRef | null>(
     forwardedRef,
-    () => internalRef.current
+    () => internalRef.current,
+    []
   );
 
   const [selectedValue, setSelectedValue] = useState<typeof value>(value);
