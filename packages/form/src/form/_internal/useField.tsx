@@ -119,15 +119,28 @@ export const useControlledField = <
     fieldApiRef.current.clearError = () => clearErrors(name);
     fieldApiRef.current.setError = (error) => setError(name, error);
     fieldApiRef.current.getValue = () => getValues(name);
-    fieldApiRef.current.setValue = (value) =>
+    fieldApiRef.current.setValue = (value) => {
+      if (getFieldState(name).error) {
+        clearErrors(name);
+      }
       setValue(name, value, {
         shouldDirty: true,
         shouldValidate: false,
         shouldTouch: true,
       });
+    };
     fieldApiRef.current.focus = () =>
       ref?.current ? ref?.current?.focus() : setFocus(name);
-  }, [name, setError, clearErrors, getValues, setValue, trigger, ref]);
+  }, [
+    name,
+    getFieldState,
+    setError,
+    clearErrors,
+    getValues,
+    setValue,
+    trigger,
+    ref,
+  ]);
 
   const revalidateIfDirty = useEventCallback(
     useDebounceCallback(

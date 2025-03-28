@@ -57,12 +57,14 @@ export function useFormController<FormValues extends {}>(
   });
 
   const {
+    clearErrors,
+    getValues,
+    getFieldState,
     handleSubmit: createHandleSubmit,
     reset,
-    setValue,
-    getValues,
     setError,
     setFocus,
+    setValue,
   } = form;
 
   actions.current.focus = useEventCallback((name) => {
@@ -91,6 +93,10 @@ export function useFormController<FormValues extends {}>(
 
   actions.current.setValues = useEventCallback((values, options) => {
     values.forEach(({ name, value }) => {
+      if (getFieldState(name).error) {
+        clearErrors(name);
+      }
+
       setValue(name, value, {
         shouldValidate: options?.shouldValidate ?? false,
         shouldDirty: options?.shouldDirty ?? false,
