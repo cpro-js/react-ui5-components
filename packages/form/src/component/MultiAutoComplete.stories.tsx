@@ -17,18 +17,15 @@ export default {
 
 type Story = StoryObj<typeof MultiAutoComplete<DefaultAutoCompletOption>>;
 
-const MultiAutoCompleteDecorator: Decorator = (Story) => {
-  const onSelect = (values: Array<string>) => {
-    // setStoredValues(values);
-    action("onSelect")(values);
-  };
-
-  return <Story onSelectionChange={onSelect} style={{ width: "50%" }} />;
-};
-
 export const Standard = {
-  args: { values: [], onSearch: SEARCH_COUNTRIES },
-  decorators: [MultiAutoCompleteDecorator],
+  args: {
+    values: [],
+    onSearch: SEARCH_COUNTRIES,
+    onSelectionChange: (values: Array<string>) => {
+      action("onSelect")(values);
+    },
+    style: { width: "50%" },
+  },
 } satisfies Story;
 
 export const Prefilled = {
@@ -37,13 +34,10 @@ export const Prefilled = {
     values: [COUNTRIES[0].value, COUNTRIES[4].value, COUNTRIES[5].value],
     initialSuggestions: [COUNTRIES[0], COUNTRIES[4], COUNTRIES[5]],
   },
-
-  decorators: [MultiAutoCompleteDecorator],
 } satisfies Story;
 
 export const CustomLabelProp = {
   args: { ...Prefilled.args, itemLabel: "withUmlaut" },
-  decorators: [MultiAutoCompleteDecorator],
 } satisfies Story;
 
 export const CustomLabelFunction = {
@@ -51,12 +45,10 @@ export const CustomLabelFunction = {
     ...Prefilled.args,
     itemLabel: (country) => `ISO code: ${country.value}`,
   },
-  decorators: [MultiAutoCompleteDecorator],
 } satisfies Story;
 
 export const CustomValueProp = {
   args: { ...Prefilled.args, itemValue: "label" },
-  decorators: [MultiAutoCompleteDecorator],
 } satisfies Story;
 
 export const CustomValueFunction = {
@@ -64,7 +56,6 @@ export const CustomValueFunction = {
     ...Prefilled.args,
     itemValue: (country) => `VALUE_${country.label.toUpperCase()}`,
   },
-  decorators: [MultiAutoCompleteDecorator],
 } satisfies Story;
 
 export const RenderValue = {
@@ -80,5 +71,4 @@ export const RenderValue = {
       };
     },
   },
-  decorators: [MultiAutoCompleteDecorator],
 } satisfies Story;
