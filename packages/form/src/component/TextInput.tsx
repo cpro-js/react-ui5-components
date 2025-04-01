@@ -1,22 +1,21 @@
 import { Input, InputDomRef, InputPropTypes } from "@ui5/webcomponents-react";
 import {
-  HTMLAttributes,
+  FocusEvent,
   KeyboardEvent,
-  MutableRefObject,
   forwardRef,
-  useCallback,
   useImperativeHandle,
   useRef,
 } from "react";
+import { useEventCallback } from "usehooks-ts";
 
+import {
+  TypedCustomEvent,
+  useCustomEventDispatcher,
+} from "../hook/useCustomEventDispatcher";
 import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
-import { triggerSubmitOnEnter } from "./util";
-
-// pick only those props which we do care about
-type TextInputHtmlProps = Pick<HTMLAttributes<HTMLElement>, "onKeyPress">;
+import { useFireSubmit } from "./util";
 
 export type TextInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
-  TextInputHtmlProps &
   Pick<
     InputPropTypes,
     | "children"
@@ -37,39 +36,59 @@ export type TextInputProps = GlobalHtmlKeyInputElementProps<InputDomRef> &
     | "type"
     | "value"
     | "valueState"
-  >;
+  > & {
+    /** Fired when the input operation has finished by pressing Enter */
+    onSubmit?: (event: TypedCustomEvent<InputDomRef>) => void;
+  };
 
 /** `TextInput` as a wrapper of
  * <a href="https://sap.github.io/ui5-webcomponents-react/?path=/docs/inputs-input--docs" target="_blank">UI5 Input</a>
  * adding a custom `SubmitOnEnter` eventhandler, which triggers when pressing enter.
  */
 export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
-  ({ value, onKeyPress, ...props }, forwardedRef) => {
-    const handleKeyPress = useCallback(
-      (event: KeyboardEvent<HTMLElement>) => {
-        // Workaround: Webcomponents catches enter -> need to submit manually
-        // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
-        triggerSubmitOnEnter(event);
-        if (onKeyPress != null) {
-          onKeyPress(event);
-        }
-      },
-      [onKeyPress]
-    );
-
-    // store input ref for internal usage
+  (
+    { onFocus, onKeyDown, onKeyUp, onChange, onSubmit, ...props },
+    forwardedRef
+  ) => {
+    // store internal input ref and pass it back
     const inputRef = useRef<InputDomRef>(null);
-    useImperativeHandle<InputDomRef | null, InputDomRef | null>(
-      forwardedRef,
-      () => inputRef.current
-    );
+    useImperativeHandle(forwardedRef, () => inputRef.current!, []);
+
+    const submit = useFireSubmit();
+
+    const dispatchSubmitEvent = useCustomEventDispatcher<InputDomRef>({
+      ref: inputRef,
+      name: "cpro-submit",
+      onEvent: onSubmit,
+      delay: 0,
+    });
 
     return (
       <Input
         {...props}
         ref={inputRef}
-        onKeyPress={handleKeyPress}
-        value={value}
+        onFocus={useEventCallback((e) => {
+          submit.focus();
+          onFocus?.(e as FocusEvent<InputDomRef>);
+        })}
+        onKeyDown={useEventCallback((e) => {
+          submit.keyDown(e);
+          onKeyDown?.(e as KeyboardEvent<InputDomRef>);
+        })}
+        onKeyUp={useEventCallback(async (event) => {
+          onKeyUp?.(event as KeyboardEvent<InputDomRef>);
+          if (submit.shouldFireSubmitOnKeyUp()) {
+            // no change fired before -> user just pressed enter again -> trigger submit
+            dispatchSubmitEvent();
+          }
+        })}
+        onChange={useEventCallback(async (event) => {
+          onChange?.(event);
+          if (submit.shouldFireSubmitOnChange()) {
+            // change event was triggered by enter --> submit
+            dispatchSubmitEvent();
+          }
+        })}
       />
     );
   }

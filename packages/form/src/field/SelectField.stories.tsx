@@ -6,7 +6,7 @@ import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { SelectField, SelectFieldProps } from "./SelectField";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 export interface SelectItemAlt extends SelectItem {
   alt: string;
@@ -24,15 +24,15 @@ interface FormData {
   item?: string | number;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & SelectFieldProps> = (
-  args
-) => {
+const Template: StoryFn<
+  FormControllerProps<FormData> & SelectFieldProps<FormData, "item">
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -43,7 +43,7 @@ const Template: StoryFn<FormControllerProps<FormData> & SelectFieldProps> = (
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & SelectFieldProps
+  FormControllerProps<FormData> & SelectFieldProps<FormData, "item">
 > = (args, context) => {
   return (
     <FormI18nProvider
@@ -101,18 +101,19 @@ ValidationTranslationRequired.args = {
 };
 
 const TemplateAlt: StoryFn<
-  FormControllerProps<FormData> & SelectFieldProps<SelectItemAlt, string>
+  FormControllerProps<FormData> &
+    SelectFieldProps<FormData, "item", SelectItemAlt, string>
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <SelectField<SelectItemAlt, string>
+      <SelectField<FormData, "item", SelectItemAlt, string>
         {...props}
         ref={fieldRef}
         name="item"

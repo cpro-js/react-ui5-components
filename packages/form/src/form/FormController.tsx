@@ -1,10 +1,34 @@
+import { Ui5DomRef } from "@ui5/webcomponents-react";
 import * as React from "react";
-import { CSSProperties, ReactNode } from "react";
+import {
+  CSSProperties,
+  FormEvent,
+  ReactElement,
+  ReactNode,
+  Ref,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from "react";
+import { FieldPath } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
-import { FormChangeHandler } from "../field/types";
-import { FormListener } from "./FormListener";
+import {
+  FieldEventDetail,
+  FormActions,
+  FormChangeHandler,
+  FormFieldChangeEvent,
+  FormFieldSubmitEvent,
+} from "../field/types";
+import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
+import { FormListener } from "./_internal/FormListener";
+import {
+  UseFormControllerProps,
+  useFormController,
+} from "./_internal/useFormController";
 import { FormProvider } from "./FormProvider";
-import { UseFormControllerProps, useFormController } from "./useFormController";
+
+export type FormControllerRef<FormValues extends {}> = FormActions<FormValues>;
 
 export interface FormControllerProps<FormValues extends {}>
   extends UseFormControllerProps<FormValues> {
@@ -15,25 +39,73 @@ export interface FormControllerProps<FormValues extends {}>
   style?: CSSProperties;
   /** custom event handler that triggers when any value of the form is changed  */
   onChange?: FormChangeHandler<FormValues>;
+
+  onFieldChange?: (
+    event: FormFieldChangeEvent<Ui5DomRef, FormValues, FieldPath<FormValues>>
+  ) => void;
+  onFieldSubmit?: (
+    event: FormFieldSubmitEvent<Ui5DomRef, FormValues, FieldPath<FormValues>>
+  ) => void;
 }
 
-export function FormController<FormValues extends {}>(
-  props: FormControllerProps<FormValues>
-) {
-  const { id, children, initialValues, onSubmit, onChange, className, style } =
-    props;
+export const FormController = forwardRef<
+  FormControllerRef<{}>,
+  FormControllerProps<{}>
+>((props, forwardedRef) => {
+  const {
+    id,
+    children,
+    initialValues,
+    onSubmit,
+    onChange,
+    onFieldChange,
+    onFieldSubmit,
+    className,
+    style,
+  } = props;
 
-  const form = useFormController<FormValues>({
+  const ref = useRef<HTMLFormElement>(null);
+
+  const form = useFormController<any>({
     initialValues,
     onSubmit,
   });
 
+  // support imperative form field api via ref
+  useImperativeHandle(forwardedRef, () => form.actions, [form.actions]);
+
   const { handleSubmit, handleReset } = form;
+
+  const handleRestrictedSubmit = useEventCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const nativeEvent = event.nativeEvent as SubmitEvent;
+
+      const submitter = nativeEvent.submitter?.tagName.toLowerCase();
+      // restrict submits to button
+      if (submitter && ["ui5-button"].includes(submitter)) {
+        handleSubmit(event);
+      }
+    }
+  );
+
+  useCustomEventDispatcher<Ui5DomRef, FieldEventDetail<{}, FieldPath<{}>>>({
+    ref: ref,
+    name: "field-change",
+    onEvent: onFieldChange,
+  });
+
+  useCustomEventDispatcher<Ui5DomRef, FieldEventDetail<{}, FieldPath<{}>>>({
+    ref: ref,
+    name: "field-submit",
+    onEvent: onFieldSubmit,
+  });
 
   return (
     <form
+      ref={ref}
       id={id}
-      onSubmit={handleSubmit}
+      onSubmit={handleRestrictedSubmit}
       onReset={handleReset}
       className={className}
       style={style}
@@ -45,4 +117,8 @@ export function FormController<FormValues extends {}>(
       </FormProvider>
     </form>
   );
-}
+}) as <FormValues extends {}>(
+  p: FormControllerProps<FormValues> & {
+    ref?: Ref<FormControllerRef<FormValues> | undefined>;
+  }
+) => ReactElement;

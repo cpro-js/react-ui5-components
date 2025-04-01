@@ -1,21 +1,35 @@
 import { DateTimePickerDomRef } from "@ui5/webcomponents-react";
 import {
+  ReactElement,
+  Ref,
   forwardRef,
   useContext,
   useImperativeHandle,
-  useMemo,
   useRef,
 } from "react";
-import { FieldError, useController } from "react-hook-form";
+import {
+  FieldError,
+  FieldPath,
+  FieldPathValue,
+  FieldValues,
+} from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import {
   DateTimePicker,
   DateTimePickerProps,
 } from "../component/DateTimePicker";
+import { useControlledField } from "../form/_internal/useField";
 import { FormAdapterContext } from "../form/FormAdapter";
-import { useI18nValidationError } from "../i18n/FormI18n";
-import { FormFieldElement, FormFieldValidation } from "./types";
-import { hasError } from "./util";
+import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
+import {
+  FieldEventDetail,
+  FormFieldChangeEvent,
+  FormFieldCommonProps,
+  FormFieldRef,
+  FormFieldSubmitEvent,
+  FormFieldValidation,
+} from "./types";
 
 const convertToDateOnly = (
   value: Date | any,
@@ -33,30 +47,76 @@ const isErrorIgnored = (error: FieldError | undefined) =>
   // minDate and maxDate errors are already handled by web component -> no need to provide our own error message
   error != null && (error.type === "minDate" || error.type === "maxDate");
 
-export type DateTimePickerFieldProps = Omit<
+export type DateTimePickerFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+> = Omit<
   DateTimePickerProps,
-  "name" | "value" | "onChange" | "valueState" | "onBlur"
+  | "name"
+  | "value"
+  | "valueState"
+  | "valueStateMessage"
+  | "onChange"
+  | "onSubmit"
 > &
-  Pick<FormFieldValidation, "required"> & {
-    name: string;
+  Pick<
+    FormFieldValidation<FormValues, FieldPathValue<FormValues, FormFieldName>>,
+    "required" | "validate"
+  > &
+  FormFieldCommonProps<FormValues, FormFieldName> & {
+    onChange?: (
+      event: FormFieldChangeEvent<
+        DateTimePickerDomRef,
+        FormValues,
+        FormFieldName
+      >
+    ) => void;
+    onSubmit?: (
+      event: FormFieldSubmitEvent<
+        DateTimePickerDomRef,
+        FormValues,
+        FormFieldName
+      >
+    ) => void;
   };
 
 export const DateTimePickerField = forwardRef<
-  FormFieldElement,
-  DateTimePickerFieldProps
->(({ name, required, minDate, maxDate, ...props }, forwardedRef) => {
-  const {
-    dateTime: { parse },
-  } = useContext(FormAdapterContext);
+  FormFieldRef<any, any>,
+  DateTimePickerFieldProps<any, any>
+>(
+  (
+    {
+      name,
+      required,
+      minDate,
+      maxDate,
+      validate,
+      dependsOn,
+      onInput,
+      onChange,
+      onSubmit,
+      onBlur,
+      ...props
+    },
+    forwardedRef
+  ) => {
+    const {
+      dateTime: { parse },
+    } = useContext(FormAdapterContext);
 
-  const rules: Partial<FormFieldValidation> = useMemo(
-    () => ({
+    // store input ref for internal usage
+    const elementRef = useRef<DateTimePickerDomRef>(null);
+
+    const field = useControlledField({
+      ref: elementRef,
+      name,
       required,
       validate: {
+        ...(typeof validate === "function" ? { validate: validate } : validate),
         ...(minDate == null
           ? {}
           : {
-              minDate: (value?: Date | null) => {
+              minDate: (value?: Date | string | null) => {
                 if (value == null) {
                   return true;
                 }
@@ -73,7 +133,7 @@ export const DateTimePickerField = forwardRef<
         ...(maxDate == null
           ? {}
           : {
-              maxDate: (value?: Date | null) => {
+              maxDate: (value?: Date | string | null) => {
                 if (value == null) {
                   return true;
                 }
@@ -88,58 +148,102 @@ export const DateTimePickerField = forwardRef<
               },
             }),
       },
-    }),
-    [parse, required, minDate, maxDate]
-  );
+      dependsOn,
+    });
 
-  const getValidationErrorMessage = useI18nValidationError(name, rules);
+    // support imperative form field api via ref
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
+      field.fieldApiRef,
+    ]);
 
-  const { field, fieldState } = useController({
-    name: name,
-    rules,
-  });
+    // forward field ref to stored internal input ref
+    useImperativeHandle(field.ref, () => elementRef.current, []);
 
-  // store input ref for intenral usage
-  const internalRef = useRef<DateTimePickerDomRef>(null);
-  // forward outer ref to custom element
-  useImperativeHandle(forwardedRef, () => ({
-    focus() {
-      if (internalRef.current != null) {
-        internalRef.current.focus();
-      }
-    },
-  }));
-  // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => internalRef.current);
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      DateTimePickerDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-change",
+      onEvent: onChange,
+    });
 
-  // use null to reset value, undefined will be ignored by web component
-  const value = field.value === undefined ? null : field.value;
+    const dispatchSubmitEvent = useCustomEventDispatcher<
+      DateTimePickerDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-submit",
+      onEvent: onSubmit,
+    });
 
-  // get error message (Note: undefined fallbacks to default message of ui5 component)
-  const errorMessage =
-    hasError(fieldState.error) && !isErrorIgnored(fieldState.error)
-      ? getValidationErrorMessage(fieldState.error, field.value)
-      : undefined;
+    return (
+      <DateTimePicker
+        {...props}
+        ref={elementRef}
+        name={field.name}
+        // use null to reset value, undefined will be ignored by web component
+        value={field.value === undefined ? null : field.value}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
+        required={required}
+        minDate={minDate}
+        maxDate={maxDate}
+        valueState={field.valueState}
+        // ignore custom message for minDate and maxDate because they are already handled by minDate / maxDate
+        valueStateMessage={
+          !isErrorIgnored(field.error) &&
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
+        }
+        onInput={useEventCallback((event) => {
+          // reset previous errors
+          field.error && field.fieldApiRef.current.clearError();
+          onInput?.(event);
+        })}
+        onChange={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
 
-  return (
-    <DateTimePicker
-      {...props}
-      ref={internalRef}
-      name={field.name}
-      value={value}
-      minDate={minDate}
-      maxDate={maxDate}
-      onChange={(event, value) =>
-        field.onChange(value != null ? value : undefined)
-      }
-      valueState={hasError(fieldState.error) ? "Negative" : "None"}
-      valueStateMessage={
-        errorMessage != null && (
-          <div slot="valueStateMessage">{errorMessage}</div>
-        )
-      }
-      onBlur={field.onBlur}
-      required={required}
-    />
-  );
-});
+          const value = event.detail.value;
+          field.fieldApiRef.current.setValue(value);
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
+          });
+        })}
+        onSubmit={useEventCallback(async (event) => {
+          // don't bubble up this event -> we trigger our own enhanced event
+          event.stopPropagation();
+
+          const value = field.fieldApiRef.current.getValue();
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchSubmitEvent({
+            name,
+            value,
+            valid,
+            field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
+          });
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
+        })}
+      />
+    );
+  }
+) as <
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>
+>(
+  p: DateTimePickerFieldProps<FormValues, FormFieldName> & {
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
+  }
+) => ReactElement;

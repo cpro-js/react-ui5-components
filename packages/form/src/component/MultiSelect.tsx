@@ -8,8 +8,6 @@ import {
 import { MultiComboBoxSelectionChangeEventDetail } from "@ui5/webcomponents/dist/MultiComboBox.js";
 import {
   ClipboardEvent,
-  KeyboardEvent,
-  MutableRefObject,
   ReactElement,
   Ref,
   forwardRef,
@@ -21,11 +19,8 @@ import {
 } from "react";
 
 import { handlePastedText } from "./common/PasteHandler";
-import {
-  GlobalHtmlElementProps,
-  GlobalHtmlKeyInputElementProps,
-} from "./GlobalHtmlElementProps";
-import { triggerSubmitOnEnter, useAllowAction } from "./util";
+import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
+import { useAllowAction } from "./util";
 
 export interface MultiSelectItem {
   value: string | number;
@@ -101,7 +96,8 @@ export const MultiSelect = forwardRef<
   const internalRef = useRef<MultiComboBoxDomRef>(null);
   useImperativeHandle<MultiComboBoxDomRef | null, MultiComboBoxDomRef | null>(
     forwardedRef,
-    () => internalRef.current
+    () => internalRef.current,
+    []
   );
 
   const [selectedValue, setSelectedValue] = useState<typeof value>(value);
@@ -178,21 +174,6 @@ export const MultiSelect = forwardRef<
       }
     },
     [setAllowSubmitOnEnter, onClose]
-  );
-
-  const handleKeyPress = useCallback(
-    (event: KeyboardEvent<MultiComboBoxDomRef>) => {
-      // Workaround: Webcomponents catches enter -> need to submit manually
-      // see https://github.com/SAP/ui5-webcomponents/pull/2855/files
-      if (allowSubmitOnEnter.current) {
-        // only if it's allowed
-        triggerSubmitOnEnter(event);
-      }
-      if (onKeyPress != null) {
-        onKeyPress(event);
-      }
-    },
-    [onKeyPress]
   );
 
   const onPaste = useCallback(
@@ -280,7 +261,6 @@ export const MultiSelect = forwardRef<
         onSelectionChange={handleSelectionChange}
         onOpen={handleOnOpen}
         onClose={handleOnClose}
-        onKeyPress={handleKeyPress}
         onPaste={onPaste}
       >
         {items.map((item, index) => (

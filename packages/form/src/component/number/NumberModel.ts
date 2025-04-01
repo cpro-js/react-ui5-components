@@ -3,8 +3,8 @@ import {
   InputPropTypes,
   Ui5CustomEvent,
 } from "@ui5/webcomponents-react";
-import { KeyboardEvent } from "react";
 
+import { TypedCustomEvent } from "../../hook/useCustomEventDispatcher";
 import { GetNumberWarningMessage } from "./helper/NumberWarningMessage";
 
 /**
@@ -19,7 +19,7 @@ export interface CommonNumberInputProps
     | "showSuggestions"
     | "onSelectionChange"
     | "onChange"
-    | "onKeyUp"
+    | "onSubmit"
   > {
   /**
    * The initial value, if any.
@@ -30,20 +30,13 @@ export interface CommonNumberInputProps
    * Modified onChange method, which also supplies the consumer with the parsed number value.
    */
   onChange?: (
-    event: Ui5CustomEvent<InputDomRef>,
-    value: number | undefined
+    event: TypedCustomEvent<InputDomRef, { value: number | undefined }>
   ) => void;
   /**
-   * Convenience method which behaves like onChange, but only provides the current value as number.
-   * Fired when the value has changed and the user leaves the input field.
+   * Fired when the input operation has finished by pressing Enter, which also supplies the consumer with the parsed number value.
    */
-  onValue?: (value?: number) => void;
-  /**
-   * Modified onKeyUp method, which also supplies the consumer with the parsed number value.
-   */
-  onKeyUp?: (
-    event: KeyboardEvent<InputDomRef>,
-    value: number | undefined
+  onSubmit?: (
+    event: TypedCustomEvent<InputDomRef, { value: number | undefined }>
   ) => void;
   /**
    * Locale to use for currency formatting style.

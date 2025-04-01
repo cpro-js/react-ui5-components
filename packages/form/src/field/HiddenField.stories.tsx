@@ -8,9 +8,9 @@ interface FormData {
   text?: string;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & HiddenFieldProps> = (
-  args
-) => {
+const Template: StoryFn<
+  FormControllerProps<FormData> & HiddenFieldProps<FormData, "text">
+> = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
   const { submittedValues, handleSubmit } = useFormViewer({

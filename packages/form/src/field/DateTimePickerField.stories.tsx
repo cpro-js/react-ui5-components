@@ -7,7 +7,7 @@ import {
   DateTimePickerFieldProps,
 } from "./DateTimePickerField";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 import { FormI18nProvider, toISODateTimeString } from "..";
 
 interface FormData {
@@ -15,14 +15,14 @@ interface FormData {
 }
 
 const Template: StoryFn<
-  FormControllerProps<FormData> & DateTimePickerFieldProps
+  FormControllerProps<FormData> & DateTimePickerFieldProps<FormData, "date">
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "date">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
@@ -33,7 +33,7 @@ const Template: StoryFn<
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & DateTimePickerFieldProps
+  FormControllerProps<FormData> & DateTimePickerFieldProps<FormData, "date">
 > = (args, context) => {
   return (
     <FormI18nProvider

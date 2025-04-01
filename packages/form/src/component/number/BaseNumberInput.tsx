@@ -1,16 +1,17 @@
-import { Input, InputDomRef, Ui5CustomEvent } from "@ui5/webcomponents-react";
+import { Input, InputDomRef } from "@ui5/webcomponents-react";
 import {
   ClipboardEvent,
   KeyboardEvent,
   forwardRef,
-  useCallback,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from "react";
+import { useEventCallback } from "usehooks-ts";
 
-import { triggerSubmitOnEnter } from "../util";
+import { useCustomEventDispatcher } from "../../hook/useCustomEventDispatcher";
+import { useFireSubmit } from "../util";
 import {
   getCurrencyConfig,
   getCurrencyFormatter,
@@ -55,7 +56,6 @@ export const BaseNumberInput = forwardRef<
 >((props, forwardedRef) => {
   const {
     value,
-    onValue,
     locale,
     currency,
     minimumValue = Number.MIN_SAFE_INTEGER,
@@ -72,6 +72,7 @@ export const BaseNumberInput = forwardRef<
     onBlur: onBlurOriginal,
     onPaste: onPasteOriginal,
     onChange: onChangeOriginal,
+    onSubmit: onSubmitOriginal,
     onMouseEnter: onMouseEnterOriginal,
     onMouseLeave: onMouseLeaveOriginal,
     valueState,
@@ -93,8 +94,34 @@ export const BaseNumberInput = forwardRef<
   const inputRef = useRef<InputDomRef>(null);
   useImperativeHandle<InputDomRef | null, InputDomRef | null>(
     forwardedRef,
-    () => inputRef.current
+    () => inputRef.current,
+    []
   );
+
+  const submit = useFireSubmit();
+
+  const dispatchChangeEvent = useCustomEventDispatcher<
+    InputDomRef,
+    {
+      value: number | undefined;
+    }
+  >({
+    ref: inputRef,
+    name: "cpro-change",
+    onEvent: onChangeOriginal,
+  });
+
+  const dispatchSubmitEvent = useCustomEventDispatcher<
+    InputDomRef,
+    {
+      value: number | undefined;
+    }
+  >({
+    ref: inputRef,
+    name: "cpro-submit",
+    onEvent: onSubmitOriginal,
+    delay: 0,
+  });
 
   const inputConfig = useMemo(() => {
     const result: Intl.NumberFormatOptions = getDefinedNumberFormatOptions(
@@ -183,26 +210,23 @@ export const BaseNumberInput = forwardRef<
   }, [displayConfig, locale]);
 
   // number parser with min & max restriction
-  const parseValue = useCallback(
-    (inputValue?: string): number | undefined => {
-      if (!inputValue) {
-        return;
-      }
+  const parseValue = (inputValue?: string): number | undefined => {
+    if (!inputValue) {
+      return;
+    }
 
-      // parse the formatted number: max restrictions might apply
-      let result = parser.parse(formatForInput(parser.parse(inputValue)));
+    // parse the formatted number: max restrictions might apply
+    let result = parser.parse(formatForInput(parser.parse(inputValue)));
 
-      if (result !== undefined && result > maximumValue) {
-        result = maximumValue;
-      }
-      if (result !== undefined && result < minimumValue) {
-        result = minimumValue;
-      }
+    if (result !== undefined && result > maximumValue) {
+      result = maximumValue;
+    }
+    if (result !== undefined && result < minimumValue) {
+      result = minimumValue;
+    }
 
-      return result;
-    },
-    [parser, formatForInput]
-  );
+    return result;
+  };
 
   // current value
   const currentValueRef = useRef(
@@ -215,7 +239,7 @@ export const BaseNumberInput = forwardRef<
     return decimalTest.length <= 1 ? 0 : decimalTest.length - 2;
   }, [formatForInput]);
 
-  const onPaste = useCallback(
+  const onPaste = useEventCallback(
     (event: ClipboardEvent<HTMLInputElement>) => {
       const data = event.clipboardData.getData("text");
       const parsed = parseValue(data);
@@ -234,15 +258,15 @@ export const BaseNumberInput = forwardRef<
       if (onPasteOriginal) {
         onPasteOriginal(event);
       }
-    },
-    [parseValue, onPasteOriginal]
+    }
   );
 
   /**
    * Prevent invalid data, e.g. not a number.
    */
-  const onKeyDown = useCallback(
+  const onKeyDown = useEventCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
+      submit.keyDown(event);
       const originalValue = event.currentTarget.value;
 
       let invalidDataMsg: NumberWarningMessage | undefined;
@@ -305,98 +329,99 @@ export const BaseNumberInput = forwardRef<
 
       // update message
       setMessage(invalidDataMsg ?? undefined);
-    },
-    [parser, maxFractionDigits, decimalSeparator, onKeyDownOriginal]
+    }
   );
 
   /**
    * Sets the current value, enables submit via enter and triggers events.
    */
-  const onKeyUp = useCallback(
-    (event: KeyboardEvent<InputDomRef>) => {
-      const originalValue = event.currentTarget.value ?? "";
-      const parsedValue = parser.parse(originalValue);
-      const safeValue = parseValue(originalValue);
+  const onKeyUp = useEventCallback((event: KeyboardEvent<InputDomRef>) => {
+    const originalValue = event.currentTarget.value ?? "";
+    const parsedValue = parser.parse(originalValue);
+    const safeValue = parseValue(originalValue);
 
-      let invalidDataMsg: NumberWarningMessage | undefined;
+    let invalidDataMsg: NumberWarningMessage | undefined;
 
-      if (originalValue !== currentValueRef.current && originalValue !== "-") {
-        // parsed value is invalid, but the original value has content
-        // => reset to last valid value before the change
-        if (parsedValue === undefined && originalValue !== "") {
+    if (originalValue !== currentValueRef.current && originalValue !== "-") {
+      // parsed value is invalid, but the original value has content
+      // => reset to last valid value before the change
+      if (parsedValue === undefined && originalValue !== "") {
+        event.currentTarget.value = currentValueRef.current || "";
+        invalidDataMsg = {
+          type: WarningMessageTypes.RESET_NOT_A_NUMBER,
+          discardedValue: originalValue,
+        };
+      } else {
+        // too many fraction digits
+        const decIndex = originalValue.indexOf(decimalSeparator);
+        const fracDigits =
+          decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
+        const tooManyFracs = fracDigits > maxFractionDigits;
+
+        // if parseValue changed the value, then reset the input to our value
+        // corner case for checking tooManyFracs: 1.110 => 1.11
+        if (safeValue !== parsedValue || tooManyFracs) {
+          const isChanged =
+            safeValue !== undefined && parsedValue !== undefined;
+
+          currentValueRef.current = formatForInput(safeValue);
           event.currentTarget.value = currentValueRef.current || "";
           invalidDataMsg = {
-            type: WarningMessageTypes.RESET_NOT_A_NUMBER,
+            type: tooManyFracs
+              ? WarningMessageTypes.MODIFIED_MAX_FRACTION_DIGITS
+              : !isChanged
+              ? WarningMessageTypes.MODIFIED
+              : safeValue > parsedValue
+              ? WarningMessageTypes.MODIFIED_MIN_NUMBER
+              : WarningMessageTypes.MODIFIED_MAX_NUMBER,
             discardedValue: originalValue,
           };
         } else {
-          // too many fraction digits
-          const decIndex = originalValue.indexOf(decimalSeparator);
-          const fracDigits =
-            decIndex < 0 ? 0 : originalValue.length - 1 - decIndex;
-          const tooManyFracs = fracDigits > maxFractionDigits;
-
-          // if parseValue changed the value, then reset the input to our value
-          // corner case for checking tooManyFracs: 1.110 => 1.11
-          if (safeValue !== parsedValue || tooManyFracs) {
-            const isChanged =
-              safeValue !== undefined && parsedValue !== undefined;
-
-            currentValueRef.current = formatForInput(safeValue);
-            event.currentTarget.value = currentValueRef.current || "";
-            invalidDataMsg = {
-              type: tooManyFracs
-                ? WarningMessageTypes.MODIFIED_MAX_FRACTION_DIGITS
-                : !isChanged
-                ? WarningMessageTypes.MODIFIED
-                : safeValue > parsedValue
-                ? WarningMessageTypes.MODIFIED_MIN_NUMBER
-                : WarningMessageTypes.MODIFIED_MAX_NUMBER,
-              discardedValue: originalValue,
-            };
-          } else {
-            // set the current value to the changed value
-            currentValueRef.current = originalValue;
-          }
-
-          // fire onInput event after any changed value
-          inputRef.current?.fireEvent("input");
+          // set the current value to the changed value
+          currentValueRef.current = originalValue;
         }
-      }
 
-      if (invalidDataMsg) {
-        setMessage(invalidDataMsg);
-      } else {
-        // allow for submit via enter
-        triggerSubmitOnEnter(event);
+        // fire onInput event after any changed value
+        inputRef.current?.fireEvent("input");
       }
+    }
 
-      // allow consumers to have access to onKeyUp too
-      if (onKeyUpOriginal) {
-        onKeyUpOriginal(event, parseValue(currentValueRef.current));
-      }
-    },
-    [parser, decimalSeparator, parseValue, onKeyUpOriginal]
-  );
+    if (invalidDataMsg) {
+      setMessage(invalidDataMsg);
+    }
 
-  const leaveInputState = useCallback(() => {
+    // allow consumers to have access to onKeyUp too
+    if (onKeyUpOriginal) {
+      onKeyUpOriginal(event);
+    }
+
+    if (submit.shouldFireSubmitOnKeyUp()) {
+      const val = parseValue(currentValueRef.current);
+
+      dispatchSubmitEvent({
+        value: val,
+      });
+    }
+  });
+
+  const leaveInputState = () => {
     setInputState(false);
     setMessage(undefined);
-  }, [setInputState, setMessage]);
+  };
 
-  const onFocus = useCallback<NonNullable<typeof onFocusOriginal>>(
+  const onFocus: NonNullable<typeof onFocusOriginal> = useEventCallback(
     (...args) => {
+      submit.focus();
       isFocusRef.current = true;
       setInputState(true);
 
       if (onFocusOriginal) {
         onFocusOriginal(...args);
       }
-    },
-    [setInputState, onFocusOriginal]
+    }
   );
 
-  const onBlur = useCallback<NonNullable<typeof onBlurOriginal>>(
+  const onBlur: NonNullable<typeof onBlurOriginal> = useEventCallback(
     (event) => {
       isFocusRef.current = false;
       leaveInputState();
@@ -404,37 +429,33 @@ export const BaseNumberInput = forwardRef<
       if (onBlurOriginal) {
         onBlurOriginal(event);
       }
-    },
-    [leaveInputState, onBlurOriginal]
+    }
   );
 
-  const onChange = useCallback(
-    (event: Ui5CustomEvent<InputDomRef>) => {
-      const val = parseValue(currentValueRef.current);
+  const onChange = useEventCallback(() => {
+    const val = parseValue(currentValueRef.current);
 
-      // extra method to provide the value as number
-      if (onValue && val !== value) {
-        onValue(val);
-      }
-      if (onChangeOriginal) {
-        onChangeOriginal(event, val);
-      }
-    },
-    [parseValue, value]
-  );
+    dispatchChangeEvent({
+      value: val,
+    });
 
-  const onMouseEnter = useCallback<NonNullable<typeof onMouseEnterOriginal>>(
-    (...args) => {
+    if (submit.shouldFireSubmitOnChange()) {
+      dispatchSubmitEvent({
+        value: val,
+      });
+    }
+  });
+
+  const onMouseEnter: NonNullable<typeof onMouseEnterOriginal> =
+    useEventCallback((...args) => {
       setInputState(true);
       if (onMouseEnterOriginal) {
         onMouseEnterOriginal(...args);
       }
-    },
-    [setInputState, onMouseEnterOriginal]
-  );
+    });
 
-  const onMouseLeave = useCallback<NonNullable<typeof onMouseLeaveOriginal>>(
-    (...args) => {
+  const onMouseLeave: NonNullable<typeof onMouseLeaveOriginal> =
+    useEventCallback((...args) => {
       if (!isFocusRef.current) {
         leaveInputState();
       }
@@ -442,9 +463,7 @@ export const BaseNumberInput = forwardRef<
       if (onMouseLeaveOriginal) {
         onMouseLeaveOriginal(...args);
       }
-    },
-    [leaveInputState, onMouseLeaveOriginal]
-  );
+    });
 
   // support externally set values, required for form reset
   if (lastValueRef.current !== value) {

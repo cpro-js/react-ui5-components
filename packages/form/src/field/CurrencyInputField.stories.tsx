@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import { StoryFn } from "@storybook/react";
 import { useRef } from "react";
 
@@ -8,32 +9,38 @@ import {
   CurrencyInputFieldProps,
 } from "./CurrencyInputField";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   theNumber?: number;
 }
 
 const Template: StoryFn<
-  FormControllerProps<FormData> & CurrencyInputFieldProps
+  FormControllerProps<FormData> & CurrencyInputFieldProps<FormData, "theNumber">
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
-  const { submittedValues, handleSubmit } = useFormViewer({
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "theNumber">>(null);
 
   return (
     <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <CurrencyInputField {...props} ref={fieldRef} name={"theNumber"} />{" "}
+      <CurrencyInputField
+        {...props}
+        ref={fieldRef}
+        name={"theNumber"}
+        onSubmit={action("onSubmit")}
+        onChange={action("onChange")}
+      />
       <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
     </FormController>
   );
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & CurrencyInputFieldProps
+  FormControllerProps<FormData> & CurrencyInputFieldProps<FormData, "theNumber">
 > = (args, context) => {
   return (
     <FormI18nProvider

@@ -6,31 +6,32 @@ import { FormI18nProvider } from "../i18n/FormI18n";
 import { toISO8601DateString } from "../util/date";
 import { DatePickerField, DatePickerFieldProps } from "./DatePickerField";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { FormFieldElement } from "./types";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   date?: string;
 }
 
-const Template: StoryFn<FormControllerProps<FormData> & DatePickerFieldProps> =
-  (args) => {
-    const { initialValues, onSubmit, ...props } = args;
+const Template: StoryFn<
+  FormControllerProps<FormData> & DatePickerFieldProps<FormData, "date">
+> = (args) => {
+  const { initialValues, onSubmit, ...props } = args;
 
-    const { submittedValues, handleSubmit } = useFormViewer({
-      onSubmit: onSubmit,
-    });
-    const fieldRef = useRef<FormFieldElement>(null);
+  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+    onSubmit: onSubmit,
+  });
+  const fieldRef = useRef<FormFieldRef<FormData, "date">>(null);
 
-    return (
-      <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-        <DatePickerField {...props} ref={fieldRef} name={"date"} />
-        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-      </FormController>
-    );
-  };
+  return (
+    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
+      <DatePickerField {...props} ref={fieldRef} name={"date"} />
+      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+    </FormController>
+  );
+};
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & DatePickerFieldProps
+  FormControllerProps<FormData> & DatePickerFieldProps<FormData, "date">
 > = (args, context) => {
   return (
     <FormI18nProvider

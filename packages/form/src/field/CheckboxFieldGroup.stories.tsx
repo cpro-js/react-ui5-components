@@ -13,7 +13,7 @@ interface FormData {
 }
 
 const Template: StoryFn<
-  FormControllerProps<FormData> & CheckboxFieldGroupProps
+  FormControllerProps<FormData> & CheckboxFieldGroupProps<FormData, "value">
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 

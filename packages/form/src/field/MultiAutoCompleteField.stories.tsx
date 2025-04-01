@@ -5,26 +5,28 @@ import {
   COUNTRIES,
   SEARCH_COUNTRIES,
 } from "../component/autocomplete/AutoComplete-storyData";
-import { MultiAutoCompleteProps } from "../component/MultiAutoComplete";
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { MultiAutoCompleteField } from "./MultiAutoCompleteField";
-import { FormFieldElement } from "./types";
+import {
+  MultiAutoCompleteField,
+  MultiAutoCompleteFieldProps,
+} from "./MultiAutoCompleteField";
+import { FormFieldRef } from "./types";
 
 interface FormData {
   items?: Array<string>;
 }
 
 const Template: StoryFn<
-  FormControllerProps<FormData> & MultiAutoCompleteProps
+  FormControllerProps<FormData> & MultiAutoCompleteFieldProps<FormData, "items">
 > = (args) => {
   const { initialValues, onSubmit, ...props } = args;
 
   const { submittedValues, handleSubmit } = useFormViewer({
     onSubmit: onSubmit,
   });
-  const fieldRef = useRef<FormFieldElement>(null);
+  const fieldRef = useRef<FormFieldRef<FormData, "items">>(null);
 
   return (
     <FormController<FormData> {...{ initialValues, onSubmit: handleSubmit }}>
@@ -35,7 +37,7 @@ const Template: StoryFn<
 };
 
 const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & MultiAutoCompleteProps
+  FormControllerProps<FormData> & MultiAutoCompleteFieldProps<FormData, "items">
 > = (args, context) => {
   return (
     <FormI18nProvider
@@ -51,7 +53,7 @@ const I18nTemplate: StoryFn<
 };
 
 export const Standard = Template.bind({});
-Standard.args = { values: undefined, onSearch: SEARCH_COUNTRIES };
+Standard.args = { onSearch: SEARCH_COUNTRIES };
 
 export const Disabled = Template.bind({});
 Disabled.args = {

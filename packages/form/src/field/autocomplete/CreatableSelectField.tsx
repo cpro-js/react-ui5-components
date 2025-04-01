@@ -1,87 +1,139 @@
+import { InputDomRef } from "@ui5/webcomponents-react";
 import {
   ReactElement,
   Ref,
   forwardRef,
   useImperativeHandle,
-  useMemo,
   useRef,
 } from "react";
-import { useController } from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
+import { useEventCallback } from "usehooks-ts";
 
 import {
   CreatableSelect,
   CreatableSelectProps,
 } from "../../component/autocomplete/CreatableSelect";
 import { DefaultAutoCompleteOption } from "../../component/AutoCompleteModel";
-import { useI18nValidationError } from "../../i18n/FormI18n";
-import { FormFieldElement, FormFieldValidation } from "../types";
-import { hasError } from "../util";
+import { useControlledField } from "../../form/_internal/useField";
+import { useCustomEventDispatcher } from "../../hook/useCustomEventDispatcher";
+import {
+  FieldEventDetail,
+  FormFieldChangeEvent,
+  FormFieldCommonProps,
+  FormFieldRef,
+  FormFieldValidation,
+} from "../types";
 
 export type CreatableSelectFieldProps<
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>,
   T extends {} = DefaultAutoCompleteOption
 > = Omit<
   CreatableSelectProps<T>,
-  "name" | "value" | "inputValue" | "onChange" | "onValueChange" | "onBlur"
+  | "name"
+  | "value"
+  | "inputValue"
+  | "valueState"
+  | "valueStateMessage"
+  | "onChange"
+  | "onSelectionChange"
 > &
-  Pick<FormFieldValidation, "required"> & {
-    name: string;
+  Pick<FormFieldValidation<FormValues, string>, "required" | "validate"> &
+  FormFieldCommonProps<FormValues, FormFieldName> & {
+    onChange?: (
+      event: FormFieldChangeEvent<InputDomRef, FormValues, FormFieldName>
+    ) => void;
   };
 
 export const CreatableSelectField = forwardRef<
-  FormFieldElement,
-  CreatableSelectFieldProps
->(({ name, required, ...props }, forwardedRef) => {
-  const rules: Partial<FormFieldValidation> = useMemo(
-    () => ({
+  FormFieldRef<any, any>,
+  CreatableSelectFieldProps<any, any>
+>(
+  (
+    {
+      name,
       required,
-    }),
-    [required]
-  );
-
-  const getValidationErrorMessage = useI18nValidationError(name, rules);
-
-  const { field, fieldState } = useController({
-    name: name,
-    rules,
-  });
-
-  // store input ref for intenral usage
-  const internalRef = useRef<HTMLInputElement>(null);
-  // forward outer ref to custom element
-  useImperativeHandle(forwardedRef, () => ({
-    focus() {
-      if (internalRef.current != null) {
-        internalRef.current.focus();
-      }
+      validate,
+      dependsOn,
+      onKeyDown,
+      onChange,
+      onBlur,
+      ...props
     },
-  }));
-  // forward field ref to stored internal input ref
-  useImperativeHandle(field.ref, () => internalRef.current);
+    forwardedRef
+  ) => {
+    // store input ref for internal usage
+    const elementRef = useRef<InputDomRef>(null);
 
-  // get error message (Note: undefined fallbacks to default message of ui5 component)
-  const errorMessage = hasError(fieldState.error)
-    ? getValidationErrorMessage(fieldState.error, field.value)
-    : undefined;
+    const field = useControlledField({
+      ref: elementRef,
+      name,
+      required,
+      validate,
+      dependsOn,
+    });
 
-  return (
-    <CreatableSelect
-      {...props}
-      ref={internalRef}
-      name={field.name}
-      value={field.value}
-      onValueChange={field.onChange}
-      valueState={hasError(fieldState.error) ? "Negative" : "None"}
-      valueStateMessage={
-        errorMessage != null && (
-          <div slot="valueStateMessage">{errorMessage}</div>
-        )
-      }
-      onBlur={field.onBlur}
-      required={required}
-    />
-  );
-}) as <T extends {} = DefaultAutoCompleteOption>(
-  p: CreatableSelectFieldProps<T> & {
-    ref?: Ref<FormFieldElement | undefined>;
+    // support imperative form field api via ref
+    useImperativeHandle(forwardedRef, () => field.fieldApiRef.current, [
+      field.fieldApiRef,
+    ]);
+
+    // forward field ref to stored internal input ref
+    useImperativeHandle(field.ref, () => elementRef.current, []);
+
+    const dispatchChangeEvent = useCustomEventDispatcher<
+      InputDomRef,
+      FieldEventDetail<any, any>
+    >({
+      ref: elementRef,
+      name: "field-change",
+      onEvent: onChange,
+    });
+
+    return (
+      <CreatableSelect
+        {...props}
+        ref={elementRef}
+        name={field.name}
+        value={field.value}
+        readonly={props.readonly || field.isValidating || field.isSubmitting}
+        required={required}
+        valueState={field.valueState}
+        valueStateMessage={
+          field.valueStateMessage != null && (
+            <div slot="valueStateMessage">{field.valueStateMessage}</div>
+          )
+        }
+        onKeyDown={useEventCallback((event) => {
+          // reset previous errors
+          field.error && field.fieldApiRef.current.clearError();
+          onKeyDown?.(event);
+        })}
+        onValueChange={useEventCallback(async (value) => {
+          field.fieldApiRef.current.setValue(value);
+          const valid = await field.fieldApiRef.current.validate();
+
+          dispatchChangeEvent({
+            name,
+            value,
+            valid,
+            field: field.fieldApiRef.current,
+            form: field.formApiRef.current,
+          });
+        })}
+        onBlur={useEventCallback((event) => {
+          onBlur?.(event);
+          field.onBlur();
+        })}
+      />
+    );
+  }
+) as <
+  FormValues extends FieldValues,
+  FormFieldName extends FieldPath<FormValues>,
+  T extends {} = DefaultAutoCompleteOption
+>(
+  p: CreatableSelectFieldProps<FormValues, FormFieldName, T> & {
+    ref?: Ref<FormFieldRef<FormValues, FormFieldName>>;
   }
 ) => ReactElement;

@@ -64,5 +64,5 @@ export const AutoComplete = forwardRef<InputDomRef, AutoCompleteProps>(
     return <CoreAutocomplete ref={forwardedRef} {...stateProps} />;
   }
 ) as <T extends {} = DefaultAutoCompleteOption>(
-  p: AutoCompleteProps<T> & { ref?: Ref<HTMLInputElement | undefined> }
+  p: AutoCompleteProps<T> & { ref?: Ref<InputDomRef | undefined> }
 ) => ReactElement;
