@@ -6,17 +6,6 @@ import { Select, SelectItem } from "./Select";
 export default {
   title: "Component/Select",
   component: Select,
-  argTypes: {
-    onSelectionChange: {
-      action: "selection-change",
-    },
-    onInput: {
-      action: "input",
-    },
-    onChange: {
-      action: "change",
-    },
-  },
 } satisfies Meta<typeof Select>;
 
 export interface SelectItemAlt extends SelectItem {
