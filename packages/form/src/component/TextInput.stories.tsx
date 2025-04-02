@@ -8,19 +8,8 @@ import { TextInput } from "./TextInput";
 export default {
   title: "Component/TextInput",
   component: TextInput,
-  argTypes: {
-    onKeyPress: {
-      action: "onKeyPress",
-    },
-    onChange: {
-      action: "onChange",
-    },
-  },
 } satisfies Meta<typeof TextInput>;
 
-const Template: StoryFn<typeof TextInput> = (args) => {
-  return <TextInput {...args} />;
-};
 type Story = StoryObj<typeof TextInput>;
 
 export const Standard = {
