@@ -12,17 +12,6 @@ import { CreatableAutoComplete } from "./CreatableAutoComplete";
 export default {
   title: "Component/AutoComplete/CreatableAutocomplete",
   component: CreatableAutoComplete,
-  argTypes: {
-    onValueCreate: {
-      action: "onValueCreate",
-    },
-    onInputChange: {
-      action: "onInputChange",
-    },
-    onValueChange: {
-      action: "onValueChange",
-    },
-  },
 } satisfies Meta<typeof CreatableAutoComplete>;
 
 type Story = StoryObj<typeof CreatableAutoComplete<CountryItem>>;
