@@ -20,16 +20,11 @@ export default {
 type Story = StoryObj<typeof DatePicker>;
 
 export const Standard = {
-  args: {
-    onChange: (...args) => {
-      console.log("onChange", ...args);
-      action("onChange")(...args);
-    },
-  },
+  args: {},
 } satisfies Story;
 
 export const Prefilled = {
-  args: { ...Standard.args, value: new Date() },
+  args: { value: new Date() },
 } satisfies Story;
 
 export const ShortFormat = {
@@ -44,14 +39,14 @@ export const CustomFormat = {
  *  Only the current date or any date in the future can be selected.
  **/
 export const MinDateToday = {
-  args: { ...Standard.args, minDate: new Date() },
+  args: { minDate: new Date() },
 } satisfies Story;
 
 /**
  *  Only the current date or previous dates can be selected.
  **/
 export const MaxDateToday = {
-  args: { ...Standard.args, maxDate: new Date() },
+  args: { maxDate: new Date() },
 } satisfies Story;
 
 const ISO8601Decorator: Decorator = (Story) => {
@@ -63,12 +58,7 @@ const ISO8601Decorator: Decorator = (Story) => {
 };
 
 export const ISO8601DateStandard = {
-  args: {
-    onChange: (...args) => {
-      console.log("onChange", ...args);
-      action("onChange")(...args);
-    },
-  },
+  args: {},
   argTypes: {
     value: { type: "string", control: "text" },
     minDate: { type: "string", control: "text" },
@@ -79,7 +69,6 @@ export const ISO8601DateStandard = {
 
 export const ISO8601DateCustomFormat = {
   args: {
-    ...ISO8601DateStandard.args,
     formatPattern: "dd__MM__yyyy",
   },
   decorators: [ISO8601Decorator],
@@ -87,7 +76,6 @@ export const ISO8601DateCustomFormat = {
 
 export const ISO8601DatePrefilled = {
   args: {
-    ...ISO8601DateStandard.args,
     value: toISO8601DateString(new Date()),
   },
   decorators: [ISO8601Decorator],
@@ -95,7 +83,6 @@ export const ISO8601DatePrefilled = {
 
 export const ISO8601DateMinDateToday = {
   args: {
-    ...ISO8601DateStandard.args,
     minDate: toISO8601DateString(new Date()),
   },
   decorators: [ISO8601Decorator],
@@ -103,7 +90,6 @@ export const ISO8601DateMinDateToday = {
 
 export const ISO8601DateMaxDateToday = {
   args: {
-    ...ISO8601DateStandard.args,
     maxDate: toISO8601DateString(new Date()),
   },
   decorators: [ISO8601Decorator],
@@ -118,12 +104,7 @@ const ISODateTimeDecorator: Decorator = (Story) => {
 };
 
 export const ISODateTimeStandard = {
-  args: {
-    onChange: (...args) => {
-      console.log("onChange", ...args);
-      action("onChange")(...args);
-    },
-  },
+  args: {},
   // TODO iso date string does not for type text: https://github.com/storybookjs/storybook/issues/13713
   argTypes: {
     value: { type: "string", control: "text" },
@@ -135,7 +116,6 @@ export const ISODateTimeStandard = {
 
 export const ISODateTimeCustomFormat = {
   args: {
-    ...ISODateTimeStandard.args,
     formatPattern: "dd.MM.yyyy",
   },
   decorators: [ISODateTimeDecorator],
@@ -143,7 +123,6 @@ export const ISODateTimeCustomFormat = {
 
 export const ISODateTimePrefilled = {
   args: {
-    ...ISODateTimeStandard.args,
     value: new Date().toISOString(),
   },
   decorators: [ISODateTimeDecorator],
@@ -151,7 +130,6 @@ export const ISODateTimePrefilled = {
 
 export const ISODateTimeMinDateToday = {
   args: {
-    ...ISODateTimeStandard.args,
     minDate: new Date().toISOString(),
   },
   decorators: [ISODateTimeDecorator],
@@ -159,7 +137,6 @@ export const ISODateTimeMinDateToday = {
 
 export const ISODateTimeMaxDateToday = {
   args: {
-    ...ISODateTimeStandard.args,
     maxDate: new Date().toISOString(),
   },
   decorators: [ISODateTimeDecorator],
