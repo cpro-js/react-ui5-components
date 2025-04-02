@@ -6,7 +6,10 @@ import {
   useWatch,
 } from "react-hook-form";
 
-export const useFormValue: {
+import { PartialFormValues } from "../field/types";
+
+export const useFormValues: {
+  <TFieldValues extends FieldValues = {}>(): PartialFormValues<TFieldValues>;
   <
     TFieldValues extends FieldValues = {},
     TFieldName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
@@ -19,6 +22,6 @@ export const useFormValue: {
   >(
     names: TFieldNames
   ): FieldPathValues<TFieldValues, TFieldNames>;
-} = (name: any): any => {
+} = (name?: any): any => {
   return useWatch({ name: name }); // subscribe to re-render
 };
