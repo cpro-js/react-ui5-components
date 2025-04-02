@@ -6,11 +6,6 @@ import { Button } from "./Button";
 export default {
   title: "Component/Button",
   component: Button,
-  argTypes: {
-    onClick: {
-      action: "click",
-    },
-  },
 } satisfies Meta<typeof Button>;
 
 type Story = StoryObj<typeof Button>;
@@ -25,7 +20,6 @@ export const SubmitButton = {
   args: {
     children: "Submit",
     type: "submit",
-    onClick: action("submit-clicked"),
   },
 } satisfies Story;
 
@@ -33,7 +27,6 @@ export const ResetButton = {
   args: {
     children: "Reset",
     type: "reset",
-    onClick: action("reset-clicked"),
   },
 } satisfies Story;
 
@@ -43,10 +36,10 @@ const ParentForm = {
       style={{ border: "1px solid black", padding: 20, margin: 20 }}
       onSubmit={(e) => {
         e.preventDefault();
-        action("submit-clicked")(e);
+        action("onSubmit")(e);
       }}
       onReset={(e) => {
-        action("reset-clicked")(e);
+        action("onReset")(e);
       }}
     >
       <input type="text" defaultValue="change value and reset" />
