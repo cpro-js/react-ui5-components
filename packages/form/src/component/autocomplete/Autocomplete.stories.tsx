@@ -12,14 +12,6 @@ import {
 export default {
   title: "Component/AutoComplete/AutoComplete",
   component: AutoComplete,
-  argTypes: {
-    onInputChange: {
-      action: "onInputChange",
-    },
-    onValueChange: {
-      action: "onValueChange",
-    },
-  },
 } satisfies Meta<typeof AutoComplete>;
 
 type Story = StoryObj<typeof AutoComplete<CountryItem>>;
