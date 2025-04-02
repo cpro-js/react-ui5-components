@@ -21,9 +21,6 @@ export const Standard = {
   args: {
     values: [],
     onSearch: SEARCH_COUNTRIES,
-    onSelectionChange: (values: Array<string>) => {
-      action("onSelect")(values);
-    },
     style: { width: "50%" },
   },
 } satisfies Story;
