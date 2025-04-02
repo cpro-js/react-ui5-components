@@ -5,17 +5,6 @@ import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 export default {
   title: "Component/MultiSelect",
   component: MultiSelect,
-  argTypes: {
-    onSelectionChange: {
-      action: "selection-change",
-    },
-    onInput: {
-      action: "input",
-    },
-    onChange: {
-      action: "change",
-    },
-  },
 } satisfies Meta<typeof MultiSelect>;
 
 type Story = StoryObj<typeof MultiSelect>;
