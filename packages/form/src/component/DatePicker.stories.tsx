@@ -59,11 +59,6 @@ const ISO8601Decorator: Decorator = (Story) => {
 
 export const ISO8601DateStandard = {
   args: {},
-  argTypes: {
-    value: { type: "string", control: "text" },
-    minDate: { type: "string", control: "text" },
-    maxDate: { type: "string", control: "text" },
-  },
   decorators: [ISO8601Decorator],
 } satisfies Story;
 
@@ -105,12 +100,6 @@ const ISODateTimeDecorator: Decorator = (Story) => {
 
 export const ISODateTimeStandard = {
   args: {},
-  // TODO iso date string does not for type text: https://github.com/storybookjs/storybook/issues/13713
-  argTypes: {
-    value: { type: "string", control: "text" },
-    minDate: { type: "string", control: "text" },
-    maxDate: { type: "string", control: "text" },
-  },
   decorators: [ISODateTimeDecorator],
 } satisfies Story;
 
