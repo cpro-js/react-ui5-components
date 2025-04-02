@@ -6,9 +6,9 @@ import { RadioButtonFieldProps } from "./RadioButtonField";
 interface ForwardedRadioButtonFieldProps<
   FormValues extends FieldValues,
   FormFieldName extends FieldPath<FormValues>
-> extends Pick<
+> extends Omit<
     RadioButtonFieldProps<FormValues, FormFieldName>,
-    "name" | "required"
+    "value" | "text"
   > {
   children?: ReactNode;
 }

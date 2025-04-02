@@ -1,35 +1,42 @@
-import { StoryFn } from "@storybook/react";
-import { useRef } from "react";
+import { action } from "@storybook/addon-actions";
+import { Meta, StoryObj } from "@storybook/react";
 
-import { FormController, FormControllerProps } from "../form/FormController";
+import { FormController } from "../form/FormController";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { RadioButtonField, RadioButtonFieldProps } from "./RadioButtonField";
-import { FormFieldRef } from "./types";
+import { RadioButtonField } from "./RadioButtonField";
 
 interface FormData {
   value?: string;
 }
 
-const createTemplate = function <T extends {}>(): StoryFn<
-  FormControllerProps<T> & RadioButtonFieldProps<FormData, "value">
-> {
-  return (args) => {
-    const { initialValues, onSubmit, ...props } = args;
+export default {
+  title: "Form/Field/RadioButtonField",
+  component: RadioButtonField,
+  parameters: {
+    docs: {
+      story: {
+        inline: false, // we need to render each story in isolation to prevent synchronization of radio buttons due to same name, otherwise last checked state wins
+        iframeHeight: 200,
+      },
+    },
+    form: {
+      initialValues: {},
+      onSubmit: action("onSubmit"),
+    },
+  },
+  render(props, context) {
+    const { onSubmit, ...formControllerProps } = context.parameters.form;
 
-    const { submittedValues, handleSubmit } = useFormViewer<T>({
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
       onSubmit: onSubmit,
     });
-    const fieldRef = useRef<FormFieldRef<FormData, "value">>(null);
 
     return (
-      <FormController<T> {...{ initialValues, onSubmit: handleSubmit }}>
-        <RadioButtonField
-          {...props}
-          name="value"
-          value="cake"
-          text={"Cake"}
-          ref={fieldRef}
-        />
+      <FormController<FormData>
+        {...formControllerProps}
+        onSubmit={handleSubmit}
+      >
+        <RadioButtonField {...props} name="value" value="cake" text={"Cake"} />
         <RadioButtonField
           {...props}
           name="value"
@@ -42,48 +49,42 @@ const createTemplate = function <T extends {}>(): StoryFn<
           value="burger"
           text={"Burger"}
         />
-        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+        <FormViewer submittedValues={submittedValues} />
       </FormController>
     );
-  };
-};
-
-const Template = createTemplate<FormData>();
-
-export const Empty = Template.bind({});
-Empty.args = {};
-
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  ...Empty.args,
-  initialValues: {
-    value: "waffles",
   },
-};
+} satisfies Meta<typeof RadioButtonField>;
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Prefilled.args,
-  disabled: true,
-};
+type Story = StoryObj<typeof RadioButtonField>;
 
-export const Readonly = Template.bind({});
-Readonly.args = {
-  ...Prefilled.args,
-  readonly: true,
-};
+export const Empty = {} satisfies Story;
 
-export const ValidationRequired = Template.bind({});
-ValidationRequired.args = {
-  required: true,
-};
-
-export default {
-  title: "Form/Field/RadioButtonField",
-  component: RadioButtonField,
-  argTypes: {
-    onSubmit: {
-      action: "submit",
+export const Prefilled = {
+  parameters: {
+    form: {
+      initialValues: {
+        value: "waffles",
+      },
     },
   },
-};
+} satisfies Story;
+
+export const Disabled = {
+  ...Prefilled,
+  args: {
+    disabled: true,
+  },
+} satisfies Story;
+
+export const Readonly = {
+  ...Prefilled,
+  args: {
+    readonly: true,
+  },
+} satisfies Story;
+
+export const ValidationRequired = {
+  args: {
+    required: true,
+  },
+} satisfies Story;
