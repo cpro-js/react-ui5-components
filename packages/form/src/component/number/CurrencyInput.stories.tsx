@@ -1,50 +1,57 @@
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 
 import { CurrencyInput } from "./CurrencyInput";
 
 export default {
-  title: "Form/Component/CurrencyInput",
+  title: "Component/CurrencyInput",
   component: CurrencyInput,
 } satisfies Meta<typeof CurrencyInput>;
 
-const Template: StoryFn<typeof CurrencyInput> = (args) => {
-  return <CurrencyInput {...args} />;
-};
+type Story = StoryObj<typeof CurrencyInput>;
 
-export const Standard = Template.bind({});
-Standard.args = { currency: "USD" };
+export const Standard = {
+  args: { currency: "USD" },
+} satisfies Story;
 
-export const Prefilled = Template.bind({});
-Prefilled.args = { ...Standard.args, value: 123456.789 };
+export const Prefilled = {
+  args: { ...Standard.args, value: 123456.789 },
+} satisfies Story;
 
-export const WithoutCurrency = Template.bind({});
-WithoutCurrency.args = { ...Prefilled.args, showCurrency: false };
+export const WithoutCurrency = {
+  args: { ...Prefilled.args, showCurrency: false },
+} satisfies Story;
 
-export const WithIcon = Template.bind({});
-WithIcon.args = { ...Prefilled.args, icon: <span>Hey</span> };
+export const WithIcon = {
+  args: { ...Prefilled.args, icon: <span>Hey</span> },
+} satisfies Story;
 
-export const AlignLeft = Template.bind({});
-AlignLeft.args = { ...Prefilled.args, style: { textAlign: "left" } };
+export const AlignLeft = {
+  args: { ...Prefilled.args, style: { textAlign: "left" } },
+} satisfies Story;
 
-export const PrefilledWithZeros = Template.bind({});
-PrefilledWithZeros.args = { ...Standard.args, value: 500.0 };
+export const PrefilledWithZeros = {
+  args: { ...Standard.args, value: 500.0 },
+} satisfies Story;
 
-export const WithGrouping = Template.bind({});
-WithGrouping.args = {
-  ...Prefilled.args,
-  useGrouping: true,
-};
+export const WithGrouping = {
+  args: {
+    ...Prefilled.args,
+    useGrouping: true,
+  },
+} satisfies Story;
 
-export const WithLocaleDe = Template.bind({});
-WithLocaleDe.args = {
-  ...WithGrouping.args,
-  locale: "de",
-  currency: "EUR",
-};
+export const WithLocaleDe = {
+  args: {
+    ...WithGrouping.args,
+    locale: "de",
+    currency: "EUR",
+  },
+} satisfies Story;
 
-export const WithLocalePl = Template.bind({});
-WithLocalePl.args = {
-  ...WithGrouping.args,
-  locale: "pl",
-  currency: "EUR",
-};
+export const WithLocalePl = {
+  args: {
+    ...WithGrouping.args,
+    locale: "pl",
+    currency: "EUR",
+  },
+} satisfies Story;

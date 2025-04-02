@@ -1,26 +1,13 @@
-import { Meta, StoryFn } from "@storybook/react";
+import { ArgTypes, Meta, StoryFn, StoryObj } from "@storybook/react";
 
 import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 
 export default {
-  title: "Form/Component/MultiSelect",
+  title: "Component/MultiSelect",
   component: MultiSelect,
-  argTypes: {
-    onSelectionChange: {
-      action: "selection-change",
-    },
-    onInput: {
-      action: "input",
-    },
-    onChange: {
-      action: "change",
-    },
-  },
 } satisfies Meta<typeof MultiSelect>;
 
-const Template: StoryFn<typeof MultiSelect> = (args) => {
-  return <MultiSelect {...args} />;
-};
+type Story = StoryObj<typeof MultiSelect>;
 
 interface MultiSelectItemAlt extends MultiSelectItem {
   alt: string;
@@ -34,37 +21,40 @@ const items: Array<MultiSelectItemAlt> = [
   { value: "4", label: "Test 4", alt: "Test 4 Alt" },
 ];
 
-export const Empty = Template.bind({});
-Empty.args = {};
+export const Empty = {
+  args: {},
+} satisfies Story;
 
-export const Standard = Template.bind({});
-Standard.args = {
-  items,
-};
+export const Standard = {
+  args: {
+    items,
+  },
+} satisfies Story;
 
-export const WithValue = Template.bind({});
-WithValue.args = { ...Standard.args, value: ["2"] };
+export const WithValue = {
+  args: { ...Standard.args, value: ["2"] },
+} satisfies Story;
 
-export const WithValueNumber = Template.bind({});
-WithValueNumber.args = { ...Standard.args, value: [1] };
+export const WithValueNumber = {
+  args: { ...Standard.args, value: [1] },
+} satisfies Story;
 
-export const WithValueString = Template.bind({});
-WithValueString.args = { ...Standard.args, value: ["1"] };
+export const WithValueString = {
+  args: { ...Standard.args, value: ["1"] },
+} satisfies Story;
 
-export const WithMultiValue = Template.bind({});
-WithMultiValue.args = { ...Standard.args, value: [1, "1", "2"] };
+export const WithMultiValue = {
+  args: { ...Standard.args, value: [1, "1", "2"] },
+} satisfies Story;
 
-const TemplateAlt: StoryFn<typeof MultiSelect<MultiSelectItemAlt, string>> = (
-  args
-) => {
-  return <MultiSelect<MultiSelectItemAlt, string> {...args} />;
-};
+type StoryAlt = StoryObj<typeof MultiSelect<MultiSelectItemAlt, string>>;
 
-export const CustomItemModel = TemplateAlt.bind({});
-CustomItemModel.args = {
-  ...Standard.args,
-  items,
-  value: undefined,
-  itemLabel: "alt",
-  itemValue: "label",
-};
+export const CustomItemModelAlt = {
+  args: {
+    ...Standard.args,
+    items,
+    value: undefined,
+    itemLabel: "alt",
+    itemValue: "label",
+  },
+} satisfies StoryAlt;

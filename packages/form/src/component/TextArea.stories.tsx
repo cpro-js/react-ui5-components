@@ -1,21 +1,23 @@
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 
 import { TextArea } from "./TextArea";
 
 export default {
-  title: "Form/Component/TextArea",
+  title: "Component/TextArea",
   component: TextArea,
 } satisfies Meta<typeof TextArea>;
 
-const Template: StoryFn<typeof TextArea> = (args) => <TextArea {...args} />;
+type Story = StoryObj<typeof TextArea>;
 
-export const Standard = Template.bind({});
-Standard.args = {
-  maxlength: 100,
-  required: false,
-};
+export const Standard = {
+  args: {
+    maxlength: 100,
+    required: false,
+  },
+} satisfies Story;
 
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  value: "Prefilled Text",
-};
+export const Prefilled = {
+  args: {
+    value: "Prefilled Text",
+  },
+} satisfies Story;

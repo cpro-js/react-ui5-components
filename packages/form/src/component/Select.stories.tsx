@@ -1,22 +1,11 @@
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 
 import { COUNTRIES, CountryItem } from "./autocomplete/AutoComplete-storyData";
 import { Select, SelectItem } from "./Select";
 
 export default {
-  title: "Form/Component/Select",
+  title: "Component/Select",
   component: Select,
-  argTypes: {
-    onSelectionChange: {
-      action: "selection-change",
-    },
-    onInput: {
-      action: "input",
-    },
-    onChange: {
-      action: "change",
-    },
-  },
 } satisfies Meta<typeof Select>;
 
 export interface SelectItemAlt extends SelectItem {
@@ -31,53 +20,59 @@ const items: Array<SelectItemAlt> = [
   { value: "4", label: "Test 4", alt: "Test 4 Alt" },
 ];
 
-const Template: StoryFn<typeof Select> = (args) => {
+type Story = StoryObj<typeof Select>;
+
+/*const TemplateFn<typeof Select> = (args) => {
   return <Select {...args} />;
-};
+};*/
 
-export const Standard = Template.bind({});
-Standard.args = {
-  items,
-};
+export const Standard = {
+  args: {
+    items,
+  },
+} satisfies Story;
 
-export const Empty = Template.bind({});
-Empty.args = {};
+export const Empty = {
+  args: {},
+} satisfies Story;
 
-export const WithEmptyOption = Template.bind({});
-WithEmptyOption.args = { ...Standard.args, addEmptyOption: true };
+export const WithEmptyOption = {
+  args: { ...Standard.args, addEmptyOption: true },
+} satisfies Story;
 
-export const WithValue = Template.bind({});
-WithValue.args = { ...Standard.args, value: "2" };
+export const WithValue = {
+  args: { ...Standard.args, value: "2" },
+} satisfies Story;
 
-export const WithValueNumber = Template.bind({});
-WithValueNumber.args = { ...Standard.args, value: 1 };
+export const WithValueNumber = {
+  args: { ...Standard.args, value: 1 },
+} satisfies Story;
 
-export const WithValueString = Template.bind({});
-WithValueString.args = { ...Standard.args, value: "1" };
+export const WithValueString = {
+  args: { ...Standard.args, value: "1" },
+} satisfies Story;
 
-const TemplateAlt: StoryFn<typeof Select<SelectItemAlt, string>> = (args) => {
-  return <Select<SelectItemAlt, string> {...args} />;
-};
+type StoryAlt = StoryObj<typeof Select<SelectItemAlt, string>>;
 
-export const CustomItemModel = TemplateAlt.bind({});
-CustomItemModel.args = {
-  ...Standard.args,
-  items,
-  value: undefined,
-  itemLabel: "alt",
-  itemValue: "label",
-};
+export const CustomItemModelAlt = {
+  args: {
+    ...Standard.args,
+    items,
+    value: undefined,
+    itemLabel: "alt",
+    itemValue: "label",
+  },
+} satisfies StoryAlt;
 
-const TemplateCountry: StoryFn<typeof Select<CountryItem, string>> = (args) => {
-  return <Select<CountryItem, string> {...args} />;
-};
+type StoryCountry = StoryObj<typeof Select<CountryItem, string>>;
 
-export const AdditionalText = TemplateCountry.bind({});
-AdditionalText.args = {
-  ...Standard.args,
-  items: COUNTRIES,
-  value: undefined,
-  itemLabel: "label",
-  itemValue: "value",
-  itemAdditionalText: "value",
-};
+export const AdditionalTextCountry = {
+  args: {
+    ...Standard.args,
+    items: COUNTRIES,
+    value: undefined,
+    itemLabel: "label",
+    itemValue: "value",
+    itemAdditionalText: "value",
+  },
+} satisfies StoryCountry;

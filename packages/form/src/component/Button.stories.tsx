@@ -1,50 +1,45 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "./Button";
 
 export default {
-  title: "Form/Component/Button",
+  title: "Component/Button",
   component: Button,
-  argTypes: {
-    onClick: {
-      action: "click",
-    },
-  },
 } satisfies Meta<typeof Button>;
-const Template: StoryFn<typeof Button> = (args) => {
-  return <Button {...args} />;
-};
 
-export const DefaultButton = Template.bind({});
-DefaultButton.args = {
-  children: "Button",
-};
+type Story = StoryObj<typeof Button>;
 
-export const SubmitButton = Template.bind({});
-SubmitButton.args = {
-  children: "Submit",
-  type: "submit",
-  onClick: action("submit-clicked"),
-};
+export const DefaultButton = {
+  args: {
+    children: "Button",
+  },
+} satisfies Story;
 
-export const ResetButton = Template.bind({});
-ResetButton.args = {
-  children: "Reset",
-  type: "reset",
-  onClick: action("reset-clicked"),
-};
+export const SubmitButton = {
+  args: {
+    children: "Submit",
+    type: "submit",
+  },
+} satisfies Story;
 
-const TemplateParentForm: StoryFn<typeof Button> = (args) => {
-  return (
+export const ResetButton = {
+  args: {
+    children: "Reset",
+    type: "reset",
+  },
+} satisfies Story;
+
+const ParentForm = {
+  render: (args) => (
     <form
       style={{ border: "1px solid black", padding: 20, margin: 20 }}
       onSubmit={(e) => {
         e.preventDefault();
-        action("submit-clicked")(e);
+        action("onSubmit")(e);
       }}
       onReset={(e) => {
-        action("reset-clicked")(e);
+        action("onReset")(e);
       }}
     >
       <input type="text" defaultValue="change value and reset" />
@@ -58,14 +53,16 @@ const TemplateParentForm: StoryFn<typeof Button> = (args) => {
         Reset
       </Button>
     </form>
-  );
-};
+  ),
+} satisfies Story;
 
-export const InsideHtmlForm = TemplateParentForm.bind({});
-InsideHtmlForm.args = {};
+export const InsideHtmlForm = {
+  ...ParentForm,
+  args: {},
+} satisfies Story;
 
-const TemplateExternalForm: StoryFn<typeof Button> = (args) => {
-  return (
+const ExternalForm = {
+  render: (args) => (
     <>
       <form
         id="my-form-id"
@@ -90,8 +87,10 @@ const TemplateExternalForm: StoryFn<typeof Button> = (args) => {
         Reset
       </Button>
     </>
-  );
-};
+  ),
+} satisfies Story;
 
-export const ExternalHtmlForm = TemplateExternalForm.bind({});
-ExternalHtmlForm.args = {};
+export const ExternalHtmlForm = {
+  ...ExternalForm,
+  args: {},
+} satisfies Story;
