@@ -6,11 +6,6 @@ import { Checkbox } from "./Checkbox";
 export default {
   title: "Component/Checkbox",
   component: Checkbox,
-  argTypes: {
-    onChange: {
-      action: "change",
-    },
-  },
 } satisfies Meta<typeof Checkbox>;
 
 type Story = StoryObj<typeof Checkbox>;

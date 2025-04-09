@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Decorator, Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Decorator, Meta, StoryObj } from "@storybook/react";
 
 import { ISODateTimeAdapter } from "../form/adapter/date/ISODateTimeAdapter";
 import { FormAdapter } from "../form/FormAdapter";
