@@ -1,4 +1,5 @@
-import { StoryFn } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 import { useRef } from "react";
 
 import { SelectItem } from "../component/Select";
@@ -24,114 +25,7 @@ interface FormData {
   item?: string | number;
 }
 
-const Template: StoryFn<
-  FormControllerProps<FormData> & SelectFieldProps<FormData, "item">
-> = (args) => {
-  const { initialValues, onSubmit, ...props } = args;
-
-  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-    onSubmit: onSubmit,
-  });
-  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
-
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <SelectField {...props} ref={fieldRef} name={"item"} />
-      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-    </FormController>
-  );
-};
-
-const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & SelectFieldProps<FormData, "item">
-> = (args, context) => {
-  return (
-    <FormI18nProvider
-      getValidationErrorMessage={({ name }, error) => {
-        return `Field '${name}' has Error '${
-          error.type
-        }'. Original error message: ${error.message || "---"}`;
-      }}
-    >
-      {Template(args, context)}
-    </FormI18nProvider>
-  );
-};
-
-export const Empty = Template.bind({});
-Empty.args = {};
-
-export const Standard = Template.bind({});
-Standard.args = {
-  items,
-};
-
-export const WithEmptyOption = Template.bind({});
-WithEmptyOption.args = { ...Standard.args, addEmptyOption: true };
-
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  ...WithEmptyOption.args,
-  initialValues: {
-    item: items[1].value,
-  },
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Prefilled.args,
-  disabled: true,
-};
-
-export const Readonly = Template.bind({});
-Readonly.args = {
-  ...Prefilled.args,
-  readonly: true,
-};
-
-export const ValidationRequired = Template.bind({});
-ValidationRequired.args = {
-  ...WithEmptyOption.args,
-  required: true,
-};
-
-export const ValidationTranslationRequired = I18nTemplate.bind({});
-ValidationTranslationRequired.args = {
-  ...ValidationRequired.args,
-};
-
-const TemplateAlt: StoryFn<
-  FormControllerProps<FormData> &
-    SelectFieldProps<FormData, "item", SelectItemAlt, string>
-> = (args) => {
-  const { initialValues, onSubmit, ...props } = args;
-
-  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-    onSubmit: onSubmit,
-  });
-  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
-
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <SelectField<FormData, "item", SelectItemAlt, string>
-        {...props}
-        ref={fieldRef}
-        name="item"
-      />
-      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-    </FormController>
-  );
-};
-
-export const CustomItemModel = TemplateAlt.bind({});
-CustomItemModel.args = {
-  ...Standard.args,
-  items,
-  itemLabel: "alt",
-  itemValue: "label",
-};
-
-export default {
+const meta = {
   title: "Form/Field/SelectField",
   component: SelectField,
   argTypes: {
@@ -139,4 +33,139 @@ export default {
       action: "submit",
     },
   },
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: action("onSubmit"),
+    },
+  },
+  render(props, context) {
+    const { initialValues, onSubmit, ...formControllerProps } =
+      context.parameters.form;
+
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit,
+    });
+
+    const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
+
+    const isCustomItemModel =
+      typeof props.itemLabel === "string" ||
+      typeof props.itemValue === "string";
+
+    return (
+      <FormController
+        {...formControllerProps}
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+      >
+        {isCustomItemModel ? (
+          <SelectField<FormData, "item", SelectItemAlt, string>
+            {...(props as SelectFieldProps<
+              FormData,
+              "item",
+              SelectItemAlt,
+              string
+            >)}
+            ref={fieldRef}
+            name="item"
+          />
+        ) : (
+          <SelectField<FormData, "item">
+            {...(props as SelectFieldProps<FormData, "item">)}
+            ref={fieldRef}
+            name="item"
+          />
+        )}
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+      </FormController>
+    );
+  },
+} satisfies Meta<typeof SelectField>;
+
+export default meta;
+
+type Story = StoryObj<typeof SelectField>;
+
+export const Empty = {
+  args: {},
 };
+
+export const Standard = {
+  args: {
+    items,
+  },
+} satisfies Story;
+
+export const WithEmptyOption = {
+  args: {
+    ...Standard.args,
+    addEmptyOption: true,
+  },
+} satisfies Story;
+
+export const Prefilled = {
+  args: {
+    ...WithEmptyOption.args,
+  },
+  parameters: {
+    form: {
+      initialValues: {
+        item: items[1].value,
+      },
+    },
+  },
+} satisfies Story;
+
+export const Disabled = {
+  args: {
+    ...WithEmptyOption.args,
+    disabled: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const Readonly = {
+  args: {
+    ...WithEmptyOption.args,
+    readonly: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const ValidationRequired = {
+  args: {
+    ...WithEmptyOption.args,
+    required: true,
+  },
+} satisfies Story;
+
+export const ValidationTranslationRequired = {
+  render: (args, context) => (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) =>
+        `Field '${name}' has Error '${error.type}'. Original error: ${
+          error.message || "---"
+        }`
+      }
+    >
+      {meta.render?.(args, context)}
+    </FormI18nProvider>
+  ),
+  args: {
+    ...ValidationRequired.args,
+  },
+} satisfies Story;
+
+export const CustomItemModel = {
+  args: {
+    ...Standard.args,
+    items,
+    itemLabel: (item) => (item as SelectItemAlt).alt,
+    itemValue: (item) => (item as SelectItemAlt).label,
+  },
+} satisfies Story;
