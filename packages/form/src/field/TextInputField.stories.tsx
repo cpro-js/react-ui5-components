@@ -1,4 +1,5 @@
-import { StoryFn } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
@@ -11,97 +12,7 @@ interface FormData {
   text?: string;
 }
 
-const Template: StoryFn<
-  FormControllerProps<FormData> & TextInputFieldProps<FormData, "text">
-> = (args) => {
-  const { initialValues, onSubmit, ...props } = args;
-
-  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-    onSubmit: onSubmit,
-  });
-  const fieldRef = useRef<FormFieldRef<FormData, "text">>(null);
-
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <TextInputField {...props} ref={fieldRef} name={"text"} />
-      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-    </FormController>
-  );
-};
-
-const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & TextInputFieldProps<FormData, "text">
-> = (args, context) => {
-  return (
-    <FormI18nProvider
-      getValidationErrorMessage={({ name }, error) => {
-        return `Field '${name}' has Error '${
-          error.type
-        }'. Original error message: ${error.message || "---"}`;
-      }}
-    >
-      {Template(args, context)}
-    </FormI18nProvider>
-  );
-};
-
-export const Empty = Template.bind({});
-Empty.args = {};
-
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  initialValues: {
-    text: "hello world",
-  },
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Prefilled.args,
-  disabled: true,
-};
-
-export const Readonly = Template.bind({});
-Readonly.args = {
-  ...Prefilled.args,
-  readonly: true,
-};
-
-export const ValidationRequired = Template.bind({});
-ValidationRequired.args = {
-  ...Empty.args,
-  required: true,
-};
-
-export const ValidationMinLength = Template.bind({});
-ValidationMinLength.args = {
-  ...Empty.args,
-  minLength: 4,
-};
-
-export const ValidationMinMaxLength = Template.bind({});
-ValidationMinMaxLength.args = {
-  ...Empty.args,
-  minLength: 4,
-  maxLength: 10,
-};
-
-export const ValidationTranslationRequired = I18nTemplate.bind({});
-ValidationTranslationRequired.args = {
-  ...ValidationRequired.args,
-};
-
-export const ValidationTranslationMinLength = I18nTemplate.bind({});
-ValidationTranslationMinLength.args = {
-  ...ValidationMinLength.args,
-};
-
-export const ValidationTranslationMinMaxLength = I18nTemplate.bind({});
-ValidationTranslationMinMaxLength.args = {
-  ...ValidationMinMaxLength.args,
-};
-
-export default {
+const meta = {
   title: "Form/Field/TextInputField",
   component: TextInputField,
   argTypes: {
@@ -109,4 +20,133 @@ export default {
       action: "submit",
     },
   },
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: action("onSubmit"),
+    },
+  },
+  render(props, context) {
+    const { initialValues, onSubmit, ...formControllerProps } =
+      context.parameters.form;
+
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit,
+    });
+
+    const fieldRef = useRef<FormFieldRef<FormData, "text">>(null);
+
+    return (
+      <FormController
+        {...formControllerProps}
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+      >
+        <TextInputField {...props} ref={fieldRef} name="text" />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+      </FormController>
+    );
+  },
+} satisfies Meta<typeof TextInputField>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+const i18nStoryRenderer = (
+  renderFn: typeof meta.render
+): typeof meta.render => {
+  return (args, context) => (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) =>
+        `Field '${name}' has Error '${error.type}'. Original error message: ${
+          error.message || "---"
+        }`
+      }
+    >
+      {renderFn?.(args, context)}
+    </FormI18nProvider>
+  );
 };
+
+export const Empty = {
+  args: {
+    name: "text",
+  },
+} satisfies Story;
+
+export const Prefilled = {
+  args: {
+    ...Empty.args,
+  },
+  parameters: {
+    form: {
+      initialValues: {
+        text: "hello world",
+      },
+    },
+  },
+} satisfies Story;
+
+export const Disabled = {
+  args: {
+    ...Empty.args,
+    disabled: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const Readonly = {
+  args: {
+    ...Empty.args,
+    readonly: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const ValidationRequired = {
+  args: {
+    ...Empty.args,
+    required: true,
+  },
+} satisfies Story;
+
+export const ValidationMinLength = {
+  args: {
+    ...Empty.args,
+    minLength: 4,
+  },
+} satisfies Story;
+
+export const ValidationMinMaxLength = {
+  args: {
+    ...Empty.args,
+    minLength: 4,
+    maxLength: 10,
+  },
+} satisfies Story;
+
+export const ValidationTranslationRequired = {
+  render: i18nStoryRenderer(meta.render),
+  args: {
+    ...ValidationRequired.args,
+  },
+} satisfies Story;
+
+export const ValidationTranslationMinLength = {
+  render: i18nStoryRenderer(meta.render),
+  args: {
+    ...ValidationMinLength.args,
+  },
+} satisfies Story;
+
+export const ValidationTranslationMinMaxLength = {
+  render: i18nStoryRenderer(meta.render),
+  args: {
+    ...ValidationMinMaxLength.args,
+  },
+} satisfies Story;
