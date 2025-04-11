@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { StoryFn } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 import { useRef } from "react";
 
 import { FormController, FormControllerProps } from "../form/FormController";
@@ -12,115 +12,7 @@ interface FormData {
   theNumber?: number;
 }
 
-const Template: StoryFn<
-  FormControllerProps<FormData> & NumberInputFieldProps<FormData, "theNumber">
-> = (args) => {
-  const { initialValues, onSubmit, ...props } = args;
-
-  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-    onSubmit: onSubmit,
-  });
-  const fieldRef = useRef<FormFieldRef<FormData, "theNumber">>(null);
-
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <NumberInputField
-        {...props}
-        ref={fieldRef}
-        name={"theNumber"}
-        onSubmit={action("onSubmit")}
-        onChange={action("onChange")}
-      />
-      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-    </FormController>
-  );
-};
-
-const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & NumberInputFieldProps<FormData, "theNumber">
-> = (args, context) => {
-  return (
-    <FormI18nProvider
-      getValidationErrorMessage={({ name, value }, error) => {
-        return `Field '${name}' has Error '${
-          error.type
-        }'. Offending value: '${value}'. Original error message: ${
-          error.message || "---"
-        }`;
-      }}
-    >
-      {Template(args, context)}
-    </FormI18nProvider>
-  );
-};
-
-export const Empty = Template.bind({});
-Empty.args = { useGrouping: true };
-
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  initialValues: {
-    theNumber: 123456.789,
-  },
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Prefilled.args,
-  disabled: true,
-};
-
-export const Readonly = Template.bind({});
-Readonly.args = {
-  ...Prefilled.args,
-  readonly: true,
-};
-
-export const ValidationRequired = Template.bind({});
-ValidationRequired.args = {
-  ...Empty.args,
-  required: true,
-};
-
-export const ValidationMin = Template.bind({});
-ValidationMin.storyName = "Validation Min (4)";
-ValidationMin.args = {
-  ...Empty.args,
-  min: 4,
-};
-
-export const ValidationMinMax = Template.bind({});
-ValidationMinMax.storyName = "Validation MinMax (4-10)";
-ValidationMinMax.args = {
-  ...Empty.args,
-  min: 4,
-  max: 10,
-};
-
-export const ValidationTranslationRequired = I18nTemplate.bind({});
-ValidationTranslationRequired.args = {
-  ...ValidationRequired.args,
-};
-
-export const ValidationTranslationMin = I18nTemplate.bind({});
-ValidationTranslationMin.storyName = "Validation Translation Min (4)";
-ValidationTranslationMin.args = {
-  ...ValidationMin.args,
-};
-
-export const ValidationTranslationMinMax = I18nTemplate.bind({});
-ValidationTranslationMinMax.storyName = "Validation Translation MinMax (4-10)";
-ValidationTranslationMinMax.args = {
-  ...ValidationMinMax.args,
-};
-
-export const LocalizedDe = I18nTemplate.bind({});
-LocalizedDe.storyName = "Localized DE MinMax (4-10)";
-LocalizedDe.args = {
-  ...ValidationMinMax.args,
-};
-
-export default {
+const meta = {
   title: "Form/Field/NumberInputField",
   component: NumberInputField,
   argTypes: {
@@ -128,4 +20,149 @@ export default {
       action: "submit",
     },
   },
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: action("onSubmit"),
+    },
+  },
+  render(props, context) {
+    const { initialValues, onSubmit, ...formControllerProps } =
+      context.parameters.form;
+
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit,
+    });
+
+    const fieldRef = useRef<FormFieldRef<FormData, "theNumber">>(null);
+
+    return (
+      <FormController
+        {...formControllerProps}
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+      >
+        <NumberInputField
+          {...props}
+          ref={fieldRef}
+          name="theNumber"
+          onSubmit={action("onSubmit")}
+          onChange={action("onChange")}
+        />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+      </FormController>
+    );
+  },
+} satisfies Meta<typeof NumberInputField>;
+
+export default meta;
+
+const i18nStoryRenderer = (
+  renderFn: typeof meta.render
+): typeof meta.render => {
+  return (args, context) => (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name, value }, error) =>
+        `Field '${name}' has Error '${
+          error.type
+        }'. Offending value: '${value}'. Original error message: ${
+          error.message || "---"
+        }`
+      }
+    >
+      {renderFn?.(args, context)}
+    </FormI18nProvider>
+  );
 };
+
+type Story = StoryObj<typeof NumberInputField>;
+
+export const Empty = {
+  args: {
+    useGrouping: true,
+  },
+} satisfies Story;
+
+export const Prefilled = {
+  parameters: {
+    form: {
+      initialValues: {
+        theNumber: 123456.789,
+      },
+    },
+  },
+} satisfies Story;
+
+export const Disabled = {
+  args: {
+    disabled: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const Readonly = {
+  args: {
+    readonly: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const ValidationRequired = {
+  args: {
+    ...Empty.args,
+    required: true,
+  },
+} satisfies Story;
+
+export const ValidationMin = {
+  storyName: "Validation Min (4)",
+  args: {
+    ...Empty.args,
+    min: 4,
+  },
+} satisfies Story;
+
+export const ValidationMinMax = {
+  storyName: "Validation MinMax (4-10)",
+  args: {
+    ...Empty.args,
+    min: 4,
+    max: 10,
+  },
+} satisfies Story;
+
+export const ValidationTranslationRequired = {
+  render: i18nStoryRenderer(meta.render),
+  args: {
+    ...ValidationRequired.args,
+  },
+} satisfies Story;
+
+export const ValidationTranslationMin = {
+  render: i18nStoryRenderer(meta.render),
+  storyName: "Validation Translation Min (4)",
+  args: {
+    ...ValidationMin.args,
+  },
+} satisfies Story;
+
+export const ValidationTranslationMinMax = {
+  render: i18nStoryRenderer(meta.render),
+  storyName: "Validation Translation MinMax (4-10)",
+  args: {
+    ...ValidationMinMax.args,
+  },
+} satisfies Story;
+
+export const LocalizedDe = {
+  render: i18nStoryRenderer(meta.render),
+  storyName: "Localized DE MinMax (4-10)",
+  args: {
+    ...ValidationMinMax.args,
+    locale: "de",
+  },
+} satisfies Story;
