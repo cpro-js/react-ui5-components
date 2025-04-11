@@ -1,13 +1,10 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { useRef } from "react";
 
-import { FormController, FormControllerProps } from "../form/FormController";
+import { FormController } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";
-import {
-  CurrencyInputField,
-  CurrencyInputFieldProps,
-} from "./CurrencyInputField";
+import { CurrencyInputField } from "./CurrencyInputField";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { FormFieldRef } from "./types";
 
@@ -60,7 +57,9 @@ export default meta;
 
 type Story = StoryObj<typeof CurrencyInputField>;
 
-const I18nRenderer = (renderFn: typeof meta.render): typeof meta.render => {
+const i18nStoryRenderer = (
+  renderFn: typeof meta.render
+): typeof meta.render => {
   return (args, context) => (
     <FormI18nProvider
       getValidationErrorMessage={({ name }, error) =>
@@ -150,7 +149,7 @@ export const ValidationMinMax = {
 } satisfies Story;
 
 export const ValidationTranslationRequired = {
-  render: I18nRenderer(meta.render),
+  render: i18nStoryRenderer(meta.render),
   args: {
     ...Empty.args,
     required: true,
@@ -158,15 +157,15 @@ export const ValidationTranslationRequired = {
 } satisfies Story;
 
 export const ValidationTranslationMin = {
-  render: I18nRenderer(meta.render),
-  storyName: "Validation Translation Min (min: 4c)",
+  render: i18nStoryRenderer(meta.render),
+  storyName: "Validation Translation Min (min: 4)",
   args: {
     ...ValidationMin.args,
   },
 } satisfies Story;
 
 export const ValidationTranslationMinMax = {
-  render: I18nRenderer(meta.render),
+  render: i18nStoryRenderer(meta.render),
   storyName: "Validation Translation (min: 4, max: 10)",
   args: {
     ...ValidationMinMax.args,
@@ -174,7 +173,7 @@ export const ValidationTranslationMinMax = {
 } satisfies Story;
 
 export const LocalizedDe = {
-  render: I18nRenderer(meta.render),
+  render: i18nStoryRenderer(meta.render),
   storyName: "Localized DE",
   args: {
     ...Empty.args,
@@ -186,7 +185,7 @@ export const LocalizedDe = {
 } satisfies Story;
 
 export const LocalizedDeMinMax = {
-  render: I18nRenderer(meta.render),
+  render: i18nStoryRenderer(meta.render),
   storyName: "Localized Min Max DE (min: 4, max: 10)",
   args: {
     ...ValidationMinMax.args,
