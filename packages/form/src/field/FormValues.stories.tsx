@@ -1,54 +1,71 @@
 import { action } from "@storybook/addon-actions";
-import { StoryFn } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
+import type { SubmitHandler } from "react-hook-form";
 
-import { FormController, FormControllerProps } from "../form/FormController";
+import { FormController } from "../form/FormController";
 import { FormValues, FormValuesProps } from "./FormValues";
 import { TextInputField } from "./TextInputField";
+import { FormActions } from "./types";
 
 interface FormData {
   text?: string;
 }
 
-const Template: StoryFn<
-  FormControllerProps<FormData> & FormValuesProps<FormData>
-> = (args) => {
-  const { initialValues, onSubmit } = args;
-
-  return (
-    <FormController<FormData> {...{ initialValues, onSubmit }}>
-      <TextInputField name={"text"} />
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-      </div>
-      <FormValues {...args} />
-    </FormController>
-  );
-};
-
-export const Standard = Template.bind({});
-Standard.args = {
-  onSubmit: async (...args) => {
-    console.log("submit", ...args);
-    action("submit")(...args);
-  },
-  render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
-};
-
-export const UpdateValuesOnSubmit = Standard.bind({});
-UpdateValuesOnSubmit.args = {
-  ...Standard.args,
-  onSubmit: async (...args) => {
-    console.log("submit", ...args);
-    action("submit")(...args);
-
-    const [values, actions] = args;
-
-    actions.setValues([{ name: "text", value: "1" }]);
-  },
-};
-
-export default {
+const meta = {
   title: "Form/Field/FormValues",
   component: FormValues,
-};
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: (async (...args) => {
+        action("submit")(...args);
+      }) satisfies SubmitHandler<FormData>,
+    },
+  },
+  render(args, context) {
+    const { initialValues, onSubmit } = context.parameters.form;
+
+    return (
+      <FormController<FormData>
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+      >
+        <TextInputField name="text" />
+        <div>
+          <button type="submit">Submit</button>
+          <button type="reset">Reset</button>
+        </div>
+        <FormValues {...args} />
+      </FormController>
+    );
+  },
+} satisfies Meta<typeof FormValues>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Standard = {
+  args: {
+    render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
+  },
+} satisfies Story;
+
+export const UpdateValuesOnSubmit = {
+  args: {
+    render: (values) => <div>Form Values {JSON.stringify(values)}</div>,
+  },
+  parameters: {
+    form: {
+      onSubmit: async (
+        ...args: Parameters<
+          (values: FormData, actions: FormActions<FormData>) => void
+        >
+      ) => {
+        const [values, actions] = args;
+        action("submit")(values, actions);
+        actions.setValues([{ name: "text", value: "1" }]);
+      },
+    },
+  },
+} satisfies Story;
