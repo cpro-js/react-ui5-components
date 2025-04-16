@@ -28,15 +28,10 @@ interface FormData {
 const meta = {
   title: "Form/Field/SelectField",
   component: SelectField,
-  argTypes: {
-    onSubmit: {
-      action: "submit",
-    },
-  },
   parameters: {
     form: {
       initialValues: {},
-      onSubmit: action("onSubmit"),
+      onSubmit: action("form-submit"),
     },
   },
   render(props, context) {

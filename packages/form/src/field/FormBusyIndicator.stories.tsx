@@ -18,7 +18,7 @@ export default {
       initialValues: {},
       onSubmit: (async (...args) => {
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        action("submit")(...args);
+        action("form-submit")(...args);
       }) satisfies SubmitHandler<FormData>,
     },
   },

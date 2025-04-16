@@ -18,7 +18,7 @@ const meta = {
     form: {
       initialValues: {},
       onSubmit: (async (...args) => {
-        action("submit")(...args);
+        action("form-submit")(...args);
       }) satisfies SubmitHandler<FormData>,
     },
   },

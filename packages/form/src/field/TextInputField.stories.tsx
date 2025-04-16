@@ -15,15 +15,10 @@ interface FormData {
 const meta = {
   title: "Form/Field/TextInputField",
   component: TextInputField,
-  argTypes: {
-    onSubmit: {
-      action: "submit",
-    },
-  },
   parameters: {
     form: {
       initialValues: {},
-      onSubmit: action("onSubmit"),
+      onSubmit: action("form-submit"),
     },
   },
   render(props, context) {

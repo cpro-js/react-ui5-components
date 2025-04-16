@@ -18,7 +18,7 @@ const meta = {
       initialValues: {},
       onSubmit: (async (...args) => {
         await new Promise((r) => setTimeout(r, 2000));
-        action("submit")(...args);
+        action("form-submit")(...args);
       }) satisfies SubmitHandler<FormData>,
     },
   },

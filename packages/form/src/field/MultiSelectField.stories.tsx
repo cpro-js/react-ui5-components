@@ -31,7 +31,7 @@ const meta = {
   parameters: {
     form: {
       initialValues: {},
-      onSubmit: action("submit"),
+      onSubmit: action("form-submit"),
     },
   },
   render(props, context) {

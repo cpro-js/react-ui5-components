@@ -49,9 +49,6 @@ interface ExtraData {
 export default {
   title: "Form/Field/Form",
   argTypes: {
-    onSubmit: {
-      action: "onSubmit",
-    },
     onChange: {
       action: "onChange",
     },

@@ -20,15 +20,10 @@ interface FormData {
 const meta = {
   title: "Form/Field/Autocomplete/CreatableSelectField",
   component: CreatableSelectField,
-  argTypes: {
-    onValueCreate: {
-      action: "onValueCreate",
-    },
-  },
   parameters: {
     form: {
       initialValues: {},
-      onSubmit: action("onSubmit"),
+      onSubmit: action("form-submit"),
     },
   },
   render(props, context) {

@@ -15,15 +15,10 @@ interface FormData {
 const meta = {
   title: "Form/Field/CurrencyInputField",
   component: CurrencyInputField,
-  argTypes: {
-    onSubmit: {
-      action: "submit",
-    },
-  },
   parameters: {
     form: {
       initialValues: {},
-      onSubmit: action("onSubmit"),
+      onSubmit: action("form-submit"),
     },
   },
   render(props, context) {
