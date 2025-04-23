@@ -1,4 +1,5 @@
-import { StoryFn } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 import { useRef } from "react";
 
 import { COUNTRIES } from "../../component/autocomplete/AutoComplete-storyData";
@@ -16,87 +17,100 @@ interface FormData {
   item?: string | number;
 }
 
-const Template: StoryFn<
-  FormControllerProps<FormData> &
-    CreatableSelectFieldProps<FormData, "item", DefaultAutoCompleteOption>
-> = (args, context) => {
-  const { initialValues, onSubmit, ...props } = args;
-
-  const { submittedValues, handleSubmit } = useFormViewer({
-    onSubmit: onSubmit,
-  });
-  const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
-
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <CreatableSelectField {...props} ref={fieldRef} name="item" />
-      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-    </FormController>
-  );
-};
-
-const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> &
-    CreatableSelectFieldProps<FormData, "item", DefaultAutoCompleteOption>
-> = (args, context) => {
-  return (
-    <FormI18nProvider
-      getValidationErrorMessage={({ name }, error) => {
-        return `Field '${name}' has Error '${
-          error.type
-        }'. Original error message: ${error.message || "---"}`;
-      }}
-    >
-      {Template(args, context)}
-    </FormI18nProvider>
-  );
-};
-
-export const Standard = Template.bind({});
-Standard.args = {
-  items: COUNTRIES,
-};
-
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  ...Standard.args,
-  initialValues: {
-    item: COUNTRIES[1].value,
-  },
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Prefilled.args,
-  disabled: true,
-};
-
-export const Readonly = Template.bind({});
-Readonly.args = {
-  ...Prefilled.args,
-  readonly: true,
-};
-
-export const ValidationRequired = Template.bind({});
-ValidationRequired.args = {
-  ...Standard.args,
-  required: true,
-};
-
-export const ValidationTranslationRequired = I18nTemplate.bind({});
-ValidationTranslationRequired.args = {
-  ...ValidationRequired.args,
-};
-
-export default {
+const meta = {
   title: "Form/Field/Autocomplete/CreatableSelectField",
   component: CreatableSelectField,
-  argTypes: {
-    onSubmit: {
-      action: "submit",
-    },
-    onValueCreate: {
-      action: "onValueCreate",
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: action("form-submit"),
     },
   },
-};
+  render(props, context) {
+    const { initialValues, onSubmit, ...formControllerProps } =
+      context.parameters.form;
+
+    const { submittedValues, handleSubmit } = useFormViewer({
+      onSubmit: onSubmit,
+    });
+    const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
+
+    return (
+      <FormController
+        {...formControllerProps}
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+      >
+        <CreatableSelectField {...props} ref={fieldRef} name="item" />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+      </FormController>
+    );
+  },
+} satisfies Meta<typeof CreatableSelectField>;
+
+export default meta;
+
+type Story = StoryObj<typeof CreatableSelectField>;
+
+export const Standard = {
+  args: {
+    items: COUNTRIES,
+  },
+} satisfies Story;
+
+export const Prefilled = {
+  args: {
+    ...Standard.args,
+  },
+  parameters: {
+    form: {
+      initialValues: {
+        item: COUNTRIES[1].value,
+      },
+    },
+  },
+} satisfies Story;
+
+export const Disabled = {
+  args: {
+    ...Standard.args,
+    disabled: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const Readonly = {
+  args: {
+    ...Standard.args,
+    readonly: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const ValidationRequired = {
+  args: {
+    ...Standard.args,
+    required: true,
+  },
+} satisfies Story;
+
+export const ValidationTranslationRequired = {
+  render: (args, context) => (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) =>
+        `Field '${name}' has Error '${error.type}'. Original error: ${
+          error.message || "---"
+        }`
+      }
+    >
+      {meta.render?.(args, context)}
+    </FormI18nProvider>
+  ),
+  args: {
+    ...ValidationRequired.args,
+  },
+} satisfies Story;

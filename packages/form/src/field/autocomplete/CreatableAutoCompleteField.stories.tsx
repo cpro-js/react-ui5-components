@@ -1,4 +1,5 @@
-import { StoryFn } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
 import { useRef } from "react";
 
 import {
@@ -18,6 +19,41 @@ import {
 interface FormData {
   item?: string | number;
 }
+
+const meta = {
+  title: "Form/Field/Autocomplete/CreatableAutoCompleteField",
+  component: CreatableAutoCompleteField,
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: action("form-submit"),
+    },
+  },
+  render(props, context) {
+    const { initialValues, onSubmit, ...formControllerProps } =
+      context.parameters.form;
+
+    const { submittedValues, handleSubmit } = useFormViewer({
+      onSubmit: onSubmit,
+    });
+    const fieldRef = useRef<FormFieldRef<FormData, "item">>(null);
+
+    return (
+      <FormController
+        {...formControllerProps}
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+      >
+        <CreatableAutoCompleteField {...props} ref={fieldRef} name="item" />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+      </FormController>
+    );
+  },
+} satisfies Meta<typeof CreatableAutoCompleteField>;
+
+export default meta;
+
+type Story = StoryObj<typeof CreatableAutoCompleteField>;
 
 const Template: StoryFn<
   FormControllerProps<FormData> &
@@ -55,50 +91,66 @@ const I18nTemplate: StoryFn<
   );
 };
 
-export const Standard = Template.bind({});
-Standard.args = { loadItems: SEARCH_COUNTRIES };
-
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  ...Standard.args,
-  initialItems: [COUNTRIES[1]],
-  initialValues: {
-    item: COUNTRIES[1].value,
+export const Standard = {
+  args: {
+    loadItems: SEARCH_COUNTRIES,
   },
-};
+} satisfies Story;
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Prefilled.args,
-  disabled: true,
-};
-
-export const Readonly = Template.bind({});
-Readonly.args = {
-  ...Prefilled.args,
-  readonly: true,
-};
-
-export const ValidationRequired = Template.bind({});
-ValidationRequired.args = {
-  ...Standard.args,
-  required: true,
-};
-
-export const ValidationTranslationRequired = I18nTemplate.bind({});
-ValidationTranslationRequired.args = {
-  ...ValidationRequired.args,
-};
-
-export default {
-  title: "Form/Field/Autocomplete/CreatableAutoCompleteField",
-  component: CreatableAutoCompleteField,
-  argTypes: {
-    onSubmit: {
-      action: "submit",
-    },
-    onValueCreate: {
-      action: "onValueCreate",
+export const Prefilled = {
+  args: {
+    ...Standard.args,
+    initialItems: [COUNTRIES[1]],
+  },
+  parameters: {
+    form: {
+      initialValues: {
+        item: COUNTRIES[1].value,
+      },
     },
   },
-};
+} satisfies Story;
+
+export const Disabled = {
+  args: {
+    ...Prefilled.args,
+    disabled: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const Readonly = {
+  args: {
+    ...Prefilled.args,
+    readonly: true,
+  },
+  parameters: {
+    ...Prefilled.parameters,
+  },
+} satisfies Story;
+
+export const ValidationRequired = {
+  args: {
+    ...Standard.args,
+    required: true,
+  },
+} satisfies Story;
+
+export const ValidationTranslationRequired = {
+  render: (args, context) => (
+    <FormI18nProvider
+      getValidationErrorMessage={({ name }, error) =>
+        `Field '${name}' has Error '${error.type}'. Original error: ${
+          error.message || "---"
+        }`
+      }
+    >
+      {meta.render?.(args, context)}
+    </FormI18nProvider>
+  ),
+  args: {
+    ...ValidationRequired.args,
+  },
+} satisfies Story;

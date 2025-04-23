@@ -1,11 +1,9 @@
-import { StoryFn } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { Meta, StoryObj } from "@storybook/react";
 import { useRef } from "react";
 
-import { FormController, FormControllerProps } from "../form/FormController";
-import {
-  DateTimePickerField,
-  DateTimePickerFieldProps,
-} from "./DateTimePickerField";
+import { FormController } from "../form/FormController";
+import { DateTimePickerField } from "./DateTimePickerField";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { FormFieldRef } from "./types";
 import { FormI18nProvider, toISODateTimeString } from "..";
@@ -14,93 +12,108 @@ interface FormData {
   date?: string;
 }
 
-const Template: StoryFn<
-  FormControllerProps<FormData> & DateTimePickerFieldProps<FormData, "date">
-> = (args) => {
-  const { initialValues, onSubmit, ...props } = args;
-
-  const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-    onSubmit: onSubmit,
-  });
-  const fieldRef = useRef<FormFieldRef<FormData, "date">>(null);
-
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <DateTimePickerField {...props} ref={fieldRef} name={"date"} />
-      <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
-    </FormController>
-  );
-};
-
-const I18nTemplate: StoryFn<
-  FormControllerProps<FormData> & DateTimePickerFieldProps<FormData, "date">
-> = (args, context) => {
-  return (
-    <FormI18nProvider
-      getValidationErrorMessage={({ name }, error) => {
-        return `Field '${name}' has Error '${
-          error.type
-        }'. Original error message: ${error.message || "---"}`;
-      }}
-    >
-      {Template(args, context)}
-    </FormI18nProvider>
-  );
-};
-
-export const Empty = Template.bind({});
-Empty.args = {};
-
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  initialValues: {
-    date: toISODateTimeString(new Date()),
-  },
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Prefilled.args,
-  disabled: true,
-};
-
-export const Readonly = Template.bind({});
-Readonly.args = {
-  ...Prefilled.args,
-  readonly: true,
-};
-
-export const ValidationRequired = Template.bind({});
-ValidationRequired.args = {
-  required: true,
-};
-
-export const ValidationMinDateToday = Template.bind({});
-ValidationMinDateToday.args = { minDate: toISODateTimeString(new Date()) };
-
-export const ValidationMaxDateToday = Template.bind({});
-ValidationMaxDateToday.args = { maxDate: toISODateTimeString(new Date()) };
-
-export const ValidationRequiredAndOnlyToday = Template.bind({});
-ValidationRequiredAndOnlyToday.args = {
-  required: true,
-  minDate: toISODateTimeString(new Date()),
-  maxDate: toISODateTimeString(new Date()),
-};
-
-export const ValidationTranslationRequired = I18nTemplate.bind({});
-ValidationTranslationRequired.args = {
-  ...ValidationRequired.args,
-};
-
-export default {
+const meta = {
   title: "Form/Field/DateTimePickerField",
   component: DateTimePickerField,
   argTypes: {
-    onSubmit: {
-      action: "submit",
-    },
     minDate: { type: "string", control: "text" },
     maxDate: { type: "string", control: "text" },
   },
-};
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: action("form-submit"),
+    },
+  },
+  render(props, context) {
+    const { initialValues, onSubmit, ...formControllerProps } =
+      context.parameters.form;
+
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: onSubmit,
+    });
+    const fieldRef = useRef<FormFieldRef<FormData, "date">>(null);
+    return (
+      <FormController
+        {...formControllerProps}
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+      >
+        <DateTimePickerField {...props} ref={fieldRef} name={"date"} />
+        <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
+      </FormController>
+    );
+  },
+} satisfies Meta<typeof DateTimePickerField>;
+
+export default meta;
+
+type Story = StoryObj<typeof DateTimePickerField>;
+
+export const Empty = {
+  args: {},
+} satisfies Story;
+
+export const Prefilled = {
+  parameters: {
+    form: {
+      initialValues: {
+        date: toISODateTimeString(new Date()),
+      },
+    },
+  },
+} satisfies Story;
+
+export const Disabled = {
+  args: {
+    disabled: true,
+  },
+} satisfies Story;
+
+export const Readonly = {
+  args: {
+    readonly: true,
+  },
+} satisfies Story;
+
+export const ValidationRequired = {
+  args: {
+    required: true,
+  },
+} satisfies Story;
+
+export const ValidationMinDateToday = {
+  args: { minDate: toISODateTimeString(new Date()) },
+} satisfies Story;
+
+export const ValidationMaxDateToday = {
+  args: { maxDate: toISODateTimeString(new Date()) },
+} satisfies Story;
+
+export const ValidationRequiredAndOnlyToday = {
+  args: {
+    required: true,
+    minDate: toISODateTimeString(new Date()),
+    maxDate: toISODateTimeString(new Date()),
+  },
+} satisfies Story;
+
+export const ValidationTranslationRequired = {
+  render(args, context) {
+    return (
+      <FormI18nProvider
+        getValidationErrorMessage={({ name }, error) => {
+          return `Field '${name}' has Error '${
+            error.type
+          }'. Original error message: ${error.message || "---"}`;
+        }}
+      >
+        {meta.render?.(args, context)}
+      </FormI18nProvider>
+    );
+  },
+
+  args: {
+    ...ValidationRequired.args,
+  },
+} satisfies Story;

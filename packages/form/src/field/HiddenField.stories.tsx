@@ -1,6 +1,8 @@
-import { StoryFn } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import type { Meta, StoryObj } from "@storybook/react";
+import type { SubmitHandler } from "react-hook-form";
 
-import { FormController, FormControllerProps } from "../form/FormController";
+import { FormController } from "../form/FormController";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { HiddenField, HiddenFieldProps } from "./HiddenField";
 
@@ -8,39 +10,47 @@ interface FormData {
   text?: string;
 }
 
-const Template: StoryFn<
-  FormControllerProps<FormData> & HiddenFieldProps<FormData, "text">
-> = (args) => {
-  const { initialValues, onSubmit, ...props } = args;
-
-  const { submittedValues, handleSubmit } = useFormViewer({
-    onSubmit: onSubmit,
-  });
-
-  return (
-    <FormController {...{ initialValues, onSubmit: handleSubmit }}>
-      <HiddenField {...props} name={"text"} />
-      <FormViewer submittedValues={submittedValues} />
-    </FormController>
-  );
-};
-
-export const Empty = Template.bind({});
-Empty.args = {};
-
-export const Prefilled = Template.bind({});
-Prefilled.args = {
-  initialValues: {
-    text: "hello world",
-  },
-};
-
-export default {
+const meta = {
   title: "Form/Field/HiddenField",
   component: HiddenField,
-  argTypes: {
-    onSubmit: {
-      action: "submit",
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: (async (...args) => {
+        action("form-submit")(...args);
+      }) satisfies SubmitHandler<FormData>,
     },
   },
-};
+  render(props, context) {
+    const { initialValues, onSubmit } = context.parameters.form;
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit,
+    });
+
+    return (
+      <FormController<FormData>
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+      >
+        <HiddenField {...props} name="text" />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+} satisfies Meta<typeof HiddenField>;
+
+export default meta;
+
+type Story = StoryObj<typeof HiddenField>;
+
+export const Empty = {} satisfies Story;
+
+export const Prefilled = {
+  parameters: {
+    form: {
+      initialValues: {
+        text: "hello world",
+      },
+    },
+  },
+} satisfies Story;
