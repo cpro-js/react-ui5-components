@@ -1,4 +1,7 @@
+import { expect } from "@storybook/jest";
 import { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
+import { userEvent, waitFor, within } from "@storybook/testing-library";
 import { useRef } from "react";
 
 import { FormController } from "../form/FormController";
@@ -22,6 +25,11 @@ export default {
       initialValues: {},
     },
   },
+  args: {
+    onBlur: fn(),
+    onFocus: fn(),
+    onChange: fn(),
+  },
   render(props, context) {
     const { onSubmit, initialValues, ...formControllerProps } =
       context.parameters.form;
@@ -40,7 +48,12 @@ export default {
           initialValues={initialValues}
           onSubmit={handleSubmit}
         >
-          <CheckboxField {...props} ref={fieldRef} name="value" />
+          <CheckboxField
+            data-testid="checkbox"
+            {...props}
+            ref={fieldRef}
+            name="value"
+          />
           <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
         </FormController>
       );
@@ -55,7 +68,12 @@ export default {
           initialValues={initialValues}
           onSubmit={handleSubmit}
         >
-          <CheckboxField {...props} ref={fieldRef} name="value" />
+          <CheckboxField
+            data-testid="checkbox"
+            {...props}
+            ref={fieldRef}
+            name="value"
+          />
           <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
         </FormController>
       );
@@ -76,6 +94,15 @@ export const Prefilled = {
         value: "on",
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(canvas.getByText(/"value": ?"on"/)).toBeInTheDocument();
+    });
   },
 } satisfies Story;
 
@@ -134,5 +161,55 @@ export const BooleanValidationRequired = {
   args: {
     ...BooleanEmpty.args,
     required: true,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      const checkbox = canvas.getByTestId("checkbox");
+      expect(checkbox.getAttribute("value-state")).toBe("Negative");
+    });
+  },
+} satisfies Story;
+
+export const InteractionTests = {
+  render: () => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: (values) => console.log("Submitted", values),
+    });
+
+    return (
+      <FormController<FormData> onSubmit={handleSubmit}>
+        <CheckboxField
+          data-testid="boolean-required"
+          name="booleanRequired"
+          {...BooleanValidationRequired.args}
+        />
+
+        <CheckboxField
+          data-testid="required"
+          name="requiredField"
+          {...ValidationRequired.args}
+        />
+
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByText("Submit"));
+
+    await waitFor(() => {
+      const required = canvas.getByTestId("required");
+      const booleanRequired = canvas.getByTestId("boolean-required");
+      expect(required.getAttribute("value-state")).toBe("Negative");
+      expect(booleanRequired.getAttribute("value-state")).toBe("Negative");
+    });
   },
 } satisfies Story;
