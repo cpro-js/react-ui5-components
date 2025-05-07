@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import { expect } from "@storybook/jest";
 import { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
@@ -23,6 +24,7 @@ export default {
   parameters: {
     form: {
       initialValues: {},
+      onSubmit: action("form-submit"),
     },
   },
   args: {
@@ -95,15 +97,6 @@ export const Prefilled = {
       },
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const submitBtn = canvas.getByText("Submit");
-    await userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(canvas.getByText(/"value": ?"on"/)).toBeInTheDocument();
-    });
-  },
 } satisfies Story;
 
 export const Disabled = {
@@ -162,23 +155,52 @@ export const BooleanValidationRequired = {
     ...BooleanEmpty.args,
     required: true,
   },
+} satisfies Story;
+
+const mockSubmit = fn();
+export const InteractionTests = {
+  render: (props, context) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormDataBoolean>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController<FormDataBoolean>
+        onSubmit={handleSubmit}
+        initialValues={{ value: true }}
+      >
+        <CheckboxField data-testid="checkbox" name="value" boolean={true} />
+
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+
+    const checkbox = canvas.getByTestId("checkbox");
+
+    await waitFor(() => {
+      expect((checkbox as HTMLInputElement).checked).toBe(true);
+    });
 
     const submitBtn = canvas.getByText("Submit");
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      const checkbox = canvas.getByTestId("checkbox");
-      expect(checkbox.getAttribute("value-state")).toBe("Negative");
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { value: true },
+        expect.anything()
+      );
     });
   },
 } satisfies Story;
 
-export const InteractionTests = {
-  render: () => {
+export const InteractionTestsRequired = {
+  render: (props, context) => {
     const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-      onSubmit: (values) => console.log("Submitted", values),
+      onSubmit: mockSubmit,
     });
 
     return (
@@ -203,13 +225,15 @@ export const InteractionTests = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.click(canvas.getByText("Submit"));
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       const required = canvas.getByTestId("required");
       const booleanRequired = canvas.getByTestId("boolean-required");
       expect(required.getAttribute("value-state")).toBe("Negative");
       expect(booleanRequired.getAttribute("value-state")).toBe("Negative");
+      expect(mockSubmit).not.toHaveBeenCalled();
     });
   },
 } satisfies Story;
