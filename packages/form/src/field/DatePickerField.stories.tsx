@@ -142,7 +142,7 @@ export const InteractionTests = {
     return (
       <FormController<FormData>
         onSubmit={handleSubmit}
-        initialValues={{ date: toISO8601DateString(new Date()) }}
+        initialValues={{ date: todayStr }}
       >
         <DatePickerField data-testid="datepicker" name="date" />
 
