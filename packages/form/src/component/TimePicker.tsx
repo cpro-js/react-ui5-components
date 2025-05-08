@@ -25,9 +25,27 @@ import {
 import { GlobalHtmlKeyInputElementProps } from "./GlobalHtmlElementProps";
 import { useFireSubmit } from "./util";
 
-// Schneidet "HH:mm:ss" auf "HH:mm"
-export const durationToTime = (duration: string): string => {
-  return duration.split(":").slice(0, 2).join(":");
+export const durationToTime = (
+  duration: string,
+  formatPattern: string
+): string => {
+  const parts = duration.split(":");
+  const length = formatPattern.split(":").length;
+  return parts.slice(0, length).join(":");
+};
+
+export const normalizeTimeValue = (
+  timeInput: string,
+  formatPattern: string
+): string => {
+  const parts = timeInput.split(":");
+  const targetLength = "HH:mm:ss".split(":").length;
+
+  while (parts.length < targetLength) {
+    parts.push("00");
+  }
+
+  return parts.join(":");
 };
 
 export type TimePickerProps = GlobalHtmlKeyInputElementProps<TimePickerDomRef> &
@@ -106,9 +124,7 @@ export const TimePicker = forwardRef<TimePickerDomRef | null, TimePickerProps>(
 
     const lastValue = useRef<string | undefined>(value);
 
-    const finalValue = useMemo(() => {
-      return value ? durationToTime(value) : "";
-    }, [value]);
+    const finalValue = value ? durationToTime(value, formatPattern) : "";
 
     return (
       <UI5TimePicker
@@ -134,9 +150,11 @@ export const TimePicker = forwardRef<TimePickerDomRef | null, TimePickerProps>(
         onChange={useEventCallback((event) => {
           event.stopPropagation();
 
-          const rawTime = event.detail.value; // "HH:mm"
+          const rawTime = event.detail.value;
           const valid = event.detail.valid;
-          const formatted = valid ? `${rawTime}:00` : undefined;
+          const formatted = valid
+            ? normalizeTimeValue(rawTime, formatPattern)
+            : undefined;
 
           lastValue.current = formatted;
           dispatchChangeEvent({ value: formatted });
