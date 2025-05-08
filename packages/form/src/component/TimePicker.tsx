@@ -39,9 +39,8 @@ export const normalizeTimeValue = (
   formatPattern: string
 ): string => {
   const parts = timeInput.split(":");
-  const targetLength = "HH:mm:ss".split(":").length;
 
-  while (parts.length < targetLength) {
+  while (parts.length < 3) {
     parts.push("00");
   }
 
