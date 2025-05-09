@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification-v2.0.2...@cpro-js/react-ui5-notification-v2.1.0) (2025-05-09)
+
+
+### Features
+
+* support react 19  ([#104](https://github.com/cpro-js/react-ui5-components/issues/104)) ([6aa9ec9](https://github.com/cpro-js/react-ui5-components/commit/6aa9ec9393694e82541a0258166633d55f05c774))
+
+
+### Bug Fixes
+
+* allow react 19 as peer dependency ([#111](https://github.com/cpro-js/react-ui5-components/issues/111)) ([8e11763](https://github.com/cpro-js/react-ui5-components/commit/8e117630381fa8a96acfcc03e3508a2cd8b9670a))
+
 ## [2.0.2](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-notification-v2.0.1...@cpro-js/react-ui5-notification-v2.0.2) (2025-01-31)
 
 

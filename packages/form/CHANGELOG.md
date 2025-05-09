@@ -13,6 +13,32 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - minimum required version of @ui5/webcomponents-react is 2.5.0
 
+## [2.1.0](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v2.0.2...@cpro-js/react-ui5-webcomponents-form-v2.1.0) (2025-05-09)
+
+
+### Features
+
+* additional text for Select ([#98](https://github.com/cpro-js/react-ui5-components/issues/98)) ([5e6a0c0](https://github.com/cpro-js/react-ui5-components/commit/5e6a0c0edad7abe84d39b644ca75f0f38e78aaf1))
+* form busy indicator as wrapper for whole form or for specific fields ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* onChange event handler for fields (provides access to value, valid, field, form) ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* onSubmit event handler for fields (provides access to value, valid, field, form) ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* radio button component / field ([#119](https://github.com/cpro-js/react-ui5-components/issues/119)) ([4f5ccda](https://github.com/cpro-js/react-ui5-components/commit/4f5ccdab24557df24d8d0a035151d84552f89581))
+* support async initial form values ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* support custom (async) validation for each field ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* support react 19  ([#104](https://github.com/cpro-js/react-ui5-components/issues/104)) ([6aa9ec9](https://github.com/cpro-js/react-ui5-components/commit/6aa9ec9393694e82541a0258166633d55f05c774))
+* support ref on each form field to access field api ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* support ref on FormController to access form api ([214c8d1](https://github.com/cpro-js/react-ui5-components/commit/214c8d176ae9334119e2756b430506746793ddca))
+* timePickerComponent ([#127](https://github.com/cpro-js/react-ui5-components/issues/127)) ([7bd931d](https://github.com/cpro-js/react-ui5-components/commit/7bd931dcb8dd0bdd1104497cc2d32c073640cd64))
+
+
+### Bug Fixes
+
+* export initial form values type ([#113](https://github.com/cpro-js/react-ui5-components/issues/113)) ([4211968](https://github.com/cpro-js/react-ui5-components/commit/42119681f4a55e0aa7a52502df33cd2a4360ec39))
+* only validate field again when field is touched/dirty ([#112](https://github.com/cpro-js/react-ui5-components/issues/112)) ([68bf42a](https://github.com/cpro-js/react-ui5-components/commit/68bf42a93b14551e88d867fbddb2ebf3b1807c3b))
+* prevent native browser validation ([#105](https://github.com/cpro-js/react-ui5-components/issues/105)) ([8e849e5](https://github.com/cpro-js/react-ui5-components/commit/8e849e5f6eca6f7f75f8ca72575b2a892eec0560))
+* reset field error when setting a value ([#116](https://github.com/cpro-js/react-ui5-components/issues/116)) ([987bc40](https://github.com/cpro-js/react-ui5-components/commit/987bc40e63e9ec34471e66bb947ebde311acdf32))
+* stable refs for form components / fields ([#114](https://github.com/cpro-js/react-ui5-components/issues/114)) ([12adbea](https://github.com/cpro-js/react-ui5-components/commit/12adbea9664c873fc1eddd97063d9aa764858e77))
+
 ## [2.0.2](https://github.com/cpro-js/react-ui5-components/compare/@cpro-js/react-ui5-webcomponents-form-v2.0.1...@cpro-js/react-ui5-webcomponents-form-v2.0.2) (2025-01-31)
 
 
