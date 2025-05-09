@@ -4,6 +4,7 @@ import {
   Ref,
   forwardRef,
   useContext,
+  useEffect,
   useImperativeHandle,
   useRef,
 } from "react";
@@ -15,7 +16,12 @@ import {
 } from "react-hook-form";
 import { useEventCallback } from "usehooks-ts";
 
-import { TimePicker, TimePickerProps } from "../component/TimePicker";
+import {
+  TimePicker,
+  TimePickerProps,
+  durationToTime,
+  normalizeTimeValue,
+} from "../component/TimePicker";
 import { useControlledField } from "../form/_internal/useField";
 import { FormAdapterContext } from "../form/FormAdapter";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
@@ -105,12 +111,30 @@ export const TimePickerField = forwardRef<
     onEvent: onSubmit,
   });
 
+  const formattedValue =
+    field.value != null
+      ? normalizeTimeValue(
+          durationToTime(field.value, timePickerProps.formatPattern ?? "HH:mm"),
+          timePickerProps.formatPattern ?? "HH:mm"
+        )
+      : undefined;
+
+  useEffect(() => {
+    if (field.value != null && field.value.split(":").length < 3) {
+      const normalized = normalizeTimeValue(
+        durationToTime(field.value, timePickerProps.formatPattern ?? "HH:mm"),
+        timePickerProps.formatPattern ?? "HH:mm"
+      );
+      field.fieldApiRef.current.setValue(normalized);
+    }
+  }, [field.value, timePickerProps.formatPattern]);
+
   return (
     <TimePicker
       {...timePickerProps}
       ref={elementRef}
       name={field.name}
-      value={field.value === undefined ? null : field.value}
+      value={formattedValue}
       readonly={props.readonly || field.isValidating || field.isSubmitting}
       required={required}
       valueState={field.valueState}

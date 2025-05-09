@@ -4,7 +4,7 @@ import { useRef } from "react";
 
 import { FormController } from "../form/FormController";
 import { FormViewer, useFormViewer } from "./FormViewer";
-import { TimePickerField } from "./TimePickerFIeld";
+import { TimePickerField } from "./TimePickerField";
 import { FormFieldRef } from "./types";
 
 interface FormData {
@@ -57,6 +57,19 @@ export const Prefilled = {
     form: {
       initialValues: {
         time: "12:55",
+      },
+    },
+  },
+} satisfies Story;
+
+export const PrefilledHHmmss = {
+  args: {
+    formatPattern: "HH:mm:ss",
+  },
+  parameters: {
+    form: {
+      initialValues: {
+        time: "12:55:11",
       },
     },
   },
