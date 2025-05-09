@@ -11,6 +11,7 @@ import {
   Ref,
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -123,6 +124,15 @@ export const TimePicker = forwardRef<TimePickerDomRef | null, TimePickerProps>(
 
     const lastValue = useRef<string | undefined>(value);
 
+    useEffect(() => {
+      if (value) {
+        lastValue.current = normalizeTimeValue(
+          durationToTime(value, formatPattern),
+          formatPattern
+        );
+      }
+    }, [value, formatPattern]);
+
     const finalValue = value ? durationToTime(value, formatPattern) : "";
 
     return (
@@ -154,7 +164,6 @@ export const TimePicker = forwardRef<TimePickerDomRef | null, TimePickerProps>(
           const formatted = valid
             ? normalizeTimeValue(rawTime, formatPattern)
             : undefined;
-
           lastValue.current = formatted;
           dispatchChangeEvent({ value: formatted });
 
