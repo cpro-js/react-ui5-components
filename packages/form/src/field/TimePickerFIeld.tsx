@@ -23,7 +23,6 @@ import {
   normalizeTimeValue,
 } from "../component/TimePicker";
 import { useControlledField } from "../form/_internal/useField";
-import { FormAdapterContext } from "../form/FormAdapter";
 import { useCustomEventDispatcher } from "../hook/useCustomEventDispatcher";
 import {
   FieldEventDetail,
