@@ -83,6 +83,7 @@ export const TextInput = forwardRef<InputDomRef | null, TextInputProps>(
           }
         })}
         onChange={useEventCallback(async (event) => {
+          console.log("onChange", event.target.value);
           onChange?.(event);
           if (submit.shouldFireSubmitOnChange()) {
             // change event was triggered by enter --> submit
