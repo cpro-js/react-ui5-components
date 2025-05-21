@@ -1,7 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { expect } from "@storybook/jest";
 import { Meta, StoryObj } from "@storybook/react";
-import { fn, userEvent, waitFor, within } from "@storybook/test";
 import { useRef } from "react";
 
 import { FormController } from "../form/FormController";
@@ -117,75 +115,5 @@ export const ValidationTranslationRequired = {
 
   args: {
     ...ValidationRequired.args,
-  },
-} satisfies Story;
-
-const mockSubmit = fn();
-
-const todayStr = toISODateTimeString(new Date());
-
-export const InteractionTests = {
-  render: (props, context) => {
-    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-      onSubmit: mockSubmit,
-    });
-
-    return (
-      <FormController<FormData>
-        onSubmit={handleSubmit}
-        initialValues={{ date: todayStr }}
-      >
-        <DateTimePickerField data-testid="datetimepicker" name="date" />
-
-        <FormViewer submittedValues={submittedValues} />
-      </FormController>
-    );
-  },
-
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    const submitBtn = canvas.getByText("Submit");
-    await userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(mockSubmit).toHaveBeenCalledWith(
-        { date: todayStr },
-        expect.anything()
-      );
-    });
-  },
-} satisfies Story;
-
-export const InteractionTestsRequired = {
-  render: (props, context) => {
-    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-      onSubmit: mockSubmit,
-    });
-
-    return (
-      <FormController<FormData> onSubmit={handleSubmit}>
-        <DateTimePickerField
-          data-testid="required"
-          name="requiredField"
-          {...ValidationRequired.args}
-        />
-
-        <FormViewer submittedValues={submittedValues} />
-      </FormController>
-    );
-  },
-
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    const submitBtn = canvas.getByText("Submit");
-    await userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      const required = canvas.getByTestId("required");
-      expect(required.getAttribute("value-state")).toBe("Negative");
-      expect(mockSubmit).not.toHaveBeenCalled();
-    });
   },
 } satisfies Story;

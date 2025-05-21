@@ -5,8 +5,8 @@ import { fn } from "@storybook/test";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
 
 import { FormController, FormControllerProps } from "../form/FormController";
-import { toISO8601DateString, toISODateTimeString } from "../util/date";
-import { DatePickerField } from "./DatePickerField";
+import { toISODateTimeString } from "../util/date";
+import { DateTimePickerField } from "./DateTimePickerField";
 import { FormViewer, useFormViewer } from "./FormViewer";
 import { FormFieldRef } from "./types";
 
@@ -15,8 +15,8 @@ interface FormData {
 }
 
 const meta = {
-  title: "Form/Field/DatePickerField/Interactions",
-  component: DatePickerField,
+  title: "Form/Field/DateTimePickerField/Interactions",
+  component: DateTimePickerField,
   argTypes: {
     onSubmit: {
       action: "submit",
@@ -24,20 +24,25 @@ const meta = {
     minDate: { type: "string", control: "text" },
     maxDate: { type: "string", control: "text" },
   },
+  args: {
+    onFocus: fn(),
+    onBlur: fn(),
+  },
   parameters: {
     form: {
       initialValues: {},
       onSubmit: action("form-submit"),
     },
   },
-} satisfies Meta<typeof DatePickerField>;
+} satisfies Meta<typeof DateTimePickerField>;
 
 export default meta;
 
-type Story = StoryObj<typeof DatePickerField>;
+type Story = StoryObj<typeof DateTimePickerField>;
 
 const mockSubmit = fn();
-const todayStr = toISO8601DateString(new Date());
+
+const todayStr = toISODateTimeString(new Date());
 
 export const PrefilledTest = {
   render: (props, context) => {
@@ -50,7 +55,7 @@ export const PrefilledTest = {
         onSubmit={handleSubmit}
         initialValues={{ date: todayStr }}
       >
-        <DatePickerField data-testid="datetimepicker" name="date" />
+        <DateTimePickerField data-testid="datetimepicker" name="date" />
 
         <FormViewer submittedValues={submittedValues} />
       </FormController>
@@ -80,7 +85,11 @@ export const RequiredTest = {
 
     return (
       <FormController<FormData> onSubmit={handleSubmit}>
-        <DatePickerField data-testid="required" name="requiredField" required />
+        <DateTimePickerField
+          data-testid="required"
+          name="requiredField"
+          required
+        />
 
         <FormViewer submittedValues={submittedValues} />
       </FormController>
