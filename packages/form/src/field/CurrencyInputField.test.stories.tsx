@@ -35,33 +35,34 @@ type Story = StoryObj<typeof CurrencyInputField>;
 
 const mockSubmit = fn();
 
-const createPrefilledCurrencyTest = (initial: number): Story => ({
-  render: (props, context) => {
-    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-      onSubmit: mockSubmit,
-    });
-    return (
-      <FormController
-        initialValues={{ theNumber: initial }}
-        onSubmit={handleSubmit}
-      >
-        <CurrencyInputField {...props} name="theNumber" />
-        <FormViewer submittedValues={submittedValues} />
-      </FormController>
-    );
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const submitBtn = canvas.getByText("Submit");
-    await userEvent.click(submitBtn);
-    await waitFor(() => {
-      expect(mockSubmit).toHaveBeenCalledWith(
-        { theNumber: initial },
-        expect.anything()
+const createPrefilledCurrencyTest = (initial: number) =>
+  ({
+    render: (props, context) => {
+      const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+        onSubmit: mockSubmit,
+      });
+      return (
+        <FormController
+          initialValues={{ theNumber: initial }}
+          onSubmit={handleSubmit}
+        >
+          <CurrencyInputField {...props} name="theNumber" />
+          <FormViewer submittedValues={submittedValues} />
+        </FormController>
       );
-    });
-  },
-});
+    },
+    play: async ({ canvasElement }) => {
+      const canvas = within(canvasElement);
+      const submitBtn = canvas.getByText("Submit");
+      await userEvent.click(submitBtn);
+      await waitFor(() => {
+        expect(mockSubmit).toHaveBeenCalledWith(
+          { theNumber: initial },
+          expect.anything()
+        );
+      });
+    },
+  } satisfies Story);
 
 export const PrefilledTest = createPrefilledCurrencyTest(10.29);
 
