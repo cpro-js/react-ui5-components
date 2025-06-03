@@ -17,6 +17,9 @@ export default {
   component: TextAreaField,
   args: {
     onFocus: fn(),
+    onInput: fn(),
+    onChange: fn(),
+    onBlur: fn(),
   },
   parameters: {
     docs: { disable: true },
@@ -85,6 +88,44 @@ export const RequiredTest = {
       const field = canvas.getByTestId("textarea-required");
       expect(field.getAttribute("value-state")).toBe("Negative");
       expect(mockSubmit).not.toHaveBeenCalled();
+    });
+  },
+} satisfies Story;
+
+export const UserSubmitTest = {
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController onSubmit={handleSubmit}>
+        <TextAreaField {...props} name="text" data-testid="textarea-user" />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const textarea = canvas.getByTestId("textarea-user") as HTMLElement;
+    const input = textarea.shadowRoot?.querySelector(
+      "textarea"
+    ) as HTMLTextAreaElement;
+
+    await userEvent.type(input, "This is a test message.");
+
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { text: "This is a test message." },
+        expect.anything()
+      );
     });
   },
 } satisfies Story;
