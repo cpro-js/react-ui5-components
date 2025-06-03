@@ -35,38 +35,92 @@ type Story = StoryObj<typeof CurrencyInputField>;
 
 const mockSubmit = fn();
 
-const createPrefilledCurrencyTest = (initial: number) =>
-  ({
-    render: (props, context) => {
-      const { submittedValues, handleSubmit } = useFormViewer<FormData>({
-        onSubmit: mockSubmit,
-      });
-      return (
-        <FormController
-          initialValues={{ theNumber: initial }}
-          onSubmit={handleSubmit}
-        >
-          <CurrencyInputField {...props} name="theNumber" />
-          <FormViewer submittedValues={submittedValues} />
-        </FormController>
+export const PrefilledTest = {
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController
+        initialValues={{ theNumber: 10.29 }}
+        onSubmit={handleSubmit}
+      >
+        <CurrencyInputField
+          {...props}
+          name="theNumber"
+          data-testid="currency-input"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 10.29 },
+        expect.anything()
       );
-    },
-    play: async ({ canvasElement }) => {
-      const canvas = within(canvasElement);
-      const submitBtn = canvas.getByText("Submit");
-      await userEvent.click(submitBtn);
-      await waitFor(() => {
-        expect(mockSubmit).toHaveBeenCalledWith(
-          { theNumber: initial },
-          expect.anything()
-        );
-      });
-    },
-  } satisfies Story);
+    });
 
-export const PrefilledTest = createPrefilledCurrencyTest(10.29);
+    const host = canvas.getByTestId("currency-input");
+    console.log(host);
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
 
-export const PrefilledAndRoundedTest = createPrefilledCurrencyTest(10.299);
+    input.select();
+
+    await userEvent.keyboard("{Backspace}");
+
+    await userEvent.type(input, "20.50");
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 20.5 },
+        expect.anything()
+      );
+    });
+  },
+} satisfies Story;
+
+export const PrefilledAndRoundedTest = {
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController
+        initialValues={{ theNumber: 10.299 }}
+        onSubmit={handleSubmit}
+      >
+        <CurrencyInputField
+          {...props}
+          name="theNumber"
+          data-testid="currency-input"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 10.299 },
+        expect.anything()
+      );
+    });
+  },
+} satisfies Story;
 
 export const RequiredTest = {
   render: (props, context) => {
@@ -188,6 +242,45 @@ export const ValidationMinMaxTest = {
 
     await waitFor(() => {
       expect(host.getAttribute("value-state")).toBe("None");
+    });
+  },
+} satisfies Story;
+
+export const UserInputTest = {
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController onSubmit={handleSubmit}>
+        <CurrencyInputField
+          {...props}
+          name="theNumber"
+          data-testid="user-input"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const host = canvas.getByTestId("user-input") as HTMLElement;
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    input.focus();
+    await userEvent.type(input, "42.99");
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 42.99 },
+        expect.anything()
+      );
     });
   },
 } satisfies Story;
