@@ -26,6 +26,10 @@ export default {
   },
   args: {
     onFocus: fn(),
+    onInput: fn(),
+    onChange: fn(),
+    onBlur: fn(),
+    onSubmit: fn(),
   },
 } satisfies Meta<typeof SelectField>;
 
@@ -93,6 +97,45 @@ export const RequiredTest = {
       const select = canvas.getByTestId("select-required");
       expect(select.getAttribute("value-state")).toBe("Negative");
       expect(mockSubmit).not.toHaveBeenCalled();
+    });
+  },
+} satisfies Story;
+
+export const UserSubmitTest = {
+  args: {
+    items,
+    addEmptyOption: true,
+  },
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController<FormData> onSubmit={handleSubmit}>
+        <SelectField data-testid="select-user" {...props} name="item" />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = canvas.getByTestId("select-user") as HTMLElement;
+
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    input.focus();
+
+    await userEvent.type(input, "Te");
+
+    await userEvent.keyboard("{Enter}");
+    const submitBtn = canvas.getByText("Submit");
+
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith({ item: 1 }, expect.anything());
     });
   },
 } satisfies Story;
