@@ -66,6 +66,23 @@ export const PrefilledTest = {
     await waitFor(() => {
       expect(mockSubmit).toHaveBeenCalledWith({ item: "1" }, expect.anything());
     });
+
+    const host = canvas.getByTestId("select-prefilled") as HTMLElement;
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    input.select();
+
+    await userEvent.keyboard("{Backspace}");
+
+    await userEvent.type(input, "Test 2");
+
+    await userEvent.keyboard("{Enter}");
+
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith({ item: "2" }, expect.anything());
+    });
   },
 } satisfies Story;
 
