@@ -59,6 +59,26 @@ export const PrefilledTest = {
         expect.anything()
       );
     });
+
+    const host = canvas.getByTestId("prefilled-number") as HTMLElement;
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    input.select();
+
+    await userEvent.keyboard("{Backspace}");
+
+    await userEvent.type(input, "77412233.99");
+
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 77412233.99 },
+        expect.anything()
+      );
+    });
   },
 } satisfies Story;
 
@@ -117,7 +137,7 @@ export const OnSubmitTest = {
     const canvas = within(canvasElement);
     const host = canvas.getByTestId("number-submit") as HTMLElement;
     const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
-    console.log(input);
+
     await userEvent.type(input, "42");
 
     input.dispatchEvent(new Event("change", { bubbles: true }));
