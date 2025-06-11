@@ -14,6 +14,7 @@ interface FormData {
 export default {
   title: "Form/Field/RadioButtonField/InteractionTests",
   component: RadioButtonField,
+  tags: ["!autodocs"],
   args: {
     onFocus: fn(),
   },

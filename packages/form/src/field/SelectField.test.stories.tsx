@@ -21,6 +21,7 @@ const items = [
 export default {
   title: "Form/Field/SelectField/InteractionTests",
   component: SelectField,
+  tags: ["!autodocs"],
   parameters: {
     docs: { disable: true },
   },

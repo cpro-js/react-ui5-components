@@ -16,6 +16,7 @@ const mockSubmit = fn();
 export default {
   title: "Form/Field/NumberInputField/Interactions",
   component: NumberInputField,
+  tags: ["!autodocs"],
   args: {
     onFocus: fn(),
     onInput: fn(),

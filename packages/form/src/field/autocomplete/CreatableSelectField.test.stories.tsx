@@ -16,6 +16,7 @@ const mockSubmit = fn();
 export default {
   title: "Form/Field/Autocomplete/CreatableSelectField/InteractionTests",
   component: CreatableSelectField,
+  tags: ["!autodocs"],
   args: {
     onFocus: fn(),
     onInputChange: fn(),

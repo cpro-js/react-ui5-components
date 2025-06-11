@@ -20,6 +20,7 @@ interface FormDataBoolean {
 export default {
   title: "Form/Field/CheckboxField/InteractionTests",
   component: CheckboxField,
+  tags: ["!autodocs"],
   parameters: {
     docs: {
       disable: true,

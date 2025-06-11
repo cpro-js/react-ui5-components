@@ -16,6 +16,7 @@ const mockSubmit = fn();
 export default {
   title: "Form/Field/RadioButtonFieldGroup/InteractionTests",
   component: RadioButtonFieldGroup,
+  tags: ["!autodocs"],
   args: {
     onFocus: fn(),
   },

@@ -29,6 +29,7 @@ const mockSubmit = fn();
 export default {
   title: "Form/Field/MultiSelectField/Interactions",
   component: MultiSelectField,
+  tags: ["!autodocs"],
   args: {
     onInput: fn(),
     onFocus: fn(),

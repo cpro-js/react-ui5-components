@@ -21,12 +21,15 @@ const mockSubmit = fn();
 export default {
   title: "Form/Field/MultiAutoCompleteField/Interactions",
   component: MultiAutoCompleteField,
+  tags: ["!autodocs"],
   args: {
     onFocus: fn(),
     onClose: fn(),
     onBlur: fn(),
     onAdd: fn(),
     onChange: fn(),
+    onRemove: fn(),
+    onSearch: fn(),
   },
   parameters: {
     docs: { page: null },

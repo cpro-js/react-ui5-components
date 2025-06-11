@@ -14,6 +14,7 @@ interface FormData {
 const meta = {
   title: "Form/Field/CurrencyInputField/Interactions",
   component: CurrencyInputField,
+  tags: ["!autodocs"],
   parameters: {
     form: {
       initialValues: {},

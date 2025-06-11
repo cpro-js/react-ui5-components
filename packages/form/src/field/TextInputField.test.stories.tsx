@@ -15,7 +15,7 @@ const mockSubmit = fn();
 export default {
   title: "Form/Field/TextInputField/InteractionTests",
   component: TextInputField,
-
+  tags: ["!autodocs"],
   parameters: {
     docs: { disable: true },
   },

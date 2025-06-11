@@ -19,6 +19,7 @@ const mockSubmit = fn();
 export default {
   title: "Form/Field/Autocomplete/AutoCompleteField/InteractionTests",
   component: AutoCompleteField,
+  tags: ["!autodocs"],
   parameters: {
     docs: { disable: true },
   },

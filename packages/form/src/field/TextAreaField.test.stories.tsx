@@ -15,6 +15,7 @@ const mockSubmit = fn();
 export default {
   title: "Form/Field/TextAreaField/InteractionTests",
   component: TextAreaField,
+  tags: ["!autodocs"],
   args: {
     onFocus: fn(),
     onInput: fn(),

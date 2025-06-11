@@ -17,6 +17,7 @@ interface FormData {
 export default {
   title: "Form/Field/CheckboxFieldGroup/InteractionTests",
   component: CheckboxFieldGroup,
+  tags: ["!autodocs"],
   parameters: {
     docs: {
       disable: true,
