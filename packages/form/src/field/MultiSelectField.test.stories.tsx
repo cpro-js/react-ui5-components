@@ -130,3 +130,48 @@ export const RequiredTest = {
     });
   },
 } satisfies Story;
+
+export const OnSubmitTest = {
+  args: {
+    items,
+  },
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController<FormData> onSubmit={handleSubmit}>
+        <MultiSelectField
+          data-testid="multiselect-submit"
+          {...props}
+          name="item"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = canvas.getByTestId("multiselect-submit") as HTMLElement;
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    await userEvent.type(input, "Test 3");
+
+    await userEvent.keyboard("{Enter}");
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        {
+          item: [items[3].value],
+        },
+        expect.anything()
+      );
+    });
+  },
+} satisfies Story;
