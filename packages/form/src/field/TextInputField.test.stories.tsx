@@ -58,6 +58,24 @@ export const PrefilledTest = {
         expect.anything()
       );
     });
+
+    const host = canvas.getByTestId("text-input") as HTMLElement;
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    input.select(), await userEvent.keyboard("{Backspace}");
+
+    const newText = "typing something new";
+    await userEvent.type(input, newText);
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { text: newText },
+        expect.anything()
+      );
+    });
   },
 } satisfies Story;
 
