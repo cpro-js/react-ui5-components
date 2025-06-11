@@ -2,7 +2,10 @@ import { expect } from "@storybook/jest";
 import { Meta, StoryObj } from "@storybook/react";
 import { fn, userEvent, waitFor, within } from "@storybook/test";
 
-import { COUNTRIES } from "../../component/autocomplete/AutoComplete-storyData";
+import {
+  COUNTRIES,
+  SEARCH_COUNTRIES,
+} from "../../component/autocomplete/AutoComplete-storyData";
 import { FormController } from "../../form/FormController";
 import { FormViewer, useFormViewer } from "../FormViewer";
 import { AutoCompleteField } from "./AutoCompleteField";
@@ -21,6 +24,9 @@ export default {
   },
   args: {
     onFocus: fn(),
+    onInputChange: fn(),
+    onBlur: fn(),
+    onChange: fn(),
   },
 } satisfies Meta<typeof AutoCompleteField>;
 
@@ -28,7 +34,8 @@ type Story = StoryObj<typeof AutoCompleteField>;
 
 export const PrefilledTest = {
   args: {
-    initialItems: [COUNTRIES[1]],
+    initialItems: COUNTRIES,
+    loadItems: SEARCH_COUNTRIES,
   },
   render: (props) => {
     const { submittedValues, handleSubmit } = useFormViewer<FormData>({
@@ -54,6 +61,28 @@ export const PrefilledTest = {
     await waitFor(() => {
       expect(mockSubmit).toHaveBeenCalledWith(
         { item: COUNTRIES[1].value },
+        expect.anything()
+      );
+    });
+    const host = canvas.getByTestId("autocomplete") as HTMLElement;
+    const input = host.shadowRoot?.querySelector(
+      "input.ui5-input-inner"
+    ) as HTMLInputElement;
+
+    input.select();
+
+    await userEvent.keyboard("{Backspace}");
+
+    await userEvent.type(input, "Ger");
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    await userEvent.keyboard("{Enter}");
+
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { item: COUNTRIES[4].value },
         expect.anything()
       );
     });
@@ -90,6 +119,51 @@ export const RequiredTest = {
       const field = canvas.getByTestId("autocomplete-required");
       expect(field.getAttribute("value-state")).toBe("Negative");
       expect(mockSubmit).not.toHaveBeenCalled();
+    });
+  },
+} satisfies Story;
+
+export const UserInputTest = {
+  args: {
+    initialItems: COUNTRIES,
+    loadItems: SEARCH_COUNTRIES,
+  },
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController onSubmit={handleSubmit}>
+        <AutoCompleteField
+          {...props}
+          name="item"
+          data-testid="autocomplete-user"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = canvas.getByTestId("autocomplete-user") as HTMLElement;
+
+    const input = host.shadowRoot?.querySelector(
+      "input.ui5-input-inner"
+    ) as HTMLInputElement;
+
+    await userEvent.type(input, "Ger");
+
+    await userEvent.keyboard("{Enter}");
+
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { item: COUNTRIES[4].value },
+        expect.anything()
+      );
     });
   },
 } satisfies Story;
