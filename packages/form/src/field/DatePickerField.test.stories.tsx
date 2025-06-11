@@ -17,12 +17,19 @@ interface FormData {
 const meta = {
   title: "Form/Field/DatePickerField/Interactions",
   component: DatePickerField,
+  tags: ["!autodocs"],
   argTypes: {
     onSubmit: {
       action: "submit",
     },
     minDate: { type: "string", control: "text" },
     maxDate: { type: "string", control: "text" },
+  },
+  args: {
+    onFocus: fn(),
+    onInput: fn(),
+    onChange: fn(),
+    onBlur: fn(),
   },
   parameters: {
     form: {
@@ -69,6 +76,27 @@ export const PrefilledTest = {
         expect.anything()
       );
     });
+
+    const datePicker = canvas.getByTestId("datetimepicker") as HTMLElement;
+    const ui5Input = datePicker.shadowRoot?.querySelector("ui5-input");
+    const innerInput = ui5Input?.shadowRoot?.querySelector(
+      "input"
+    ) as HTMLInputElement;
+
+    innerInput.select();
+    await userEvent.keyboard("{Backspace}");
+
+    await userEvent.type(innerInput, "04.06.2025");
+    innerInput.dispatchEvent(new Event("change", { bubbles: true }));
+
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { date: "2025-06-04" },
+        expect.anything()
+      );
+    });
   },
 } satisfies Story;
 
@@ -97,6 +125,51 @@ export const RequiredTest = {
       const required = canvas.getByTestId("required");
       expect(required.getAttribute("value-state")).toBe("Negative");
       expect(mockSubmit).not.toHaveBeenCalled();
+    });
+  },
+} satisfies Story;
+
+export const UserInputTest = {
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController<FormData> onSubmit={handleSubmit}>
+        <DatePickerField
+          {...props}
+          data-testid="datepicker-userinput"
+          name="date"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = canvas.getByTestId("datepicker-userinput") as HTMLElement;
+
+    const ui5Input = host.shadowRoot?.querySelector("ui5-input");
+    const input = ui5Input?.shadowRoot?.querySelector(
+      "input"
+    ) as HTMLInputElement;
+
+    input.select();
+    await userEvent.keyboard("{Control>}a{/Control}{Backspace}");
+    await userEvent.type(input, "15.04.2020");
+
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { date: "2020-04-15" },
+        expect.anything()
+      );
     });
   },
 } satisfies Story;
