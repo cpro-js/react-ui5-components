@@ -147,6 +147,8 @@ export { ISO8601DateAdapter } from "./form/adapter/date/ISO8601DateAdapter";
 export { ISODateTimeAdapter } from "./form/adapter/date/ISODateTimeAdapter";
 export type { DateAdapter } from "./form/adapter/type/DateAdapter";
 
+export { useFormValues } from "./form/useFormValues";
+
 export { toISO8601DateString, toISODateTimeString } from "./util/date";
 
 export {
