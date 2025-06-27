@@ -17,6 +17,7 @@ export default {
     onInput: fn(),
     onBlur: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <TextInput data-testid="text-input" {...args} />,
 } satisfies Meta<typeof TextInput>;
 type Story = StoryObj<typeof TextInput>;

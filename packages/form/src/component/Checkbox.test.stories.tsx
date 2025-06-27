@@ -13,6 +13,7 @@ export default {
     onFocus: fn(),
     onChange: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <Checkbox data-testid="checkbox" {...args} />,
 } satisfies Meta<typeof Checkbox>;
 

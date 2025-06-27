@@ -13,6 +13,7 @@ export default {
     onFocus: fn(),
     onChange: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <RadioButton data-testid="radio-button" {...args} />,
 } satisfies Meta<typeof RadioButton>;
 

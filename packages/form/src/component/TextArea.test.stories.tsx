@@ -14,6 +14,7 @@ export default {
     onFocus: fn(),
     onInput: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <TextArea name="text" data-testid="text-input" {...args} />,
 } satisfies Meta<typeof TextArea>;
 

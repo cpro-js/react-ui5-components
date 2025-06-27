@@ -14,6 +14,7 @@ export default {
     onBlur: fn(),
     onClick: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <Button data-testid="button" {...args} />,
 } satisfies Meta<typeof Button>;
 

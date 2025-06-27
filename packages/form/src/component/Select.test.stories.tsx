@@ -26,6 +26,7 @@ export default {
     onSubmit: fn(),
     onBlur: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <Select data-testid="select-input" {...args} />,
 } satisfies Meta<typeof Select>;
 

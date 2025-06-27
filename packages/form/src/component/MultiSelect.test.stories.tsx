@@ -25,6 +25,7 @@ export default {
     onSelectionChange: fn(),
     onFocus: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <MultiSelect data-testid="multi-select" {...args} />,
 } satisfies Meta<typeof MultiSelect>;
 

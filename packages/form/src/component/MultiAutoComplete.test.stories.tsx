@@ -17,6 +17,7 @@ export default {
     onChange: fn(),
     onAdd: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <MultiAutoComplete data-testid="multi-auto" {...args} />,
 } satisfies Meta<typeof MultiAutoComplete>;
 

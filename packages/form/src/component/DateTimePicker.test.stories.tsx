@@ -16,6 +16,7 @@ export default {
     onInput: fn(),
     onBlur: fn(),
   },
+  tags: ["!autodocs"],
   render: (args) => <DateTimePicker data-testid="date-time-picker" {...args} />,
 } satisfies Meta<typeof DateTimePicker>;
 

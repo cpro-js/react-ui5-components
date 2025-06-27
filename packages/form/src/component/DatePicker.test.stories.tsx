@@ -9,6 +9,7 @@ import { DatePicker } from "./DatePicker";
 export default {
   title: "Component/DatePicker/Interactions",
   component: DatePicker,
+  tags: ["!autodocs"],
   args: {
     onFocus: fn(),
     onChange: fn(),
