@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { expect } from "@storybook/jest";
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
+import { action } from "storybook/actions";
+import { fn } from "storybook/test";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { toISO8601DateString, toISODateTimeString } from "../util/date";

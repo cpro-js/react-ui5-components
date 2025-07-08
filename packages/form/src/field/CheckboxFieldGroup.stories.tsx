@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import { FormController } from "../form/FormController";
 import { CheckboxField } from "./CheckboxField";

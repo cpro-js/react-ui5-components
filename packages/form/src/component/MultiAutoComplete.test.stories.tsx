@@ -1,8 +1,8 @@
 import { expect } from "@storybook/jest";
-import { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { userEvent } from "@storybook/testing-library";
 import { fireEvent, waitFor, within } from "@testing-library/react";
+import { fn } from "storybook/test";
 
 import { SEARCH_COUNTRIES } from "./autocomplete/AutoComplete-storyData";
 import { MultiAutoComplete } from "./MultiAutoComplete";

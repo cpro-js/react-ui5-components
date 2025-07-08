@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-icons/dist/search.js";
 
-import { StoryFn } from "@storybook/react";
+import { StoryFn } from "@storybook/react-vite";
 import { FilterGroupItem, Icon } from "@ui5/webcomponents-react";
 
 import { SelectItem } from "../component/Select";

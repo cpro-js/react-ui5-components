@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { expect } from "@storybook/jest";
-import { Meta, StoryObj } from "@storybook/react";
-import { fn, userEvent, waitFor, within } from "@storybook/test";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
+import { action } from "storybook/actions";
+import { fn, userEvent, waitFor, within } from "storybook/test";
 
 import { FormController } from "../form/FormController";
 import { CheckboxField } from "./CheckboxField";

@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 import { SubmitHandler } from "react-hook-form";
+import { action } from "storybook/actions";
 
 import { FormController, FormControllerProps } from "../form/FormController";
 import { FormBusyIndicator, FormBusyIndicatorProps } from "./FormBusyIndicator";

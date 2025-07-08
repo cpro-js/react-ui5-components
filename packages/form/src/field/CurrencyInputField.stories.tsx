@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
+import { action } from "storybook/actions";
 
 import { FormController } from "../form/FormController";
 import { FormI18nProvider } from "../i18n/FormI18n";

@@ -1,7 +1,7 @@
 import { expect } from "@storybook/jest";
-import { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
+import { fn } from "storybook/test";
 
 import { FormController } from "../form/FormController";
 import { FormViewer, useFormViewer } from "./FormViewer";

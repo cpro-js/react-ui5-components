@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import {
   COUNTRIES,

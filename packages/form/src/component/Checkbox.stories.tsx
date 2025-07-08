@@ -1,5 +1,5 @@
-import { action } from "@storybook/addon-actions";
-import { Decorator, Meta, StoryObj } from "@storybook/react";
+import { Decorator, Meta, StoryObj } from "@storybook/react-vite";
+import { action } from "storybook/actions";
 
 import { Checkbox } from "./Checkbox";
 

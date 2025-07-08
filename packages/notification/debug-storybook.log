@@ -1,0 +1,320 @@
+[11:24:33.324] [INFO] Storybook Upgrade - v9.0.15
+[11:24:33.426] [INFO] detect-projects-spinner-start: Detecting projects...
+[11:24:33.428] [DEBUG] Finding Storybook projects...
+[11:24:33.470] [DEBUG] Found 1 Storybook projects
+[11:24:33.471] [INFO] detect-projects-spinner: Detecting projects: 1 projects
+[11:24:33.472] [DEBUG] Getting Storybook data...
+[11:24:33.472] [DEBUG] Getting Storybook info...
+[11:24:33.473] [DEBUG] Loading main config...
+[11:24:33.933] [DEBUG] Getting stories paths...
+[11:24:33.977] [DEBUG] Getting package manager...
+[11:24:35.785] [DEBUG] Getting Storybook version...
+[11:24:35.801] [DEBUG] C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook - Validating before version... 8.6.0-alpha.4
+[11:24:35.801] [DEBUG] C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook - Validating upgrade compatibility...
+[11:24:35.801] [DEBUG] C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook - Fetching NPM version information...
+[11:24:35.801] [DEBUG] Getting CLI versions from NPM for storybook...
+[11:24:35.815] [DEBUG] Getting CLI versions from NPM for storybook@next...
+[11:24:37.649] [DEBUG] C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook - Evaluating blockers...
+[11:24:37.668] [DEBUG] Getting installed version for @storybook/experimental-addon-test...
+[11:24:38.459] [INFO] detect-projects-spinner-stop: 1 project detected
+[11:24:38.460] [DEBUG] Found 1 valid projects and 0 error projects
+[11:24:38.460] [INFO] Upgrading from 8.6.0-alpha.4 to 9.0.15
+[11:24:38.532] [INFO] upgrade-dependencies-task-start: Fetching versions to update package.json files..
+[11:24:38.532] [DEBUG] Updating dependencies in C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:38.607] [INFO] upgrade-dependencies-task: \packages\notification\package.json
+\package.json
+[11:24:38.608] [DEBUG] {
+  "upgradedDependencies": []
+}
+[11:24:38.608] [DEBUG] {
+  "upgradedDevDependencies": [
+    "@storybook/addon-docs@9.0.15",
+    "@storybook/addon-links@9.0.15",
+    "@storybook/react@9.0.15",
+    "@storybook/react-vite@9.0.15",
+    "storybook@9.0.15"
+  ]
+}
+[11:24:38.608] [DEBUG] {
+  "upgradedPeerDependencies": []
+}
+[11:24:38.622] [DEBUG] Getting CLI versions from NPM for @storybook/addon-docs...
+[11:24:40.062] [DEBUG] Getting CLI versions from NPM for @storybook/addon-links...
+[11:24:41.529] [DEBUG] Getting CLI versions from NPM for @storybook/react...
+[11:24:42.839] [DEBUG] Getting CLI versions from NPM for @storybook/react-vite...
+[11:24:43.887] [DEBUG] Using cached version for storybook...
+[11:24:43.899] [DEBUG] {
+  "upgradedDependencies": []
+}
+[11:24:43.899] [DEBUG] {
+  "upgradedDevDependencies": []
+}
+[11:24:43.899] [DEBUG] {
+  "upgradedPeerDependencies": []
+}
+[11:24:43.913] [INFO] upgrade-dependencies-task-success: Updated package versions in package.json files
+[11:24:43.914] [INFO] detect-automigrations-task-start: Detecting automigrations...
+[11:24:43.914] [DEBUG] Starting automigration collection across 1 projects and 15 fixes...
+[11:24:43.984] [INFO] detect-automigrations-task: Checking automigrations for
+C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:43.985] [DEBUG] Processing project: C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook
+[11:24:43.985] [DEBUG] Checking fix eslintPlugin for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:44.000] [DEBUG] Checking fix addon-mdx-gfm-remove for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:44.001] [DEBUG] Checking fix addon-storysource-code-panel for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:44.001] [DEBUG] Checking fix upgrade-storybook-related-dependencies for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:44.001] [DEBUG] Checking for incompatible storybook packages...
+[11:24:44.039] [DEBUG] Getting installed version for @storybook/addon-actions...
+[11:24:44.051] [DEBUG] Getting installed version for @storybook/addon-essentials...
+[11:24:45.001] [DEBUG] Getting CLI versions from NPM for @storybook/addon-actions...
+[11:24:45.027] [DEBUG] Getting CLI versions from NPM for @storybook/addon-essentials...
+[11:24:46.804] [DEBUG] Checking fix initial-globals for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.860] [DEBUG] Checking fix addon-a11y-addon-test for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.861] [DEBUG] Checking fix consolidated-imports for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.862] [DEBUG] Checking fix addon-experimental-test for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.862] [DEBUG] Using cached installed version for @storybook/experimental-addon-test...
+[11:24:46.862] [DEBUG] Checking fix rnstorybook-config for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.863] [DEBUG] Checking fix remove-addon-interactions for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.863] [DEBUG] Checking fix renderer-to-framework for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.864] [DEBUG] Checking fix remove-essential-addons for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.864] [DEBUG] Checking fix addon-a11y-parameters for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.864] [DEBUG] Checking fix remove-docs-autodocs for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.870] [DEBUG] Checking fix wrap-require for project C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook...
+[11:24:46.936] [INFO] detect-automigrations-task: 
+Automigrations detected:
+[11:24:47.010] [INFO] detect-automigrations-task: ✔ upgrade-storybook-related-dependencies
+[11:24:47.077] [INFO] detect-automigrations-task: ✔ renderer-to-framework
+[11:24:47.160] [INFO] detect-automigrations-task: ✔ remove-essential-addons
+[11:24:47.160] [INFO] detect-automigrations-task-success: 3 automigration(s) detected
+[11:24:49.412] [PROMPT] Select automigrations to run {"choice":["upgrade-storybook-related-dependencies","renderer-to-framework","remove-essential-addons"]}
+[11:24:49.413] [INFO] automigrate-C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook-task-start: Running automigrations for C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook
+[11:24:49.501] [INFO] automigrate-C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook-task: ✔ upgrade-storybook-related-dependencies
+[11:24:49.502] [DEBUG] 
+Migrating @storybook/react to @storybook/react-vite
+[11:24:49.507] [DEBUG] Updating package.json files...
+[11:24:49.583] [INFO] automigrate-C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook-task: ✔ renderer-to-framework
+[11:24:49.587] [DEBUG] Uninstalling @storybook/addon-actions
+[11:24:49.667] [INFO] automigrate-C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook-task: ✔ remove-essential-addons
+[11:24:49.668] [INFO] automigrate-C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook-task-success: Completed automigrations for C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook
+[11:24:49.669] [INFO] Installing dependencies...
+[11:24:49.669] [INFO] install-dependencies-task-start: Installing dependencies...
+[11:24:50.375] [INFO] ➤ YN0000: · Yarn 4.1.1
+[11:24:50.448] [INFO] install-dependencies-task: ➤ YN0000: · Yarn 4.1.1
+[11:24:50.449] [INFO] ➤ YN0000: ┌ Resolution step
+[11:24:50.534] [INFO] install-dependencies-task: ➤ YN0000: ┌ Resolution step
+[11:24:51.178] [INFO] ➤ YN0085: │ + @storybook/addon-essentials@npm:8.6.14, @storybook/addon-actions@npm:8.6.14, @storybook/addon-backgrounds@npm:8.6.14, and 10 more.
+[11:24:51.249] [INFO] install-dependencies-task: ➤ YN0085: │ + @storybook/addon-essentials@npm:8.6.14,
+@storybook/addon-actions@npm:8.6.14, @storybook/addon-backgrounds@npm:8.6.14,
+and 10 more.
+[11:24:51.250] [INFO] ➤ YN0085: │ - @esbuild/aix-ppc64@npm:0.24.2, @esbuild/android-arm64@npm:0.24.2, @esbuild/android-arm@npm:0.24.2, @esbuild/android-x64@npm:0.24.2, and 59 more.
+➤ YN0000: └ Completed in 0s 820ms
+➤ YN0000: ┌ Post-resolution validation
+➤ YN0060: │ react-dom is listed by your project with version 19.1.0, which doesn't satisfy what @testing-library/react-hooks (p2d8c3) and other dependencies request (but they have non-overlapping ranges!).
+➤ YN0060: │ storybook is listed by your project with version 9.0.15, which doesn't satisfy what @storybook/addon-essentials (p81d10) and other dependencies request (^8.6.14).
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (p3f992), requested by @babel/preset-env.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (p53dde), requested by babel-plugin-transform-typescript-metadata.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (p70ae6), requested by @babel/preset-typescript.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (p72b5d), requested by @babel/preset-react.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (pc135f), requested by @babel/plugin-proposal-class-properties.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (pef674), requested by @babel/plugin-proposal-decorators.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @testing-library/dom (peb9ca), requested by @testing-library/user-event.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p19e73), requested by @babel/preset-env.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p21315), requested by @babel/plugin-proposal-class-properties.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p30bcb), requested by @babel/plugin-proposal-decorators.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p55b26), requested by babel-plugin-transform-typescript-metadata.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p91a64), requested by @babel/preset-typescript.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (pfb786), requested by @babel/preset-react.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @testing-library/dom (p2eb1b), requested by @testing-library/user-event.
+➤ YN0086: │ Some peer dependencies are incorrectly met; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+[11:24:51.385] [INFO] install-dependencies-task: ➤ YN0085: │ - @esbuild/aix-ppc64@npm:0.24.2, @esbuild/android-arm64@npm:0.24.2,
+@esbuild/android-arm@npm:0.24.2, @esbuild/android-x64@npm:0.24.2, and 59 more.
+➤ YN0000: └ Completed in 0s 820ms
+➤ YN0000: ┌ Post-resolution validation
+➤ YN0060: │ react-dom is listed by your project with version 19.1.0, which
+doesn't satisfy what @testing-library/react-hooks (p2d8c3) and other
+dependencies request (but they have non-overlapping ranges!).
+➤ YN0060: │ storybook is listed by your project with version 9.0.15, which
+doesn't satisfy what @storybook/addon-essentials (p81d10) and other dependencies
+request (^8.6.14).
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (p3f992), requested by @babel/preset-env.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (p53dde), requested by
+babel-plugin-transform-typescript-metadata.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (p70ae6), requested by @babel/preset-typescript.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (p72b5d), requested by @babel/preset-react.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (pc135f), requested by
+@babel/plugin-proposal-class-properties.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (pef674), requested by
+@babel/plugin-proposal-decorators.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @testing-library/dom (peb9ca), requested by
+@testing-library/user-event.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p19e73), requested by @babel/preset-env.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p21315), requested by
+@babel/plugin-proposal-class-properties.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p30bcb), requested by
+@babel/plugin-proposal-decorators.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p55b26), requested by
+babel-plugin-transform-typescript-metadata.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p91a64), requested by @babel/preset-typescript.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (pfb786), requested by @babel/preset-react.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @testing-library/dom (p2eb1b), requested by
+@testing-library/user-event.
+➤ YN0086: │ Some peer dependencies are incorrectly met; run yarn explain
+peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed
+code.
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+[11:24:56.370] [INFO] ➤ YN0000: └ Completed in 5s 153ms
+[11:24:56.443] [INFO] install-dependencies-task: ➤ YN0000: └ Completed in 5s 153ms
+[11:24:56.443] [INFO] ➤ YN0000: ┌ Link step
+[11:24:56.529] [INFO] install-dependencies-task: ➤ YN0000: ┌ Link step
+[11:25:03.445] [INFO] ➤ YN0000: └ Completed in 7s 6ms
+[11:25:03.572] [INFO] install-dependencies-task: ➤ YN0000: └ Completed in 7s 6ms
+[11:25:03.657] [INFO] ➤ YN0000: · Done with warnings in 13s 282ms
+[11:25:03.782] [INFO] install-dependencies-task: ➤ YN0000: · Done with warnings in 13s 282ms
+[11:25:03.783] [INFO] Dependencies installed
+[11:25:03.783] [INFO] install-dependencies-task-success: Dependencies installed
+[11:25:03.786] [WARN] Since you are in a monorepo, we advise you to deduplicate your dependencies. We can do this for you but it might take some time.
+[11:25:11.825] [PROMPT] Execute yarn dedupe? {"choice":true}
+[11:25:11.826] [INFO] Deduplicating dependencies...
+[11:25:11.826] [INFO] dedupe-dependencies-task-start: Deduplicating dependencies...
+[11:25:12.611] [INFO] ➤ YN0000: ┌ Deduplication step
+[11:25:12.697] [INFO] dedupe-dependencies-task: ➤ YN0000: ┌ Deduplication step
+[11:25:12.795] [INFO] ➤ YN0000: │ No packages can be deduped using the highest strategy
+[11:25:12.882] [INFO] dedupe-dependencies-task: ➤ YN0000: │ No packages can be deduped using the highest strategy
+[11:25:12.882] [INFO] ➤ YN0000: └ Completed
+➤ YN0000: · Yarn 4.1.1
+➤ YN0000: ┌ Resolution step
+[11:25:12.977] [INFO] dedupe-dependencies-task: ➤ YN0000: └ Completed
+➤ YN0000: · Yarn 4.1.1
+➤ YN0000: ┌ Resolution step
+[11:25:13.140] [INFO] ➤ YN0000: └ Completed in 0s 344ms
+[11:25:13.226] [INFO] dedupe-dependencies-task: ➤ YN0000: └ Completed in 0s 344ms
+[11:25:13.227] [INFO] ➤ YN0000: ┌ Post-resolution validation
+➤ YN0060: │ react-dom is listed by your project with version 19.1.0, which doesn't satisfy what @testing-library/react-hooks (p2d8c3) and other dependencies request (but they have non-overlapping ranges!).
+➤ YN0060: │ storybook is listed by your project with version 9.0.15, which doesn't satisfy what @storybook/addon-essentials (p81d10) and other dependencies request (^8.6.14).
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (p3f992), requested by @babel/preset-env.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (p53dde), requested by babel-plugin-transform-typescript-metadata.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (p70ae6), requested by @babel/preset-typescript.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (p72b5d), requested by @babel/preset-react.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (pc135f), requested by @babel/plugin-proposal-class-properties.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @babel/core (pef674), requested by @babel/plugin-proposal-decorators.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification doesn't provide @testing-library/dom (peb9ca), requested by @testing-library/user-event.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p19e73), requested by @babel/preset-env.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p21315), requested by @babel/plugin-proposal-class-properties.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p30bcb), requested by @babel/plugin-proposal-decorators.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p55b26), requested by babel-plugin-transform-typescript-metadata.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (p91a64), requested by @babel/preset-typescript.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @babel/core (pfb786), requested by @babel/preset-react.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form doesn't provide @testing-library/dom (p2eb1b), requested by @testing-library/user-event.
+➤ YN0086: │ Some peer dependencies are incorrectly met; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+[11:25:13.328] [INFO] dedupe-dependencies-task: ➤ YN0000: ┌ Post-resolution validation
+➤ YN0060: │ react-dom is listed by your project with version 19.1.0, which
+doesn't satisfy what @testing-library/react-hooks (p2d8c3) and other
+dependencies request (but they have non-overlapping ranges!).
+➤ YN0060: │ storybook is listed by your project with version 9.0.15, which
+doesn't satisfy what @storybook/addon-essentials (p81d10) and other dependencies
+request (^8.6.14).
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (p3f992), requested by @babel/preset-env.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (p53dde), requested by
+babel-plugin-transform-typescript-metadata.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (p70ae6), requested by @babel/preset-typescript.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (p72b5d), requested by @babel/preset-react.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (pc135f), requested by
+@babel/plugin-proposal-class-properties.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @babel/core (pef674), requested by
+@babel/plugin-proposal-decorators.
+➤ YN0002: │ @cpro-js/react-ui5-notification@workspace:packages/notification
+doesn't provide @testing-library/dom (peb9ca), requested by
+@testing-library/user-event.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p19e73), requested by @babel/preset-env.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p21315), requested by
+@babel/plugin-proposal-class-properties.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p30bcb), requested by
+@babel/plugin-proposal-decorators.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p55b26), requested by
+babel-plugin-transform-typescript-metadata.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (p91a64), requested by @babel/preset-typescript.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @babel/core (pfb786), requested by @babel/preset-react.
+➤ YN0002: │ @cpro-js/react-ui5-webcomponents-form@workspace:packages/form
+doesn't provide @testing-library/dom (p2eb1b), requested by
+@testing-library/user-event.
+➤ YN0086: │ Some peer dependencies are incorrectly met; run yarn explain
+peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed
+code.
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+[11:25:14.418] [INFO] ➤ YN0000: └ Completed in 1s 274ms
+[11:25:14.497] [INFO] dedupe-dependencies-task: ➤ YN0000: └ Completed in 1s 274ms
+[11:25:14.498] [INFO] ➤ YN0000: ┌ Link step
+[11:25:14.585] [INFO] dedupe-dependencies-task: ➤ YN0000: ┌ Link step
+[11:25:15.063] [INFO] ➤ YN0000: └ Completed in 0s 571ms
+[11:25:15.137] [INFO] dedupe-dependencies-task: ➤ YN0000: └ Completed in 0s 571ms
+[11:25:15.201] [INFO] ➤ YN0000: · Done with warnings in 2s 406ms
+[11:25:15.287] [INFO] dedupe-dependencies-task: ➤ YN0000: · Done with warnings in 2s 406ms
+[11:25:15.288] [INFO] Dependencies deduplicated
+[11:25:15.288] [INFO] dedupe-dependencies-task-success: Dependencies deduplicated
+[11:25:15.288] [INFO] Checking the health of your project(s)..
+[11:25:16.181] [WARN] C:/projekte/storybookComponents/react-ui5-components/packages/notification/.storybook: 1 issue found
+[11:25:16.249] [INFO] You are currently using Storybook 9.0.15 but you have packages which are incompatible with it:
+
+- @storybook/addon-essentials@8.6.14 which depends on 8.6.14
+ Repo: https://github.com/storybookjs/storybook/tree/next/code/addons/essentials
+
+Please consider updating your packages or contacting the maintainers for compatibility details.
+
+For more on Storybook 9 compatibility, see the linked GitHub issue:
+https://github.com/storybookjs/storybook/issues/30944
+[11:25:16.249] [INFO] Incompatible Packages
+[11:25:16.328] [INFO] You are currently using Storybook 9.0.15 but you have packages which are incompatible with it:
+
+- @storybook/addon-essentials@8.6.14 which depends on 8.6.14
+ Repo: https://github.com/storybookjs/storybook/tree/next/code/addons/essentials
+
+Please consider updating your packages or contacting the maintainers for compatibility details.
+
+For more on Storybook 9 compatibility, see the linked GitHub issue:
+https://github.com/storybookjs/storybook/issues/30944
+[11:25:16.432] [INFO] Storybook doctor is complete!
+[11:25:16.533] [INFO] You can always recheck the health of your project(s) by running:
+npx storybook doctor
+[11:25:16.622] [INFO] The upgrade is complete!
+[11:25:16.711] [INFO] Your project(s) have been upgraded successfully, but some issues were found which need your attention, please check Storybook doctor logs above.
+[11:25:16.985] [INFO] If you want to learn more about the automigrations that executed in your project(s), please check the following links:
+
+• upgrade-storybook-related-dependencies
+• renderer-to-framework
+• remove-essential-addons
+[11:25:17.053] [INFO] For a full list of changes, please check our migration guide: https://storybook.js.org/docs/migration-guide
+[11:25:17.160] [INFO] Attention: Storybook now collects completely anonymous telemetry regarding usage. This information is used to shape Storybook's roadmap and prioritize features.
+[11:25:17.231] [INFO] You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+[11:25:17.300] [INFO] https://storybook.js.org/telemetry
+[11:25:17.370] [INFO] 

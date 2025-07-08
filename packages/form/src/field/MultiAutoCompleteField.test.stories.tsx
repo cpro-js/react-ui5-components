@@ -1,9 +1,9 @@
-import { action } from "@storybook/addon-actions";
 import { expect } from "@storybook/jest";
-import { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { userEvent } from "@storybook/testing-library";
 import { waitFor, within } from "@testing-library/react";
+import { action } from "storybook/actions";
+import { fn } from "storybook/test";
 
 import {
   COUNTRIES,

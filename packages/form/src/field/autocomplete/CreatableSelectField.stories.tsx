@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
+import { action } from "storybook/actions";
 
 import { COUNTRIES } from "../../component/autocomplete/AutoComplete-storyData";
 import { DefaultAutoCompleteOption } from "../../component/autocomplete/internal/CoreAutocomplete";

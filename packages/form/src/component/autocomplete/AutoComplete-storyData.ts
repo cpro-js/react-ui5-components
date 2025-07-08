@@ -1,4 +1,4 @@
-import { action } from "@storybook/addon-actions";
+import { action } from "storybook/internal/actions";
 
 export const COUNTRIES = [
   { label: "Argentina", value: "AR", withUmlaut: "Ärgentöna" },
@@ -15,7 +15,7 @@ export const COUNTRIES = [
   { label: "USA", value: "US", withUmlaut: "ÜSÄ" },
 ];
 
-export type CountryItem = typeof COUNTRIES[0];
+export type CountryItem = (typeof COUNTRIES)[0];
 
 export const SEARCH_COUNTRIES = (
   searchTerm: string

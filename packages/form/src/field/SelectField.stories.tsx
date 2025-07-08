@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
+import { action } from "storybook/actions";
 
 import { SelectItem } from "../component/Select";
 import { FormController, FormControllerProps } from "../form/FormController";

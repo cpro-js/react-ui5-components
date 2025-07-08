@@ -1,4 +1,4 @@
-import { Decorator, Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Decorator, Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 
 import { CurrencyInput } from "../CurrencyInput";
 import { NumberInput } from "../NumberInput";
