@@ -14,7 +14,7 @@ jobs:
       fail-fast: true
       matrix:
         react: ["^18.x", "^19.x"]
-        script: ["typecheck", "build", "build-storybook", "test-storybook"]
+        script: ["typecheck", "build", "build-storybook"]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -31,3 +31,24 @@ jobs:
           yarn info --all --name-only react react-dom @types/react @types/react-dom
       - name: Run script
         run: yarn ${{ matrix.script }}
+
+  playtests:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+      - name: Install packages
+        run: yarn --immutable
+      - name: Build Storybook
+        run: yarn build-storybook
+      - name: Serve Storybook and run Playtests
+        run: |
+          npx http-server ./packages/form/storybook-static -p 6006 &
+          npx wait-on http://localhost:6006
+          yarn test-storybook --url http://localhost:6006
