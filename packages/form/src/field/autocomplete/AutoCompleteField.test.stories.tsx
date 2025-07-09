@@ -65,6 +65,7 @@ export const PrefilledTest = {
         expect.anything()
       );
     });
+
     const host = canvas.getByTestId("autocomplete") as HTMLElement;
     const input = host.shadowRoot?.querySelector(
       "input.ui5-input-inner"
@@ -75,7 +76,7 @@ export const PrefilledTest = {
     await userEvent.keyboard("{Backspace}");
 
     await userEvent.type(input, "Ger");
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     await userEvent.keyboard("{Enter}");
 

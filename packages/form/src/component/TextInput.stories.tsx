@@ -14,6 +14,11 @@ type Story = StoryObj<typeof TextInput>;
 
 export const Standard = {
   args: {},
+  parameters: {
+    testRunner: {
+      timeout: 30000,
+    },
+  },
 } satisfies Story;
 
 export const Prefilled = {

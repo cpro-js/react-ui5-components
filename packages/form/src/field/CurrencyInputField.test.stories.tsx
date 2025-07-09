@@ -223,6 +223,8 @@ export const ValidationMinMaxTest = {
     //forced onChange event. To-Do: Trigger it without forcing it
     input.dispatchEvent(new Event("change", { bubbles: true }));
 
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     await waitFor(() => {
       expect(host.getAttribute("value-state")).toBe("Negative");
       expect(mockSubmit).not.toHaveBeenCalled();
@@ -232,6 +234,8 @@ export const ValidationMinMaxTest = {
     await userEvent.type(input, "11");
     input.dispatchEvent(new Event("change", { bubbles: true }));
 
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     await waitFor(() => {
       expect(host.getAttribute("value-state")).toBe("Negative");
       expect(mockSubmit).not.toHaveBeenCalled();
@@ -240,6 +244,8 @@ export const ValidationMinMaxTest = {
     await userEvent.keyboard("{Control>}a{/Control}{Backspace}"); //clearing input
     await userEvent.type(input, "8");
     input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     await waitFor(() => {
       expect(host.getAttribute("value-state")).toBe("None");
