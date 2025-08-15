@@ -1,0 +1,293 @@
+import { expect } from "@storybook/jest";
+import { Meta, StoryObj } from "@storybook/react-vite";
+import { action } from "storybook/actions";
+import { fn, userEvent, waitFor, within } from "storybook/test";
+
+import { FormController } from "../form/FormController";
+import { CurrencyInputField } from "./CurrencyInputField";
+import { FormViewer, useFormViewer } from "./FormViewer";
+
+interface FormData {
+  theNumber?: number;
+}
+
+const meta = {
+  title: "Form/Field/CurrencyInputField/Interactions",
+  component: CurrencyInputField,
+  tags: ["!autodocs"],
+  parameters: {
+    form: {
+      initialValues: {},
+      onSubmit: action("form-submit"),
+    },
+  },
+  args: {
+    currency: "EUR",
+    onFocus: fn(),
+    onInput: fn(),
+    onBlur: fn(),
+    onChange: fn(),
+  },
+} satisfies Meta<typeof CurrencyInputField>;
+
+export default meta;
+
+type Story = StoryObj<typeof CurrencyInputField>;
+
+const mockSubmit = fn();
+
+export const PrefilledTest = {
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController
+        initialValues={{ theNumber: 10.29 }}
+        onSubmit={handleSubmit}
+      >
+        <CurrencyInputField
+          {...props}
+          name="theNumber"
+          data-testid="currency-input"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 10.29 },
+        expect.anything()
+      );
+    });
+
+    const host = canvas.getByTestId("currency-input");
+    console.log(host);
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    input.select();
+
+    await userEvent.keyboard("{Backspace}");
+
+    await userEvent.type(input, "20.50");
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 20.5 },
+        expect.anything()
+      );
+    });
+  },
+} satisfies Story;
+
+export const PrefilledAndRoundedTest = {
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController
+        initialValues={{ theNumber: 10.299 }}
+        onSubmit={handleSubmit}
+      >
+        <CurrencyInputField
+          {...props}
+          name="theNumber"
+          data-testid="currency-input"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 10.299 },
+        expect.anything()
+      );
+    });
+  },
+} satisfies Story;
+
+export const RequiredTest = {
+  render: (props, context) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController onSubmit={handleSubmit}>
+        <CurrencyInputField
+          data-testid="currency-input"
+          {...props}
+          name={"theNumber"}
+          required
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submitBtn = canvas.getByText("Submit");
+
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      const currencyInput = canvas.getByTestId("currency-input");
+      expect(currencyInput.getAttribute("value-state")).toBe("Negative");
+      expect(mockSubmit).not.toHaveBeenCalled();
+    });
+  },
+} satisfies Story;
+
+export const ValidationMinTest = {
+  args: {
+    min: 4,
+  },
+  render: (props, context) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController onSubmit={handleSubmit}>
+        <CurrencyInputField
+          data-testid="min-input"
+          {...props}
+          name="theNumber"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = canvas.getByTestId("min-input") as HTMLElement;
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    await userEvent.type(input, "1");
+
+    //forced onChange event. To-Do: Trigger it without forcing it
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    await waitFor(() => {
+      expect(host.getAttribute("value-state")).toBe("Negative");
+      expect(mockSubmit).not.toHaveBeenCalled();
+    });
+  },
+} satisfies Story;
+
+export const ValidationMinMaxTest = {
+  args: {
+    min: 4,
+    max: 10,
+  },
+  render: (props, context) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController onSubmit={handleSubmit}>
+        <CurrencyInputField
+          data-testid="min-input"
+          {...props}
+          name="theNumber"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = canvas.getByTestId("min-input") as HTMLElement;
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    await userEvent.type(input, "1");
+
+    //forced onChange event. To-Do: Trigger it without forcing it
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    await waitFor(() => {
+      expect(host.getAttribute("value-state")).toBe("Negative");
+      expect(mockSubmit).not.toHaveBeenCalled();
+    });
+
+    await userEvent.keyboard("{Control>}a{/Control}{Backspace}"); //clearing input
+    await userEvent.type(input, "11");
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    await waitFor(() => {
+      expect(host.getAttribute("value-state")).toBe("Negative");
+      expect(mockSubmit).not.toHaveBeenCalled();
+    });
+
+    await userEvent.keyboard("{Control>}a{/Control}{Backspace}"); //clearing input
+    await userEvent.type(input, "8");
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    await waitFor(() => {
+      expect(host.getAttribute("value-state")).toBe("None");
+    });
+  },
+} satisfies Story;
+
+export const UserInputTest = {
+  render: (props) => {
+    const { submittedValues, handleSubmit } = useFormViewer<FormData>({
+      onSubmit: mockSubmit,
+    });
+
+    return (
+      <FormController onSubmit={handleSubmit}>
+        <CurrencyInputField
+          {...props}
+          name="theNumber"
+          data-testid="user-input"
+        />
+        <FormViewer submittedValues={submittedValues} />
+      </FormController>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const host = canvas.getByTestId("user-input") as HTMLElement;
+    const input = host.shadowRoot?.querySelector("input") as HTMLInputElement;
+
+    input.focus();
+    await userEvent.type(input, "42.99");
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    const submitBtn = canvas.getByText("Submit");
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        { theNumber: 42.99 },
+        expect.anything()
+      );
+    });
+  },
+} satisfies Story;

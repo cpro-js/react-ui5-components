@@ -2,7 +2,7 @@ import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js";
 import "@ui5/webcomponents-react/dist/Assets.js";
 
-import { Preview } from "@storybook/react";
+import { Preview } from "@storybook/react-vite";
 import { setLanguage } from "@ui5/webcomponents-base/dist/config/Language.js";
 import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
 import applyDirection from "@ui5/webcomponents-base/dist/locale/applyDirection.js";

@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 
 import { AutoComplete } from "./AutoComplete";
 import {

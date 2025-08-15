@@ -1,5 +1,6 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
+import { action } from "storybook/actions";
+import { fn, userEvent, waitFor, within } from "storybook/test";
 
 import { FormController } from "../form/FormController";
 import { FormViewer, useFormViewer } from "./FormViewer";

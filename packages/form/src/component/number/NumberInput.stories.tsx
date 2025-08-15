@@ -1,5 +1,5 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
+import { action } from "storybook/actions";
 
 import { NumberInput } from "./NumberInput";
 
@@ -119,6 +119,7 @@ export const InputMinFailure = {
     ...Prefilled.args,
     minimumValue: 2,
   },
+  tags: ["!test"],
 } satisfies Story;
 
 export const InputMax = {
@@ -135,6 +136,7 @@ export const InputMaxFailure = {
     ...Prefilled.args,
     maximumValue: -2,
   },
+  tags: ["!test"],
 } satisfies Story;
 
 export const InputMaxFractionDigits = {

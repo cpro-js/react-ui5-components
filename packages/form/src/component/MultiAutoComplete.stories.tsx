@@ -1,7 +1,7 @@
 import "@ui5/webcomponents-icons/dist/add.js";
 
-import { action } from "@storybook/addon-actions";
-import { Decorator, Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Decorator, Meta, StoryFn, StoryObj } from "@storybook/react-vite";
+import { action } from "storybook/actions";
 
 import {
   COUNTRIES,

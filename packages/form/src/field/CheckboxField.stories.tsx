@@ -1,5 +1,6 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
+import { action } from "storybook/actions";
 
 import { FormController } from "../form/FormController";
 import { CheckboxField } from "./CheckboxField";
@@ -20,6 +21,7 @@ export default {
   parameters: {
     form: {
       initialValues: {},
+      onSubmit: action("form-submit"),
     },
   },
   render(props, context) {
@@ -40,7 +42,12 @@ export default {
           initialValues={initialValues}
           onSubmit={handleSubmit}
         >
-          <CheckboxField {...props} ref={fieldRef} name="value" />
+          <CheckboxField
+            data-testid="checkbox"
+            {...props}
+            ref={fieldRef}
+            name="value"
+          />
           <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
         </FormController>
       );
@@ -55,7 +62,12 @@ export default {
           initialValues={initialValues}
           onSubmit={handleSubmit}
         >
-          <CheckboxField {...props} ref={fieldRef} name="value" />
+          <CheckboxField
+            data-testid="checkbox"
+            {...props}
+            ref={fieldRef}
+            name="value"
+          />
           <FormViewer submittedValues={submittedValues} fieldRef={fieldRef} />
         </FormController>
       );

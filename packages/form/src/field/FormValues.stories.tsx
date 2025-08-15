@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { SubmitHandler } from "react-hook-form";
+import { action } from "storybook/actions";
 
 import { FormController } from "../form/FormController";
 import { FormValues, FormValuesProps } from "./FormValues";

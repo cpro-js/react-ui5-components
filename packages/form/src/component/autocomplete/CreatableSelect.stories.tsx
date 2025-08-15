@@ -1,4 +1,4 @@
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 
 import { COUNTRIES } from "./AutoComplete-storyData";
 import { CreatableSelect } from "./CreatableSelect";

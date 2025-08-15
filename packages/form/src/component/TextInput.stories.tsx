@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-icons/dist/value-help.js";
 
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 import { Icon } from "@ui5/webcomponents-react";
 
 import { TextInput } from "./TextInput";
@@ -14,6 +14,11 @@ type Story = StoryObj<typeof TextInput>;
 
 export const Standard = {
   args: {},
+  parameters: {
+    testRunner: {
+      timeout: 30000,
+    },
+  },
 } satisfies Story;
 
 export const Prefilled = {

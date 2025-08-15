@@ -1,4 +1,4 @@
-import { ArgTypes, Meta, StoryFn, StoryObj } from "@storybook/react";
+import { ArgTypes, Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 
 import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 

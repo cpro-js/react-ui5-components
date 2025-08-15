@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
 import { Meta, StoryObj } from "@storybook/react";
 import { useRef } from "react";
+import { action } from "storybook/actions";
 
 import { FormController } from "../form/FormController";
 import { FormViewer, useFormViewer } from "./FormViewer";

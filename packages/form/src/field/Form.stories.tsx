@@ -1,5 +1,4 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
 import {
   FlexBox,
   FlexBoxDirection,
@@ -9,6 +8,7 @@ import {
   Label,
   Text,
 } from "@ui5/webcomponents-react";
+import { action } from "storybook/actions";
 
 import {
   COUNTRIES,

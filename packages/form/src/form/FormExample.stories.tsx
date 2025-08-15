@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { Form, FormItem, Label } from "@ui5/webcomponents-react";
 import { useEffect, useRef, useState } from "react";
 import { useEventCallback } from "usehooks-ts";
