@@ -1846,6 +1846,7 @@ __metadata:
     "@types/react": "npm:^19.0.8"
     "@ui5/webcomponents": "npm:^2.5.1"
     "@ui5/webcomponents-fiori": "npm:^2.5.1"
+    "@ui5/webcomponents-localization": "npm:^2.13.2"
     "@ui5/webcomponents-react": "npm:^2.5.0"
     "@vitejs/plugin-react": "npm:^4.2.1"
     babel-plugin-transform-typescript-metadata: "npm:^0.3.2"
@@ -3996,6 +3997,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ui5/webcomponents-base@npm:2.13.2":
+  version: 2.13.2
+  resolution: "@ui5/webcomponents-base@npm:2.13.2"
+  dependencies:
+    "@lit-labs/ssr-dom-shim": "npm:^1.1.2"
+    lit-html: "npm:^2.0.1"
+  checksum: 10c0/dbccca053a4b4ac41d8553c04c76e548d99cfcd89af7f05f10e0a80c7e062c27a34f8b73516ad79d6f008d0c5ebacf8deb9664070126a0e00bec434c80c9c8cb
+  languageName: node
+  linkType: hard
+
 "@ui5/webcomponents-base@npm:2.5.1":
   version: 2.5.1
   resolution: "@ui5/webcomponents-base@npm:2.5.1"
@@ -4053,6 +4064,16 @@ __metadata:
     "@types/openui5": "npm:^1.113.0"
     "@ui5/webcomponents-base": "npm:2.5.1"
   checksum: 10c0/d90ce382c116fff5be68be8f6b90ce8a89dec5ff2bdb31433578c55c34c122226d85ecec9c91839cd764d77a0d2a2929243e6781a0ff2271a5aaa54c402a8705
+  languageName: node
+  linkType: hard
+
+"@ui5/webcomponents-localization@npm:^2.13.2":
+  version: 2.13.2
+  resolution: "@ui5/webcomponents-localization@npm:2.13.2"
+  dependencies:
+    "@types/openui5": "npm:^1.113.0"
+    "@ui5/webcomponents-base": "npm:2.13.2"
+  checksum: 10c0/5db2aedbddd8ef5f8534ebcc162b07cfd8c96c22cae9a4ec28bb11e003a96c7855ef89dc32e9bd0d8446ad39015538fa31ff4d4e74fde547ad669a759dd235ef
   languageName: node
   linkType: hard
 

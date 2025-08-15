@@ -59,7 +59,7 @@ export const onChange = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
 
-    const host = canvas.getByTestId("date-picker");
+    const host = await canvas.findByTestId("date-picker");
     const internalInput =
       host.shadowRoot!.querySelector<HTMLInputElement>("ui5-input")!;
     const input =

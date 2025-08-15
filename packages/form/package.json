@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@react-hook/debounce": "^4.0.0",
+    "@ui5/webcomponents-localization": "^2.13.2",
     "clsx": "^1.1.1",
     "klona": "^2.0.6",
     "p-debounce": "^4.0.0",
